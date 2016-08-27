@@ -29,7 +29,7 @@ package org.hl7.fhir.dstu3.model;
   
 */
 
-// Generated on Sat, Jan 30, 2016 09:18-0500 for FHIR v1.3.0
+// Generated on Thu, Aug 25, 2016 23:04-0400 for FHIR v1.6.0
 
 import java.util.*;
 
@@ -37,11 +37,11 @@ import org.hl7.fhir.utilities.Utilities;
 import ca.uhn.fhir.model.api.annotation.ResourceDef;
 import ca.uhn.fhir.model.api.annotation.SearchParamDefinition;
 import ca.uhn.fhir.model.api.annotation.Child;
+import ca.uhn.fhir.model.api.annotation.ChildOrder;
 import ca.uhn.fhir.model.api.annotation.Description;
 import ca.uhn.fhir.model.api.annotation.Block;
-
-import org.hl7.fhir.dstu3.exceptions.FHIRException;
 import org.hl7.fhir.instance.model.api.*;
+import org.hl7.fhir.dstu3.exceptions.FHIRException;
 /**
  * The subscription resource is used to define a push based subscription from a server to another system. Once a subscription is registered with the server, the server checks every resource that is created or updated, and if the resource matches the given criteria, it sends a message on the defined "channel" so that another system is able to take an appropriate action.
  */
@@ -66,7 +66,7 @@ public class Subscription extends DomainResource {
          */
         OFF, 
         /**
-         * added to help the parsers
+         * added to help the parsers with the generic types
          */
         NULL;
         public static SubscriptionStatus fromCode(String codeString) throws FHIRException {
@@ -80,7 +80,10 @@ public class Subscription extends DomainResource {
           return ERROR;
         if ("off".equals(codeString))
           return OFF;
-        throw new FHIRException("Unknown SubscriptionStatus code '"+codeString+"'");
+        if (Configuration.isAcceptInvalidEnums())
+          return null;
+        else
+          throw new FHIRException("Unknown SubscriptionStatus code '"+codeString+"'");
         }
         public String toCode() {
           switch (this) {
@@ -189,7 +192,7 @@ public class Subscription extends DomainResource {
          */
         MESSAGE, 
         /**
-         * added to help the parsers
+         * added to help the parsers with the generic types
          */
         NULL;
         public static SubscriptionChannelType fromCode(String codeString) throws FHIRException {
@@ -205,7 +208,10 @@ public class Subscription extends DomainResource {
           return SMS;
         if ("message".equals(codeString))
           return MESSAGE;
-        throw new FHIRException("Unknown SubscriptionChannelType code '"+codeString+"'");
+        if (Configuration.isAcceptInvalidEnums())
+          return null;
+        else
+          throw new FHIRException("Unknown SubscriptionChannelType code '"+codeString+"'");
         }
         public String toCode() {
           switch (this) {
@@ -309,6 +315,7 @@ public class Subscription extends DomainResource {
          */
         @Child(name = "type", type = {CodeType.class}, order=1, min=1, max=1, modifier=false, summary=true)
         @Description(shortDefinition="rest-hook | websocket | email | sms | message", formalDefinition="The type of channel to send notifications on." )
+        @ca.uhn.fhir.model.api.annotation.Binding(valueSet="http://hl7.org/fhir/ValueSet/subscription-channel-type")
         protected Enumeration<SubscriptionChannelType> type;
 
         /**
@@ -319,10 +326,10 @@ public class Subscription extends DomainResource {
         protected UriType endpoint;
 
         /**
-         * The mime type to send the payload in - either application/xml+fhir, or application/json+fhir. If the mime type is blank, then there is no payload in the notification, just a notification.
+         * The mime type to send the payload in - either application/fhir+xml, or application/fhir+json. If the payload is not present, then there is no payload in the notification, just a notification.
          */
-        @Child(name = "payload", type = {StringType.class}, order=3, min=1, max=1, modifier=false, summary=true)
-        @Description(shortDefinition="Mimetype to send, or blank for no payload", formalDefinition="The mime type to send the payload in - either application/xml+fhir, or application/json+fhir. If the mime type is blank, then there is no payload in the notification, just a notification." )
+        @Child(name = "payload", type = {StringType.class}, order=3, min=0, max=1, modifier=false, summary=true)
+        @Description(shortDefinition="Mimetype to send, or omit for no payload", formalDefinition="The mime type to send the payload in - either application/fhir+xml, or application/fhir+json. If the payload is not present, then there is no payload in the notification, just a notification." )
         protected StringType payload;
 
         /**
@@ -344,10 +351,9 @@ public class Subscription extends DomainResource {
     /**
      * Constructor
      */
-      public SubscriptionChannelComponent(Enumeration<SubscriptionChannelType> type, StringType payload) {
+      public SubscriptionChannelComponent(Enumeration<SubscriptionChannelType> type) {
         super();
         this.type = type;
-        this.payload = payload;
       }
 
         /**
@@ -445,7 +451,7 @@ public class Subscription extends DomainResource {
         }
 
         /**
-         * @return {@link #payload} (The mime type to send the payload in - either application/xml+fhir, or application/json+fhir. If the mime type is blank, then there is no payload in the notification, just a notification.). This is the underlying object with id, value and extensions. The accessor "getPayload" gives direct access to the value
+         * @return {@link #payload} (The mime type to send the payload in - either application/fhir+xml, or application/fhir+json. If the payload is not present, then there is no payload in the notification, just a notification.). This is the underlying object with id, value and extensions. The accessor "getPayload" gives direct access to the value
          */
         public StringType getPayloadElement() { 
           if (this.payload == null)
@@ -465,7 +471,7 @@ public class Subscription extends DomainResource {
         }
 
         /**
-         * @param value {@link #payload} (The mime type to send the payload in - either application/xml+fhir, or application/json+fhir. If the mime type is blank, then there is no payload in the notification, just a notification.). This is the underlying object with id, value and extensions. The accessor "getPayload" gives direct access to the value
+         * @param value {@link #payload} (The mime type to send the payload in - either application/fhir+xml, or application/fhir+json. If the payload is not present, then there is no payload in the notification, just a notification.). This is the underlying object with id, value and extensions. The accessor "getPayload" gives direct access to the value
          */
         public SubscriptionChannelComponent setPayloadElement(StringType value) { 
           this.payload = value;
@@ -473,19 +479,23 @@ public class Subscription extends DomainResource {
         }
 
         /**
-         * @return The mime type to send the payload in - either application/xml+fhir, or application/json+fhir. If the mime type is blank, then there is no payload in the notification, just a notification.
+         * @return The mime type to send the payload in - either application/fhir+xml, or application/fhir+json. If the payload is not present, then there is no payload in the notification, just a notification.
          */
         public String getPayload() { 
           return this.payload == null ? null : this.payload.getValue();
         }
 
         /**
-         * @param value The mime type to send the payload in - either application/xml+fhir, or application/json+fhir. If the mime type is blank, then there is no payload in the notification, just a notification.
+         * @param value The mime type to send the payload in - either application/fhir+xml, or application/fhir+json. If the payload is not present, then there is no payload in the notification, just a notification.
          */
         public SubscriptionChannelComponent setPayload(String value) { 
+          if (Utilities.noString(value))
+            this.payload = null;
+          else {
             if (this.payload == null)
               this.payload = new StringType();
             this.payload.setValue(value);
+          }
           return this;
         }
 
@@ -542,9 +552,41 @@ public class Subscription extends DomainResource {
           super.listChildren(childrenList);
           childrenList.add(new Property("type", "code", "The type of channel to send notifications on.", 0, java.lang.Integer.MAX_VALUE, type));
           childrenList.add(new Property("endpoint", "uri", "The uri that describes the actual end-point to send messages to.", 0, java.lang.Integer.MAX_VALUE, endpoint));
-          childrenList.add(new Property("payload", "string", "The mime type to send the payload in - either application/xml+fhir, or application/json+fhir. If the mime type is blank, then there is no payload in the notification, just a notification.", 0, java.lang.Integer.MAX_VALUE, payload));
+          childrenList.add(new Property("payload", "string", "The mime type to send the payload in - either application/fhir+xml, or application/fhir+json. If the payload is not present, then there is no payload in the notification, just a notification.", 0, java.lang.Integer.MAX_VALUE, payload));
           childrenList.add(new Property("header", "string", "Additional headers / information to send as part of the notification.", 0, java.lang.Integer.MAX_VALUE, header));
         }
+
+      @Override
+      public Base[] getProperty(int hash, String name, boolean checkValid) throws FHIRException {
+        switch (hash) {
+        case 3575610: /*type*/ return this.type == null ? new Base[0] : new Base[] {this.type}; // Enumeration<SubscriptionChannelType>
+        case 1741102485: /*endpoint*/ return this.endpoint == null ? new Base[0] : new Base[] {this.endpoint}; // UriType
+        case -786701938: /*payload*/ return this.payload == null ? new Base[0] : new Base[] {this.payload}; // StringType
+        case -1221270899: /*header*/ return this.header == null ? new Base[0] : new Base[] {this.header}; // StringType
+        default: return super.getProperty(hash, name, checkValid);
+        }
+
+      }
+
+      @Override
+      public void setProperty(int hash, String name, Base value) throws FHIRException {
+        switch (hash) {
+        case 3575610: // type
+          this.type = new SubscriptionChannelTypeEnumFactory().fromType(value); // Enumeration<SubscriptionChannelType>
+          break;
+        case 1741102485: // endpoint
+          this.endpoint = castToUri(value); // UriType
+          break;
+        case -786701938: // payload
+          this.payload = castToString(value); // StringType
+          break;
+        case -1221270899: // header
+          this.header = castToString(value); // StringType
+          break;
+        default: super.setProperty(hash, name, value);
+        }
+
+      }
 
       @Override
       public void setProperty(String name, Base value) throws FHIRException {
@@ -558,6 +600,18 @@ public class Subscription extends DomainResource {
           this.header = castToString(value); // StringType
         else
           super.setProperty(name, value);
+      }
+
+      @Override
+      public Base makeProperty(int hash, String name) throws FHIRException {
+        switch (hash) {
+        case 3575610: throw new FHIRException("Cannot make property type as it is not a complex type"); // Enumeration<SubscriptionChannelType>
+        case 1741102485: throw new FHIRException("Cannot make property endpoint as it is not a complex type"); // UriType
+        case -786701938: throw new FHIRException("Cannot make property payload as it is not a complex type"); // StringType
+        case -1221270899: throw new FHIRException("Cannot make property header as it is not a complex type"); // StringType
+        default: return super.makeProperty(hash, name);
+        }
+
       }
 
       @Override
@@ -611,8 +665,8 @@ public class Subscription extends DomainResource {
       }
 
       public boolean isEmpty() {
-        return super.isEmpty() && (type == null || type.isEmpty()) && (endpoint == null || endpoint.isEmpty())
-           && (payload == null || payload.isEmpty()) && (header == null || header.isEmpty());
+        return super.isEmpty() && ca.uhn.fhir.util.ElementUtil.isEmpty(type, endpoint, payload
+          , header);
       }
 
   public String fhirType() {
@@ -648,6 +702,7 @@ public class Subscription extends DomainResource {
      */
     @Child(name = "status", type = {CodeType.class}, order=3, min=1, max=1, modifier=true, summary=true)
     @Description(shortDefinition="requested | active | error | off", formalDefinition="The status of the subscription, which marks the server state for managing the subscription." )
+    @ca.uhn.fhir.model.api.annotation.Binding(valueSet="http://hl7.org/fhir/ValueSet/subscription-status")
     protected Enumeration<SubscriptionStatus> status;
 
     /**
@@ -676,6 +731,7 @@ public class Subscription extends DomainResource {
      */
     @Child(name = "tag", type = {Coding.class}, order=7, min=0, max=Child.MAX_UNLIMITED, modifier=false, summary=true)
     @Description(shortDefinition="A tag to add to matching resources", formalDefinition="A tag to add to any resource that matches the criteria, after the subscription is processed." )
+    @ca.uhn.fhir.model.api.annotation.Binding(valueSet="http://hl7.org/fhir/ValueSet/subscription-tag")
     protected List<Coding> tag;
 
     private static final long serialVersionUID = -1390870804L;
@@ -752,6 +808,14 @@ public class Subscription extends DomainResource {
       return this.contact;
     }
 
+    /**
+     * @return Returns a reference to <code>this</code> for easy method chaining
+     */
+    public Subscription setContact(List<ContactPoint> theContact) { 
+      this.contact = theContact;
+      return this;
+    }
+
     public boolean hasContact() { 
       if (this.contact == null)
         return false;
@@ -761,10 +825,6 @@ public class Subscription extends DomainResource {
       return false;
     }
 
-    /**
-     * @return {@link #contact} (Contact details for a human to contact about the subscription. The primary use of this for system administrator troubleshooting.)
-     */
-    // syntactic sugar
     public ContactPoint addContact() { //3
       ContactPoint t = new ContactPoint();
       if (this.contact == null)
@@ -773,7 +833,6 @@ public class Subscription extends DomainResource {
       return t;
     }
 
-    // syntactic sugar
     public Subscription addContact(ContactPoint t) { //3
       if (t == null)
         return this;
@@ -781,6 +840,16 @@ public class Subscription extends DomainResource {
         this.contact = new ArrayList<ContactPoint>();
       this.contact.add(t);
       return this;
+    }
+
+    /**
+     * @return The first repetition of repeating field {@link #contact}, creating it if it does not already exist
+     */
+    public ContactPoint getContactFirstRep() { 
+      if (getContact().isEmpty()) {
+        addContact();
+      }
+      return getContact().get(0);
     }
 
     /**
@@ -1004,6 +1073,14 @@ public class Subscription extends DomainResource {
       return this.tag;
     }
 
+    /**
+     * @return Returns a reference to <code>this</code> for easy method chaining
+     */
+    public Subscription setTag(List<Coding> theTag) { 
+      this.tag = theTag;
+      return this;
+    }
+
     public boolean hasTag() { 
       if (this.tag == null)
         return false;
@@ -1013,10 +1090,6 @@ public class Subscription extends DomainResource {
       return false;
     }
 
-    /**
-     * @return {@link #tag} (A tag to add to any resource that matches the criteria, after the subscription is processed.)
-     */
-    // syntactic sugar
     public Coding addTag() { //3
       Coding t = new Coding();
       if (this.tag == null)
@@ -1025,7 +1098,6 @@ public class Subscription extends DomainResource {
       return t;
     }
 
-    // syntactic sugar
     public Subscription addTag(Coding t) { //3
       if (t == null)
         return this;
@@ -1033,6 +1105,16 @@ public class Subscription extends DomainResource {
         this.tag = new ArrayList<Coding>();
       this.tag.add(t);
       return this;
+    }
+
+    /**
+     * @return The first repetition of repeating field {@link #tag}, creating it if it does not already exist
+     */
+    public Coding getTagFirstRep() { 
+      if (getTag().isEmpty()) {
+        addTag();
+      }
+      return getTag().get(0);
     }
 
       protected void listChildren(List<Property> childrenList) {
@@ -1045,6 +1127,54 @@ public class Subscription extends DomainResource {
         childrenList.add(new Property("channel", "", "Details where to send notifications when resources are received that meet the criteria.", 0, java.lang.Integer.MAX_VALUE, channel));
         childrenList.add(new Property("end", "instant", "The time for the server to turn the subscription off.", 0, java.lang.Integer.MAX_VALUE, end));
         childrenList.add(new Property("tag", "Coding", "A tag to add to any resource that matches the criteria, after the subscription is processed.", 0, java.lang.Integer.MAX_VALUE, tag));
+      }
+
+      @Override
+      public Base[] getProperty(int hash, String name, boolean checkValid) throws FHIRException {
+        switch (hash) {
+        case 1952046943: /*criteria*/ return this.criteria == null ? new Base[0] : new Base[] {this.criteria}; // StringType
+        case 951526432: /*contact*/ return this.contact == null ? new Base[0] : this.contact.toArray(new Base[this.contact.size()]); // ContactPoint
+        case -934964668: /*reason*/ return this.reason == null ? new Base[0] : new Base[] {this.reason}; // StringType
+        case -892481550: /*status*/ return this.status == null ? new Base[0] : new Base[] {this.status}; // Enumeration<SubscriptionStatus>
+        case 96784904: /*error*/ return this.error == null ? new Base[0] : new Base[] {this.error}; // StringType
+        case 738950403: /*channel*/ return this.channel == null ? new Base[0] : new Base[] {this.channel}; // SubscriptionChannelComponent
+        case 100571: /*end*/ return this.end == null ? new Base[0] : new Base[] {this.end}; // InstantType
+        case 114586: /*tag*/ return this.tag == null ? new Base[0] : this.tag.toArray(new Base[this.tag.size()]); // Coding
+        default: return super.getProperty(hash, name, checkValid);
+        }
+
+      }
+
+      @Override
+      public void setProperty(int hash, String name, Base value) throws FHIRException {
+        switch (hash) {
+        case 1952046943: // criteria
+          this.criteria = castToString(value); // StringType
+          break;
+        case 951526432: // contact
+          this.getContact().add(castToContactPoint(value)); // ContactPoint
+          break;
+        case -934964668: // reason
+          this.reason = castToString(value); // StringType
+          break;
+        case -892481550: // status
+          this.status = new SubscriptionStatusEnumFactory().fromType(value); // Enumeration<SubscriptionStatus>
+          break;
+        case 96784904: // error
+          this.error = castToString(value); // StringType
+          break;
+        case 738950403: // channel
+          this.channel = (SubscriptionChannelComponent) value; // SubscriptionChannelComponent
+          break;
+        case 100571: // end
+          this.end = castToInstant(value); // InstantType
+          break;
+        case 114586: // tag
+          this.getTag().add(castToCoding(value)); // Coding
+          break;
+        default: super.setProperty(hash, name, value);
+        }
+
       }
 
       @Override
@@ -1067,6 +1197,22 @@ public class Subscription extends DomainResource {
           this.getTag().add(castToCoding(value));
         else
           super.setProperty(name, value);
+      }
+
+      @Override
+      public Base makeProperty(int hash, String name) throws FHIRException {
+        switch (hash) {
+        case 1952046943: throw new FHIRException("Cannot make property criteria as it is not a complex type"); // StringType
+        case 951526432:  return addContact(); // ContactPoint
+        case -934964668: throw new FHIRException("Cannot make property reason as it is not a complex type"); // StringType
+        case -892481550: throw new FHIRException("Cannot make property status as it is not a complex type"); // Enumeration<SubscriptionStatus>
+        case 96784904: throw new FHIRException("Cannot make property error as it is not a complex type"); // StringType
+        case 738950403:  return getChannel(); // SubscriptionChannelComponent
+        case 100571: throw new FHIRException("Cannot make property end as it is not a complex type"); // InstantType
+        case 114586:  return addTag(); // Coding
+        default: return super.makeProperty(hash, name);
+        }
+
       }
 
       @Override
@@ -1155,10 +1301,8 @@ public class Subscription extends DomainResource {
       }
 
       public boolean isEmpty() {
-        return super.isEmpty() && (criteria == null || criteria.isEmpty()) && (contact == null || contact.isEmpty())
-           && (reason == null || reason.isEmpty()) && (status == null || status.isEmpty()) && (error == null || error.isEmpty())
-           && (channel == null || channel.isEmpty()) && (end == null || end.isEmpty()) && (tag == null || tag.isEmpty())
-          ;
+        return super.isEmpty() && ca.uhn.fhir.util.ElementUtil.isEmpty(criteria, contact, reason
+          , status, error, channel, end, tag);
       }
 
   @Override
@@ -1169,17 +1313,17 @@ public class Subscription extends DomainResource {
  /**
    * Search parameter: <b>payload</b>
    * <p>
-   * Description: <b>Mimetype to send, or blank for no payload</b><br>
+   * Description: <b>Mimetype to send, or omit for no payload</b><br>
    * Type: <b>string</b><br>
    * Path: <b>Subscription.channel.payload</b><br>
    * </p>
    */
-  @SearchParamDefinition(name="payload", path="Subscription.channel.payload", description="Mimetype to send, or blank for no payload", type="string" )
+  @SearchParamDefinition(name="payload", path="Subscription.channel.payload", description="Mimetype to send, or omit for no payload", type="string" )
   public static final String SP_PAYLOAD = "payload";
  /**
    * <b>Fluent Client</b> search parameter constant for <b>payload</b>
    * <p>
-   * Description: <b>Mimetype to send, or blank for no payload</b><br>
+   * Description: <b>Mimetype to send, or omit for no payload</b><br>
    * Type: <b>string</b><br>
    * Path: <b>Subscription.channel.payload</b><br>
    * </p>

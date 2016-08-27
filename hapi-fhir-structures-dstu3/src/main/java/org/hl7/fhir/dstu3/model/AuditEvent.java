@@ -29,21 +29,20 @@ package org.hl7.fhir.dstu3.model;
   
 */
 
-// Generated on Sat, Jan 30, 2016 09:18-0500 for FHIR v1.3.0
+// Generated on Thu, Aug 25, 2016 23:04-0400 for FHIR v1.6.0
 
 import java.util.*;
 
 import org.hl7.fhir.utilities.Utilities;
-
+import org.hl7.fhir.dstu3.model.Enumerations.*;
 import ca.uhn.fhir.model.api.annotation.ResourceDef;
 import ca.uhn.fhir.model.api.annotation.SearchParamDefinition;
 import ca.uhn.fhir.model.api.annotation.Child;
+import ca.uhn.fhir.model.api.annotation.ChildOrder;
 import ca.uhn.fhir.model.api.annotation.Description;
 import ca.uhn.fhir.model.api.annotation.Block;
-
-import org.hl7.fhir.dstu3.exceptions.FHIRException;
-import org.hl7.fhir.dstu3.model.Enumerations.*;
 import org.hl7.fhir.instance.model.api.*;
+import org.hl7.fhir.dstu3.exceptions.FHIRException;
 /**
  * A record of an event made for purposes of maintaining a security log. Typical uses include detection of intrusion attempts and monitoring for inappropriate usage.
  */
@@ -72,7 +71,7 @@ public class AuditEvent extends DomainResource {
          */
         E, 
         /**
-         * added to help the parsers
+         * added to help the parsers with the generic types
          */
         NULL;
         public static AuditEventAction fromCode(String codeString) throws FHIRException {
@@ -88,7 +87,10 @@ public class AuditEvent extends DomainResource {
           return D;
         if ("E".equals(codeString))
           return E;
-        throw new FHIRException("Unknown AuditEventAction code '"+codeString+"'");
+        if (Configuration.isAcceptInvalidEnums())
+          return null;
+        else
+          throw new FHIRException("Unknown AuditEventAction code '"+codeString+"'");
         }
         public String toCode() {
           switch (this) {
@@ -203,7 +205,7 @@ public class AuditEvent extends DomainResource {
          */
         _12, 
         /**
-         * added to help the parsers
+         * added to help the parsers with the generic types
          */
         NULL;
         public static AuditEventOutcome fromCode(String codeString) throws FHIRException {
@@ -217,7 +219,10 @@ public class AuditEvent extends DomainResource {
           return _8;
         if ("12".equals(codeString))
           return _12;
-        throw new FHIRException("Unknown AuditEventOutcome code '"+codeString+"'");
+        if (Configuration.isAcceptInvalidEnums())
+          return null;
+        else
+          throw new FHIRException("Unknown AuditEventOutcome code '"+codeString+"'");
         }
         public String toCode() {
           switch (this) {
@@ -304,7 +309,7 @@ public class AuditEvent extends DomainResource {
       }
     }
 
-    public enum AuditEventParticipantNetworkType {
+    public enum AuditEventAgentNetworkType {
         /**
          * The machine name, including DNS name.
          */
@@ -326,10 +331,10 @@ public class AuditEvent extends DomainResource {
          */
         _5, 
         /**
-         * added to help the parsers
+         * added to help the parsers with the generic types
          */
         NULL;
-        public static AuditEventParticipantNetworkType fromCode(String codeString) throws FHIRException {
+        public static AuditEventAgentNetworkType fromCode(String codeString) throws FHIRException {
             if (codeString == null || "".equals(codeString))
                 return null;
         if ("1".equals(codeString))
@@ -342,7 +347,10 @@ public class AuditEvent extends DomainResource {
           return _4;
         if ("5".equals(codeString))
           return _5;
-        throw new FHIRException("Unknown AuditEventParticipantNetworkType code '"+codeString+"'");
+        if (Configuration.isAcceptInvalidEnums())
+          return null;
+        else
+          throw new FHIRException("Unknown AuditEventAgentNetworkType code '"+codeString+"'");
         }
         public String toCode() {
           switch (this) {
@@ -386,55 +394,55 @@ public class AuditEvent extends DomainResource {
         }
     }
 
-  public static class AuditEventParticipantNetworkTypeEnumFactory implements EnumFactory<AuditEventParticipantNetworkType> {
-    public AuditEventParticipantNetworkType fromCode(String codeString) throws IllegalArgumentException {
+  public static class AuditEventAgentNetworkTypeEnumFactory implements EnumFactory<AuditEventAgentNetworkType> {
+    public AuditEventAgentNetworkType fromCode(String codeString) throws IllegalArgumentException {
       if (codeString == null || "".equals(codeString))
             if (codeString == null || "".equals(codeString))
                 return null;
         if ("1".equals(codeString))
-          return AuditEventParticipantNetworkType._1;
+          return AuditEventAgentNetworkType._1;
         if ("2".equals(codeString))
-          return AuditEventParticipantNetworkType._2;
+          return AuditEventAgentNetworkType._2;
         if ("3".equals(codeString))
-          return AuditEventParticipantNetworkType._3;
+          return AuditEventAgentNetworkType._3;
         if ("4".equals(codeString))
-          return AuditEventParticipantNetworkType._4;
+          return AuditEventAgentNetworkType._4;
         if ("5".equals(codeString))
-          return AuditEventParticipantNetworkType._5;
-        throw new IllegalArgumentException("Unknown AuditEventParticipantNetworkType code '"+codeString+"'");
+          return AuditEventAgentNetworkType._5;
+        throw new IllegalArgumentException("Unknown AuditEventAgentNetworkType code '"+codeString+"'");
         }
-        public Enumeration<AuditEventParticipantNetworkType> fromType(Base code) throws FHIRException {
+        public Enumeration<AuditEventAgentNetworkType> fromType(Base code) throws FHIRException {
           if (code == null || code.isEmpty())
             return null;
           String codeString = ((PrimitiveType) code).asStringValue();
           if (codeString == null || "".equals(codeString))
             return null;
         if ("1".equals(codeString))
-          return new Enumeration<AuditEventParticipantNetworkType>(this, AuditEventParticipantNetworkType._1);
+          return new Enumeration<AuditEventAgentNetworkType>(this, AuditEventAgentNetworkType._1);
         if ("2".equals(codeString))
-          return new Enumeration<AuditEventParticipantNetworkType>(this, AuditEventParticipantNetworkType._2);
+          return new Enumeration<AuditEventAgentNetworkType>(this, AuditEventAgentNetworkType._2);
         if ("3".equals(codeString))
-          return new Enumeration<AuditEventParticipantNetworkType>(this, AuditEventParticipantNetworkType._3);
+          return new Enumeration<AuditEventAgentNetworkType>(this, AuditEventAgentNetworkType._3);
         if ("4".equals(codeString))
-          return new Enumeration<AuditEventParticipantNetworkType>(this, AuditEventParticipantNetworkType._4);
+          return new Enumeration<AuditEventAgentNetworkType>(this, AuditEventAgentNetworkType._4);
         if ("5".equals(codeString))
-          return new Enumeration<AuditEventParticipantNetworkType>(this, AuditEventParticipantNetworkType._5);
-        throw new FHIRException("Unknown AuditEventParticipantNetworkType code '"+codeString+"'");
+          return new Enumeration<AuditEventAgentNetworkType>(this, AuditEventAgentNetworkType._5);
+        throw new FHIRException("Unknown AuditEventAgentNetworkType code '"+codeString+"'");
         }
-    public String toCode(AuditEventParticipantNetworkType code) {
-      if (code == AuditEventParticipantNetworkType._1)
+    public String toCode(AuditEventAgentNetworkType code) {
+      if (code == AuditEventAgentNetworkType._1)
         return "1";
-      if (code == AuditEventParticipantNetworkType._2)
+      if (code == AuditEventAgentNetworkType._2)
         return "2";
-      if (code == AuditEventParticipantNetworkType._3)
+      if (code == AuditEventAgentNetworkType._3)
         return "3";
-      if (code == AuditEventParticipantNetworkType._4)
+      if (code == AuditEventAgentNetworkType._4)
         return "4";
-      if (code == AuditEventParticipantNetworkType._5)
+      if (code == AuditEventAgentNetworkType._5)
         return "5";
       return "?";
       }
-    public String toSystem(AuditEventParticipantNetworkType code) {
+    public String toSystem(AuditEventAgentNetworkType code) {
       return code.getSystem();
       }
     }
@@ -442,10 +450,11 @@ public class AuditEvent extends DomainResource {
     @Block()
     public static class AuditEventAgentComponent extends BackboneElement implements IBaseBackboneElement {
         /**
-         * Specification of the role(s) the user plays when performing the event. Usually the codes used in this element are local codes defined by the role-based access control security system used in the local context.
+         * Specification of the role(s) the user plays when performing the event. Additional may contain security role codes that come from local codes defined by the access control security system (e.g. RBAC, ABAC) used in the local context.
          */
         @Child(name = "role", type = {CodeableConcept.class}, order=1, min=0, max=Child.MAX_UNLIMITED, modifier=false, summary=false)
-        @Description(shortDefinition="User roles (e.g. local RBAC codes)", formalDefinition="Specification of the role(s) the user plays when performing the event. Usually the codes used in this element are local codes defined by the role-based access control security system used in the local context." )
+        @Description(shortDefinition="Agent role in the event", formalDefinition="Specification of the role(s) the user plays when performing the event. Additional may contain security role codes that come from local codes defined by the access control security system (e.g. RBAC, ABAC) used in the local context." )
+        @ca.uhn.fhir.model.api.annotation.Binding(valueSet="http://hl7.org/fhir/ValueSet/dicm-402-roleid")
         protected List<CodeableConcept> role;
 
         /**
@@ -475,10 +484,10 @@ public class AuditEvent extends DomainResource {
         protected StringType altId;
 
         /**
-         * Human-meaningful name for the user.
+         * Human-meaningful name for the agent.
          */
         @Child(name = "name", type = {StringType.class}, order=5, min=0, max=1, modifier=false, summary=false)
-        @Description(shortDefinition="Human-meaningful name for the user", formalDefinition="Human-meaningful name for the user." )
+        @Description(shortDefinition="Human-meaningful name for the agent", formalDefinition="Human-meaningful name for the agent." )
         protected StringType name;
 
         /**
@@ -512,6 +521,7 @@ public class AuditEvent extends DomainResource {
          */
         @Child(name = "media", type = {Coding.class}, order=9, min=0, max=1, modifier=false, summary=false)
         @Description(shortDefinition="Type of media", formalDefinition="Type of media involved. Used when the event is about exporting/importing onto media." )
+        @ca.uhn.fhir.model.api.annotation.Binding(valueSet="http://hl7.org/fhir/ValueSet/dicm-405-mediatype")
         protected Coding media;
 
         /**
@@ -526,6 +536,7 @@ public class AuditEvent extends DomainResource {
          */
         @Child(name = "purposeOfUse", type = {Coding.class}, order=11, min=0, max=Child.MAX_UNLIMITED, modifier=false, summary=false)
         @Description(shortDefinition="Reason given for this user", formalDefinition="The reason (purpose of use), specific to this agent, that was used during the event being recorded." )
+        @ca.uhn.fhir.model.api.annotation.Binding(valueSet="http://hl7.org/fhir/ValueSet/v3-PurposeOfUse")
         protected List<Coding> purposeOfUse;
 
         private static final long serialVersionUID = 1802747339L;
@@ -546,12 +557,20 @@ public class AuditEvent extends DomainResource {
       }
 
         /**
-         * @return {@link #role} (Specification of the role(s) the user plays when performing the event. Usually the codes used in this element are local codes defined by the role-based access control security system used in the local context.)
+         * @return {@link #role} (Specification of the role(s) the user plays when performing the event. Additional may contain security role codes that come from local codes defined by the access control security system (e.g. RBAC, ABAC) used in the local context.)
          */
         public List<CodeableConcept> getRole() { 
           if (this.role == null)
             this.role = new ArrayList<CodeableConcept>();
           return this.role;
+        }
+
+        /**
+         * @return Returns a reference to <code>this</code> for easy method chaining
+         */
+        public AuditEventAgentComponent setRole(List<CodeableConcept> theRole) { 
+          this.role = theRole;
+          return this;
         }
 
         public boolean hasRole() { 
@@ -563,10 +582,6 @@ public class AuditEvent extends DomainResource {
           return false;
         }
 
-        /**
-         * @return {@link #role} (Specification of the role(s) the user plays when performing the event. Usually the codes used in this element are local codes defined by the role-based access control security system used in the local context.)
-         */
-    // syntactic sugar
         public CodeableConcept addRole() { //3
           CodeableConcept t = new CodeableConcept();
           if (this.role == null)
@@ -575,7 +590,6 @@ public class AuditEvent extends DomainResource {
           return t;
         }
 
-    // syntactic sugar
         public AuditEventAgentComponent addRole(CodeableConcept t) { //3
           if (t == null)
             return this;
@@ -583,6 +597,16 @@ public class AuditEvent extends DomainResource {
             this.role = new ArrayList<CodeableConcept>();
           this.role.add(t);
           return this;
+        }
+
+        /**
+         * @return The first repetition of repeating field {@link #role}, creating it if it does not already exist
+         */
+        public CodeableConcept getRoleFirstRep() { 
+          if (getRole().isEmpty()) {
+            addRole();
+          }
+          return getRole().get(0);
         }
 
         /**
@@ -698,7 +722,7 @@ public class AuditEvent extends DomainResource {
         }
 
         /**
-         * @return {@link #name} (Human-meaningful name for the user.). This is the underlying object with id, value and extensions. The accessor "getName" gives direct access to the value
+         * @return {@link #name} (Human-meaningful name for the agent.). This is the underlying object with id, value and extensions. The accessor "getName" gives direct access to the value
          */
         public StringType getNameElement() { 
           if (this.name == null)
@@ -718,7 +742,7 @@ public class AuditEvent extends DomainResource {
         }
 
         /**
-         * @param value {@link #name} (Human-meaningful name for the user.). This is the underlying object with id, value and extensions. The accessor "getName" gives direct access to the value
+         * @param value {@link #name} (Human-meaningful name for the agent.). This is the underlying object with id, value and extensions. The accessor "getName" gives direct access to the value
          */
         public AuditEventAgentComponent setNameElement(StringType value) { 
           this.name = value;
@@ -726,14 +750,14 @@ public class AuditEvent extends DomainResource {
         }
 
         /**
-         * @return Human-meaningful name for the user.
+         * @return Human-meaningful name for the agent.
          */
         public String getName() { 
           return this.name == null ? null : this.name.getValue();
         }
 
         /**
-         * @param value Human-meaningful name for the user.
+         * @param value Human-meaningful name for the agent.
          */
         public AuditEventAgentComponent setName(String value) { 
           if (Utilities.noString(value))
@@ -844,6 +868,14 @@ public class AuditEvent extends DomainResource {
           return this.policy;
         }
 
+        /**
+         * @return Returns a reference to <code>this</code> for easy method chaining
+         */
+        public AuditEventAgentComponent setPolicy(List<UriType> thePolicy) { 
+          this.policy = thePolicy;
+          return this;
+        }
+
         public boolean hasPolicy() { 
           if (this.policy == null)
             return false;
@@ -856,7 +888,6 @@ public class AuditEvent extends DomainResource {
         /**
          * @return {@link #policy} (The policy or plan that authorized the activity being recorded. Typically, a single activity may have multiple applicable policies, such as patient consent, guarantor funding, etc. The policy would also indicate the security token used.)
          */
-    // syntactic sugar
         public UriType addPolicyElement() {//2 
           UriType t = new UriType();
           if (this.policy == null)
@@ -946,6 +977,14 @@ public class AuditEvent extends DomainResource {
           return this.purposeOfUse;
         }
 
+        /**
+         * @return Returns a reference to <code>this</code> for easy method chaining
+         */
+        public AuditEventAgentComponent setPurposeOfUse(List<Coding> thePurposeOfUse) { 
+          this.purposeOfUse = thePurposeOfUse;
+          return this;
+        }
+
         public boolean hasPurposeOfUse() { 
           if (this.purposeOfUse == null)
             return false;
@@ -955,10 +994,6 @@ public class AuditEvent extends DomainResource {
           return false;
         }
 
-        /**
-         * @return {@link #purposeOfUse} (The reason (purpose of use), specific to this agent, that was used during the event being recorded.)
-         */
-    // syntactic sugar
         public Coding addPurposeOfUse() { //3
           Coding t = new Coding();
           if (this.purposeOfUse == null)
@@ -967,7 +1002,6 @@ public class AuditEvent extends DomainResource {
           return t;
         }
 
-    // syntactic sugar
         public AuditEventAgentComponent addPurposeOfUse(Coding t) { //3
           if (t == null)
             return this;
@@ -977,13 +1011,23 @@ public class AuditEvent extends DomainResource {
           return this;
         }
 
+        /**
+         * @return The first repetition of repeating field {@link #purposeOfUse}, creating it if it does not already exist
+         */
+        public Coding getPurposeOfUseFirstRep() { 
+          if (getPurposeOfUse().isEmpty()) {
+            addPurposeOfUse();
+          }
+          return getPurposeOfUse().get(0);
+        }
+
         protected void listChildren(List<Property> childrenList) {
           super.listChildren(childrenList);
-          childrenList.add(new Property("role", "CodeableConcept", "Specification of the role(s) the user plays when performing the event. Usually the codes used in this element are local codes defined by the role-based access control security system used in the local context.", 0, java.lang.Integer.MAX_VALUE, role));
+          childrenList.add(new Property("role", "CodeableConcept", "Specification of the role(s) the user plays when performing the event. Additional may contain security role codes that come from local codes defined by the access control security system (e.g. RBAC, ABAC) used in the local context.", 0, java.lang.Integer.MAX_VALUE, role));
           childrenList.add(new Property("reference", "Reference(Practitioner|Organization|Device|Patient|RelatedPerson)", "Direct reference to a resource that identifies the agent.", 0, java.lang.Integer.MAX_VALUE, reference));
           childrenList.add(new Property("userId", "Identifier", "Unique identifier for the user actively participating in the event.", 0, java.lang.Integer.MAX_VALUE, userId));
           childrenList.add(new Property("altId", "string", "Alternative agent Identifier. For a human, this should be a user identifier text string from authentication system. This identifier would be one known to a common authentication system (e.g. single sign-on), if available.", 0, java.lang.Integer.MAX_VALUE, altId));
-          childrenList.add(new Property("name", "string", "Human-meaningful name for the user.", 0, java.lang.Integer.MAX_VALUE, name));
+          childrenList.add(new Property("name", "string", "Human-meaningful name for the agent.", 0, java.lang.Integer.MAX_VALUE, name));
           childrenList.add(new Property("requestor", "boolean", "Indicator that the user is or is not the requestor, or initiator, for the event being audited.", 0, java.lang.Integer.MAX_VALUE, requestor));
           childrenList.add(new Property("location", "Reference(Location)", "Where the event occurred.", 0, java.lang.Integer.MAX_VALUE, location));
           childrenList.add(new Property("policy", "uri", "The policy or plan that authorized the activity being recorded. Typically, a single activity may have multiple applicable policies, such as patient consent, guarantor funding, etc. The policy would also indicate the security token used.", 0, java.lang.Integer.MAX_VALUE, policy));
@@ -991,6 +1035,66 @@ public class AuditEvent extends DomainResource {
           childrenList.add(new Property("network", "", "Logical network location for application activity, if the activity has a network location.", 0, java.lang.Integer.MAX_VALUE, network));
           childrenList.add(new Property("purposeOfUse", "Coding", "The reason (purpose of use), specific to this agent, that was used during the event being recorded.", 0, java.lang.Integer.MAX_VALUE, purposeOfUse));
         }
+
+      @Override
+      public Base[] getProperty(int hash, String name, boolean checkValid) throws FHIRException {
+        switch (hash) {
+        case 3506294: /*role*/ return this.role == null ? new Base[0] : this.role.toArray(new Base[this.role.size()]); // CodeableConcept
+        case -925155509: /*reference*/ return this.reference == null ? new Base[0] : new Base[] {this.reference}; // Reference
+        case -836030906: /*userId*/ return this.userId == null ? new Base[0] : new Base[] {this.userId}; // Identifier
+        case 92912804: /*altId*/ return this.altId == null ? new Base[0] : new Base[] {this.altId}; // StringType
+        case 3373707: /*name*/ return this.name == null ? new Base[0] : new Base[] {this.name}; // StringType
+        case 693934258: /*requestor*/ return this.requestor == null ? new Base[0] : new Base[] {this.requestor}; // BooleanType
+        case 1901043637: /*location*/ return this.location == null ? new Base[0] : new Base[] {this.location}; // Reference
+        case -982670030: /*policy*/ return this.policy == null ? new Base[0] : this.policy.toArray(new Base[this.policy.size()]); // UriType
+        case 103772132: /*media*/ return this.media == null ? new Base[0] : new Base[] {this.media}; // Coding
+        case 1843485230: /*network*/ return this.network == null ? new Base[0] : new Base[] {this.network}; // AuditEventAgentNetworkComponent
+        case -1881902670: /*purposeOfUse*/ return this.purposeOfUse == null ? new Base[0] : this.purposeOfUse.toArray(new Base[this.purposeOfUse.size()]); // Coding
+        default: return super.getProperty(hash, name, checkValid);
+        }
+
+      }
+
+      @Override
+      public void setProperty(int hash, String name, Base value) throws FHIRException {
+        switch (hash) {
+        case 3506294: // role
+          this.getRole().add(castToCodeableConcept(value)); // CodeableConcept
+          break;
+        case -925155509: // reference
+          this.reference = castToReference(value); // Reference
+          break;
+        case -836030906: // userId
+          this.userId = castToIdentifier(value); // Identifier
+          break;
+        case 92912804: // altId
+          this.altId = castToString(value); // StringType
+          break;
+        case 3373707: // name
+          this.name = castToString(value); // StringType
+          break;
+        case 693934258: // requestor
+          this.requestor = castToBoolean(value); // BooleanType
+          break;
+        case 1901043637: // location
+          this.location = castToReference(value); // Reference
+          break;
+        case -982670030: // policy
+          this.getPolicy().add(castToUri(value)); // UriType
+          break;
+        case 103772132: // media
+          this.media = castToCoding(value); // Coding
+          break;
+        case 1843485230: // network
+          this.network = (AuditEventAgentNetworkComponent) value; // AuditEventAgentNetworkComponent
+          break;
+        case -1881902670: // purposeOfUse
+          this.getPurposeOfUse().add(castToCoding(value)); // Coding
+          break;
+        default: super.setProperty(hash, name, value);
+        }
+
+      }
 
       @Override
       public void setProperty(String name, Base value) throws FHIRException {
@@ -1018,6 +1122,25 @@ public class AuditEvent extends DomainResource {
           this.getPurposeOfUse().add(castToCoding(value));
         else
           super.setProperty(name, value);
+      }
+
+      @Override
+      public Base makeProperty(int hash, String name) throws FHIRException {
+        switch (hash) {
+        case 3506294:  return addRole(); // CodeableConcept
+        case -925155509:  return getReference(); // Reference
+        case -836030906:  return getUserId(); // Identifier
+        case 92912804: throw new FHIRException("Cannot make property altId as it is not a complex type"); // StringType
+        case 3373707: throw new FHIRException("Cannot make property name as it is not a complex type"); // StringType
+        case 693934258: throw new FHIRException("Cannot make property requestor as it is not a complex type"); // BooleanType
+        case 1901043637:  return getLocation(); // Reference
+        case -982670030: throw new FHIRException("Cannot make property policy as it is not a complex type"); // UriType
+        case 103772132:  return getMedia(); // Coding
+        case 1843485230:  return getNetwork(); // AuditEventAgentNetworkComponent
+        case -1881902670:  return addPurposeOfUse(); // Coding
+        default: return super.makeProperty(hash, name);
+        }
+
       }
 
       @Override
@@ -1118,11 +1241,8 @@ public class AuditEvent extends DomainResource {
       }
 
       public boolean isEmpty() {
-        return super.isEmpty() && (role == null || role.isEmpty()) && (reference == null || reference.isEmpty())
-           && (userId == null || userId.isEmpty()) && (altId == null || altId.isEmpty()) && (name == null || name.isEmpty())
-           && (requestor == null || requestor.isEmpty()) && (location == null || location.isEmpty())
-           && (policy == null || policy.isEmpty()) && (media == null || media.isEmpty()) && (network == null || network.isEmpty())
-           && (purposeOfUse == null || purposeOfUse.isEmpty());
+        return super.isEmpty() && ca.uhn.fhir.util.ElementUtil.isEmpty(role, reference, userId
+          , altId, name, requestor, location, policy, media, network, purposeOfUse);
       }
 
   public String fhirType() {
@@ -1146,9 +1266,10 @@ public class AuditEvent extends DomainResource {
          */
         @Child(name = "type", type = {CodeType.class}, order=2, min=0, max=1, modifier=false, summary=false)
         @Description(shortDefinition="The type of network access point", formalDefinition="An identifier for the type of network access point that originated the audit event." )
-        protected Enumeration<AuditEventParticipantNetworkType> type;
+        @ca.uhn.fhir.model.api.annotation.Binding(valueSet="http://hl7.org/fhir/ValueSet/network-type")
+        protected Enumeration<AuditEventAgentNetworkType> type;
 
-        private static final long serialVersionUID = -1355220390L;
+        private static final long serialVersionUID = -160715924L;
 
     /**
      * Constructor
@@ -1209,12 +1330,12 @@ public class AuditEvent extends DomainResource {
         /**
          * @return {@link #type} (An identifier for the type of network access point that originated the audit event.). This is the underlying object with id, value and extensions. The accessor "getType" gives direct access to the value
          */
-        public Enumeration<AuditEventParticipantNetworkType> getTypeElement() { 
+        public Enumeration<AuditEventAgentNetworkType> getTypeElement() { 
           if (this.type == null)
             if (Configuration.errorOnAutoCreate())
               throw new Error("Attempt to auto-create AuditEventAgentNetworkComponent.type");
             else if (Configuration.doAutoCreate())
-              this.type = new Enumeration<AuditEventParticipantNetworkType>(new AuditEventParticipantNetworkTypeEnumFactory()); // bb
+              this.type = new Enumeration<AuditEventAgentNetworkType>(new AuditEventAgentNetworkTypeEnumFactory()); // bb
           return this.type;
         }
 
@@ -1229,7 +1350,7 @@ public class AuditEvent extends DomainResource {
         /**
          * @param value {@link #type} (An identifier for the type of network access point that originated the audit event.). This is the underlying object with id, value and extensions. The accessor "getType" gives direct access to the value
          */
-        public AuditEventAgentNetworkComponent setTypeElement(Enumeration<AuditEventParticipantNetworkType> value) { 
+        public AuditEventAgentNetworkComponent setTypeElement(Enumeration<AuditEventAgentNetworkType> value) { 
           this.type = value;
           return this;
         }
@@ -1237,19 +1358,19 @@ public class AuditEvent extends DomainResource {
         /**
          * @return An identifier for the type of network access point that originated the audit event.
          */
-        public AuditEventParticipantNetworkType getType() { 
+        public AuditEventAgentNetworkType getType() { 
           return this.type == null ? null : this.type.getValue();
         }
 
         /**
          * @param value An identifier for the type of network access point that originated the audit event.
          */
-        public AuditEventAgentNetworkComponent setType(AuditEventParticipantNetworkType value) { 
+        public AuditEventAgentNetworkComponent setType(AuditEventAgentNetworkType value) { 
           if (value == null)
             this.type = null;
           else {
             if (this.type == null)
-              this.type = new Enumeration<AuditEventParticipantNetworkType>(new AuditEventParticipantNetworkTypeEnumFactory());
+              this.type = new Enumeration<AuditEventAgentNetworkType>(new AuditEventAgentNetworkTypeEnumFactory());
             this.type.setValue(value);
           }
           return this;
@@ -1262,13 +1383,47 @@ public class AuditEvent extends DomainResource {
         }
 
       @Override
+      public Base[] getProperty(int hash, String name, boolean checkValid) throws FHIRException {
+        switch (hash) {
+        case -1147692044: /*address*/ return this.address == null ? new Base[0] : new Base[] {this.address}; // StringType
+        case 3575610: /*type*/ return this.type == null ? new Base[0] : new Base[] {this.type}; // Enumeration<AuditEventAgentNetworkType>
+        default: return super.getProperty(hash, name, checkValid);
+        }
+
+      }
+
+      @Override
+      public void setProperty(int hash, String name, Base value) throws FHIRException {
+        switch (hash) {
+        case -1147692044: // address
+          this.address = castToString(value); // StringType
+          break;
+        case 3575610: // type
+          this.type = new AuditEventAgentNetworkTypeEnumFactory().fromType(value); // Enumeration<AuditEventAgentNetworkType>
+          break;
+        default: super.setProperty(hash, name, value);
+        }
+
+      }
+
+      @Override
       public void setProperty(String name, Base value) throws FHIRException {
         if (name.equals("address"))
           this.address = castToString(value); // StringType
         else if (name.equals("type"))
-          this.type = new AuditEventParticipantNetworkTypeEnumFactory().fromType(value); // Enumeration<AuditEventParticipantNetworkType>
+          this.type = new AuditEventAgentNetworkTypeEnumFactory().fromType(value); // Enumeration<AuditEventAgentNetworkType>
         else
           super.setProperty(name, value);
+      }
+
+      @Override
+      public Base makeProperty(int hash, String name) throws FHIRException {
+        switch (hash) {
+        case -1147692044: throw new FHIRException("Cannot make property address as it is not a complex type"); // StringType
+        case 3575610: throw new FHIRException("Cannot make property type as it is not a complex type"); // Enumeration<AuditEventAgentNetworkType>
+        default: return super.makeProperty(hash, name);
+        }
+
       }
 
       @Override
@@ -1312,8 +1467,7 @@ public class AuditEvent extends DomainResource {
       }
 
       public boolean isEmpty() {
-        return super.isEmpty() && (address == null || address.isEmpty()) && (type == null || type.isEmpty())
-          ;
+        return super.isEmpty() && ca.uhn.fhir.util.ElementUtil.isEmpty(address, type);
       }
 
   public String fhirType() {
@@ -1344,6 +1498,7 @@ public class AuditEvent extends DomainResource {
          */
         @Child(name = "type", type = {Coding.class}, order=3, min=0, max=Child.MAX_UNLIMITED, modifier=false, summary=false)
         @Description(shortDefinition="The type of source where event originated", formalDefinition="Code specifying the type of source where event originated." )
+        @ca.uhn.fhir.model.api.annotation.Binding(valueSet="http://hl7.org/fhir/ValueSet/audit-source-type")
         protected List<Coding> type;
 
         private static final long serialVersionUID = -1562673890L;
@@ -1445,6 +1600,14 @@ public class AuditEvent extends DomainResource {
           return this.type;
         }
 
+        /**
+         * @return Returns a reference to <code>this</code> for easy method chaining
+         */
+        public AuditEventSourceComponent setType(List<Coding> theType) { 
+          this.type = theType;
+          return this;
+        }
+
         public boolean hasType() { 
           if (this.type == null)
             return false;
@@ -1454,10 +1617,6 @@ public class AuditEvent extends DomainResource {
           return false;
         }
 
-        /**
-         * @return {@link #type} (Code specifying the type of source where event originated.)
-         */
-    // syntactic sugar
         public Coding addType() { //3
           Coding t = new Coding();
           if (this.type == null)
@@ -1466,7 +1625,6 @@ public class AuditEvent extends DomainResource {
           return t;
         }
 
-    // syntactic sugar
         public AuditEventSourceComponent addType(Coding t) { //3
           if (t == null)
             return this;
@@ -1476,12 +1634,50 @@ public class AuditEvent extends DomainResource {
           return this;
         }
 
+        /**
+         * @return The first repetition of repeating field {@link #type}, creating it if it does not already exist
+         */
+        public Coding getTypeFirstRep() { 
+          if (getType().isEmpty()) {
+            addType();
+          }
+          return getType().get(0);
+        }
+
         protected void listChildren(List<Property> childrenList) {
           super.listChildren(childrenList);
           childrenList.add(new Property("site", "string", "Logical source location within the healthcare enterprise network.  For example, a hospital or other provider location within a multi-entity provider group.", 0, java.lang.Integer.MAX_VALUE, site));
           childrenList.add(new Property("identifier", "Identifier", "Identifier of the source where the event was detected.", 0, java.lang.Integer.MAX_VALUE, identifier));
           childrenList.add(new Property("type", "Coding", "Code specifying the type of source where event originated.", 0, java.lang.Integer.MAX_VALUE, type));
         }
+
+      @Override
+      public Base[] getProperty(int hash, String name, boolean checkValid) throws FHIRException {
+        switch (hash) {
+        case 3530567: /*site*/ return this.site == null ? new Base[0] : new Base[] {this.site}; // StringType
+        case -1618432855: /*identifier*/ return this.identifier == null ? new Base[0] : new Base[] {this.identifier}; // Identifier
+        case 3575610: /*type*/ return this.type == null ? new Base[0] : this.type.toArray(new Base[this.type.size()]); // Coding
+        default: return super.getProperty(hash, name, checkValid);
+        }
+
+      }
+
+      @Override
+      public void setProperty(int hash, String name, Base value) throws FHIRException {
+        switch (hash) {
+        case 3530567: // site
+          this.site = castToString(value); // StringType
+          break;
+        case -1618432855: // identifier
+          this.identifier = castToIdentifier(value); // Identifier
+          break;
+        case 3575610: // type
+          this.getType().add(castToCoding(value)); // Coding
+          break;
+        default: super.setProperty(hash, name, value);
+        }
+
+      }
 
       @Override
       public void setProperty(String name, Base value) throws FHIRException {
@@ -1493,6 +1689,17 @@ public class AuditEvent extends DomainResource {
           this.getType().add(castToCoding(value));
         else
           super.setProperty(name, value);
+      }
+
+      @Override
+      public Base makeProperty(int hash, String name) throws FHIRException {
+        switch (hash) {
+        case 3530567: throw new FHIRException("Cannot make property site as it is not a complex type"); // StringType
+        case -1618432855:  return getIdentifier(); // Identifier
+        case 3575610:  return addType(); // Coding
+        default: return super.makeProperty(hash, name);
+        }
+
       }
 
       @Override
@@ -1546,8 +1753,7 @@ public class AuditEvent extends DomainResource {
       }
 
       public boolean isEmpty() {
-        return super.isEmpty() && (site == null || site.isEmpty()) && (identifier == null || identifier.isEmpty())
-           && (type == null || type.isEmpty());
+        return super.isEmpty() && ca.uhn.fhir.util.ElementUtil.isEmpty(site, identifier, type);
       }
 
   public String fhirType() {
@@ -1563,18 +1769,18 @@ public class AuditEvent extends DomainResource {
          * Identifies a specific instance of the entity. The reference should always be version specific.
          */
         @Child(name = "identifier", type = {Identifier.class}, order=1, min=0, max=1, modifier=false, summary=true)
-        @Description(shortDefinition="Specific instance of object (e.g. versioned)", formalDefinition="Identifies a specific instance of the entity. The reference should always be version specific." )
+        @Description(shortDefinition="Specific instance of object", formalDefinition="Identifies a specific instance of the entity. The reference should always be version specific." )
         protected Identifier identifier;
 
         /**
-         * Identifies a specific instance of the entity. The reference should always be version specific.
+         * Identifies a specific instance of the entity. The reference should be version specific.
          */
-        @Child(name = "reference", type = {}, order=2, min=0, max=1, modifier=false, summary=true)
-        @Description(shortDefinition="Specific instance of resource (e.g. versioned)", formalDefinition="Identifies a specific instance of the entity. The reference should always be version specific." )
+        @Child(name = "reference", type = {Reference.class}, order=2, min=0, max=1, modifier=false, summary=true)
+        @Description(shortDefinition="Specific instance of resource", formalDefinition="Identifies a specific instance of the entity. The reference should be version specific." )
         protected Reference reference;
 
         /**
-         * The actual object that is the target of the reference (Identifies a specific instance of the entity. The reference should always be version specific.)
+         * The actual object that is the target of the reference (Identifies a specific instance of the entity. The reference should be version specific.)
          */
         protected Resource referenceTarget;
 
@@ -1582,7 +1788,8 @@ public class AuditEvent extends DomainResource {
          * The type of the object that was involved in this audit event.
          */
         @Child(name = "type", type = {Coding.class}, order=3, min=0, max=1, modifier=false, summary=false)
-        @Description(shortDefinition="Type of object involved", formalDefinition="The type of the object that was involved in this audit event." )
+        @Description(shortDefinition="Type of entity involved", formalDefinition="The type of the object that was involved in this audit event." )
+        @ca.uhn.fhir.model.api.annotation.Binding(valueSet="http://hl7.org/fhir/ValueSet/object-type")
         protected Coding type;
 
         /**
@@ -1590,20 +1797,23 @@ public class AuditEvent extends DomainResource {
          */
         @Child(name = "role", type = {Coding.class}, order=4, min=0, max=1, modifier=false, summary=false)
         @Description(shortDefinition="What role the entity played", formalDefinition="Code representing the role the entity played in the event being audited." )
+        @ca.uhn.fhir.model.api.annotation.Binding(valueSet="http://hl7.org/fhir/ValueSet/object-role")
         protected Coding role;
 
         /**
          * Identifier for the data life-cycle stage for the entity.
          */
         @Child(name = "lifecycle", type = {Coding.class}, order=5, min=0, max=1, modifier=false, summary=false)
-        @Description(shortDefinition="Life-cycle stage for the object", formalDefinition="Identifier for the data life-cycle stage for the entity." )
+        @Description(shortDefinition="Life-cycle stage for the entity", formalDefinition="Identifier for the data life-cycle stage for the entity." )
+        @ca.uhn.fhir.model.api.annotation.Binding(valueSet="http://hl7.org/fhir/ValueSet/object-lifecycle")
         protected Coding lifecycle;
 
         /**
          * Denotes security labels for the identified entity.
          */
         @Child(name = "securityLabel", type = {Coding.class}, order=6, min=0, max=Child.MAX_UNLIMITED, modifier=false, summary=false)
-        @Description(shortDefinition="Security labels applied to the object", formalDefinition="Denotes security labels for the identified entity." )
+        @Description(shortDefinition="Security labels on the entity", formalDefinition="Denotes security labels for the identified entity." )
+        @ca.uhn.fhir.model.api.annotation.Binding(valueSet="http://hl7.org/fhir/ValueSet/security-labels")
         protected List<Coding> securityLabel;
 
         /**
@@ -1668,7 +1878,7 @@ public class AuditEvent extends DomainResource {
         }
 
         /**
-         * @return {@link #reference} (Identifies a specific instance of the entity. The reference should always be version specific.)
+         * @return {@link #reference} (Identifies a specific instance of the entity. The reference should be version specific.)
          */
         public Reference getReference() { 
           if (this.reference == null)
@@ -1684,7 +1894,7 @@ public class AuditEvent extends DomainResource {
         }
 
         /**
-         * @param value {@link #reference} (Identifies a specific instance of the entity. The reference should always be version specific.)
+         * @param value {@link #reference} (Identifies a specific instance of the entity. The reference should be version specific.)
          */
         public AuditEventEntityComponent setReference(Reference value) { 
           this.reference = value;
@@ -1692,14 +1902,14 @@ public class AuditEvent extends DomainResource {
         }
 
         /**
-         * @return {@link #reference} The actual object that is the target of the reference. The reference library doesn't populate this, but you can use it to hold the resource if you resolve it. (Identifies a specific instance of the entity. The reference should always be version specific.)
+         * @return {@link #reference} The actual object that is the target of the reference. The reference library doesn't populate this, but you can use it to hold the resource if you resolve it. (Identifies a specific instance of the entity. The reference should be version specific.)
          */
         public Resource getReferenceTarget() { 
           return this.referenceTarget;
         }
 
         /**
-         * @param value {@link #reference} The actual object that is the target of the reference. The reference library doesn't use these, but you can use it to hold the resource if you resolve it. (Identifies a specific instance of the entity. The reference should always be version specific.)
+         * @param value {@link #reference} The actual object that is the target of the reference. The reference library doesn't use these, but you can use it to hold the resource if you resolve it. (Identifies a specific instance of the entity. The reference should be version specific.)
          */
         public AuditEventEntityComponent setReferenceTarget(Resource value) { 
           this.referenceTarget = value;
@@ -1787,6 +1997,14 @@ public class AuditEvent extends DomainResource {
           return this.securityLabel;
         }
 
+        /**
+         * @return Returns a reference to <code>this</code> for easy method chaining
+         */
+        public AuditEventEntityComponent setSecurityLabel(List<Coding> theSecurityLabel) { 
+          this.securityLabel = theSecurityLabel;
+          return this;
+        }
+
         public boolean hasSecurityLabel() { 
           if (this.securityLabel == null)
             return false;
@@ -1796,10 +2014,6 @@ public class AuditEvent extends DomainResource {
           return false;
         }
 
-        /**
-         * @return {@link #securityLabel} (Denotes security labels for the identified entity.)
-         */
-    // syntactic sugar
         public Coding addSecurityLabel() { //3
           Coding t = new Coding();
           if (this.securityLabel == null)
@@ -1808,7 +2022,6 @@ public class AuditEvent extends DomainResource {
           return t;
         }
 
-    // syntactic sugar
         public AuditEventEntityComponent addSecurityLabel(Coding t) { //3
           if (t == null)
             return this;
@@ -1816,6 +2029,16 @@ public class AuditEvent extends DomainResource {
             this.securityLabel = new ArrayList<Coding>();
           this.securityLabel.add(t);
           return this;
+        }
+
+        /**
+         * @return The first repetition of repeating field {@link #securityLabel}, creating it if it does not already exist
+         */
+        public Coding getSecurityLabelFirstRep() { 
+          if (getSecurityLabel().isEmpty()) {
+            addSecurityLabel();
+          }
+          return getSecurityLabel().get(0);
         }
 
         /**
@@ -1974,6 +2197,14 @@ public class AuditEvent extends DomainResource {
           return this.detail;
         }
 
+        /**
+         * @return Returns a reference to <code>this</code> for easy method chaining
+         */
+        public AuditEventEntityComponent setDetail(List<AuditEventEntityDetailComponent> theDetail) { 
+          this.detail = theDetail;
+          return this;
+        }
+
         public boolean hasDetail() { 
           if (this.detail == null)
             return false;
@@ -1983,10 +2214,6 @@ public class AuditEvent extends DomainResource {
           return false;
         }
 
-        /**
-         * @return {@link #detail} (Additional Information about the entity.)
-         */
-    // syntactic sugar
         public AuditEventEntityDetailComponent addDetail() { //3
           AuditEventEntityDetailComponent t = new AuditEventEntityDetailComponent();
           if (this.detail == null)
@@ -1995,7 +2222,6 @@ public class AuditEvent extends DomainResource {
           return t;
         }
 
-    // syntactic sugar
         public AuditEventEntityComponent addDetail(AuditEventEntityDetailComponent t) { //3
           if (t == null)
             return this;
@@ -2005,10 +2231,20 @@ public class AuditEvent extends DomainResource {
           return this;
         }
 
+        /**
+         * @return The first repetition of repeating field {@link #detail}, creating it if it does not already exist
+         */
+        public AuditEventEntityDetailComponent getDetailFirstRep() { 
+          if (getDetail().isEmpty()) {
+            addDetail();
+          }
+          return getDetail().get(0);
+        }
+
         protected void listChildren(List<Property> childrenList) {
           super.listChildren(childrenList);
           childrenList.add(new Property("identifier", "Identifier", "Identifies a specific instance of the entity. The reference should always be version specific.", 0, java.lang.Integer.MAX_VALUE, identifier));
-          childrenList.add(new Property("reference", "Reference(Any)", "Identifies a specific instance of the entity. The reference should always be version specific.", 0, java.lang.Integer.MAX_VALUE, reference));
+          childrenList.add(new Property("reference", "Reference(Any)", "Identifies a specific instance of the entity. The reference should be version specific.", 0, java.lang.Integer.MAX_VALUE, reference));
           childrenList.add(new Property("type", "Coding", "The type of the object that was involved in this audit event.", 0, java.lang.Integer.MAX_VALUE, type));
           childrenList.add(new Property("role", "Coding", "Code representing the role the entity played in the event being audited.", 0, java.lang.Integer.MAX_VALUE, role));
           childrenList.add(new Property("lifecycle", "Coding", "Identifier for the data life-cycle stage for the entity.", 0, java.lang.Integer.MAX_VALUE, lifecycle));
@@ -2018,6 +2254,62 @@ public class AuditEvent extends DomainResource {
           childrenList.add(new Property("query", "base64Binary", "The query parameters for a query-type entities.", 0, java.lang.Integer.MAX_VALUE, query));
           childrenList.add(new Property("detail", "", "Additional Information about the entity.", 0, java.lang.Integer.MAX_VALUE, detail));
         }
+
+      @Override
+      public Base[] getProperty(int hash, String name, boolean checkValid) throws FHIRException {
+        switch (hash) {
+        case -1618432855: /*identifier*/ return this.identifier == null ? new Base[0] : new Base[] {this.identifier}; // Identifier
+        case -925155509: /*reference*/ return this.reference == null ? new Base[0] : new Base[] {this.reference}; // Reference
+        case 3575610: /*type*/ return this.type == null ? new Base[0] : new Base[] {this.type}; // Coding
+        case 3506294: /*role*/ return this.role == null ? new Base[0] : new Base[] {this.role}; // Coding
+        case -302323862: /*lifecycle*/ return this.lifecycle == null ? new Base[0] : new Base[] {this.lifecycle}; // Coding
+        case -722296940: /*securityLabel*/ return this.securityLabel == null ? new Base[0] : this.securityLabel.toArray(new Base[this.securityLabel.size()]); // Coding
+        case 3373707: /*name*/ return this.name == null ? new Base[0] : new Base[] {this.name}; // StringType
+        case -1724546052: /*description*/ return this.description == null ? new Base[0] : new Base[] {this.description}; // StringType
+        case 107944136: /*query*/ return this.query == null ? new Base[0] : new Base[] {this.query}; // Base64BinaryType
+        case -1335224239: /*detail*/ return this.detail == null ? new Base[0] : this.detail.toArray(new Base[this.detail.size()]); // AuditEventEntityDetailComponent
+        default: return super.getProperty(hash, name, checkValid);
+        }
+
+      }
+
+      @Override
+      public void setProperty(int hash, String name, Base value) throws FHIRException {
+        switch (hash) {
+        case -1618432855: // identifier
+          this.identifier = castToIdentifier(value); // Identifier
+          break;
+        case -925155509: // reference
+          this.reference = castToReference(value); // Reference
+          break;
+        case 3575610: // type
+          this.type = castToCoding(value); // Coding
+          break;
+        case 3506294: // role
+          this.role = castToCoding(value); // Coding
+          break;
+        case -302323862: // lifecycle
+          this.lifecycle = castToCoding(value); // Coding
+          break;
+        case -722296940: // securityLabel
+          this.getSecurityLabel().add(castToCoding(value)); // Coding
+          break;
+        case 3373707: // name
+          this.name = castToString(value); // StringType
+          break;
+        case -1724546052: // description
+          this.description = castToString(value); // StringType
+          break;
+        case 107944136: // query
+          this.query = castToBase64Binary(value); // Base64BinaryType
+          break;
+        case -1335224239: // detail
+          this.getDetail().add((AuditEventEntityDetailComponent) value); // AuditEventEntityDetailComponent
+          break;
+        default: super.setProperty(hash, name, value);
+        }
+
+      }
 
       @Override
       public void setProperty(String name, Base value) throws FHIRException {
@@ -2043,6 +2335,24 @@ public class AuditEvent extends DomainResource {
           this.getDetail().add((AuditEventEntityDetailComponent) value);
         else
           super.setProperty(name, value);
+      }
+
+      @Override
+      public Base makeProperty(int hash, String name) throws FHIRException {
+        switch (hash) {
+        case -1618432855:  return getIdentifier(); // Identifier
+        case -925155509:  return getReference(); // Reference
+        case 3575610:  return getType(); // Coding
+        case 3506294:  return getRole(); // Coding
+        case -302323862:  return getLifecycle(); // Coding
+        case -722296940:  return addSecurityLabel(); // Coding
+        case 3373707: throw new FHIRException("Cannot make property name as it is not a complex type"); // StringType
+        case -1724546052: throw new FHIRException("Cannot make property description as it is not a complex type"); // StringType
+        case 107944136: throw new FHIRException("Cannot make property query as it is not a complex type"); // Base64BinaryType
+        case -1335224239:  return addDetail(); // AuditEventEntityDetailComponent
+        default: return super.makeProperty(hash, name);
+        }
+
       }
 
       @Override
@@ -2135,11 +2445,8 @@ public class AuditEvent extends DomainResource {
       }
 
       public boolean isEmpty() {
-        return super.isEmpty() && (identifier == null || identifier.isEmpty()) && (reference == null || reference.isEmpty())
-           && (type == null || type.isEmpty()) && (role == null || role.isEmpty()) && (lifecycle == null || lifecycle.isEmpty())
-           && (securityLabel == null || securityLabel.isEmpty()) && (name == null || name.isEmpty())
-           && (description == null || description.isEmpty()) && (query == null || query.isEmpty()) && (detail == null || detail.isEmpty())
-          ;
+        return super.isEmpty() && ca.uhn.fhir.util.ElementUtil.isEmpty(identifier, reference, type
+          , role, lifecycle, securityLabel, name, description, query, detail);
       }
 
   public String fhirType() {
@@ -2280,6 +2587,30 @@ public class AuditEvent extends DomainResource {
         }
 
       @Override
+      public Base[] getProperty(int hash, String name, boolean checkValid) throws FHIRException {
+        switch (hash) {
+        case 3575610: /*type*/ return this.type == null ? new Base[0] : new Base[] {this.type}; // StringType
+        case 111972721: /*value*/ return this.value == null ? new Base[0] : new Base[] {this.value}; // Base64BinaryType
+        default: return super.getProperty(hash, name, checkValid);
+        }
+
+      }
+
+      @Override
+      public void setProperty(int hash, String name, Base value) throws FHIRException {
+        switch (hash) {
+        case 3575610: // type
+          this.type = castToString(value); // StringType
+          break;
+        case 111972721: // value
+          this.value = castToBase64Binary(value); // Base64BinaryType
+          break;
+        default: super.setProperty(hash, name, value);
+        }
+
+      }
+
+      @Override
       public void setProperty(String name, Base value) throws FHIRException {
         if (name.equals("type"))
           this.type = castToString(value); // StringType
@@ -2287,6 +2618,16 @@ public class AuditEvent extends DomainResource {
           this.value = castToBase64Binary(value); // Base64BinaryType
         else
           super.setProperty(name, value);
+      }
+
+      @Override
+      public Base makeProperty(int hash, String name) throws FHIRException {
+        switch (hash) {
+        case 3575610: throw new FHIRException("Cannot make property type as it is not a complex type"); // StringType
+        case 111972721: throw new FHIRException("Cannot make property value as it is not a complex type"); // Base64BinaryType
+        default: return super.makeProperty(hash, name);
+        }
+
       }
 
       @Override
@@ -2330,8 +2671,7 @@ public class AuditEvent extends DomainResource {
       }
 
       public boolean isEmpty() {
-        return super.isEmpty() && (type == null || type.isEmpty()) && (value == null || value.isEmpty())
-          ;
+        return super.isEmpty() && ca.uhn.fhir.util.ElementUtil.isEmpty(type, value);
       }
 
   public String fhirType() {
@@ -2346,6 +2686,7 @@ public class AuditEvent extends DomainResource {
      */
     @Child(name = "type", type = {Coding.class}, order=0, min=1, max=1, modifier=false, summary=true)
     @Description(shortDefinition="Type/identifier of event", formalDefinition="Identifier for a family of the event.  For example, a menu item, program, rule, policy, function code, application name or URL. It identifies the performed function." )
+    @ca.uhn.fhir.model.api.annotation.Binding(valueSet="http://hl7.org/fhir/ValueSet/audit-event-type")
     protected Coding type;
 
     /**
@@ -2353,6 +2694,7 @@ public class AuditEvent extends DomainResource {
      */
     @Child(name = "subtype", type = {Coding.class}, order=1, min=0, max=Child.MAX_UNLIMITED, modifier=false, summary=true)
     @Description(shortDefinition="More specific type/id for the event", formalDefinition="Identifier for the category of event." )
+    @ca.uhn.fhir.model.api.annotation.Binding(valueSet="http://hl7.org/fhir/ValueSet/audit-event-sub-type")
     protected List<Coding> subtype;
 
     /**
@@ -2360,6 +2702,7 @@ public class AuditEvent extends DomainResource {
      */
     @Child(name = "action", type = {CodeType.class}, order=2, min=0, max=1, modifier=false, summary=true)
     @Description(shortDefinition="Type of action performed during the event", formalDefinition="Indicator for type of action performed during the event that generated the audit." )
+    @ca.uhn.fhir.model.api.annotation.Binding(valueSet="http://hl7.org/fhir/ValueSet/audit-event-action")
     protected Enumeration<AuditEventAction> action;
 
     /**
@@ -2374,6 +2717,7 @@ public class AuditEvent extends DomainResource {
      */
     @Child(name = "outcome", type = {CodeType.class}, order=4, min=0, max=1, modifier=false, summary=true)
     @Description(shortDefinition="Whether the event succeeded or failed", formalDefinition="Indicates whether the event succeeded or failed." )
+    @ca.uhn.fhir.model.api.annotation.Binding(valueSet="http://hl7.org/fhir/ValueSet/audit-event-outcome")
     protected Enumeration<AuditEventOutcome> outcome;
 
     /**
@@ -2388,27 +2732,28 @@ public class AuditEvent extends DomainResource {
      */
     @Child(name = "purposeOfEvent", type = {Coding.class}, order=6, min=0, max=Child.MAX_UNLIMITED, modifier=false, summary=true)
     @Description(shortDefinition="The purposeOfUse of the event", formalDefinition="The purposeOfUse (reason) that was used during the event being recorded." )
+    @ca.uhn.fhir.model.api.annotation.Binding(valueSet="http://hl7.org/fhir/ValueSet/v3-PurposeOfUse")
     protected List<Coding> purposeOfEvent;
 
     /**
-     * A person, a hardware device or software process.
+     * An actor taking an active role in the event or activity that is logged.
      */
     @Child(name = "agent", type = {}, order=7, min=1, max=Child.MAX_UNLIMITED, modifier=false, summary=false)
-    @Description(shortDefinition="A person, a hardware device or software process", formalDefinition="A person, a hardware device or software process." )
+    @Description(shortDefinition="Actor involved in the event", formalDefinition="An actor taking an active role in the event or activity that is logged." )
     protected List<AuditEventAgentComponent> agent;
 
     /**
-     * Application systems and processes.
+     * The system that is reporting the event.
      */
     @Child(name = "source", type = {}, order=8, min=1, max=1, modifier=false, summary=false)
-    @Description(shortDefinition="Application systems and processes", formalDefinition="Application systems and processes." )
+    @Description(shortDefinition="Audit Event Reporter", formalDefinition="The system that is reporting the event." )
     protected AuditEventSourceComponent source;
 
     /**
      * Specific instances of data or objects that have been accessed.
      */
     @Child(name = "entity", type = {}, order=9, min=0, max=Child.MAX_UNLIMITED, modifier=false, summary=false)
-    @Description(shortDefinition="Specific instances of data or objects that have been accessed", formalDefinition="Specific instances of data or objects that have been accessed." )
+    @Description(shortDefinition="Data or objects used", formalDefinition="Specific instances of data or objects that have been accessed." )
     protected List<AuditEventEntityComponent> entity;
 
     private static final long serialVersionUID = 945153702L;
@@ -2463,6 +2808,14 @@ public class AuditEvent extends DomainResource {
       return this.subtype;
     }
 
+    /**
+     * @return Returns a reference to <code>this</code> for easy method chaining
+     */
+    public AuditEvent setSubtype(List<Coding> theSubtype) { 
+      this.subtype = theSubtype;
+      return this;
+    }
+
     public boolean hasSubtype() { 
       if (this.subtype == null)
         return false;
@@ -2472,10 +2825,6 @@ public class AuditEvent extends DomainResource {
       return false;
     }
 
-    /**
-     * @return {@link #subtype} (Identifier for the category of event.)
-     */
-    // syntactic sugar
     public Coding addSubtype() { //3
       Coding t = new Coding();
       if (this.subtype == null)
@@ -2484,7 +2833,6 @@ public class AuditEvent extends DomainResource {
       return t;
     }
 
-    // syntactic sugar
     public AuditEvent addSubtype(Coding t) { //3
       if (t == null)
         return this;
@@ -2492,6 +2840,16 @@ public class AuditEvent extends DomainResource {
         this.subtype = new ArrayList<Coding>();
       this.subtype.add(t);
       return this;
+    }
+
+    /**
+     * @return The first repetition of repeating field {@link #subtype}, creating it if it does not already exist
+     */
+    public Coding getSubtypeFirstRep() { 
+      if (getSubtype().isEmpty()) {
+        addSubtype();
+      }
+      return getSubtype().get(0);
     }
 
     /**
@@ -2695,6 +3053,14 @@ public class AuditEvent extends DomainResource {
       return this.purposeOfEvent;
     }
 
+    /**
+     * @return Returns a reference to <code>this</code> for easy method chaining
+     */
+    public AuditEvent setPurposeOfEvent(List<Coding> thePurposeOfEvent) { 
+      this.purposeOfEvent = thePurposeOfEvent;
+      return this;
+    }
+
     public boolean hasPurposeOfEvent() { 
       if (this.purposeOfEvent == null)
         return false;
@@ -2704,10 +3070,6 @@ public class AuditEvent extends DomainResource {
       return false;
     }
 
-    /**
-     * @return {@link #purposeOfEvent} (The purposeOfUse (reason) that was used during the event being recorded.)
-     */
-    // syntactic sugar
     public Coding addPurposeOfEvent() { //3
       Coding t = new Coding();
       if (this.purposeOfEvent == null)
@@ -2716,7 +3078,6 @@ public class AuditEvent extends DomainResource {
       return t;
     }
 
-    // syntactic sugar
     public AuditEvent addPurposeOfEvent(Coding t) { //3
       if (t == null)
         return this;
@@ -2727,12 +3088,30 @@ public class AuditEvent extends DomainResource {
     }
 
     /**
-     * @return {@link #agent} (A person, a hardware device or software process.)
+     * @return The first repetition of repeating field {@link #purposeOfEvent}, creating it if it does not already exist
+     */
+    public Coding getPurposeOfEventFirstRep() { 
+      if (getPurposeOfEvent().isEmpty()) {
+        addPurposeOfEvent();
+      }
+      return getPurposeOfEvent().get(0);
+    }
+
+    /**
+     * @return {@link #agent} (An actor taking an active role in the event or activity that is logged.)
      */
     public List<AuditEventAgentComponent> getAgent() { 
       if (this.agent == null)
         this.agent = new ArrayList<AuditEventAgentComponent>();
       return this.agent;
+    }
+
+    /**
+     * @return Returns a reference to <code>this</code> for easy method chaining
+     */
+    public AuditEvent setAgent(List<AuditEventAgentComponent> theAgent) { 
+      this.agent = theAgent;
+      return this;
     }
 
     public boolean hasAgent() { 
@@ -2744,10 +3123,6 @@ public class AuditEvent extends DomainResource {
       return false;
     }
 
-    /**
-     * @return {@link #agent} (A person, a hardware device or software process.)
-     */
-    // syntactic sugar
     public AuditEventAgentComponent addAgent() { //3
       AuditEventAgentComponent t = new AuditEventAgentComponent();
       if (this.agent == null)
@@ -2756,7 +3131,6 @@ public class AuditEvent extends DomainResource {
       return t;
     }
 
-    // syntactic sugar
     public AuditEvent addAgent(AuditEventAgentComponent t) { //3
       if (t == null)
         return this;
@@ -2767,7 +3141,17 @@ public class AuditEvent extends DomainResource {
     }
 
     /**
-     * @return {@link #source} (Application systems and processes.)
+     * @return The first repetition of repeating field {@link #agent}, creating it if it does not already exist
+     */
+    public AuditEventAgentComponent getAgentFirstRep() { 
+      if (getAgent().isEmpty()) {
+        addAgent();
+      }
+      return getAgent().get(0);
+    }
+
+    /**
+     * @return {@link #source} (The system that is reporting the event.)
      */
     public AuditEventSourceComponent getSource() { 
       if (this.source == null)
@@ -2783,7 +3167,7 @@ public class AuditEvent extends DomainResource {
     }
 
     /**
-     * @param value {@link #source} (Application systems and processes.)
+     * @param value {@link #source} (The system that is reporting the event.)
      */
     public AuditEvent setSource(AuditEventSourceComponent value) { 
       this.source = value;
@@ -2799,6 +3183,14 @@ public class AuditEvent extends DomainResource {
       return this.entity;
     }
 
+    /**
+     * @return Returns a reference to <code>this</code> for easy method chaining
+     */
+    public AuditEvent setEntity(List<AuditEventEntityComponent> theEntity) { 
+      this.entity = theEntity;
+      return this;
+    }
+
     public boolean hasEntity() { 
       if (this.entity == null)
         return false;
@@ -2808,10 +3200,6 @@ public class AuditEvent extends DomainResource {
       return false;
     }
 
-    /**
-     * @return {@link #entity} (Specific instances of data or objects that have been accessed.)
-     */
-    // syntactic sugar
     public AuditEventEntityComponent addEntity() { //3
       AuditEventEntityComponent t = new AuditEventEntityComponent();
       if (this.entity == null)
@@ -2820,7 +3208,6 @@ public class AuditEvent extends DomainResource {
       return t;
     }
 
-    // syntactic sugar
     public AuditEvent addEntity(AuditEventEntityComponent t) { //3
       if (t == null)
         return this;
@@ -2828,6 +3215,16 @@ public class AuditEvent extends DomainResource {
         this.entity = new ArrayList<AuditEventEntityComponent>();
       this.entity.add(t);
       return this;
+    }
+
+    /**
+     * @return The first repetition of repeating field {@link #entity}, creating it if it does not already exist
+     */
+    public AuditEventEntityComponent getEntityFirstRep() { 
+      if (getEntity().isEmpty()) {
+        addEntity();
+      }
+      return getEntity().get(0);
     }
 
       protected void listChildren(List<Property> childrenList) {
@@ -2839,9 +3236,65 @@ public class AuditEvent extends DomainResource {
         childrenList.add(new Property("outcome", "code", "Indicates whether the event succeeded or failed.", 0, java.lang.Integer.MAX_VALUE, outcome));
         childrenList.add(new Property("outcomeDesc", "string", "A free text description of the outcome of the event.", 0, java.lang.Integer.MAX_VALUE, outcomeDesc));
         childrenList.add(new Property("purposeOfEvent", "Coding", "The purposeOfUse (reason) that was used during the event being recorded.", 0, java.lang.Integer.MAX_VALUE, purposeOfEvent));
-        childrenList.add(new Property("agent", "", "A person, a hardware device or software process.", 0, java.lang.Integer.MAX_VALUE, agent));
-        childrenList.add(new Property("source", "", "Application systems and processes.", 0, java.lang.Integer.MAX_VALUE, source));
+        childrenList.add(new Property("agent", "", "An actor taking an active role in the event or activity that is logged.", 0, java.lang.Integer.MAX_VALUE, agent));
+        childrenList.add(new Property("source", "", "The system that is reporting the event.", 0, java.lang.Integer.MAX_VALUE, source));
         childrenList.add(new Property("entity", "", "Specific instances of data or objects that have been accessed.", 0, java.lang.Integer.MAX_VALUE, entity));
+      }
+
+      @Override
+      public Base[] getProperty(int hash, String name, boolean checkValid) throws FHIRException {
+        switch (hash) {
+        case 3575610: /*type*/ return this.type == null ? new Base[0] : new Base[] {this.type}; // Coding
+        case -1867567750: /*subtype*/ return this.subtype == null ? new Base[0] : this.subtype.toArray(new Base[this.subtype.size()]); // Coding
+        case -1422950858: /*action*/ return this.action == null ? new Base[0] : new Base[] {this.action}; // Enumeration<AuditEventAction>
+        case -799233872: /*recorded*/ return this.recorded == null ? new Base[0] : new Base[] {this.recorded}; // InstantType
+        case -1106507950: /*outcome*/ return this.outcome == null ? new Base[0] : new Base[] {this.outcome}; // Enumeration<AuditEventOutcome>
+        case 1062502659: /*outcomeDesc*/ return this.outcomeDesc == null ? new Base[0] : new Base[] {this.outcomeDesc}; // StringType
+        case -341917691: /*purposeOfEvent*/ return this.purposeOfEvent == null ? new Base[0] : this.purposeOfEvent.toArray(new Base[this.purposeOfEvent.size()]); // Coding
+        case 92750597: /*agent*/ return this.agent == null ? new Base[0] : this.agent.toArray(new Base[this.agent.size()]); // AuditEventAgentComponent
+        case -896505829: /*source*/ return this.source == null ? new Base[0] : new Base[] {this.source}; // AuditEventSourceComponent
+        case -1298275357: /*entity*/ return this.entity == null ? new Base[0] : this.entity.toArray(new Base[this.entity.size()]); // AuditEventEntityComponent
+        default: return super.getProperty(hash, name, checkValid);
+        }
+
+      }
+
+      @Override
+      public void setProperty(int hash, String name, Base value) throws FHIRException {
+        switch (hash) {
+        case 3575610: // type
+          this.type = castToCoding(value); // Coding
+          break;
+        case -1867567750: // subtype
+          this.getSubtype().add(castToCoding(value)); // Coding
+          break;
+        case -1422950858: // action
+          this.action = new AuditEventActionEnumFactory().fromType(value); // Enumeration<AuditEventAction>
+          break;
+        case -799233872: // recorded
+          this.recorded = castToInstant(value); // InstantType
+          break;
+        case -1106507950: // outcome
+          this.outcome = new AuditEventOutcomeEnumFactory().fromType(value); // Enumeration<AuditEventOutcome>
+          break;
+        case 1062502659: // outcomeDesc
+          this.outcomeDesc = castToString(value); // StringType
+          break;
+        case -341917691: // purposeOfEvent
+          this.getPurposeOfEvent().add(castToCoding(value)); // Coding
+          break;
+        case 92750597: // agent
+          this.getAgent().add((AuditEventAgentComponent) value); // AuditEventAgentComponent
+          break;
+        case -896505829: // source
+          this.source = (AuditEventSourceComponent) value; // AuditEventSourceComponent
+          break;
+        case -1298275357: // entity
+          this.getEntity().add((AuditEventEntityComponent) value); // AuditEventEntityComponent
+          break;
+        default: super.setProperty(hash, name, value);
+        }
+
       }
 
       @Override
@@ -2868,6 +3321,24 @@ public class AuditEvent extends DomainResource {
           this.getEntity().add((AuditEventEntityComponent) value);
         else
           super.setProperty(name, value);
+      }
+
+      @Override
+      public Base makeProperty(int hash, String name) throws FHIRException {
+        switch (hash) {
+        case 3575610:  return getType(); // Coding
+        case -1867567750:  return addSubtype(); // Coding
+        case -1422950858: throw new FHIRException("Cannot make property action as it is not a complex type"); // Enumeration<AuditEventAction>
+        case -799233872: throw new FHIRException("Cannot make property recorded as it is not a complex type"); // InstantType
+        case -1106507950: throw new FHIRException("Cannot make property outcome as it is not a complex type"); // Enumeration<AuditEventOutcome>
+        case 1062502659: throw new FHIRException("Cannot make property outcomeDesc as it is not a complex type"); // StringType
+        case -341917691:  return addPurposeOfEvent(); // Coding
+        case 92750597:  return addAgent(); // AuditEventAgentComponent
+        case -896505829:  return getSource(); // AuditEventSourceComponent
+        case -1298275357:  return addEntity(); // AuditEventEntityComponent
+        default: return super.makeProperty(hash, name);
+        }
+
       }
 
       @Override
@@ -2974,11 +3445,8 @@ public class AuditEvent extends DomainResource {
       }
 
       public boolean isEmpty() {
-        return super.isEmpty() && (type == null || type.isEmpty()) && (subtype == null || subtype.isEmpty())
-           && (action == null || action.isEmpty()) && (recorded == null || recorded.isEmpty()) && (outcome == null || outcome.isEmpty())
-           && (outcomeDesc == null || outcomeDesc.isEmpty()) && (purposeOfEvent == null || purposeOfEvent.isEmpty())
-           && (agent == null || agent.isEmpty()) && (source == null || source.isEmpty()) && (entity == null || entity.isEmpty())
-          ;
+        return super.isEmpty() && ca.uhn.fhir.util.ElementUtil.isEmpty(type, subtype, action, recorded
+          , outcome, outcomeDesc, purposeOfEvent, agent, source, entity);
       }
 
   @Override
@@ -3007,24 +3475,90 @@ public class AuditEvent extends DomainResource {
   public static final ca.uhn.fhir.rest.gclient.DateClientParam DATE = new ca.uhn.fhir.rest.gclient.DateClientParam(SP_DATE);
 
  /**
+   * Search parameter: <b>entity-type</b>
+   * <p>
+   * Description: <b>Type of entity involved</b><br>
+   * Type: <b>token</b><br>
+   * Path: <b>AuditEvent.entity.type</b><br>
+   * </p>
+   */
+  @SearchParamDefinition(name="entity-type", path="AuditEvent.entity.type", description="Type of entity involved", type="token" )
+  public static final String SP_ENTITY_TYPE = "entity-type";
+ /**
+   * <b>Fluent Client</b> search parameter constant for <b>entity-type</b>
+   * <p>
+   * Description: <b>Type of entity involved</b><br>
+   * Type: <b>token</b><br>
+   * Path: <b>AuditEvent.entity.type</b><br>
+   * </p>
+   */
+  public static final ca.uhn.fhir.rest.gclient.TokenClientParam ENTITY_TYPE = new ca.uhn.fhir.rest.gclient.TokenClientParam(SP_ENTITY_TYPE);
+
+ /**
+   * Search parameter: <b>agent</b>
+   * <p>
+   * Description: <b>Direct reference to resource</b><br>
+   * Type: <b>reference</b><br>
+   * Path: <b>AuditEvent.agent.reference</b><br>
+   * </p>
+   */
+  @SearchParamDefinition(name="agent", path="AuditEvent.agent.reference", description="Direct reference to resource", type="reference", providesMembershipIn={ @ca.uhn.fhir.model.api.annotation.Compartment(name="Device"), @ca.uhn.fhir.model.api.annotation.Compartment(name="Practitioner") }, target={Device.class, Organization.class, Patient.class, Practitioner.class, RelatedPerson.class } )
+  public static final String SP_AGENT = "agent";
+ /**
+   * <b>Fluent Client</b> search parameter constant for <b>agent</b>
+   * <p>
+   * Description: <b>Direct reference to resource</b><br>
+   * Type: <b>reference</b><br>
+   * Path: <b>AuditEvent.agent.reference</b><br>
+   * </p>
+   */
+  public static final ca.uhn.fhir.rest.gclient.ReferenceClientParam AGENT = new ca.uhn.fhir.rest.gclient.ReferenceClientParam(SP_AGENT);
+
+/**
+   * Constant for fluent queries to be used to add include statements. Specifies
+   * the path value of "<b>AuditEvent:agent</b>".
+   */
+  public static final ca.uhn.fhir.model.api.Include INCLUDE_AGENT = new ca.uhn.fhir.model.api.Include("AuditEvent:agent").toLocked();
+
+ /**
    * Search parameter: <b>address</b>
    * <p>
    * Description: <b>Identifier for the network access point of the user device</b><br>
-   * Type: <b>token</b><br>
+   * Type: <b>string</b><br>
    * Path: <b>AuditEvent.agent.network.address</b><br>
    * </p>
    */
-  @SearchParamDefinition(name="address", path="AuditEvent.agent.network.address", description="Identifier for the network access point of the user device", type="token" )
+  @SearchParamDefinition(name="address", path="AuditEvent.agent.network.address", description="Identifier for the network access point of the user device", type="string" )
   public static final String SP_ADDRESS = "address";
  /**
    * <b>Fluent Client</b> search parameter constant for <b>address</b>
    * <p>
    * Description: <b>Identifier for the network access point of the user device</b><br>
-   * Type: <b>token</b><br>
+   * Type: <b>string</b><br>
    * Path: <b>AuditEvent.agent.network.address</b><br>
    * </p>
    */
-  public static final ca.uhn.fhir.rest.gclient.TokenClientParam ADDRESS = new ca.uhn.fhir.rest.gclient.TokenClientParam(SP_ADDRESS);
+  public static final ca.uhn.fhir.rest.gclient.StringClientParam ADDRESS = new ca.uhn.fhir.rest.gclient.StringClientParam(SP_ADDRESS);
+
+ /**
+   * Search parameter: <b>role</b>
+   * <p>
+   * Description: <b>What role the entity played</b><br>
+   * Type: <b>token</b><br>
+   * Path: <b>AuditEvent.entity.role</b><br>
+   * </p>
+   */
+  @SearchParamDefinition(name="role", path="AuditEvent.entity.role", description="What role the entity played", type="token" )
+  public static final String SP_ROLE = "role";
+ /**
+   * <b>Fluent Client</b> search parameter constant for <b>role</b>
+   * <p>
+   * Description: <b>What role the entity played</b><br>
+   * Type: <b>token</b><br>
+   * Path: <b>AuditEvent.entity.role</b><br>
+   * </p>
+   */
+  public static final ca.uhn.fhir.rest.gclient.TokenClientParam ROLE = new ca.uhn.fhir.rest.gclient.TokenClientParam(SP_ROLE);
 
  /**
    * Search parameter: <b>source</b>
@@ -3087,58 +3621,6 @@ public class AuditEvent extends DomainResource {
   public static final ca.uhn.fhir.rest.gclient.TokenClientParam ALTID = new ca.uhn.fhir.rest.gclient.TokenClientParam(SP_ALTID);
 
  /**
-   * Search parameter: <b>participant</b>
-   * <p>
-   * Description: <b>Direct reference to resource</b><br>
-   * Type: <b>reference</b><br>
-   * Path: <b>AuditEvent.agent.reference</b><br>
-   * </p>
-   */
-  @SearchParamDefinition(name="participant", path="AuditEvent.agent.reference", description="Direct reference to resource", type="reference" )
-  public static final String SP_PARTICIPANT = "participant";
- /**
-   * <b>Fluent Client</b> search parameter constant for <b>participant</b>
-   * <p>
-   * Description: <b>Direct reference to resource</b><br>
-   * Type: <b>reference</b><br>
-   * Path: <b>AuditEvent.agent.reference</b><br>
-   * </p>
-   */
-  public static final ca.uhn.fhir.rest.gclient.ReferenceClientParam PARTICIPANT = new ca.uhn.fhir.rest.gclient.ReferenceClientParam(SP_PARTICIPANT);
-
-/**
-   * Constant for fluent queries to be used to add include statements. Specifies
-   * the path value of "<b>AuditEvent:participant</b>".
-   */
-  public static final ca.uhn.fhir.model.api.Include INCLUDE_PARTICIPANT = new ca.uhn.fhir.model.api.Include("AuditEvent:participant").toLocked();
-
- /**
-   * Search parameter: <b>reference</b>
-   * <p>
-   * Description: <b>Specific instance of resource (e.g. versioned)</b><br>
-   * Type: <b>reference</b><br>
-   * Path: <b>AuditEvent.entity.reference</b><br>
-   * </p>
-   */
-  @SearchParamDefinition(name="reference", path="AuditEvent.entity.reference", description="Specific instance of resource (e.g. versioned)", type="reference" )
-  public static final String SP_REFERENCE = "reference";
- /**
-   * <b>Fluent Client</b> search parameter constant for <b>reference</b>
-   * <p>
-   * Description: <b>Specific instance of resource (e.g. versioned)</b><br>
-   * Type: <b>reference</b><br>
-   * Path: <b>AuditEvent.entity.reference</b><br>
-   * </p>
-   */
-  public static final ca.uhn.fhir.rest.gclient.ReferenceClientParam REFERENCE = new ca.uhn.fhir.rest.gclient.ReferenceClientParam(SP_REFERENCE);
-
-/**
-   * Constant for fluent queries to be used to add include statements. Specifies
-   * the path value of "<b>AuditEvent:reference</b>".
-   */
-  public static final ca.uhn.fhir.model.api.Include INCLUDE_REFERENCE = new ca.uhn.fhir.model.api.Include("AuditEvent:reference").toLocked();
-
- /**
    * Search parameter: <b>site</b>
    * <p>
    * Description: <b>Logical source location within the enterprise</b><br>
@@ -3157,6 +3639,46 @@ public class AuditEvent extends DomainResource {
    * </p>
    */
   public static final ca.uhn.fhir.rest.gclient.TokenClientParam SITE = new ca.uhn.fhir.rest.gclient.TokenClientParam(SP_SITE);
+
+ /**
+   * Search parameter: <b>agent-name</b>
+   * <p>
+   * Description: <b>Human-meaningful name for the agent</b><br>
+   * Type: <b>string</b><br>
+   * Path: <b>AuditEvent.agent.name</b><br>
+   * </p>
+   */
+  @SearchParamDefinition(name="agent-name", path="AuditEvent.agent.name", description="Human-meaningful name for the agent", type="string" )
+  public static final String SP_AGENT_NAME = "agent-name";
+ /**
+   * <b>Fluent Client</b> search parameter constant for <b>agent-name</b>
+   * <p>
+   * Description: <b>Human-meaningful name for the agent</b><br>
+   * Type: <b>string</b><br>
+   * Path: <b>AuditEvent.agent.name</b><br>
+   * </p>
+   */
+  public static final ca.uhn.fhir.rest.gclient.StringClientParam AGENT_NAME = new ca.uhn.fhir.rest.gclient.StringClientParam(SP_AGENT_NAME);
+
+ /**
+   * Search parameter: <b>entity-name</b>
+   * <p>
+   * Description: <b>Descriptor for entity</b><br>
+   * Type: <b>string</b><br>
+   * Path: <b>AuditEvent.entity.name</b><br>
+   * </p>
+   */
+  @SearchParamDefinition(name="entity-name", path="AuditEvent.entity.name", description="Descriptor for entity", type="string" )
+  public static final String SP_ENTITY_NAME = "entity-name";
+ /**
+   * <b>Fluent Client</b> search parameter constant for <b>entity-name</b>
+   * <p>
+   * Description: <b>Descriptor for entity</b><br>
+   * Type: <b>string</b><br>
+   * Path: <b>AuditEvent.entity.name</b><br>
+   * </p>
+   */
+  public static final ca.uhn.fhir.rest.gclient.StringClientParam ENTITY_NAME = new ca.uhn.fhir.rest.gclient.StringClientParam(SP_ENTITY_NAME);
 
  /**
    * Search parameter: <b>subtype</b>
@@ -3179,26 +3701,6 @@ public class AuditEvent extends DomainResource {
   public static final ca.uhn.fhir.rest.gclient.TokenClientParam SUBTYPE = new ca.uhn.fhir.rest.gclient.TokenClientParam(SP_SUBTYPE);
 
  /**
-   * Search parameter: <b>identity</b>
-   * <p>
-   * Description: <b>Specific instance of object (e.g. versioned)</b><br>
-   * Type: <b>token</b><br>
-   * Path: <b>AuditEvent.entity.identifier</b><br>
-   * </p>
-   */
-  @SearchParamDefinition(name="identity", path="AuditEvent.entity.identifier", description="Specific instance of object (e.g. versioned)", type="token" )
-  public static final String SP_IDENTITY = "identity";
- /**
-   * <b>Fluent Client</b> search parameter constant for <b>identity</b>
-   * <p>
-   * Description: <b>Specific instance of object (e.g. versioned)</b><br>
-   * Type: <b>token</b><br>
-   * Path: <b>AuditEvent.entity.identifier</b><br>
-   * </p>
-   */
-  public static final ca.uhn.fhir.rest.gclient.TokenClientParam IDENTITY = new ca.uhn.fhir.rest.gclient.TokenClientParam(SP_IDENTITY);
-
- /**
    * Search parameter: <b>patient</b>
    * <p>
    * Description: <b>Direct reference to resource</b><br>
@@ -3206,7 +3708,7 @@ public class AuditEvent extends DomainResource {
    * Path: <b>AuditEvent.agent.reference, AuditEvent.entity.reference</b><br>
    * </p>
    */
-  @SearchParamDefinition(name="patient", path="AuditEvent.agent.reference | AuditEvent.entity.reference", description="Direct reference to resource", type="reference" )
+  @SearchParamDefinition(name="patient", path="AuditEvent.agent.reference | AuditEvent.entity.reference", description="Direct reference to resource", type="reference", providesMembershipIn={ @ca.uhn.fhir.model.api.annotation.Compartment(name="Patient") }, target={Patient.class } )
   public static final String SP_PATIENT = "patient";
  /**
    * <b>Fluent Client</b> search parameter constant for <b>patient</b>
@@ -3223,46 +3725,6 @@ public class AuditEvent extends DomainResource {
    * the path value of "<b>AuditEvent:patient</b>".
    */
   public static final ca.uhn.fhir.model.api.Include INCLUDE_PATIENT = new ca.uhn.fhir.model.api.Include("AuditEvent:patient").toLocked();
-
- /**
-   * Search parameter: <b>object-type</b>
-   * <p>
-   * Description: <b>Type of object involved</b><br>
-   * Type: <b>token</b><br>
-   * Path: <b>AuditEvent.entity.type</b><br>
-   * </p>
-   */
-  @SearchParamDefinition(name="object-type", path="AuditEvent.entity.type", description="Type of object involved", type="token" )
-  public static final String SP_OBJECT_TYPE = "object-type";
- /**
-   * <b>Fluent Client</b> search parameter constant for <b>object-type</b>
-   * <p>
-   * Description: <b>Type of object involved</b><br>
-   * Type: <b>token</b><br>
-   * Path: <b>AuditEvent.entity.type</b><br>
-   * </p>
-   */
-  public static final ca.uhn.fhir.rest.gclient.TokenClientParam OBJECT_TYPE = new ca.uhn.fhir.rest.gclient.TokenClientParam(SP_OBJECT_TYPE);
-
- /**
-   * Search parameter: <b>name</b>
-   * <p>
-   * Description: <b>Human-meaningful name for the user</b><br>
-   * Type: <b>string</b><br>
-   * Path: <b>AuditEvent.agent.name</b><br>
-   * </p>
-   */
-  @SearchParamDefinition(name="name", path="AuditEvent.agent.name", description="Human-meaningful name for the user", type="string" )
-  public static final String SP_NAME = "name";
- /**
-   * <b>Fluent Client</b> search parameter constant for <b>name</b>
-   * <p>
-   * Description: <b>Human-meaningful name for the user</b><br>
-   * Type: <b>string</b><br>
-   * Path: <b>AuditEvent.agent.name</b><br>
-   * </p>
-   */
-  public static final ca.uhn.fhir.rest.gclient.StringClientParam NAME = new ca.uhn.fhir.rest.gclient.StringClientParam(SP_NAME);
 
  /**
    * Search parameter: <b>action</b>
@@ -3305,24 +3767,70 @@ public class AuditEvent extends DomainResource {
   public static final ca.uhn.fhir.rest.gclient.TokenClientParam USER = new ca.uhn.fhir.rest.gclient.TokenClientParam(SP_USER);
 
  /**
-   * Search parameter: <b>desc</b>
+   * Search parameter: <b>entity</b>
    * <p>
-   * Description: <b>Descriptor for entity</b><br>
-   * Type: <b>string</b><br>
-   * Path: <b>AuditEvent.entity.name</b><br>
+   * Description: <b>Specific instance of resource</b><br>
+   * Type: <b>reference</b><br>
+   * Path: <b>AuditEvent.entity.reference</b><br>
    * </p>
    */
-  @SearchParamDefinition(name="desc", path="AuditEvent.entity.name", description="Descriptor for entity", type="string" )
-  public static final String SP_DESC = "desc";
+  @SearchParamDefinition(name="entity", path="AuditEvent.entity.reference", description="Specific instance of resource", type="reference" )
+  public static final String SP_ENTITY = "entity";
  /**
-   * <b>Fluent Client</b> search parameter constant for <b>desc</b>
+   * <b>Fluent Client</b> search parameter constant for <b>entity</b>
    * <p>
-   * Description: <b>Descriptor for entity</b><br>
-   * Type: <b>string</b><br>
-   * Path: <b>AuditEvent.entity.name</b><br>
+   * Description: <b>Specific instance of resource</b><br>
+   * Type: <b>reference</b><br>
+   * Path: <b>AuditEvent.entity.reference</b><br>
    * </p>
    */
-  public static final ca.uhn.fhir.rest.gclient.StringClientParam DESC = new ca.uhn.fhir.rest.gclient.StringClientParam(SP_DESC);
+  public static final ca.uhn.fhir.rest.gclient.ReferenceClientParam ENTITY = new ca.uhn.fhir.rest.gclient.ReferenceClientParam(SP_ENTITY);
+
+/**
+   * Constant for fluent queries to be used to add include statements. Specifies
+   * the path value of "<b>AuditEvent:entity</b>".
+   */
+  public static final ca.uhn.fhir.model.api.Include INCLUDE_ENTITY = new ca.uhn.fhir.model.api.Include("AuditEvent:entity").toLocked();
+
+ /**
+   * Search parameter: <b>entity-id</b>
+   * <p>
+   * Description: <b>Specific instance of object</b><br>
+   * Type: <b>token</b><br>
+   * Path: <b>AuditEvent.entity.identifier</b><br>
+   * </p>
+   */
+  @SearchParamDefinition(name="entity-id", path="AuditEvent.entity.identifier", description="Specific instance of object", type="token" )
+  public static final String SP_ENTITY_ID = "entity-id";
+ /**
+   * <b>Fluent Client</b> search parameter constant for <b>entity-id</b>
+   * <p>
+   * Description: <b>Specific instance of object</b><br>
+   * Type: <b>token</b><br>
+   * Path: <b>AuditEvent.entity.identifier</b><br>
+   * </p>
+   */
+  public static final ca.uhn.fhir.rest.gclient.TokenClientParam ENTITY_ID = new ca.uhn.fhir.rest.gclient.TokenClientParam(SP_ENTITY_ID);
+
+ /**
+   * Search parameter: <b>outcome</b>
+   * <p>
+   * Description: <b>Whether the event succeeded or failed</b><br>
+   * Type: <b>token</b><br>
+   * Path: <b>AuditEvent.outcome</b><br>
+   * </p>
+   */
+  @SearchParamDefinition(name="outcome", path="AuditEvent.outcome", description="Whether the event succeeded or failed", type="token" )
+  public static final String SP_OUTCOME = "outcome";
+ /**
+   * <b>Fluent Client</b> search parameter constant for <b>outcome</b>
+   * <p>
+   * Description: <b>Whether the event succeeded or failed</b><br>
+   * Type: <b>token</b><br>
+   * Path: <b>AuditEvent.outcome</b><br>
+   * </p>
+   */
+  public static final ca.uhn.fhir.rest.gclient.TokenClientParam OUTCOME = new ca.uhn.fhir.rest.gclient.TokenClientParam(SP_OUTCOME);
 
  /**
    * Search parameter: <b>policy</b>

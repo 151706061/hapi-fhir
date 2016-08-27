@@ -29,20 +29,19 @@ package org.hl7.fhir.dstu3.model;
   
 */
 
-// Generated on Sat, Jan 30, 2016 09:18-0500 for FHIR v1.3.0
+// Generated on Thu, Aug 25, 2016 23:04-0400 for FHIR v1.6.0
 
 import java.util.*;
 
 import org.hl7.fhir.utilities.Utilities;
-
+import org.hl7.fhir.dstu3.model.Enumerations.*;
 import ca.uhn.fhir.model.api.annotation.Child;
+import ca.uhn.fhir.model.api.annotation.ChildOrder;
 import ca.uhn.fhir.model.api.annotation.Description;
 import ca.uhn.fhir.model.api.annotation.DatatypeDef;
 import ca.uhn.fhir.model.api.annotation.Block;
-
-import org.hl7.fhir.dstu3.exceptions.FHIRException;
-import org.hl7.fhir.dstu3.model.Enumerations.*;
 import org.hl7.fhir.instance.model.api.*;
+import org.hl7.fhir.dstu3.exceptions.FHIRException;
 /**
  * A technical identifier - identifies some entity uniquely and unambiguously.
  */
@@ -67,7 +66,7 @@ public class Identifier extends Type implements ICompositeType {
          */
         SECONDARY, 
         /**
-         * added to help the parsers
+         * added to help the parsers with the generic types
          */
         NULL;
         public static IdentifierUse fromCode(String codeString) throws FHIRException {
@@ -81,7 +80,10 @@ public class Identifier extends Type implements ICompositeType {
           return TEMP;
         if ("secondary".equals(codeString))
           return SECONDARY;
-        throw new FHIRException("Unknown IdentifierUse code '"+codeString+"'");
+        if (Configuration.isAcceptInvalidEnums())
+          return null;
+        else
+          throw new FHIRException("Unknown IdentifierUse code '"+codeString+"'");
         }
         public String toCode() {
           switch (this) {
@@ -173,6 +175,7 @@ public class Identifier extends Type implements ICompositeType {
      */
     @Child(name = "use", type = {CodeType.class}, order=0, min=0, max=1, modifier=true, summary=true)
     @Description(shortDefinition="usual | official | temp | secondary (If known)", formalDefinition="The purpose of this identifier." )
+    @ca.uhn.fhir.model.api.annotation.Binding(valueSet="http://hl7.org/fhir/ValueSet/identifier-use")
     protected Enumeration<IdentifierUse> use;
 
     /**
@@ -180,6 +183,7 @@ public class Identifier extends Type implements ICompositeType {
      */
     @Child(name = "type", type = {CodeableConcept.class}, order=1, min=0, max=1, modifier=false, summary=true)
     @Description(shortDefinition="Description of identifier", formalDefinition="A coded type for the identifier that can be used to determine which identifier to use for a specific purpose." )
+    @ca.uhn.fhir.model.api.annotation.Binding(valueSet="http://hl7.org/fhir/ValueSet/identifier-type")
     protected CodeableConcept type;
 
     /**
@@ -190,10 +194,10 @@ public class Identifier extends Type implements ICompositeType {
     protected UriType system;
 
     /**
-     * The portion of the identifier typically displayed to the user and which is unique within the context of the system.
+     * The portion of the identifier typically relevant to the user and which is unique within the context of the system.
      */
     @Child(name = "value", type = {StringType.class}, order=3, min=0, max=1, modifier=false, summary=true)
-    @Description(shortDefinition="The value that is unique", formalDefinition="The portion of the identifier typically displayed to the user and which is unique within the context of the system." )
+    @Description(shortDefinition="The value that is unique", formalDefinition="The portion of the identifier typically relevant to the user and which is unique within the context of the system." )
     protected StringType value;
 
     /**
@@ -347,7 +351,7 @@ public class Identifier extends Type implements ICompositeType {
     }
 
     /**
-     * @return {@link #value} (The portion of the identifier typically displayed to the user and which is unique within the context of the system.). This is the underlying object with id, value and extensions. The accessor "getValue" gives direct access to the value
+     * @return {@link #value} (The portion of the identifier typically relevant to the user and which is unique within the context of the system.). This is the underlying object with id, value and extensions. The accessor "getValue" gives direct access to the value
      */
     public StringType getValueElement() { 
       if (this.value == null)
@@ -367,7 +371,7 @@ public class Identifier extends Type implements ICompositeType {
     }
 
     /**
-     * @param value {@link #value} (The portion of the identifier typically displayed to the user and which is unique within the context of the system.). This is the underlying object with id, value and extensions. The accessor "getValue" gives direct access to the value
+     * @param value {@link #value} (The portion of the identifier typically relevant to the user and which is unique within the context of the system.). This is the underlying object with id, value and extensions. The accessor "getValue" gives direct access to the value
      */
     public Identifier setValueElement(StringType value) { 
       this.value = value;
@@ -375,14 +379,14 @@ public class Identifier extends Type implements ICompositeType {
     }
 
     /**
-     * @return The portion of the identifier typically displayed to the user and which is unique within the context of the system.
+     * @return The portion of the identifier typically relevant to the user and which is unique within the context of the system.
      */
     public String getValue() { 
       return this.value == null ? null : this.value.getValue();
     }
 
     /**
-     * @param value The portion of the identifier typically displayed to the user and which is unique within the context of the system.
+     * @param value The portion of the identifier typically relevant to the user and which is unique within the context of the system.
      */
     public Identifier setValue(String value) { 
       if (Utilities.noString(value))
@@ -468,9 +472,49 @@ public class Identifier extends Type implements ICompositeType {
         childrenList.add(new Property("use", "code", "The purpose of this identifier.", 0, java.lang.Integer.MAX_VALUE, use));
         childrenList.add(new Property("type", "CodeableConcept", "A coded type for the identifier that can be used to determine which identifier to use for a specific purpose.", 0, java.lang.Integer.MAX_VALUE, type));
         childrenList.add(new Property("system", "uri", "Establishes the namespace in which set of possible id values is unique.", 0, java.lang.Integer.MAX_VALUE, system));
-        childrenList.add(new Property("value", "string", "The portion of the identifier typically displayed to the user and which is unique within the context of the system.", 0, java.lang.Integer.MAX_VALUE, value));
+        childrenList.add(new Property("value", "string", "The portion of the identifier typically relevant to the user and which is unique within the context of the system.", 0, java.lang.Integer.MAX_VALUE, value));
         childrenList.add(new Property("period", "Period", "Time period during which identifier is/was valid for use.", 0, java.lang.Integer.MAX_VALUE, period));
         childrenList.add(new Property("assigner", "Reference(Organization)", "Organization that issued/manages the identifier.", 0, java.lang.Integer.MAX_VALUE, assigner));
+      }
+
+      @Override
+      public Base[] getProperty(int hash, String name, boolean checkValid) throws FHIRException {
+        switch (hash) {
+        case 116103: /*use*/ return this.use == null ? new Base[0] : new Base[] {this.use}; // Enumeration<IdentifierUse>
+        case 3575610: /*type*/ return this.type == null ? new Base[0] : new Base[] {this.type}; // CodeableConcept
+        case -887328209: /*system*/ return this.system == null ? new Base[0] : new Base[] {this.system}; // UriType
+        case 111972721: /*value*/ return this.value == null ? new Base[0] : new Base[] {this.value}; // StringType
+        case -991726143: /*period*/ return this.period == null ? new Base[0] : new Base[] {this.period}; // Period
+        case -369881636: /*assigner*/ return this.assigner == null ? new Base[0] : new Base[] {this.assigner}; // Reference
+        default: return super.getProperty(hash, name, checkValid);
+        }
+
+      }
+
+      @Override
+      public void setProperty(int hash, String name, Base value) throws FHIRException {
+        switch (hash) {
+        case 116103: // use
+          this.use = new IdentifierUseEnumFactory().fromType(value); // Enumeration<IdentifierUse>
+          break;
+        case 3575610: // type
+          this.type = castToCodeableConcept(value); // CodeableConcept
+          break;
+        case -887328209: // system
+          this.system = castToUri(value); // UriType
+          break;
+        case 111972721: // value
+          this.value = castToString(value); // StringType
+          break;
+        case -991726143: // period
+          this.period = castToPeriod(value); // Period
+          break;
+        case -369881636: // assigner
+          this.assigner = castToReference(value); // Reference
+          break;
+        default: super.setProperty(hash, name, value);
+        }
+
       }
 
       @Override
@@ -489,6 +533,20 @@ public class Identifier extends Type implements ICompositeType {
           this.assigner = castToReference(value); // Reference
         else
           super.setProperty(name, value);
+      }
+
+      @Override
+      public Base makeProperty(int hash, String name) throws FHIRException {
+        switch (hash) {
+        case 116103: throw new FHIRException("Cannot make property use as it is not a complex type"); // Enumeration<IdentifierUse>
+        case 3575610:  return getType(); // CodeableConcept
+        case -887328209: throw new FHIRException("Cannot make property system as it is not a complex type"); // UriType
+        case 111972721: throw new FHIRException("Cannot make property value as it is not a complex type"); // StringType
+        case -991726143:  return getPeriod(); // Period
+        case -369881636:  return getAssigner(); // Reference
+        default: return super.makeProperty(hash, name);
+        }
+
       }
 
       @Override
@@ -563,9 +621,8 @@ public class Identifier extends Type implements ICompositeType {
       }
 
       public boolean isEmpty() {
-        return super.isEmpty() && (use == null || use.isEmpty()) && (type == null || type.isEmpty())
-           && (system == null || system.isEmpty()) && (value == null || value.isEmpty()) && (period == null || period.isEmpty())
-           && (assigner == null || assigner.isEmpty());
+        return super.isEmpty() && ca.uhn.fhir.util.ElementUtil.isEmpty(use, type, system, value
+          , period, assigner);
       }
 
 

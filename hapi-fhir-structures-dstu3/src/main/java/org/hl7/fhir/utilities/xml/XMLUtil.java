@@ -29,18 +29,26 @@ POSSIBILITY OF SUCH DAMAGE.
 package org.hl7.fhir.utilities.xml;
 
 import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.List;
+import java.util.Set;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 
 import org.hl7.fhir.exceptions.FHIRException;
 import org.hl7.fhir.utilities.Utilities;
+import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -381,9 +389,18 @@ public class XMLUtil {
         children.add(c);
       c = getNextSibling(c);
     }
-	  
   }
 
+	public static void getNamedChildrenWithTails(Element focus, String name, List<Element> children, Set<String> typeTails) {
+    Element c = getFirstChild(focus);
+    while (c != null) {
+      String n = c.getLocalName() != null ? c.getLocalName() : c.getNodeName(); 
+      if (n.equals(name) || (!n.equals("responseCode") && (n.startsWith(name) && typeTails.contains(n.substring(name.length())))))
+        children.add(c);
+      c = getNextSibling(c);
+    }
+  }
+	
   public static boolean hasNamedChild(Element e, String name) {
     Element c = getFirstChild(e);
     while (c != null && !name.equals(c.getLocalName()) && !name.equals(c.getNodeName()))
@@ -425,6 +442,31 @@ public class XMLUtil {
     Element e = getNamedChild(element, name);
     return e == null ? null : e.getAttribute(aname);
   }
+
+  public static void writeDomToFile(Document doc, String filename) throws TransformerException {
+    TransformerFactory transformerFactory = TransformerFactory.newInstance();
+    Transformer transformer = transformerFactory.newTransformer();
+    DOMSource source = new DOMSource(doc);
+    StreamResult streamResult =  new StreamResult(new File(filename));
+    transformer.transform(source, streamResult);    
+  }
+
+  public static String getXsiType(org.w3c.dom.Element element) {
+    Attr a = element.getAttributeNodeNS("http://www.w3.org/2001/XMLSchema-instance", "type");
+    return (a == null ? null : a.getTextContent());
+    
+  }
+
+	public static String getDirectText(org.w3c.dom.Element node) {
+    Node n = node.getFirstChild();
+    StringBuilder b = new StringBuilder();
+    while (n != null) {
+    	if (n.getNodeType() == Node.TEXT_NODE) 
+    		b.append(n.getTextContent());
+    	n = n.getNextSibling();
+    }
+	  return b.toString().trim();
+	}
 
  	
 }

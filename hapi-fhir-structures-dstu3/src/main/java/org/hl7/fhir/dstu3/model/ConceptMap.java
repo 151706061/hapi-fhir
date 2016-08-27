@@ -29,26 +29,26 @@ package org.hl7.fhir.dstu3.model;
   
 */
 
-// Generated on Sat, Jan 30, 2016 09:18-0500 for FHIR v1.3.0
+// Generated on Thu, Aug 25, 2016 23:04-0400 for FHIR v1.6.0
 
 import java.util.*;
 
 import org.hl7.fhir.utilities.Utilities;
-
+import org.hl7.fhir.dstu3.model.Enumerations.*;
 import ca.uhn.fhir.model.api.annotation.ResourceDef;
 import ca.uhn.fhir.model.api.annotation.SearchParamDefinition;
 import ca.uhn.fhir.model.api.annotation.Child;
+import ca.uhn.fhir.model.api.annotation.ChildOrder;
 import ca.uhn.fhir.model.api.annotation.Description;
 import ca.uhn.fhir.model.api.annotation.Block;
-
-import org.hl7.fhir.dstu3.exceptions.FHIRException;
-import org.hl7.fhir.dstu3.model.Enumerations.*;
 import org.hl7.fhir.instance.model.api.*;
+import org.hl7.fhir.dstu3.exceptions.FHIRException;
 /**
  * A statement of relationships from one set of concepts to one or more other concepts - either code systems or data elements, or classes in class models.
  */
 @ResourceDef(name="ConceptMap", profile="http://hl7.org/fhir/Profile/ConceptMap")
-public class ConceptMap extends DomainResource {
+@ChildOrder(names={"url", "identifier", "version", "name", "status", "experimental", "publisher", "contact", "date", "description", "useContext", "requirements", "copyright", "source[x]", "target[x]", "group"})
+public class ConceptMap extends BaseConformance {
 
     @Block()
     public static class ConceptMapContactComponent extends BackboneElement implements IBaseBackboneElement {
@@ -56,7 +56,7 @@ public class ConceptMap extends DomainResource {
          * The name of an individual to contact regarding the concept map.
          */
         @Child(name = "name", type = {StringType.class}, order=1, min=0, max=1, modifier=false, summary=true)
-        @Description(shortDefinition="Name of a individual to contact", formalDefinition="The name of an individual to contact regarding the concept map." )
+        @Description(shortDefinition="Name of an individual to contact", formalDefinition="The name of an individual to contact regarding the concept map." )
         protected StringType name;
 
         /**
@@ -133,6 +133,14 @@ public class ConceptMap extends DomainResource {
           return this.telecom;
         }
 
+        /**
+         * @return Returns a reference to <code>this</code> for easy method chaining
+         */
+        public ConceptMapContactComponent setTelecom(List<ContactPoint> theTelecom) { 
+          this.telecom = theTelecom;
+          return this;
+        }
+
         public boolean hasTelecom() { 
           if (this.telecom == null)
             return false;
@@ -142,10 +150,6 @@ public class ConceptMap extends DomainResource {
           return false;
         }
 
-        /**
-         * @return {@link #telecom} (Contact details for individual (if a name was provided) or the publisher.)
-         */
-    // syntactic sugar
         public ContactPoint addTelecom() { //3
           ContactPoint t = new ContactPoint();
           if (this.telecom == null)
@@ -154,7 +158,6 @@ public class ConceptMap extends DomainResource {
           return t;
         }
 
-    // syntactic sugar
         public ConceptMapContactComponent addTelecom(ContactPoint t) { //3
           if (t == null)
             return this;
@@ -164,11 +167,45 @@ public class ConceptMap extends DomainResource {
           return this;
         }
 
+        /**
+         * @return The first repetition of repeating field {@link #telecom}, creating it if it does not already exist
+         */
+        public ContactPoint getTelecomFirstRep() { 
+          if (getTelecom().isEmpty()) {
+            addTelecom();
+          }
+          return getTelecom().get(0);
+        }
+
         protected void listChildren(List<Property> childrenList) {
           super.listChildren(childrenList);
           childrenList.add(new Property("name", "string", "The name of an individual to contact regarding the concept map.", 0, java.lang.Integer.MAX_VALUE, name));
           childrenList.add(new Property("telecom", "ContactPoint", "Contact details for individual (if a name was provided) or the publisher.", 0, java.lang.Integer.MAX_VALUE, telecom));
         }
+
+      @Override
+      public Base[] getProperty(int hash, String name, boolean checkValid) throws FHIRException {
+        switch (hash) {
+        case 3373707: /*name*/ return this.name == null ? new Base[0] : new Base[] {this.name}; // StringType
+        case -1429363305: /*telecom*/ return this.telecom == null ? new Base[0] : this.telecom.toArray(new Base[this.telecom.size()]); // ContactPoint
+        default: return super.getProperty(hash, name, checkValid);
+        }
+
+      }
+
+      @Override
+      public void setProperty(int hash, String name, Base value) throws FHIRException {
+        switch (hash) {
+        case 3373707: // name
+          this.name = castToString(value); // StringType
+          break;
+        case -1429363305: // telecom
+          this.getTelecom().add(castToContactPoint(value)); // ContactPoint
+          break;
+        default: super.setProperty(hash, name, value);
+        }
+
+      }
 
       @Override
       public void setProperty(String name, Base value) throws FHIRException {
@@ -178,6 +215,16 @@ public class ConceptMap extends DomainResource {
           this.getTelecom().add(castToContactPoint(value));
         else
           super.setProperty(name, value);
+      }
+
+      @Override
+      public Base makeProperty(int hash, String name) throws FHIRException {
+        switch (hash) {
+        case 3373707: throw new FHIRException("Cannot make property name as it is not a complex type"); // StringType
+        case -1429363305:  return addTelecom(); // ContactPoint
+        default: return super.makeProperty(hash, name);
+        }
+
       }
 
       @Override
@@ -225,8 +272,7 @@ public class ConceptMap extends DomainResource {
       }
 
       public boolean isEmpty() {
-        return super.isEmpty() && (name == null || name.isEmpty()) && (telecom == null || telecom.isEmpty())
-          ;
+        return super.isEmpty() && ca.uhn.fhir.util.ElementUtil.isEmpty(name, telecom);
       }
 
   public String fhirType() {
@@ -237,29 +283,466 @@ public class ConceptMap extends DomainResource {
   }
 
     @Block()
-    public static class SourceElementComponent extends BackboneElement implements IBaseBackboneElement {
+    public static class ConceptMapGroupComponent extends BackboneElement implements IBaseBackboneElement {
         /**
          * An absolute URI that identifies the Code System (if the source is a value set that crosses more than one code system).
          */
-        @Child(name = "codeSystem", type = {UriType.class}, order=1, min=0, max=1, modifier=false, summary=false)
+        @Child(name = "source", type = {UriType.class}, order=1, min=1, max=1, modifier=false, summary=false)
         @Description(shortDefinition="Code System (if value set crosses code systems)", formalDefinition="An absolute URI that identifies the Code System (if the source is a value set that crosses more than one code system)." )
-        protected UriType codeSystem;
+        protected UriType source;
 
+        /**
+         * The specific version of the code system, as determined by the code system authority.
+         */
+        @Child(name = "sourceVersion", type = {StringType.class}, order=2, min=0, max=1, modifier=false, summary=false)
+        @Description(shortDefinition="Specific version of the  code system", formalDefinition="The specific version of the code system, as determined by the code system authority." )
+        protected StringType sourceVersion;
+
+        /**
+         * An absolute URI that identifies the code system of the target code (if the target is a value set that cross code systems).
+         */
+        @Child(name = "target", type = {UriType.class}, order=3, min=0, max=1, modifier=false, summary=false)
+        @Description(shortDefinition="System of the target (if necessary)", formalDefinition="An absolute URI that identifies the code system of the target code (if the target is a value set that cross code systems)." )
+        protected UriType target;
+
+        /**
+         * The specific version of the code system, as determined by the code system authority.
+         */
+        @Child(name = "targetVersion", type = {StringType.class}, order=4, min=0, max=1, modifier=false, summary=false)
+        @Description(shortDefinition="Specific version of the  code system", formalDefinition="The specific version of the code system, as determined by the code system authority." )
+        protected StringType targetVersion;
+
+        /**
+         * Mappings for an individual concept in the source to one or more concepts in the target.
+         */
+        @Child(name = "element", type = {}, order=5, min=1, max=Child.MAX_UNLIMITED, modifier=false, summary=false)
+        @Description(shortDefinition="Mappings for a concept from the source set", formalDefinition="Mappings for an individual concept in the source to one or more concepts in the target." )
+        protected List<SourceElementComponent> element;
+
+        private static final long serialVersionUID = 924052416L;
+
+    /**
+     * Constructor
+     */
+      public ConceptMapGroupComponent() {
+        super();
+      }
+
+    /**
+     * Constructor
+     */
+      public ConceptMapGroupComponent(UriType source) {
+        super();
+        this.source = source;
+      }
+
+        /**
+         * @return {@link #source} (An absolute URI that identifies the Code System (if the source is a value set that crosses more than one code system).). This is the underlying object with id, value and extensions. The accessor "getSource" gives direct access to the value
+         */
+        public UriType getSourceElement() { 
+          if (this.source == null)
+            if (Configuration.errorOnAutoCreate())
+              throw new Error("Attempt to auto-create ConceptMapGroupComponent.source");
+            else if (Configuration.doAutoCreate())
+              this.source = new UriType(); // bb
+          return this.source;
+        }
+
+        public boolean hasSourceElement() { 
+          return this.source != null && !this.source.isEmpty();
+        }
+
+        public boolean hasSource() { 
+          return this.source != null && !this.source.isEmpty();
+        }
+
+        /**
+         * @param value {@link #source} (An absolute URI that identifies the Code System (if the source is a value set that crosses more than one code system).). This is the underlying object with id, value and extensions. The accessor "getSource" gives direct access to the value
+         */
+        public ConceptMapGroupComponent setSourceElement(UriType value) { 
+          this.source = value;
+          return this;
+        }
+
+        /**
+         * @return An absolute URI that identifies the Code System (if the source is a value set that crosses more than one code system).
+         */
+        public String getSource() { 
+          return this.source == null ? null : this.source.getValue();
+        }
+
+        /**
+         * @param value An absolute URI that identifies the Code System (if the source is a value set that crosses more than one code system).
+         */
+        public ConceptMapGroupComponent setSource(String value) { 
+            if (this.source == null)
+              this.source = new UriType();
+            this.source.setValue(value);
+          return this;
+        }
+
+        /**
+         * @return {@link #sourceVersion} (The specific version of the code system, as determined by the code system authority.). This is the underlying object with id, value and extensions. The accessor "getSourceVersion" gives direct access to the value
+         */
+        public StringType getSourceVersionElement() { 
+          if (this.sourceVersion == null)
+            if (Configuration.errorOnAutoCreate())
+              throw new Error("Attempt to auto-create ConceptMapGroupComponent.sourceVersion");
+            else if (Configuration.doAutoCreate())
+              this.sourceVersion = new StringType(); // bb
+          return this.sourceVersion;
+        }
+
+        public boolean hasSourceVersionElement() { 
+          return this.sourceVersion != null && !this.sourceVersion.isEmpty();
+        }
+
+        public boolean hasSourceVersion() { 
+          return this.sourceVersion != null && !this.sourceVersion.isEmpty();
+        }
+
+        /**
+         * @param value {@link #sourceVersion} (The specific version of the code system, as determined by the code system authority.). This is the underlying object with id, value and extensions. The accessor "getSourceVersion" gives direct access to the value
+         */
+        public ConceptMapGroupComponent setSourceVersionElement(StringType value) { 
+          this.sourceVersion = value;
+          return this;
+        }
+
+        /**
+         * @return The specific version of the code system, as determined by the code system authority.
+         */
+        public String getSourceVersion() { 
+          return this.sourceVersion == null ? null : this.sourceVersion.getValue();
+        }
+
+        /**
+         * @param value The specific version of the code system, as determined by the code system authority.
+         */
+        public ConceptMapGroupComponent setSourceVersion(String value) { 
+          if (Utilities.noString(value))
+            this.sourceVersion = null;
+          else {
+            if (this.sourceVersion == null)
+              this.sourceVersion = new StringType();
+            this.sourceVersion.setValue(value);
+          }
+          return this;
+        }
+
+        /**
+         * @return {@link #target} (An absolute URI that identifies the code system of the target code (if the target is a value set that cross code systems).). This is the underlying object with id, value and extensions. The accessor "getTarget" gives direct access to the value
+         */
+        public UriType getTargetElement() { 
+          if (this.target == null)
+            if (Configuration.errorOnAutoCreate())
+              throw new Error("Attempt to auto-create ConceptMapGroupComponent.target");
+            else if (Configuration.doAutoCreate())
+              this.target = new UriType(); // bb
+          return this.target;
+        }
+
+        public boolean hasTargetElement() { 
+          return this.target != null && !this.target.isEmpty();
+        }
+
+        public boolean hasTarget() { 
+          return this.target != null && !this.target.isEmpty();
+        }
+
+        /**
+         * @param value {@link #target} (An absolute URI that identifies the code system of the target code (if the target is a value set that cross code systems).). This is the underlying object with id, value and extensions. The accessor "getTarget" gives direct access to the value
+         */
+        public ConceptMapGroupComponent setTargetElement(UriType value) { 
+          this.target = value;
+          return this;
+        }
+
+        /**
+         * @return An absolute URI that identifies the code system of the target code (if the target is a value set that cross code systems).
+         */
+        public String getTarget() { 
+          return this.target == null ? null : this.target.getValue();
+        }
+
+        /**
+         * @param value An absolute URI that identifies the code system of the target code (if the target is a value set that cross code systems).
+         */
+        public ConceptMapGroupComponent setTarget(String value) { 
+          if (Utilities.noString(value))
+            this.target = null;
+          else {
+            if (this.target == null)
+              this.target = new UriType();
+            this.target.setValue(value);
+          }
+          return this;
+        }
+
+        /**
+         * @return {@link #targetVersion} (The specific version of the code system, as determined by the code system authority.). This is the underlying object with id, value and extensions. The accessor "getTargetVersion" gives direct access to the value
+         */
+        public StringType getTargetVersionElement() { 
+          if (this.targetVersion == null)
+            if (Configuration.errorOnAutoCreate())
+              throw new Error("Attempt to auto-create ConceptMapGroupComponent.targetVersion");
+            else if (Configuration.doAutoCreate())
+              this.targetVersion = new StringType(); // bb
+          return this.targetVersion;
+        }
+
+        public boolean hasTargetVersionElement() { 
+          return this.targetVersion != null && !this.targetVersion.isEmpty();
+        }
+
+        public boolean hasTargetVersion() { 
+          return this.targetVersion != null && !this.targetVersion.isEmpty();
+        }
+
+        /**
+         * @param value {@link #targetVersion} (The specific version of the code system, as determined by the code system authority.). This is the underlying object with id, value and extensions. The accessor "getTargetVersion" gives direct access to the value
+         */
+        public ConceptMapGroupComponent setTargetVersionElement(StringType value) { 
+          this.targetVersion = value;
+          return this;
+        }
+
+        /**
+         * @return The specific version of the code system, as determined by the code system authority.
+         */
+        public String getTargetVersion() { 
+          return this.targetVersion == null ? null : this.targetVersion.getValue();
+        }
+
+        /**
+         * @param value The specific version of the code system, as determined by the code system authority.
+         */
+        public ConceptMapGroupComponent setTargetVersion(String value) { 
+          if (Utilities.noString(value))
+            this.targetVersion = null;
+          else {
+            if (this.targetVersion == null)
+              this.targetVersion = new StringType();
+            this.targetVersion.setValue(value);
+          }
+          return this;
+        }
+
+        /**
+         * @return {@link #element} (Mappings for an individual concept in the source to one or more concepts in the target.)
+         */
+        public List<SourceElementComponent> getElement() { 
+          if (this.element == null)
+            this.element = new ArrayList<SourceElementComponent>();
+          return this.element;
+        }
+
+        /**
+         * @return Returns a reference to <code>this</code> for easy method chaining
+         */
+        public ConceptMapGroupComponent setElement(List<SourceElementComponent> theElement) { 
+          this.element = theElement;
+          return this;
+        }
+
+        public boolean hasElement() { 
+          if (this.element == null)
+            return false;
+          for (SourceElementComponent item : this.element)
+            if (!item.isEmpty())
+              return true;
+          return false;
+        }
+
+        public SourceElementComponent addElement() { //3
+          SourceElementComponent t = new SourceElementComponent();
+          if (this.element == null)
+            this.element = new ArrayList<SourceElementComponent>();
+          this.element.add(t);
+          return t;
+        }
+
+        public ConceptMapGroupComponent addElement(SourceElementComponent t) { //3
+          if (t == null)
+            return this;
+          if (this.element == null)
+            this.element = new ArrayList<SourceElementComponent>();
+          this.element.add(t);
+          return this;
+        }
+
+        /**
+         * @return The first repetition of repeating field {@link #element}, creating it if it does not already exist
+         */
+        public SourceElementComponent getElementFirstRep() { 
+          if (getElement().isEmpty()) {
+            addElement();
+          }
+          return getElement().get(0);
+        }
+
+        protected void listChildren(List<Property> childrenList) {
+          super.listChildren(childrenList);
+          childrenList.add(new Property("source", "uri", "An absolute URI that identifies the Code System (if the source is a value set that crosses more than one code system).", 0, java.lang.Integer.MAX_VALUE, source));
+          childrenList.add(new Property("sourceVersion", "string", "The specific version of the code system, as determined by the code system authority.", 0, java.lang.Integer.MAX_VALUE, sourceVersion));
+          childrenList.add(new Property("target", "uri", "An absolute URI that identifies the code system of the target code (if the target is a value set that cross code systems).", 0, java.lang.Integer.MAX_VALUE, target));
+          childrenList.add(new Property("targetVersion", "string", "The specific version of the code system, as determined by the code system authority.", 0, java.lang.Integer.MAX_VALUE, targetVersion));
+          childrenList.add(new Property("element", "", "Mappings for an individual concept in the source to one or more concepts in the target.", 0, java.lang.Integer.MAX_VALUE, element));
+        }
+
+      @Override
+      public Base[] getProperty(int hash, String name, boolean checkValid) throws FHIRException {
+        switch (hash) {
+        case -896505829: /*source*/ return this.source == null ? new Base[0] : new Base[] {this.source}; // UriType
+        case 446171197: /*sourceVersion*/ return this.sourceVersion == null ? new Base[0] : new Base[] {this.sourceVersion}; // StringType
+        case -880905839: /*target*/ return this.target == null ? new Base[0] : new Base[] {this.target}; // UriType
+        case -1639412217: /*targetVersion*/ return this.targetVersion == null ? new Base[0] : new Base[] {this.targetVersion}; // StringType
+        case -1662836996: /*element*/ return this.element == null ? new Base[0] : this.element.toArray(new Base[this.element.size()]); // SourceElementComponent
+        default: return super.getProperty(hash, name, checkValid);
+        }
+
+      }
+
+      @Override
+      public void setProperty(int hash, String name, Base value) throws FHIRException {
+        switch (hash) {
+        case -896505829: // source
+          this.source = castToUri(value); // UriType
+          break;
+        case 446171197: // sourceVersion
+          this.sourceVersion = castToString(value); // StringType
+          break;
+        case -880905839: // target
+          this.target = castToUri(value); // UriType
+          break;
+        case -1639412217: // targetVersion
+          this.targetVersion = castToString(value); // StringType
+          break;
+        case -1662836996: // element
+          this.getElement().add((SourceElementComponent) value); // SourceElementComponent
+          break;
+        default: super.setProperty(hash, name, value);
+        }
+
+      }
+
+      @Override
+      public void setProperty(String name, Base value) throws FHIRException {
+        if (name.equals("source"))
+          this.source = castToUri(value); // UriType
+        else if (name.equals("sourceVersion"))
+          this.sourceVersion = castToString(value); // StringType
+        else if (name.equals("target"))
+          this.target = castToUri(value); // UriType
+        else if (name.equals("targetVersion"))
+          this.targetVersion = castToString(value); // StringType
+        else if (name.equals("element"))
+          this.getElement().add((SourceElementComponent) value);
+        else
+          super.setProperty(name, value);
+      }
+
+      @Override
+      public Base makeProperty(int hash, String name) throws FHIRException {
+        switch (hash) {
+        case -896505829: throw new FHIRException("Cannot make property source as it is not a complex type"); // UriType
+        case 446171197: throw new FHIRException("Cannot make property sourceVersion as it is not a complex type"); // StringType
+        case -880905839: throw new FHIRException("Cannot make property target as it is not a complex type"); // UriType
+        case -1639412217: throw new FHIRException("Cannot make property targetVersion as it is not a complex type"); // StringType
+        case -1662836996:  return addElement(); // SourceElementComponent
+        default: return super.makeProperty(hash, name);
+        }
+
+      }
+
+      @Override
+      public Base addChild(String name) throws FHIRException {
+        if (name.equals("source")) {
+          throw new FHIRException("Cannot call addChild on a primitive type ConceptMap.source");
+        }
+        else if (name.equals("sourceVersion")) {
+          throw new FHIRException("Cannot call addChild on a primitive type ConceptMap.sourceVersion");
+        }
+        else if (name.equals("target")) {
+          throw new FHIRException("Cannot call addChild on a primitive type ConceptMap.target");
+        }
+        else if (name.equals("targetVersion")) {
+          throw new FHIRException("Cannot call addChild on a primitive type ConceptMap.targetVersion");
+        }
+        else if (name.equals("element")) {
+          return addElement();
+        }
+        else
+          return super.addChild(name);
+      }
+
+      public ConceptMapGroupComponent copy() {
+        ConceptMapGroupComponent dst = new ConceptMapGroupComponent();
+        copyValues(dst);
+        dst.source = source == null ? null : source.copy();
+        dst.sourceVersion = sourceVersion == null ? null : sourceVersion.copy();
+        dst.target = target == null ? null : target.copy();
+        dst.targetVersion = targetVersion == null ? null : targetVersion.copy();
+        if (element != null) {
+          dst.element = new ArrayList<SourceElementComponent>();
+          for (SourceElementComponent i : element)
+            dst.element.add(i.copy());
+        };
+        return dst;
+      }
+
+      @Override
+      public boolean equalsDeep(Base other) {
+        if (!super.equalsDeep(other))
+          return false;
+        if (!(other instanceof ConceptMapGroupComponent))
+          return false;
+        ConceptMapGroupComponent o = (ConceptMapGroupComponent) other;
+        return compareDeep(source, o.source, true) && compareDeep(sourceVersion, o.sourceVersion, true)
+           && compareDeep(target, o.target, true) && compareDeep(targetVersion, o.targetVersion, true) && compareDeep(element, o.element, true)
+          ;
+      }
+
+      @Override
+      public boolean equalsShallow(Base other) {
+        if (!super.equalsShallow(other))
+          return false;
+        if (!(other instanceof ConceptMapGroupComponent))
+          return false;
+        ConceptMapGroupComponent o = (ConceptMapGroupComponent) other;
+        return compareValues(source, o.source, true) && compareValues(sourceVersion, o.sourceVersion, true)
+           && compareValues(target, o.target, true) && compareValues(targetVersion, o.targetVersion, true);
+      }
+
+      public boolean isEmpty() {
+        return super.isEmpty() && ca.uhn.fhir.util.ElementUtil.isEmpty(source, sourceVersion, target
+          , targetVersion, element);
+      }
+
+  public String fhirType() {
+    return "ConceptMap.group";
+
+  }
+
+  }
+
+    @Block()
+    public static class SourceElementComponent extends BackboneElement implements IBaseBackboneElement {
         /**
          * Identity (code or path) or the element/item being mapped.
          */
-        @Child(name = "code", type = {CodeType.class}, order=2, min=0, max=1, modifier=false, summary=false)
+        @Child(name = "code", type = {CodeType.class}, order=1, min=0, max=1, modifier=false, summary=false)
         @Description(shortDefinition="Identifies element being mapped", formalDefinition="Identity (code or path) or the element/item being mapped." )
         protected CodeType code;
 
         /**
          * A concept from the target value set that this concept maps to.
          */
-        @Child(name = "target", type = {}, order=3, min=0, max=Child.MAX_UNLIMITED, modifier=false, summary=false)
+        @Child(name = "target", type = {}, order=2, min=0, max=Child.MAX_UNLIMITED, modifier=false, summary=false)
         @Description(shortDefinition="Concept in target system for element", formalDefinition="A concept from the target value set that this concept maps to." )
         protected List<TargetElementComponent> target;
 
-        private static final long serialVersionUID = -458143877L;
+        private static final long serialVersionUID = 410931019L;
 
     /**
      * Constructor
@@ -267,55 +750,6 @@ public class ConceptMap extends DomainResource {
       public SourceElementComponent() {
         super();
       }
-
-        /**
-         * @return {@link #codeSystem} (An absolute URI that identifies the Code System (if the source is a value set that crosses more than one code system).). This is the underlying object with id, value and extensions. The accessor "getCodeSystem" gives direct access to the value
-         */
-        public UriType getCodeSystemElement() { 
-          if (this.codeSystem == null)
-            if (Configuration.errorOnAutoCreate())
-              throw new Error("Attempt to auto-create SourceElementComponent.codeSystem");
-            else if (Configuration.doAutoCreate())
-              this.codeSystem = new UriType(); // bb
-          return this.codeSystem;
-        }
-
-        public boolean hasCodeSystemElement() { 
-          return this.codeSystem != null && !this.codeSystem.isEmpty();
-        }
-
-        public boolean hasCodeSystem() { 
-          return this.codeSystem != null && !this.codeSystem.isEmpty();
-        }
-
-        /**
-         * @param value {@link #codeSystem} (An absolute URI that identifies the Code System (if the source is a value set that crosses more than one code system).). This is the underlying object with id, value and extensions. The accessor "getCodeSystem" gives direct access to the value
-         */
-        public SourceElementComponent setCodeSystemElement(UriType value) { 
-          this.codeSystem = value;
-          return this;
-        }
-
-        /**
-         * @return An absolute URI that identifies the Code System (if the source is a value set that crosses more than one code system).
-         */
-        public String getCodeSystem() { 
-          return this.codeSystem == null ? null : this.codeSystem.getValue();
-        }
-
-        /**
-         * @param value An absolute URI that identifies the Code System (if the source is a value set that crosses more than one code system).
-         */
-        public SourceElementComponent setCodeSystem(String value) { 
-          if (Utilities.noString(value))
-            this.codeSystem = null;
-          else {
-            if (this.codeSystem == null)
-              this.codeSystem = new UriType();
-            this.codeSystem.setValue(value);
-          }
-          return this;
-        }
 
         /**
          * @return {@link #code} (Identity (code or path) or the element/item being mapped.). This is the underlying object with id, value and extensions. The accessor "getCode" gives direct access to the value
@@ -375,6 +809,14 @@ public class ConceptMap extends DomainResource {
           return this.target;
         }
 
+        /**
+         * @return Returns a reference to <code>this</code> for easy method chaining
+         */
+        public SourceElementComponent setTarget(List<TargetElementComponent> theTarget) { 
+          this.target = theTarget;
+          return this;
+        }
+
         public boolean hasTarget() { 
           if (this.target == null)
             return false;
@@ -384,10 +826,6 @@ public class ConceptMap extends DomainResource {
           return false;
         }
 
-        /**
-         * @return {@link #target} (A concept from the target value set that this concept maps to.)
-         */
-    // syntactic sugar
         public TargetElementComponent addTarget() { //3
           TargetElementComponent t = new TargetElementComponent();
           if (this.target == null)
@@ -396,7 +834,6 @@ public class ConceptMap extends DomainResource {
           return t;
         }
 
-    // syntactic sugar
         public SourceElementComponent addTarget(TargetElementComponent t) { //3
           if (t == null)
             return this;
@@ -406,18 +843,49 @@ public class ConceptMap extends DomainResource {
           return this;
         }
 
+        /**
+         * @return The first repetition of repeating field {@link #target}, creating it if it does not already exist
+         */
+        public TargetElementComponent getTargetFirstRep() { 
+          if (getTarget().isEmpty()) {
+            addTarget();
+          }
+          return getTarget().get(0);
+        }
+
         protected void listChildren(List<Property> childrenList) {
           super.listChildren(childrenList);
-          childrenList.add(new Property("codeSystem", "uri", "An absolute URI that identifies the Code System (if the source is a value set that crosses more than one code system).", 0, java.lang.Integer.MAX_VALUE, codeSystem));
           childrenList.add(new Property("code", "code", "Identity (code or path) or the element/item being mapped.", 0, java.lang.Integer.MAX_VALUE, code));
           childrenList.add(new Property("target", "", "A concept from the target value set that this concept maps to.", 0, java.lang.Integer.MAX_VALUE, target));
         }
 
       @Override
+      public Base[] getProperty(int hash, String name, boolean checkValid) throws FHIRException {
+        switch (hash) {
+        case 3059181: /*code*/ return this.code == null ? new Base[0] : new Base[] {this.code}; // CodeType
+        case -880905839: /*target*/ return this.target == null ? new Base[0] : this.target.toArray(new Base[this.target.size()]); // TargetElementComponent
+        default: return super.getProperty(hash, name, checkValid);
+        }
+
+      }
+
+      @Override
+      public void setProperty(int hash, String name, Base value) throws FHIRException {
+        switch (hash) {
+        case 3059181: // code
+          this.code = castToCode(value); // CodeType
+          break;
+        case -880905839: // target
+          this.getTarget().add((TargetElementComponent) value); // TargetElementComponent
+          break;
+        default: super.setProperty(hash, name, value);
+        }
+
+      }
+
+      @Override
       public void setProperty(String name, Base value) throws FHIRException {
-        if (name.equals("codeSystem"))
-          this.codeSystem = castToUri(value); // UriType
-        else if (name.equals("code"))
+        if (name.equals("code"))
           this.code = castToCode(value); // CodeType
         else if (name.equals("target"))
           this.getTarget().add((TargetElementComponent) value);
@@ -426,11 +894,18 @@ public class ConceptMap extends DomainResource {
       }
 
       @Override
-      public Base addChild(String name) throws FHIRException {
-        if (name.equals("codeSystem")) {
-          throw new FHIRException("Cannot call addChild on a primitive type ConceptMap.codeSystem");
+      public Base makeProperty(int hash, String name) throws FHIRException {
+        switch (hash) {
+        case 3059181: throw new FHIRException("Cannot make property code as it is not a complex type"); // CodeType
+        case -880905839:  return addTarget(); // TargetElementComponent
+        default: return super.makeProperty(hash, name);
         }
-        else if (name.equals("code")) {
+
+      }
+
+      @Override
+      public Base addChild(String name) throws FHIRException {
+        if (name.equals("code")) {
           throw new FHIRException("Cannot call addChild on a primitive type ConceptMap.code");
         }
         else if (name.equals("target")) {
@@ -443,7 +918,6 @@ public class ConceptMap extends DomainResource {
       public SourceElementComponent copy() {
         SourceElementComponent dst = new SourceElementComponent();
         copyValues(dst);
-        dst.codeSystem = codeSystem == null ? null : codeSystem.copy();
         dst.code = code == null ? null : code.copy();
         if (target != null) {
           dst.target = new ArrayList<TargetElementComponent>();
@@ -460,8 +934,7 @@ public class ConceptMap extends DomainResource {
         if (!(other instanceof SourceElementComponent))
           return false;
         SourceElementComponent o = (SourceElementComponent) other;
-        return compareDeep(codeSystem, o.codeSystem, true) && compareDeep(code, o.code, true) && compareDeep(target, o.target, true)
-          ;
+        return compareDeep(code, o.code, true) && compareDeep(target, o.target, true);
       }
 
       @Override
@@ -471,16 +944,15 @@ public class ConceptMap extends DomainResource {
         if (!(other instanceof SourceElementComponent))
           return false;
         SourceElementComponent o = (SourceElementComponent) other;
-        return compareValues(codeSystem, o.codeSystem, true) && compareValues(code, o.code, true);
+        return compareValues(code, o.code, true);
       }
 
       public boolean isEmpty() {
-        return super.isEmpty() && (codeSystem == null || codeSystem.isEmpty()) && (code == null || code.isEmpty())
-           && (target == null || target.isEmpty());
+        return super.isEmpty() && ca.uhn.fhir.util.ElementUtil.isEmpty(code, target);
       }
 
   public String fhirType() {
-    return "ConceptMap.element";
+    return "ConceptMap.group.element";
 
   }
 
@@ -489,48 +961,42 @@ public class ConceptMap extends DomainResource {
     @Block()
     public static class TargetElementComponent extends BackboneElement implements IBaseBackboneElement {
         /**
-         * An absolute URI that identifies the code system of the target code (if the target is a value set that cross code systems).
-         */
-        @Child(name = "codeSystem", type = {UriType.class}, order=1, min=0, max=1, modifier=false, summary=false)
-        @Description(shortDefinition="System of the target (if necessary)", formalDefinition="An absolute URI that identifies the code system of the target code (if the target is a value set that cross code systems)." )
-        protected UriType codeSystem;
-
-        /**
          * Identity (code or path) or the element/item that the map refers to.
          */
-        @Child(name = "code", type = {CodeType.class}, order=2, min=0, max=1, modifier=false, summary=false)
+        @Child(name = "code", type = {CodeType.class}, order=1, min=0, max=1, modifier=false, summary=false)
         @Description(shortDefinition="Code that identifies the target element", formalDefinition="Identity (code or path) or the element/item that the map refers to." )
         protected CodeType code;
 
         /**
          * The equivalence between the source and target concepts (counting for the dependencies and products). The equivalence is read from target to source (e.g. the target is 'wider' than the source).
          */
-        @Child(name = "equivalence", type = {CodeType.class}, order=3, min=1, max=1, modifier=true, summary=false)
+        @Child(name = "equivalence", type = {CodeType.class}, order=2, min=0, max=1, modifier=true, summary=false)
         @Description(shortDefinition="equivalent | equal | wider | subsumes | narrower | specializes | inexact | unmatched | disjoint", formalDefinition="The equivalence between the source and target concepts (counting for the dependencies and products). The equivalence is read from target to source (e.g. the target is 'wider' than the source)." )
+        @ca.uhn.fhir.model.api.annotation.Binding(valueSet="http://hl7.org/fhir/ValueSet/concept-map-equivalence")
         protected Enumeration<ConceptMapEquivalence> equivalence;
 
         /**
          * A description of status/issues in mapping that conveys additional information not represented in  the structured data.
          */
-        @Child(name = "comments", type = {StringType.class}, order=4, min=0, max=1, modifier=false, summary=false)
+        @Child(name = "comments", type = {StringType.class}, order=3, min=0, max=1, modifier=false, summary=false)
         @Description(shortDefinition="Description of status/issues in mapping", formalDefinition="A description of status/issues in mapping that conveys additional information not represented in  the structured data." )
         protected StringType comments;
 
         /**
          * A set of additional dependencies for this mapping to hold. This mapping is only applicable if the specified element can be resolved, and it has the specified value.
          */
-        @Child(name = "dependsOn", type = {}, order=5, min=0, max=Child.MAX_UNLIMITED, modifier=false, summary=false)
+        @Child(name = "dependsOn", type = {}, order=4, min=0, max=Child.MAX_UNLIMITED, modifier=false, summary=false)
         @Description(shortDefinition="Other elements required for this mapping (from context)", formalDefinition="A set of additional dependencies for this mapping to hold. This mapping is only applicable if the specified element can be resolved, and it has the specified value." )
         protected List<OtherElementComponent> dependsOn;
 
         /**
          * A set of additional outcomes from this mapping to other elements. To properly execute this mapping, the specified element must be mapped to some data element or source that is in context. The mapping may still be useful without a place for the additional data elements, but the equivalence cannot be relied on.
          */
-        @Child(name = "product", type = {OtherElementComponent.class}, order=6, min=0, max=Child.MAX_UNLIMITED, modifier=false, summary=false)
+        @Child(name = "product", type = {OtherElementComponent.class}, order=5, min=0, max=Child.MAX_UNLIMITED, modifier=false, summary=false)
         @Description(shortDefinition="Other concepts that this mapping also produces", formalDefinition="A set of additional outcomes from this mapping to other elements. To properly execute this mapping, the specified element must be mapped to some data element or source that is in context. The mapping may still be useful without a place for the additional data elements, but the equivalence cannot be relied on." )
         protected List<OtherElementComponent> product;
 
-        private static final long serialVersionUID = -804990059L;
+        private static final long serialVersionUID = 770469317L;
 
     /**
      * Constructor
@@ -538,63 +1004,6 @@ public class ConceptMap extends DomainResource {
       public TargetElementComponent() {
         super();
       }
-
-    /**
-     * Constructor
-     */
-      public TargetElementComponent(Enumeration<ConceptMapEquivalence> equivalence) {
-        super();
-        this.equivalence = equivalence;
-      }
-
-        /**
-         * @return {@link #codeSystem} (An absolute URI that identifies the code system of the target code (if the target is a value set that cross code systems).). This is the underlying object with id, value and extensions. The accessor "getCodeSystem" gives direct access to the value
-         */
-        public UriType getCodeSystemElement() { 
-          if (this.codeSystem == null)
-            if (Configuration.errorOnAutoCreate())
-              throw new Error("Attempt to auto-create TargetElementComponent.codeSystem");
-            else if (Configuration.doAutoCreate())
-              this.codeSystem = new UriType(); // bb
-          return this.codeSystem;
-        }
-
-        public boolean hasCodeSystemElement() { 
-          return this.codeSystem != null && !this.codeSystem.isEmpty();
-        }
-
-        public boolean hasCodeSystem() { 
-          return this.codeSystem != null && !this.codeSystem.isEmpty();
-        }
-
-        /**
-         * @param value {@link #codeSystem} (An absolute URI that identifies the code system of the target code (if the target is a value set that cross code systems).). This is the underlying object with id, value and extensions. The accessor "getCodeSystem" gives direct access to the value
-         */
-        public TargetElementComponent setCodeSystemElement(UriType value) { 
-          this.codeSystem = value;
-          return this;
-        }
-
-        /**
-         * @return An absolute URI that identifies the code system of the target code (if the target is a value set that cross code systems).
-         */
-        public String getCodeSystem() { 
-          return this.codeSystem == null ? null : this.codeSystem.getValue();
-        }
-
-        /**
-         * @param value An absolute URI that identifies the code system of the target code (if the target is a value set that cross code systems).
-         */
-        public TargetElementComponent setCodeSystem(String value) { 
-          if (Utilities.noString(value))
-            this.codeSystem = null;
-          else {
-            if (this.codeSystem == null)
-              this.codeSystem = new UriType();
-            this.codeSystem.setValue(value);
-          }
-          return this;
-        }
 
         /**
          * @return {@link #code} (Identity (code or path) or the element/item that the map refers to.). This is the underlying object with id, value and extensions. The accessor "getCode" gives direct access to the value
@@ -684,9 +1093,13 @@ public class ConceptMap extends DomainResource {
          * @param value The equivalence between the source and target concepts (counting for the dependencies and products). The equivalence is read from target to source (e.g. the target is 'wider' than the source).
          */
         public TargetElementComponent setEquivalence(ConceptMapEquivalence value) { 
+          if (value == null)
+            this.equivalence = null;
+          else {
             if (this.equivalence == null)
               this.equivalence = new Enumeration<ConceptMapEquivalence>(new ConceptMapEquivalenceEnumFactory());
             this.equivalence.setValue(value);
+          }
           return this;
         }
 
@@ -748,6 +1161,14 @@ public class ConceptMap extends DomainResource {
           return this.dependsOn;
         }
 
+        /**
+         * @return Returns a reference to <code>this</code> for easy method chaining
+         */
+        public TargetElementComponent setDependsOn(List<OtherElementComponent> theDependsOn) { 
+          this.dependsOn = theDependsOn;
+          return this;
+        }
+
         public boolean hasDependsOn() { 
           if (this.dependsOn == null)
             return false;
@@ -757,10 +1178,6 @@ public class ConceptMap extends DomainResource {
           return false;
         }
 
-        /**
-         * @return {@link #dependsOn} (A set of additional dependencies for this mapping to hold. This mapping is only applicable if the specified element can be resolved, and it has the specified value.)
-         */
-    // syntactic sugar
         public OtherElementComponent addDependsOn() { //3
           OtherElementComponent t = new OtherElementComponent();
           if (this.dependsOn == null)
@@ -769,7 +1186,6 @@ public class ConceptMap extends DomainResource {
           return t;
         }
 
-    // syntactic sugar
         public TargetElementComponent addDependsOn(OtherElementComponent t) { //3
           if (t == null)
             return this;
@@ -777,6 +1193,16 @@ public class ConceptMap extends DomainResource {
             this.dependsOn = new ArrayList<OtherElementComponent>();
           this.dependsOn.add(t);
           return this;
+        }
+
+        /**
+         * @return The first repetition of repeating field {@link #dependsOn}, creating it if it does not already exist
+         */
+        public OtherElementComponent getDependsOnFirstRep() { 
+          if (getDependsOn().isEmpty()) {
+            addDependsOn();
+          }
+          return getDependsOn().get(0);
         }
 
         /**
@@ -788,6 +1214,14 @@ public class ConceptMap extends DomainResource {
           return this.product;
         }
 
+        /**
+         * @return Returns a reference to <code>this</code> for easy method chaining
+         */
+        public TargetElementComponent setProduct(List<OtherElementComponent> theProduct) { 
+          this.product = theProduct;
+          return this;
+        }
+
         public boolean hasProduct() { 
           if (this.product == null)
             return false;
@@ -797,10 +1231,6 @@ public class ConceptMap extends DomainResource {
           return false;
         }
 
-        /**
-         * @return {@link #product} (A set of additional outcomes from this mapping to other elements. To properly execute this mapping, the specified element must be mapped to some data element or source that is in context. The mapping may still be useful without a place for the additional data elements, but the equivalence cannot be relied on.)
-         */
-    // syntactic sugar
         public OtherElementComponent addProduct() { //3
           OtherElementComponent t = new OtherElementComponent();
           if (this.product == null)
@@ -809,7 +1239,6 @@ public class ConceptMap extends DomainResource {
           return t;
         }
 
-    // syntactic sugar
         public TargetElementComponent addProduct(OtherElementComponent t) { //3
           if (t == null)
             return this;
@@ -819,21 +1248,64 @@ public class ConceptMap extends DomainResource {
           return this;
         }
 
+        /**
+         * @return The first repetition of repeating field {@link #product}, creating it if it does not already exist
+         */
+        public OtherElementComponent getProductFirstRep() { 
+          if (getProduct().isEmpty()) {
+            addProduct();
+          }
+          return getProduct().get(0);
+        }
+
         protected void listChildren(List<Property> childrenList) {
           super.listChildren(childrenList);
-          childrenList.add(new Property("codeSystem", "uri", "An absolute URI that identifies the code system of the target code (if the target is a value set that cross code systems).", 0, java.lang.Integer.MAX_VALUE, codeSystem));
           childrenList.add(new Property("code", "code", "Identity (code or path) or the element/item that the map refers to.", 0, java.lang.Integer.MAX_VALUE, code));
           childrenList.add(new Property("equivalence", "code", "The equivalence between the source and target concepts (counting for the dependencies and products). The equivalence is read from target to source (e.g. the target is 'wider' than the source).", 0, java.lang.Integer.MAX_VALUE, equivalence));
           childrenList.add(new Property("comments", "string", "A description of status/issues in mapping that conveys additional information not represented in  the structured data.", 0, java.lang.Integer.MAX_VALUE, comments));
           childrenList.add(new Property("dependsOn", "", "A set of additional dependencies for this mapping to hold. This mapping is only applicable if the specified element can be resolved, and it has the specified value.", 0, java.lang.Integer.MAX_VALUE, dependsOn));
-          childrenList.add(new Property("product", "@ConceptMap.element.target.dependsOn", "A set of additional outcomes from this mapping to other elements. To properly execute this mapping, the specified element must be mapped to some data element or source that is in context. The mapping may still be useful without a place for the additional data elements, but the equivalence cannot be relied on.", 0, java.lang.Integer.MAX_VALUE, product));
+          childrenList.add(new Property("product", "@ConceptMap.group.element.target.dependsOn", "A set of additional outcomes from this mapping to other elements. To properly execute this mapping, the specified element must be mapped to some data element or source that is in context. The mapping may still be useful without a place for the additional data elements, but the equivalence cannot be relied on.", 0, java.lang.Integer.MAX_VALUE, product));
         }
 
       @Override
+      public Base[] getProperty(int hash, String name, boolean checkValid) throws FHIRException {
+        switch (hash) {
+        case 3059181: /*code*/ return this.code == null ? new Base[0] : new Base[] {this.code}; // CodeType
+        case -15828692: /*equivalence*/ return this.equivalence == null ? new Base[0] : new Base[] {this.equivalence}; // Enumeration<ConceptMapEquivalence>
+        case -602415628: /*comments*/ return this.comments == null ? new Base[0] : new Base[] {this.comments}; // StringType
+        case -1109214266: /*dependsOn*/ return this.dependsOn == null ? new Base[0] : this.dependsOn.toArray(new Base[this.dependsOn.size()]); // OtherElementComponent
+        case -309474065: /*product*/ return this.product == null ? new Base[0] : this.product.toArray(new Base[this.product.size()]); // OtherElementComponent
+        default: return super.getProperty(hash, name, checkValid);
+        }
+
+      }
+
+      @Override
+      public void setProperty(int hash, String name, Base value) throws FHIRException {
+        switch (hash) {
+        case 3059181: // code
+          this.code = castToCode(value); // CodeType
+          break;
+        case -15828692: // equivalence
+          this.equivalence = new ConceptMapEquivalenceEnumFactory().fromType(value); // Enumeration<ConceptMapEquivalence>
+          break;
+        case -602415628: // comments
+          this.comments = castToString(value); // StringType
+          break;
+        case -1109214266: // dependsOn
+          this.getDependsOn().add((OtherElementComponent) value); // OtherElementComponent
+          break;
+        case -309474065: // product
+          this.getProduct().add((OtherElementComponent) value); // OtherElementComponent
+          break;
+        default: super.setProperty(hash, name, value);
+        }
+
+      }
+
+      @Override
       public void setProperty(String name, Base value) throws FHIRException {
-        if (name.equals("codeSystem"))
-          this.codeSystem = castToUri(value); // UriType
-        else if (name.equals("code"))
+        if (name.equals("code"))
           this.code = castToCode(value); // CodeType
         else if (name.equals("equivalence"))
           this.equivalence = new ConceptMapEquivalenceEnumFactory().fromType(value); // Enumeration<ConceptMapEquivalence>
@@ -848,11 +1320,21 @@ public class ConceptMap extends DomainResource {
       }
 
       @Override
-      public Base addChild(String name) throws FHIRException {
-        if (name.equals("codeSystem")) {
-          throw new FHIRException("Cannot call addChild on a primitive type ConceptMap.codeSystem");
+      public Base makeProperty(int hash, String name) throws FHIRException {
+        switch (hash) {
+        case 3059181: throw new FHIRException("Cannot make property code as it is not a complex type"); // CodeType
+        case -15828692: throw new FHIRException("Cannot make property equivalence as it is not a complex type"); // Enumeration<ConceptMapEquivalence>
+        case -602415628: throw new FHIRException("Cannot make property comments as it is not a complex type"); // StringType
+        case -1109214266:  return addDependsOn(); // OtherElementComponent
+        case -309474065:  return addProduct(); // OtherElementComponent
+        default: return super.makeProperty(hash, name);
         }
-        else if (name.equals("code")) {
+
+      }
+
+      @Override
+      public Base addChild(String name) throws FHIRException {
+        if (name.equals("code")) {
           throw new FHIRException("Cannot call addChild on a primitive type ConceptMap.code");
         }
         else if (name.equals("equivalence")) {
@@ -874,7 +1356,6 @@ public class ConceptMap extends DomainResource {
       public TargetElementComponent copy() {
         TargetElementComponent dst = new TargetElementComponent();
         copyValues(dst);
-        dst.codeSystem = codeSystem == null ? null : codeSystem.copy();
         dst.code = code == null ? null : code.copy();
         dst.equivalence = equivalence == null ? null : equivalence.copy();
         dst.comments = comments == null ? null : comments.copy();
@@ -898,9 +1379,8 @@ public class ConceptMap extends DomainResource {
         if (!(other instanceof TargetElementComponent))
           return false;
         TargetElementComponent o = (TargetElementComponent) other;
-        return compareDeep(codeSystem, o.codeSystem, true) && compareDeep(code, o.code, true) && compareDeep(equivalence, o.equivalence, true)
-           && compareDeep(comments, o.comments, true) && compareDeep(dependsOn, o.dependsOn, true) && compareDeep(product, o.product, true)
-          ;
+        return compareDeep(code, o.code, true) && compareDeep(equivalence, o.equivalence, true) && compareDeep(comments, o.comments, true)
+           && compareDeep(dependsOn, o.dependsOn, true) && compareDeep(product, o.product, true);
       }
 
       @Override
@@ -910,18 +1390,17 @@ public class ConceptMap extends DomainResource {
         if (!(other instanceof TargetElementComponent))
           return false;
         TargetElementComponent o = (TargetElementComponent) other;
-        return compareValues(codeSystem, o.codeSystem, true) && compareValues(code, o.code, true) && compareValues(equivalence, o.equivalence, true)
-           && compareValues(comments, o.comments, true);
+        return compareValues(code, o.code, true) && compareValues(equivalence, o.equivalence, true) && compareValues(comments, o.comments, true)
+          ;
       }
 
       public boolean isEmpty() {
-        return super.isEmpty() && (codeSystem == null || codeSystem.isEmpty()) && (code == null || code.isEmpty())
-           && (equivalence == null || equivalence.isEmpty()) && (comments == null || comments.isEmpty())
-           && (dependsOn == null || dependsOn.isEmpty()) && (product == null || product.isEmpty());
+        return super.isEmpty() && ca.uhn.fhir.util.ElementUtil.isEmpty(code, equivalence, comments
+          , dependsOn, product);
       }
 
   public String fhirType() {
-    return "ConceptMap.element.target";
+    return "ConceptMap.group.element.target";
 
   }
 
@@ -930,18 +1409,18 @@ public class ConceptMap extends DomainResource {
     @Block()
     public static class OtherElementComponent extends BackboneElement implements IBaseBackboneElement {
         /**
-         * A reference to a specific concept that holds a coded value. This can be an element in a FHIR resource, or a specific reference to a data element in a different specification (e.g. HL7 v2) or a general reference to a kind of data field, or a reference to a value set with an appropriately narrow definition.
+         * A reference to an element that holds a coded value that corresponds to a code system property. The idea is that the information model carries an element somwhere that is labelled to correspond with a code system property.
          */
-        @Child(name = "element", type = {UriType.class}, order=1, min=1, max=1, modifier=false, summary=false)
-        @Description(shortDefinition="Reference to element/field/ValueSet mapping depends on", formalDefinition="A reference to a specific concept that holds a coded value. This can be an element in a FHIR resource, or a specific reference to a data element in a different specification (e.g. HL7 v2) or a general reference to a kind of data field, or a reference to a value set with an appropriately narrow definition." )
-        protected UriType element;
+        @Child(name = "property", type = {UriType.class}, order=1, min=1, max=1, modifier=false, summary=false)
+        @Description(shortDefinition="Reference to property mapping depends on", formalDefinition="A reference to an element that holds a coded value that corresponds to a code system property. The idea is that the information model carries an element somwhere that is labelled to correspond with a code system property." )
+        protected UriType property;
 
         /**
          * An absolute URI that identifies the code system of the dependency code (if the source/dependency is a value set that crosses code systems).
          */
-        @Child(name = "codeSystem", type = {UriType.class}, order=2, min=1, max=1, modifier=false, summary=false)
+        @Child(name = "system", type = {UriType.class}, order=2, min=0, max=1, modifier=false, summary=false)
         @Description(shortDefinition="Code System (if necessary)", formalDefinition="An absolute URI that identifies the code system of the dependency code (if the source/dependency is a value set that crosses code systems)." )
-        protected UriType codeSystem;
+        protected UriType system;
 
         /**
          * Identity (code or path) or the element/item/ValueSet that the map depends on / refers to.
@@ -950,7 +1429,7 @@ public class ConceptMap extends DomainResource {
         @Description(shortDefinition="Value of the referenced element", formalDefinition="Identity (code or path) or the element/item/ValueSet that the map depends on / refers to." )
         protected StringType code;
 
-        private static final long serialVersionUID = 1488522448L;
+        private static final long serialVersionUID = 1055992750L;
 
     /**
      * Constructor
@@ -962,100 +1441,103 @@ public class ConceptMap extends DomainResource {
     /**
      * Constructor
      */
-      public OtherElementComponent(UriType element, UriType codeSystem, StringType code) {
+      public OtherElementComponent(UriType property, StringType code) {
         super();
-        this.element = element;
-        this.codeSystem = codeSystem;
+        this.property = property;
         this.code = code;
       }
 
         /**
-         * @return {@link #element} (A reference to a specific concept that holds a coded value. This can be an element in a FHIR resource, or a specific reference to a data element in a different specification (e.g. HL7 v2) or a general reference to a kind of data field, or a reference to a value set with an appropriately narrow definition.). This is the underlying object with id, value and extensions. The accessor "getElement" gives direct access to the value
+         * @return {@link #property} (A reference to an element that holds a coded value that corresponds to a code system property. The idea is that the information model carries an element somwhere that is labelled to correspond with a code system property.). This is the underlying object with id, value and extensions. The accessor "getProperty" gives direct access to the value
          */
-        public UriType getElementElement() { 
-          if (this.element == null)
+        public UriType getPropertyElement() { 
+          if (this.property == null)
             if (Configuration.errorOnAutoCreate())
-              throw new Error("Attempt to auto-create OtherElementComponent.element");
+              throw new Error("Attempt to auto-create OtherElementComponent.property");
             else if (Configuration.doAutoCreate())
-              this.element = new UriType(); // bb
-          return this.element;
+              this.property = new UriType(); // bb
+          return this.property;
         }
 
-        public boolean hasElementElement() { 
-          return this.element != null && !this.element.isEmpty();
+        public boolean hasPropertyElement() { 
+          return this.property != null && !this.property.isEmpty();
         }
 
-        public boolean hasElement() { 
-          return this.element != null && !this.element.isEmpty();
+        public boolean hasProperty() { 
+          return this.property != null && !this.property.isEmpty();
         }
 
         /**
-         * @param value {@link #element} (A reference to a specific concept that holds a coded value. This can be an element in a FHIR resource, or a specific reference to a data element in a different specification (e.g. HL7 v2) or a general reference to a kind of data field, or a reference to a value set with an appropriately narrow definition.). This is the underlying object with id, value and extensions. The accessor "getElement" gives direct access to the value
+         * @param value {@link #property} (A reference to an element that holds a coded value that corresponds to a code system property. The idea is that the information model carries an element somwhere that is labelled to correspond with a code system property.). This is the underlying object with id, value and extensions. The accessor "getProperty" gives direct access to the value
          */
-        public OtherElementComponent setElementElement(UriType value) { 
-          this.element = value;
+        public OtherElementComponent setPropertyElement(UriType value) { 
+          this.property = value;
           return this;
         }
 
         /**
-         * @return A reference to a specific concept that holds a coded value. This can be an element in a FHIR resource, or a specific reference to a data element in a different specification (e.g. HL7 v2) or a general reference to a kind of data field, or a reference to a value set with an appropriately narrow definition.
+         * @return A reference to an element that holds a coded value that corresponds to a code system property. The idea is that the information model carries an element somwhere that is labelled to correspond with a code system property.
          */
-        public String getElement() { 
-          return this.element == null ? null : this.element.getValue();
+        public String getProperty() { 
+          return this.property == null ? null : this.property.getValue();
         }
 
         /**
-         * @param value A reference to a specific concept that holds a coded value. This can be an element in a FHIR resource, or a specific reference to a data element in a different specification (e.g. HL7 v2) or a general reference to a kind of data field, or a reference to a value set with an appropriately narrow definition.
+         * @param value A reference to an element that holds a coded value that corresponds to a code system property. The idea is that the information model carries an element somwhere that is labelled to correspond with a code system property.
          */
-        public OtherElementComponent setElement(String value) { 
-            if (this.element == null)
-              this.element = new UriType();
-            this.element.setValue(value);
+        public OtherElementComponent setProperty(String value) { 
+            if (this.property == null)
+              this.property = new UriType();
+            this.property.setValue(value);
           return this;
         }
 
         /**
-         * @return {@link #codeSystem} (An absolute URI that identifies the code system of the dependency code (if the source/dependency is a value set that crosses code systems).). This is the underlying object with id, value and extensions. The accessor "getCodeSystem" gives direct access to the value
+         * @return {@link #system} (An absolute URI that identifies the code system of the dependency code (if the source/dependency is a value set that crosses code systems).). This is the underlying object with id, value and extensions. The accessor "getSystem" gives direct access to the value
          */
-        public UriType getCodeSystemElement() { 
-          if (this.codeSystem == null)
+        public UriType getSystemElement() { 
+          if (this.system == null)
             if (Configuration.errorOnAutoCreate())
-              throw new Error("Attempt to auto-create OtherElementComponent.codeSystem");
+              throw new Error("Attempt to auto-create OtherElementComponent.system");
             else if (Configuration.doAutoCreate())
-              this.codeSystem = new UriType(); // bb
-          return this.codeSystem;
+              this.system = new UriType(); // bb
+          return this.system;
         }
 
-        public boolean hasCodeSystemElement() { 
-          return this.codeSystem != null && !this.codeSystem.isEmpty();
+        public boolean hasSystemElement() { 
+          return this.system != null && !this.system.isEmpty();
         }
 
-        public boolean hasCodeSystem() { 
-          return this.codeSystem != null && !this.codeSystem.isEmpty();
+        public boolean hasSystem() { 
+          return this.system != null && !this.system.isEmpty();
         }
 
         /**
-         * @param value {@link #codeSystem} (An absolute URI that identifies the code system of the dependency code (if the source/dependency is a value set that crosses code systems).). This is the underlying object with id, value and extensions. The accessor "getCodeSystem" gives direct access to the value
+         * @param value {@link #system} (An absolute URI that identifies the code system of the dependency code (if the source/dependency is a value set that crosses code systems).). This is the underlying object with id, value and extensions. The accessor "getSystem" gives direct access to the value
          */
-        public OtherElementComponent setCodeSystemElement(UriType value) { 
-          this.codeSystem = value;
+        public OtherElementComponent setSystemElement(UriType value) { 
+          this.system = value;
           return this;
         }
 
         /**
          * @return An absolute URI that identifies the code system of the dependency code (if the source/dependency is a value set that crosses code systems).
          */
-        public String getCodeSystem() { 
-          return this.codeSystem == null ? null : this.codeSystem.getValue();
+        public String getSystem() { 
+          return this.system == null ? null : this.system.getValue();
         }
 
         /**
          * @param value An absolute URI that identifies the code system of the dependency code (if the source/dependency is a value set that crosses code systems).
          */
-        public OtherElementComponent setCodeSystem(String value) { 
-            if (this.codeSystem == null)
-              this.codeSystem = new UriType();
-            this.codeSystem.setValue(value);
+        public OtherElementComponent setSystem(String value) { 
+          if (Utilities.noString(value))
+            this.system = null;
+          else {
+            if (this.system == null)
+              this.system = new UriType();
+            this.system.setValue(value);
+          }
           return this;
         }
 
@@ -1106,17 +1588,45 @@ public class ConceptMap extends DomainResource {
 
         protected void listChildren(List<Property> childrenList) {
           super.listChildren(childrenList);
-          childrenList.add(new Property("element", "uri", "A reference to a specific concept that holds a coded value. This can be an element in a FHIR resource, or a specific reference to a data element in a different specification (e.g. HL7 v2) or a general reference to a kind of data field, or a reference to a value set with an appropriately narrow definition.", 0, java.lang.Integer.MAX_VALUE, element));
-          childrenList.add(new Property("codeSystem", "uri", "An absolute URI that identifies the code system of the dependency code (if the source/dependency is a value set that crosses code systems).", 0, java.lang.Integer.MAX_VALUE, codeSystem));
+          childrenList.add(new Property("property", "uri", "A reference to an element that holds a coded value that corresponds to a code system property. The idea is that the information model carries an element somwhere that is labelled to correspond with a code system property.", 0, java.lang.Integer.MAX_VALUE, property));
+          childrenList.add(new Property("system", "uri", "An absolute URI that identifies the code system of the dependency code (if the source/dependency is a value set that crosses code systems).", 0, java.lang.Integer.MAX_VALUE, system));
           childrenList.add(new Property("code", "string", "Identity (code or path) or the element/item/ValueSet that the map depends on / refers to.", 0, java.lang.Integer.MAX_VALUE, code));
         }
 
       @Override
+      public Base[] getProperty(int hash, String name, boolean checkValid) throws FHIRException {
+        switch (hash) {
+        case -993141291: /*property*/ return this.property == null ? new Base[0] : new Base[] {this.property}; // UriType
+        case -887328209: /*system*/ return this.system == null ? new Base[0] : new Base[] {this.system}; // UriType
+        case 3059181: /*code*/ return this.code == null ? new Base[0] : new Base[] {this.code}; // StringType
+        default: return super.getProperty(hash, name, checkValid);
+        }
+
+      }
+
+      @Override
+      public void setProperty(int hash, String name, Base value) throws FHIRException {
+        switch (hash) {
+        case -993141291: // property
+          this.property = castToUri(value); // UriType
+          break;
+        case -887328209: // system
+          this.system = castToUri(value); // UriType
+          break;
+        case 3059181: // code
+          this.code = castToString(value); // StringType
+          break;
+        default: super.setProperty(hash, name, value);
+        }
+
+      }
+
+      @Override
       public void setProperty(String name, Base value) throws FHIRException {
-        if (name.equals("element"))
-          this.element = castToUri(value); // UriType
-        else if (name.equals("codeSystem"))
-          this.codeSystem = castToUri(value); // UriType
+        if (name.equals("property"))
+          this.property = castToUri(value); // UriType
+        else if (name.equals("system"))
+          this.system = castToUri(value); // UriType
         else if (name.equals("code"))
           this.code = castToString(value); // StringType
         else
@@ -1124,12 +1634,23 @@ public class ConceptMap extends DomainResource {
       }
 
       @Override
-      public Base addChild(String name) throws FHIRException {
-        if (name.equals("element")) {
-          throw new FHIRException("Cannot call addChild on a primitive type ConceptMap.element");
+      public Base makeProperty(int hash, String name) throws FHIRException {
+        switch (hash) {
+        case -993141291: throw new FHIRException("Cannot make property property as it is not a complex type"); // UriType
+        case -887328209: throw new FHIRException("Cannot make property system as it is not a complex type"); // UriType
+        case 3059181: throw new FHIRException("Cannot make property code as it is not a complex type"); // StringType
+        default: return super.makeProperty(hash, name);
         }
-        else if (name.equals("codeSystem")) {
-          throw new FHIRException("Cannot call addChild on a primitive type ConceptMap.codeSystem");
+
+      }
+
+      @Override
+      public Base addChild(String name) throws FHIRException {
+        if (name.equals("property")) {
+          throw new FHIRException("Cannot call addChild on a primitive type ConceptMap.property");
+        }
+        else if (name.equals("system")) {
+          throw new FHIRException("Cannot call addChild on a primitive type ConceptMap.system");
         }
         else if (name.equals("code")) {
           throw new FHIRException("Cannot call addChild on a primitive type ConceptMap.code");
@@ -1141,8 +1662,8 @@ public class ConceptMap extends DomainResource {
       public OtherElementComponent copy() {
         OtherElementComponent dst = new OtherElementComponent();
         copyValues(dst);
-        dst.element = element == null ? null : element.copy();
-        dst.codeSystem = codeSystem == null ? null : codeSystem.copy();
+        dst.property = property == null ? null : property.copy();
+        dst.system = system == null ? null : system.copy();
         dst.code = code == null ? null : code.copy();
         return dst;
       }
@@ -1154,7 +1675,7 @@ public class ConceptMap extends DomainResource {
         if (!(other instanceof OtherElementComponent))
           return false;
         OtherElementComponent o = (OtherElementComponent) other;
-        return compareDeep(element, o.element, true) && compareDeep(codeSystem, o.codeSystem, true) && compareDeep(code, o.code, true)
+        return compareDeep(property, o.property, true) && compareDeep(system, o.system, true) && compareDeep(code, o.code, true)
           ;
       }
 
@@ -1165,135 +1686,92 @@ public class ConceptMap extends DomainResource {
         if (!(other instanceof OtherElementComponent))
           return false;
         OtherElementComponent o = (OtherElementComponent) other;
-        return compareValues(element, o.element, true) && compareValues(codeSystem, o.codeSystem, true) && compareValues(code, o.code, true)
+        return compareValues(property, o.property, true) && compareValues(system, o.system, true) && compareValues(code, o.code, true)
           ;
       }
 
       public boolean isEmpty() {
-        return super.isEmpty() && (element == null || element.isEmpty()) && (codeSystem == null || codeSystem.isEmpty())
-           && (code == null || code.isEmpty());
+        return super.isEmpty() && ca.uhn.fhir.util.ElementUtil.isEmpty(property, system, code);
       }
 
   public String fhirType() {
-    return "ConceptMap.element.target.dependsOn";
+    return "ConceptMap.group.element.target.dependsOn";
 
   }
 
   }
-
-    /**
-     * An absolute URL that is used to identify this concept map when it is referenced in a specification, model, design or an instance. This SHALL be a URL, SHOULD be globally unique, and SHOULD be an address at which this concept map is (or will be) published.
-     */
-    @Child(name = "url", type = {UriType.class}, order=0, min=0, max=1, modifier=false, summary=true)
-    @Description(shortDefinition="Globally unique logical id for concept map", formalDefinition="An absolute URL that is used to identify this concept map when it is referenced in a specification, model, design or an instance. This SHALL be a URL, SHOULD be globally unique, and SHOULD be an address at which this concept map is (or will be) published." )
-    protected UriType url;
 
     /**
      * Formal identifier that is used to identify this concept map when it is represented in other formats, or referenced in a specification, model, design or an instance.
      */
-    @Child(name = "identifier", type = {Identifier.class}, order=1, min=0, max=1, modifier=false, summary=true)
+    @Child(name = "identifier", type = {Identifier.class}, order=0, min=0, max=1, modifier=false, summary=true)
     @Description(shortDefinition="Additional identifier for the concept map", formalDefinition="Formal identifier that is used to identify this concept map when it is represented in other formats, or referenced in a specification, model, design or an instance." )
     protected Identifier identifier;
 
     /**
-     * The identifier that is used to identify this version of the concept map when it is referenced in a specification, model, design or instance. This is an arbitrary value managed by the profile author manually and the value should be a timestamp.
-     */
-    @Child(name = "version", type = {StringType.class}, order=2, min=0, max=1, modifier=false, summary=true)
-    @Description(shortDefinition="Logical id for this version of the concept map", formalDefinition="The identifier that is used to identify this version of the concept map when it is referenced in a specification, model, design or instance. This is an arbitrary value managed by the profile author manually and the value should be a timestamp." )
-    protected StringType version;
-
-    /**
-     * A free text natural language name describing the concept map.
-     */
-    @Child(name = "name", type = {StringType.class}, order=3, min=0, max=1, modifier=false, summary=true)
-    @Description(shortDefinition="Informal name for this concept map", formalDefinition="A free text natural language name describing the concept map." )
-    protected StringType name;
-
-    /**
-     * The status of the concept map.
-     */
-    @Child(name = "status", type = {CodeType.class}, order=4, min=1, max=1, modifier=true, summary=true)
-    @Description(shortDefinition="draft | active | retired", formalDefinition="The status of the concept map." )
-    protected Enumeration<ConformanceResourceStatus> status;
-
-    /**
      * This ConceptMap was authored for testing purposes (or education/evaluation/marketing), and is not intended to be used for genuine usage.
      */
-    @Child(name = "experimental", type = {BooleanType.class}, order=5, min=0, max=1, modifier=false, summary=true)
+    @Child(name = "experimental", type = {BooleanType.class}, order=1, min=0, max=1, modifier=false, summary=true)
     @Description(shortDefinition="If for testing purposes, not real usage", formalDefinition="This ConceptMap was authored for testing purposes (or education/evaluation/marketing), and is not intended to be used for genuine usage." )
     protected BooleanType experimental;
 
     /**
      * The name of the individual or organization that published the concept map.
      */
-    @Child(name = "publisher", type = {StringType.class}, order=6, min=0, max=1, modifier=false, summary=true)
+    @Child(name = "publisher", type = {StringType.class}, order=2, min=0, max=1, modifier=false, summary=true)
     @Description(shortDefinition="Name of the publisher (organization or individual)", formalDefinition="The name of the individual or organization that published the concept map." )
     protected StringType publisher;
 
     /**
      * Contacts to assist a user in finding and communicating with the publisher.
      */
-    @Child(name = "contact", type = {}, order=7, min=0, max=Child.MAX_UNLIMITED, modifier=false, summary=true)
+    @Child(name = "contact", type = {}, order=3, min=0, max=Child.MAX_UNLIMITED, modifier=false, summary=true)
     @Description(shortDefinition="Contact details of the publisher", formalDefinition="Contacts to assist a user in finding and communicating with the publisher." )
     protected List<ConceptMapContactComponent> contact;
 
     /**
-     * The date this version of the concept map was published. The date must change when the business version changes, if it does, and it must change if the status code changes. In addition, it should change when the substantive content of the concept map changes.
-     */
-    @Child(name = "date", type = {DateTimeType.class}, order=8, min=0, max=1, modifier=false, summary=true)
-    @Description(shortDefinition="Date for given status", formalDefinition="The date this version of the concept map was published. The date must change when the business version changes, if it does, and it must change if the status code changes. In addition, it should change when the substantive content of the concept map changes." )
-    protected DateTimeType date;
-
-    /**
      * A free text natural language description of the use of the concept map - reason for definition, conditions of use, etc.
      */
-    @Child(name = "description", type = {StringType.class}, order=9, min=0, max=1, modifier=false, summary=true)
+    @Child(name = "description", type = {MarkdownType.class}, order=4, min=0, max=1, modifier=false, summary=true)
     @Description(shortDefinition="Human language description of the concept map", formalDefinition="A free text natural language description of the use of the concept map - reason for definition, conditions of use, etc." )
-    protected StringType description;
-
-    /**
-     * The content was developed with a focus and intent of supporting the contexts that are listed. These terms may be used to assist with indexing and searching of concept map instances.
-     */
-    @Child(name = "useContext", type = {CodeableConcept.class}, order=10, min=0, max=Child.MAX_UNLIMITED, modifier=false, summary=true)
-    @Description(shortDefinition="Content intends to support these contexts", formalDefinition="The content was developed with a focus and intent of supporting the contexts that are listed. These terms may be used to assist with indexing and searching of concept map instances." )
-    protected List<CodeableConcept> useContext;
+    protected MarkdownType description;
 
     /**
      * Explains why this concept map is needed and why it has been constrained as it has.
      */
-    @Child(name = "requirements", type = {StringType.class}, order=11, min=0, max=1, modifier=false, summary=false)
+    @Child(name = "requirements", type = {MarkdownType.class}, order=5, min=0, max=1, modifier=false, summary=false)
     @Description(shortDefinition="Why needed", formalDefinition="Explains why this concept map is needed and why it has been constrained as it has." )
-    protected StringType requirements;
+    protected MarkdownType requirements;
 
     /**
      * A copyright statement relating to the concept map and/or its contents.
      */
-    @Child(name = "copyright", type = {StringType.class}, order=12, min=0, max=1, modifier=false, summary=false)
+    @Child(name = "copyright", type = {StringType.class}, order=6, min=0, max=1, modifier=false, summary=false)
     @Description(shortDefinition="Use and/or publishing restrictions", formalDefinition="A copyright statement relating to the concept map and/or its contents." )
     protected StringType copyright;
 
     /**
      * The source value set that specifies the concepts that are being mapped.
      */
-    @Child(name = "source", type = {UriType.class, ValueSet.class, StructureDefinition.class}, order=13, min=1, max=1, modifier=false, summary=true)
+    @Child(name = "source", type = {UriType.class, ValueSet.class, StructureDefinition.class}, order=7, min=1, max=1, modifier=false, summary=true)
     @Description(shortDefinition="Identifies the source of the concepts which are being mapped", formalDefinition="The source value set that specifies the concepts that are being mapped." )
     protected Type source;
 
     /**
      * The target value set provides context to the mappings. Note that the mapping is made between concepts, not between value sets, but the value set provides important context about how the concept mapping choices are made.
      */
-    @Child(name = "target", type = {UriType.class, ValueSet.class, StructureDefinition.class}, order=14, min=1, max=1, modifier=false, summary=true)
+    @Child(name = "target", type = {UriType.class, ValueSet.class, StructureDefinition.class}, order=8, min=1, max=1, modifier=false, summary=true)
     @Description(shortDefinition="Provides context to the mappings", formalDefinition="The target value set provides context to the mappings. Note that the mapping is made between concepts, not between value sets, but the value set provides important context about how the concept mapping choices are made." )
     protected Type target;
 
     /**
-     * Mappings for an individual concept in the source to one or more concepts in the target.
+     * A group of mappings that all have the same source and target system.
      */
-    @Child(name = "element", type = {}, order=15, min=0, max=Child.MAX_UNLIMITED, modifier=false, summary=false)
-    @Description(shortDefinition="Mappings for a concept from the source set", formalDefinition="Mappings for an individual concept in the source to one or more concepts in the target." )
-    protected List<SourceElementComponent> element;
+    @Child(name = "group", type = {}, order=9, min=0, max=Child.MAX_UNLIMITED, modifier=false, summary=false)
+    @Description(shortDefinition="Same source and target systems", formalDefinition="A group of mappings that all have the same source and target system." )
+    protected List<ConceptMapGroupComponent> group;
 
-    private static final long serialVersionUID = 1687563642L;
+    private static final long serialVersionUID = 186664735L;
 
   /**
    * Constructor
@@ -1310,41 +1788,6 @@ public class ConceptMap extends DomainResource {
       this.status = status;
       this.source = source;
       this.target = target;
-    }
-
-    /**
-     * @return {@link #url} (An absolute URL that is used to identify this concept map when it is referenced in a specification, model, design or an instance. This SHALL be a URL, SHOULD be globally unique, and SHOULD be an address at which this concept map is (or will be) published.). This is the underlying object with id, value and extensions. The accessor "getUrl" gives direct access to the value
-     */
-    public UriType getUrlElement() { 
-      if (this.url == null)
-        if (Configuration.errorOnAutoCreate())
-          throw new Error("Attempt to auto-create ConceptMap.url");
-        else if (Configuration.doAutoCreate())
-          this.url = new UriType(); // bb
-      return this.url;
-    }
-
-    public boolean hasUrlElement() { 
-      return this.url != null && !this.url.isEmpty();
-    }
-
-    public boolean hasUrl() { 
-      return this.url != null && !this.url.isEmpty();
-    }
-
-    /**
-     * @param value {@link #url} (An absolute URL that is used to identify this concept map when it is referenced in a specification, model, design or an instance. This SHALL be a URL, SHOULD be globally unique, and SHOULD be an address at which this concept map is (or will be) published.). This is the underlying object with id, value and extensions. The accessor "getUrl" gives direct access to the value
-     */
-    public ConceptMap setUrlElement(UriType value) { 
-      this.url = value;
-      return this;
-    }
-
-    /**
-     * @return An absolute URL that is used to identify this concept map when it is referenced in a specification, model, design or an instance. This SHALL be a URL, SHOULD be globally unique, and SHOULD be an address at which this concept map is (or will be) published.
-     */
-    public String getUrl() { 
-      return this.url == null ? null : this.url.getValue();
     }
 
     /**
@@ -1386,41 +1829,6 @@ public class ConceptMap extends DomainResource {
     }
 
     /**
-     * @return {@link #version} (The identifier that is used to identify this version of the concept map when it is referenced in a specification, model, design or instance. This is an arbitrary value managed by the profile author manually and the value should be a timestamp.). This is the underlying object with id, value and extensions. The accessor "getVersion" gives direct access to the value
-     */
-    public StringType getVersionElement() { 
-      if (this.version == null)
-        if (Configuration.errorOnAutoCreate())
-          throw new Error("Attempt to auto-create ConceptMap.version");
-        else if (Configuration.doAutoCreate())
-          this.version = new StringType(); // bb
-      return this.version;
-    }
-
-    public boolean hasVersionElement() { 
-      return this.version != null && !this.version.isEmpty();
-    }
-
-    public boolean hasVersion() { 
-      return this.version != null && !this.version.isEmpty();
-    }
-
-    /**
-     * @param value {@link #version} (The identifier that is used to identify this version of the concept map when it is referenced in a specification, model, design or instance. This is an arbitrary value managed by the profile author manually and the value should be a timestamp.). This is the underlying object with id, value and extensions. The accessor "getVersion" gives direct access to the value
-     */
-    public ConceptMap setVersionElement(StringType value) { 
-      this.version = value;
-      return this;
-    }
-
-    /**
-     * @return The identifier that is used to identify this version of the concept map when it is referenced in a specification, model, design or instance. This is an arbitrary value managed by the profile author manually and the value should be a timestamp.
-     */
-    public String getVersion() { 
-      return this.version == null ? null : this.version.getValue();
-    }
-
-    /**
      * @param value The identifier that is used to identify this version of the concept map when it is referenced in a specification, model, design or instance. This is an arbitrary value managed by the profile author manually and the value should be a timestamp.
      */
     public ConceptMap setVersion(String value) { 
@@ -1435,41 +1843,6 @@ public class ConceptMap extends DomainResource {
     }
 
     /**
-     * @return {@link #name} (A free text natural language name describing the concept map.). This is the underlying object with id, value and extensions. The accessor "getName" gives direct access to the value
-     */
-    public StringType getNameElement() { 
-      if (this.name == null)
-        if (Configuration.errorOnAutoCreate())
-          throw new Error("Attempt to auto-create ConceptMap.name");
-        else if (Configuration.doAutoCreate())
-          this.name = new StringType(); // bb
-      return this.name;
-    }
-
-    public boolean hasNameElement() { 
-      return this.name != null && !this.name.isEmpty();
-    }
-
-    public boolean hasName() { 
-      return this.name != null && !this.name.isEmpty();
-    }
-
-    /**
-     * @param value {@link #name} (A free text natural language name describing the concept map.). This is the underlying object with id, value and extensions. The accessor "getName" gives direct access to the value
-     */
-    public ConceptMap setNameElement(StringType value) { 
-      this.name = value;
-      return this;
-    }
-
-    /**
-     * @return A free text natural language name describing the concept map.
-     */
-    public String getName() { 
-      return this.name == null ? null : this.name.getValue();
-    }
-
-    /**
      * @param value A free text natural language name describing the concept map.
      */
     public ConceptMap setName(String value) { 
@@ -1481,41 +1854,6 @@ public class ConceptMap extends DomainResource {
         this.name.setValue(value);
       }
       return this;
-    }
-
-    /**
-     * @return {@link #status} (The status of the concept map.). This is the underlying object with id, value and extensions. The accessor "getStatus" gives direct access to the value
-     */
-    public Enumeration<ConformanceResourceStatus> getStatusElement() { 
-      if (this.status == null)
-        if (Configuration.errorOnAutoCreate())
-          throw new Error("Attempt to auto-create ConceptMap.status");
-        else if (Configuration.doAutoCreate())
-          this.status = new Enumeration<ConformanceResourceStatus>(new ConformanceResourceStatusEnumFactory()); // bb
-      return this.status;
-    }
-
-    public boolean hasStatusElement() { 
-      return this.status != null && !this.status.isEmpty();
-    }
-
-    public boolean hasStatus() { 
-      return this.status != null && !this.status.isEmpty();
-    }
-
-    /**
-     * @param value {@link #status} (The status of the concept map.). This is the underlying object with id, value and extensions. The accessor "getStatus" gives direct access to the value
-     */
-    public ConceptMap setStatusElement(Enumeration<ConformanceResourceStatus> value) { 
-      this.status = value;
-      return this;
-    }
-
-    /**
-     * @return The status of the concept map.
-     */
-    public ConformanceResourceStatus getStatus() { 
-      return this.status == null ? null : this.status.getValue();
     }
 
     /**
@@ -1631,6 +1969,14 @@ public class ConceptMap extends DomainResource {
       return this.contact;
     }
 
+    /**
+     * @return Returns a reference to <code>this</code> for easy method chaining
+     */
+    public ConceptMap setContact(List<ConceptMapContactComponent> theContact) { 
+      this.contact = theContact;
+      return this;
+    }
+
     public boolean hasContact() { 
       if (this.contact == null)
         return false;
@@ -1640,10 +1986,6 @@ public class ConceptMap extends DomainResource {
       return false;
     }
 
-    /**
-     * @return {@link #contact} (Contacts to assist a user in finding and communicating with the publisher.)
-     */
-    // syntactic sugar
     public ConceptMapContactComponent addContact() { //3
       ConceptMapContactComponent t = new ConceptMapContactComponent();
       if (this.contact == null)
@@ -1652,7 +1994,6 @@ public class ConceptMap extends DomainResource {
       return t;
     }
 
-    // syntactic sugar
     public ConceptMap addContact(ConceptMapContactComponent t) { //3
       if (t == null)
         return this;
@@ -1663,38 +2004,13 @@ public class ConceptMap extends DomainResource {
     }
 
     /**
-     * @return {@link #date} (The date this version of the concept map was published. The date must change when the business version changes, if it does, and it must change if the status code changes. In addition, it should change when the substantive content of the concept map changes.). This is the underlying object with id, value and extensions. The accessor "getDate" gives direct access to the value
+     * @return The first repetition of repeating field {@link #contact}, creating it if it does not already exist
      */
-    public DateTimeType getDateElement() { 
-      if (this.date == null)
-        if (Configuration.errorOnAutoCreate())
-          throw new Error("Attempt to auto-create ConceptMap.date");
-        else if (Configuration.doAutoCreate())
-          this.date = new DateTimeType(); // bb
-      return this.date;
-    }
-
-    public boolean hasDateElement() { 
-      return this.date != null && !this.date.isEmpty();
-    }
-
-    public boolean hasDate() { 
-      return this.date != null && !this.date.isEmpty();
-    }
-
-    /**
-     * @param value {@link #date} (The date this version of the concept map was published. The date must change when the business version changes, if it does, and it must change if the status code changes. In addition, it should change when the substantive content of the concept map changes.). This is the underlying object with id, value and extensions. The accessor "getDate" gives direct access to the value
-     */
-    public ConceptMap setDateElement(DateTimeType value) { 
-      this.date = value;
-      return this;
-    }
-
-    /**
-     * @return The date this version of the concept map was published. The date must change when the business version changes, if it does, and it must change if the status code changes. In addition, it should change when the substantive content of the concept map changes.
-     */
-    public Date getDate() { 
-      return this.date == null ? null : this.date.getValue();
+    public ConceptMapContactComponent getContactFirstRep() { 
+      if (getContact().isEmpty()) {
+        addContact();
+      }
+      return getContact().get(0);
     }
 
     /**
@@ -1714,12 +2030,12 @@ public class ConceptMap extends DomainResource {
     /**
      * @return {@link #description} (A free text natural language description of the use of the concept map - reason for definition, conditions of use, etc.). This is the underlying object with id, value and extensions. The accessor "getDescription" gives direct access to the value
      */
-    public StringType getDescriptionElement() { 
+    public MarkdownType getDescriptionElement() { 
       if (this.description == null)
         if (Configuration.errorOnAutoCreate())
           throw new Error("Attempt to auto-create ConceptMap.description");
         else if (Configuration.doAutoCreate())
-          this.description = new StringType(); // bb
+          this.description = new MarkdownType(); // bb
       return this.description;
     }
 
@@ -1734,7 +2050,7 @@ public class ConceptMap extends DomainResource {
     /**
      * @param value {@link #description} (A free text natural language description of the use of the concept map - reason for definition, conditions of use, etc.). This is the underlying object with id, value and extensions. The accessor "getDescription" gives direct access to the value
      */
-    public ConceptMap setDescriptionElement(StringType value) { 
+    public ConceptMap setDescriptionElement(MarkdownType value) { 
       this.description = value;
       return this;
     }
@@ -1750,65 +2066,25 @@ public class ConceptMap extends DomainResource {
      * @param value A free text natural language description of the use of the concept map - reason for definition, conditions of use, etc.
      */
     public ConceptMap setDescription(String value) { 
-      if (Utilities.noString(value))
+      if (value == null)
         this.description = null;
       else {
         if (this.description == null)
-          this.description = new StringType();
+          this.description = new MarkdownType();
         this.description.setValue(value);
       }
       return this;
     }
 
     /**
-     * @return {@link #useContext} (The content was developed with a focus and intent of supporting the contexts that are listed. These terms may be used to assist with indexing and searching of concept map instances.)
-     */
-    public List<CodeableConcept> getUseContext() { 
-      if (this.useContext == null)
-        this.useContext = new ArrayList<CodeableConcept>();
-      return this.useContext;
-    }
-
-    public boolean hasUseContext() { 
-      if (this.useContext == null)
-        return false;
-      for (CodeableConcept item : this.useContext)
-        if (!item.isEmpty())
-          return true;
-      return false;
-    }
-
-    /**
-     * @return {@link #useContext} (The content was developed with a focus and intent of supporting the contexts that are listed. These terms may be used to assist with indexing and searching of concept map instances.)
-     */
-    // syntactic sugar
-    public CodeableConcept addUseContext() { //3
-      CodeableConcept t = new CodeableConcept();
-      if (this.useContext == null)
-        this.useContext = new ArrayList<CodeableConcept>();
-      this.useContext.add(t);
-      return t;
-    }
-
-    // syntactic sugar
-    public ConceptMap addUseContext(CodeableConcept t) { //3
-      if (t == null)
-        return this;
-      if (this.useContext == null)
-        this.useContext = new ArrayList<CodeableConcept>();
-      this.useContext.add(t);
-      return this;
-    }
-
-    /**
      * @return {@link #requirements} (Explains why this concept map is needed and why it has been constrained as it has.). This is the underlying object with id, value and extensions. The accessor "getRequirements" gives direct access to the value
      */
-    public StringType getRequirementsElement() { 
+    public MarkdownType getRequirementsElement() { 
       if (this.requirements == null)
         if (Configuration.errorOnAutoCreate())
           throw new Error("Attempt to auto-create ConceptMap.requirements");
         else if (Configuration.doAutoCreate())
-          this.requirements = new StringType(); // bb
+          this.requirements = new MarkdownType(); // bb
       return this.requirements;
     }
 
@@ -1823,7 +2099,7 @@ public class ConceptMap extends DomainResource {
     /**
      * @param value {@link #requirements} (Explains why this concept map is needed and why it has been constrained as it has.). This is the underlying object with id, value and extensions. The accessor "getRequirements" gives direct access to the value
      */
-    public ConceptMap setRequirementsElement(StringType value) { 
+    public ConceptMap setRequirementsElement(MarkdownType value) { 
       this.requirements = value;
       return this;
     }
@@ -1839,11 +2115,11 @@ public class ConceptMap extends DomainResource {
      * @param value Explains why this concept map is needed and why it has been constrained as it has.
      */
     public ConceptMap setRequirements(String value) { 
-      if (Utilities.noString(value))
+      if (value == null)
         this.requirements = null;
       else {
         if (this.requirements == null)
-          this.requirements = new StringType();
+          this.requirements = new MarkdownType();
         this.requirements.setValue(value);
       }
       return this;
@@ -1989,63 +2265,150 @@ public class ConceptMap extends DomainResource {
     }
 
     /**
-     * @return {@link #element} (Mappings for an individual concept in the source to one or more concepts in the target.)
+     * @return {@link #group} (A group of mappings that all have the same source and target system.)
      */
-    public List<SourceElementComponent> getElement() { 
-      if (this.element == null)
-        this.element = new ArrayList<SourceElementComponent>();
-      return this.element;
+    public List<ConceptMapGroupComponent> getGroup() { 
+      if (this.group == null)
+        this.group = new ArrayList<ConceptMapGroupComponent>();
+      return this.group;
     }
 
-    public boolean hasElement() { 
-      if (this.element == null)
+    /**
+     * @return Returns a reference to <code>this</code> for easy method chaining
+     */
+    public ConceptMap setGroup(List<ConceptMapGroupComponent> theGroup) { 
+      this.group = theGroup;
+      return this;
+    }
+
+    public boolean hasGroup() { 
+      if (this.group == null)
         return false;
-      for (SourceElementComponent item : this.element)
+      for (ConceptMapGroupComponent item : this.group)
         if (!item.isEmpty())
           return true;
       return false;
     }
 
-    /**
-     * @return {@link #element} (Mappings for an individual concept in the source to one or more concepts in the target.)
-     */
-    // syntactic sugar
-    public SourceElementComponent addElement() { //3
-      SourceElementComponent t = new SourceElementComponent();
-      if (this.element == null)
-        this.element = new ArrayList<SourceElementComponent>();
-      this.element.add(t);
+    public ConceptMapGroupComponent addGroup() { //3
+      ConceptMapGroupComponent t = new ConceptMapGroupComponent();
+      if (this.group == null)
+        this.group = new ArrayList<ConceptMapGroupComponent>();
+      this.group.add(t);
       return t;
     }
 
-    // syntactic sugar
-    public ConceptMap addElement(SourceElementComponent t) { //3
+    public ConceptMap addGroup(ConceptMapGroupComponent t) { //3
       if (t == null)
         return this;
-      if (this.element == null)
-        this.element = new ArrayList<SourceElementComponent>();
-      this.element.add(t);
+      if (this.group == null)
+        this.group = new ArrayList<ConceptMapGroupComponent>();
+      this.group.add(t);
       return this;
+    }
+
+    /**
+     * @return The first repetition of repeating field {@link #group}, creating it if it does not already exist
+     */
+    public ConceptMapGroupComponent getGroupFirstRep() { 
+      if (getGroup().isEmpty()) {
+        addGroup();
+      }
+      return getGroup().get(0);
     }
 
       protected void listChildren(List<Property> childrenList) {
         super.listChildren(childrenList);
-        childrenList.add(new Property("url", "uri", "An absolute URL that is used to identify this concept map when it is referenced in a specification, model, design or an instance. This SHALL be a URL, SHOULD be globally unique, and SHOULD be an address at which this concept map is (or will be) published.", 0, java.lang.Integer.MAX_VALUE, url));
         childrenList.add(new Property("identifier", "Identifier", "Formal identifier that is used to identify this concept map when it is represented in other formats, or referenced in a specification, model, design or an instance.", 0, java.lang.Integer.MAX_VALUE, identifier));
-        childrenList.add(new Property("version", "string", "The identifier that is used to identify this version of the concept map when it is referenced in a specification, model, design or instance. This is an arbitrary value managed by the profile author manually and the value should be a timestamp.", 0, java.lang.Integer.MAX_VALUE, version));
-        childrenList.add(new Property("name", "string", "A free text natural language name describing the concept map.", 0, java.lang.Integer.MAX_VALUE, name));
-        childrenList.add(new Property("status", "code", "The status of the concept map.", 0, java.lang.Integer.MAX_VALUE, status));
         childrenList.add(new Property("experimental", "boolean", "This ConceptMap was authored for testing purposes (or education/evaluation/marketing), and is not intended to be used for genuine usage.", 0, java.lang.Integer.MAX_VALUE, experimental));
         childrenList.add(new Property("publisher", "string", "The name of the individual or organization that published the concept map.", 0, java.lang.Integer.MAX_VALUE, publisher));
         childrenList.add(new Property("contact", "", "Contacts to assist a user in finding and communicating with the publisher.", 0, java.lang.Integer.MAX_VALUE, contact));
-        childrenList.add(new Property("date", "dateTime", "The date this version of the concept map was published. The date must change when the business version changes, if it does, and it must change if the status code changes. In addition, it should change when the substantive content of the concept map changes.", 0, java.lang.Integer.MAX_VALUE, date));
-        childrenList.add(new Property("description", "string", "A free text natural language description of the use of the concept map - reason for definition, conditions of use, etc.", 0, java.lang.Integer.MAX_VALUE, description));
-        childrenList.add(new Property("useContext", "CodeableConcept", "The content was developed with a focus and intent of supporting the contexts that are listed. These terms may be used to assist with indexing and searching of concept map instances.", 0, java.lang.Integer.MAX_VALUE, useContext));
-        childrenList.add(new Property("requirements", "string", "Explains why this concept map is needed and why it has been constrained as it has.", 0, java.lang.Integer.MAX_VALUE, requirements));
+        childrenList.add(new Property("description", "markdown", "A free text natural language description of the use of the concept map - reason for definition, conditions of use, etc.", 0, java.lang.Integer.MAX_VALUE, description));
+        childrenList.add(new Property("requirements", "markdown", "Explains why this concept map is needed and why it has been constrained as it has.", 0, java.lang.Integer.MAX_VALUE, requirements));
         childrenList.add(new Property("copyright", "string", "A copyright statement relating to the concept map and/or its contents.", 0, java.lang.Integer.MAX_VALUE, copyright));
         childrenList.add(new Property("source[x]", "uri|Reference(ValueSet|StructureDefinition)", "The source value set that specifies the concepts that are being mapped.", 0, java.lang.Integer.MAX_VALUE, source));
         childrenList.add(new Property("target[x]", "uri|Reference(ValueSet|StructureDefinition)", "The target value set provides context to the mappings. Note that the mapping is made between concepts, not between value sets, but the value set provides important context about how the concept mapping choices are made.", 0, java.lang.Integer.MAX_VALUE, target));
-        childrenList.add(new Property("element", "", "Mappings for an individual concept in the source to one or more concepts in the target.", 0, java.lang.Integer.MAX_VALUE, element));
+        childrenList.add(new Property("group", "", "A group of mappings that all have the same source and target system.", 0, java.lang.Integer.MAX_VALUE, group));
+      }
+
+      @Override
+      public Base[] getProperty(int hash, String name, boolean checkValid) throws FHIRException {
+        switch (hash) {
+        case 116079: /*url*/ return this.url == null ? new Base[0] : new Base[] {this.url}; // UriType
+        case -1618432855: /*identifier*/ return this.identifier == null ? new Base[0] : new Base[] {this.identifier}; // Identifier
+        case 351608024: /*version*/ return this.version == null ? new Base[0] : new Base[] {this.version}; // StringType
+        case 3373707: /*name*/ return this.name == null ? new Base[0] : new Base[] {this.name}; // StringType
+        case -892481550: /*status*/ return this.status == null ? new Base[0] : new Base[] {this.status}; // Enumeration<ConformanceResourceStatus>
+        case -404562712: /*experimental*/ return this.experimental == null ? new Base[0] : new Base[] {this.experimental}; // BooleanType
+        case 1447404028: /*publisher*/ return this.publisher == null ? new Base[0] : new Base[] {this.publisher}; // StringType
+        case 951526432: /*contact*/ return this.contact == null ? new Base[0] : this.contact.toArray(new Base[this.contact.size()]); // ConceptMapContactComponent
+        case 3076014: /*date*/ return this.date == null ? new Base[0] : new Base[] {this.date}; // DateTimeType
+        case -1724546052: /*description*/ return this.description == null ? new Base[0] : new Base[] {this.description}; // MarkdownType
+        case -669707736: /*useContext*/ return this.useContext == null ? new Base[0] : this.useContext.toArray(new Base[this.useContext.size()]); // CodeableConcept
+        case -1619874672: /*requirements*/ return this.requirements == null ? new Base[0] : new Base[] {this.requirements}; // MarkdownType
+        case 1522889671: /*copyright*/ return this.copyright == null ? new Base[0] : new Base[] {this.copyright}; // StringType
+        case -896505829: /*source*/ return this.source == null ? new Base[0] : new Base[] {this.source}; // Type
+        case -880905839: /*target*/ return this.target == null ? new Base[0] : new Base[] {this.target}; // Type
+        case 98629247: /*group*/ return this.group == null ? new Base[0] : this.group.toArray(new Base[this.group.size()]); // ConceptMapGroupComponent
+        default: return super.getProperty(hash, name, checkValid);
+        }
+
+      }
+
+      @Override
+      public void setProperty(int hash, String name, Base value) throws FHIRException {
+        switch (hash) {
+        case 116079: // url
+          this.url = castToUri(value); // UriType
+          break;
+        case -1618432855: // identifier
+          this.identifier = castToIdentifier(value); // Identifier
+          break;
+        case 351608024: // version
+          this.version = castToString(value); // StringType
+          break;
+        case 3373707: // name
+          this.name = castToString(value); // StringType
+          break;
+        case -892481550: // status
+          this.status = new ConformanceResourceStatusEnumFactory().fromType(value); // Enumeration<ConformanceResourceStatus>
+          break;
+        case -404562712: // experimental
+          this.experimental = castToBoolean(value); // BooleanType
+          break;
+        case 1447404028: // publisher
+          this.publisher = castToString(value); // StringType
+          break;
+        case 951526432: // contact
+          this.getContact().add((ConceptMapContactComponent) value); // ConceptMapContactComponent
+          break;
+        case 3076014: // date
+          this.date = castToDateTime(value); // DateTimeType
+          break;
+        case -1724546052: // description
+          this.description = castToMarkdown(value); // MarkdownType
+          break;
+        case -669707736: // useContext
+          this.getUseContext().add(castToCodeableConcept(value)); // CodeableConcept
+          break;
+        case -1619874672: // requirements
+          this.requirements = castToMarkdown(value); // MarkdownType
+          break;
+        case 1522889671: // copyright
+          this.copyright = castToString(value); // StringType
+          break;
+        case -896505829: // source
+          this.source = (Type) value; // Type
+          break;
+        case -880905839: // target
+          this.target = (Type) value; // Type
+          break;
+        case 98629247: // group
+          this.getGroup().add((ConceptMapGroupComponent) value); // ConceptMapGroupComponent
+          break;
+        default: super.setProperty(hash, name, value);
+        }
+
       }
 
       @Override
@@ -2069,21 +2432,45 @@ public class ConceptMap extends DomainResource {
         else if (name.equals("date"))
           this.date = castToDateTime(value); // DateTimeType
         else if (name.equals("description"))
-          this.description = castToString(value); // StringType
+          this.description = castToMarkdown(value); // MarkdownType
         else if (name.equals("useContext"))
           this.getUseContext().add(castToCodeableConcept(value));
         else if (name.equals("requirements"))
-          this.requirements = castToString(value); // StringType
+          this.requirements = castToMarkdown(value); // MarkdownType
         else if (name.equals("copyright"))
           this.copyright = castToString(value); // StringType
         else if (name.equals("source[x]"))
           this.source = (Type) value; // Type
         else if (name.equals("target[x]"))
           this.target = (Type) value; // Type
-        else if (name.equals("element"))
-          this.getElement().add((SourceElementComponent) value);
+        else if (name.equals("group"))
+          this.getGroup().add((ConceptMapGroupComponent) value);
         else
           super.setProperty(name, value);
+      }
+
+      @Override
+      public Base makeProperty(int hash, String name) throws FHIRException {
+        switch (hash) {
+        case 116079: throw new FHIRException("Cannot make property url as it is not a complex type"); // UriType
+        case -1618432855:  return getIdentifier(); // Identifier
+        case 351608024: throw new FHIRException("Cannot make property version as it is not a complex type"); // StringType
+        case 3373707: throw new FHIRException("Cannot make property name as it is not a complex type"); // StringType
+        case -892481550: throw new FHIRException("Cannot make property status as it is not a complex type"); // Enumeration<ConformanceResourceStatus>
+        case -404562712: throw new FHIRException("Cannot make property experimental as it is not a complex type"); // BooleanType
+        case 1447404028: throw new FHIRException("Cannot make property publisher as it is not a complex type"); // StringType
+        case 951526432:  return addContact(); // ConceptMapContactComponent
+        case 3076014: throw new FHIRException("Cannot make property date as it is not a complex type"); // DateTimeType
+        case -1724546052: throw new FHIRException("Cannot make property description as it is not a complex type"); // MarkdownType
+        case -669707736:  return addUseContext(); // CodeableConcept
+        case -1619874672: throw new FHIRException("Cannot make property requirements as it is not a complex type"); // MarkdownType
+        case 1522889671: throw new FHIRException("Cannot make property copyright as it is not a complex type"); // StringType
+        case -1698413947:  return getSource(); // Type
+        case -815579825:  return getTarget(); // Type
+        case 98629247:  return addGroup(); // ConceptMapGroupComponent
+        default: return super.makeProperty(hash, name);
+        }
+
       }
 
       @Override
@@ -2144,8 +2531,8 @@ public class ConceptMap extends DomainResource {
           this.target = new Reference();
           return this.target;
         }
-        else if (name.equals("element")) {
-          return addElement();
+        else if (name.equals("group")) {
+          return addGroup();
         }
         else
           return super.addChild(name);
@@ -2182,10 +2569,10 @@ public class ConceptMap extends DomainResource {
         dst.copyright = copyright == null ? null : copyright.copy();
         dst.source = source == null ? null : source.copy();
         dst.target = target == null ? null : target.copy();
-        if (element != null) {
-          dst.element = new ArrayList<SourceElementComponent>();
-          for (SourceElementComponent i : element)
-            dst.element.add(i.copy());
+        if (group != null) {
+          dst.group = new ArrayList<ConceptMapGroupComponent>();
+          for (ConceptMapGroupComponent i : group)
+            dst.group.add(i.copy());
         };
         return dst;
       }
@@ -2201,12 +2588,10 @@ public class ConceptMap extends DomainResource {
         if (!(other instanceof ConceptMap))
           return false;
         ConceptMap o = (ConceptMap) other;
-        return compareDeep(url, o.url, true) && compareDeep(identifier, o.identifier, true) && compareDeep(version, o.version, true)
-           && compareDeep(name, o.name, true) && compareDeep(status, o.status, true) && compareDeep(experimental, o.experimental, true)
-           && compareDeep(publisher, o.publisher, true) && compareDeep(contact, o.contact, true) && compareDeep(date, o.date, true)
-           && compareDeep(description, o.description, true) && compareDeep(useContext, o.useContext, true)
+        return compareDeep(identifier, o.identifier, true) && compareDeep(experimental, o.experimental, true)
+           && compareDeep(publisher, o.publisher, true) && compareDeep(contact, o.contact, true) && compareDeep(description, o.description, true)
            && compareDeep(requirements, o.requirements, true) && compareDeep(copyright, o.copyright, true)
-           && compareDeep(source, o.source, true) && compareDeep(target, o.target, true) && compareDeep(element, o.element, true)
+           && compareDeep(source, o.source, true) && compareDeep(target, o.target, true) && compareDeep(group, o.group, true)
           ;
       }
 
@@ -2217,20 +2602,14 @@ public class ConceptMap extends DomainResource {
         if (!(other instanceof ConceptMap))
           return false;
         ConceptMap o = (ConceptMap) other;
-        return compareValues(url, o.url, true) && compareValues(version, o.version, true) && compareValues(name, o.name, true)
-           && compareValues(status, o.status, true) && compareValues(experimental, o.experimental, true) && compareValues(publisher, o.publisher, true)
-           && compareValues(date, o.date, true) && compareValues(description, o.description, true) && compareValues(requirements, o.requirements, true)
+        return compareValues(experimental, o.experimental, true) && compareValues(publisher, o.publisher, true)
+           && compareValues(description, o.description, true) && compareValues(requirements, o.requirements, true)
            && compareValues(copyright, o.copyright, true);
       }
 
       public boolean isEmpty() {
-        return super.isEmpty() && (url == null || url.isEmpty()) && (identifier == null || identifier.isEmpty())
-           && (version == null || version.isEmpty()) && (name == null || name.isEmpty()) && (status == null || status.isEmpty())
-           && (experimental == null || experimental.isEmpty()) && (publisher == null || publisher.isEmpty())
-           && (contact == null || contact.isEmpty()) && (date == null || date.isEmpty()) && (description == null || description.isEmpty())
-           && (useContext == null || useContext.isEmpty()) && (requirements == null || requirements.isEmpty())
-           && (copyright == null || copyright.isEmpty()) && (source == null || source.isEmpty()) && (target == null || target.isEmpty())
-           && (element == null || element.isEmpty());
+        return super.isEmpty() && ca.uhn.fhir.util.ElementUtil.isEmpty(identifier, experimental, publisher
+          , contact, description, requirements, copyright, source, target, group);
       }
 
   @Override
@@ -2281,39 +2660,59 @@ public class ConceptMap extends DomainResource {
  /**
    * Search parameter: <b>product</b>
    * <p>
-   * Description: <b>Reference to element/field/ValueSet mapping depends on</b><br>
+   * Description: <b>Reference to property mapping depends on</b><br>
    * Type: <b>uri</b><br>
-   * Path: <b>ConceptMap.element.target.product.element</b><br>
+   * Path: <b>ConceptMap.group.element.target.product.property</b><br>
    * </p>
    */
-  @SearchParamDefinition(name="product", path="ConceptMap.element.target.product.element", description="Reference to element/field/ValueSet mapping depends on", type="uri" )
+  @SearchParamDefinition(name="product", path="ConceptMap.group.element.target.product.property", description="Reference to property mapping depends on", type="uri" )
   public static final String SP_PRODUCT = "product";
  /**
    * <b>Fluent Client</b> search parameter constant for <b>product</b>
    * <p>
-   * Description: <b>Reference to element/field/ValueSet mapping depends on</b><br>
+   * Description: <b>Reference to property mapping depends on</b><br>
    * Type: <b>uri</b><br>
-   * Path: <b>ConceptMap.element.target.product.element</b><br>
+   * Path: <b>ConceptMap.group.element.target.product.property</b><br>
    * </p>
    */
   public static final ca.uhn.fhir.rest.gclient.UriClientParam PRODUCT = new ca.uhn.fhir.rest.gclient.UriClientParam(SP_PRODUCT);
 
  /**
-   * Search parameter: <b>dependson</b>
+   * Search parameter: <b>target-system</b>
    * <p>
-   * Description: <b>Reference to element/field/ValueSet mapping depends on</b><br>
+   * Description: <b>System of the target (if necessary)</b><br>
    * Type: <b>uri</b><br>
-   * Path: <b>ConceptMap.element.target.dependsOn.element</b><br>
+   * Path: <b>ConceptMap.group.target</b><br>
    * </p>
    */
-  @SearchParamDefinition(name="dependson", path="ConceptMap.element.target.dependsOn.element", description="Reference to element/field/ValueSet mapping depends on", type="uri" )
+  @SearchParamDefinition(name="target-system", path="ConceptMap.group.target", description="System of the target (if necessary)", type="uri" )
+  public static final String SP_TARGET_SYSTEM = "target-system";
+ /**
+   * <b>Fluent Client</b> search parameter constant for <b>target-system</b>
+   * <p>
+   * Description: <b>System of the target (if necessary)</b><br>
+   * Type: <b>uri</b><br>
+   * Path: <b>ConceptMap.group.target</b><br>
+   * </p>
+   */
+  public static final ca.uhn.fhir.rest.gclient.UriClientParam TARGET_SYSTEM = new ca.uhn.fhir.rest.gclient.UriClientParam(SP_TARGET_SYSTEM);
+
+ /**
+   * Search parameter: <b>dependson</b>
+   * <p>
+   * Description: <b>Reference to property mapping depends on</b><br>
+   * Type: <b>uri</b><br>
+   * Path: <b>ConceptMap.group.element.target.dependsOn.property</b><br>
+   * </p>
+   */
+  @SearchParamDefinition(name="dependson", path="ConceptMap.group.element.target.dependsOn.property", description="Reference to property mapping depends on", type="uri" )
   public static final String SP_DEPENDSON = "dependson";
  /**
    * <b>Fluent Client</b> search parameter constant for <b>dependson</b>
    * <p>
-   * Description: <b>Reference to element/field/ValueSet mapping depends on</b><br>
+   * Description: <b>Reference to property mapping depends on</b><br>
    * Type: <b>uri</b><br>
-   * Path: <b>ConceptMap.element.target.dependsOn.element</b><br>
+   * Path: <b>ConceptMap.group.element.target.dependsOn.property</b><br>
    * </p>
    */
   public static final ca.uhn.fhir.rest.gclient.UriClientParam DEPENDSON = new ca.uhn.fhir.rest.gclient.UriClientParam(SP_DEPENDSON);
@@ -2339,26 +2738,6 @@ public class ConceptMap extends DomainResource {
   public static final ca.uhn.fhir.rest.gclient.StringClientParam DESCRIPTION = new ca.uhn.fhir.rest.gclient.StringClientParam(SP_DESCRIPTION);
 
  /**
-   * Search parameter: <b>targetsystem</b>
-   * <p>
-   * Description: <b>System of the target (if necessary)</b><br>
-   * Type: <b>uri</b><br>
-   * Path: <b>ConceptMap.element.target.codeSystem</b><br>
-   * </p>
-   */
-  @SearchParamDefinition(name="targetsystem", path="ConceptMap.element.target.codeSystem", description="System of the target (if necessary)", type="uri" )
-  public static final String SP_TARGETSYSTEM = "targetsystem";
- /**
-   * <b>Fluent Client</b> search parameter constant for <b>targetsystem</b>
-   * <p>
-   * Description: <b>System of the target (if necessary)</b><br>
-   * Type: <b>uri</b><br>
-   * Path: <b>ConceptMap.element.target.codeSystem</b><br>
-   * </p>
-   */
-  public static final ca.uhn.fhir.rest.gclient.UriClientParam TARGETSYSTEM = new ca.uhn.fhir.rest.gclient.UriClientParam(SP_TARGETSYSTEM);
-
- /**
    * Search parameter: <b>source</b>
    * <p>
    * Description: <b>Identifies the source of the concepts which are being mapped</b><br>
@@ -2366,7 +2745,7 @@ public class ConceptMap extends DomainResource {
    * Path: <b>ConceptMap.sourceReference</b><br>
    * </p>
    */
-  @SearchParamDefinition(name="source", path="ConceptMap.sourceReference", description="Identifies the source of the concepts which are being mapped", type="reference" )
+  @SearchParamDefinition(name="source", path="ConceptMap.source.as(Reference)", description="Identifies the source of the concepts which are being mapped", type="reference", target={StructureDefinition.class, ValueSet.class } )
   public static final String SP_SOURCE = "source";
  /**
    * <b>Fluent Client</b> search parameter constant for <b>source</b>
@@ -2405,26 +2784,6 @@ public class ConceptMap extends DomainResource {
   public static final ca.uhn.fhir.rest.gclient.TokenClientParam VERSION = new ca.uhn.fhir.rest.gclient.TokenClientParam(SP_VERSION);
 
  /**
-   * Search parameter: <b>sourcesystem</b>
-   * <p>
-   * Description: <b>Code System (if value set crosses code systems)</b><br>
-   * Type: <b>uri</b><br>
-   * Path: <b>ConceptMap.element.codeSystem</b><br>
-   * </p>
-   */
-  @SearchParamDefinition(name="sourcesystem", path="ConceptMap.element.codeSystem", description="Code System (if value set crosses code systems)", type="uri" )
-  public static final String SP_SOURCESYSTEM = "sourcesystem";
- /**
-   * <b>Fluent Client</b> search parameter constant for <b>sourcesystem</b>
-   * <p>
-   * Description: <b>Code System (if value set crosses code systems)</b><br>
-   * Type: <b>uri</b><br>
-   * Path: <b>ConceptMap.element.codeSystem</b><br>
-   * </p>
-   */
-  public static final ca.uhn.fhir.rest.gclient.UriClientParam SOURCESYSTEM = new ca.uhn.fhir.rest.gclient.UriClientParam(SP_SOURCESYSTEM);
-
- /**
    * Search parameter: <b>url</b>
    * <p>
    * Description: <b>The URL of the concept map</b><br>
@@ -2449,17 +2808,17 @@ public class ConceptMap extends DomainResource {
    * <p>
    * Description: <b>Provides context to the mappings</b><br>
    * Type: <b>reference</b><br>
-   * Path: <b>ConceptMap.target[x]</b><br>
+   * Path: <b>ConceptMap.targetReference</b><br>
    * </p>
    */
-  @SearchParamDefinition(name="target", path="ConceptMap.target[x]", description="Provides context to the mappings", type="reference" )
+  @SearchParamDefinition(name="target", path="ConceptMap.target.as(Reference)", description="Provides context to the mappings", type="reference", target={StructureDefinition.class, ValueSet.class } )
   public static final String SP_TARGET = "target";
  /**
    * <b>Fluent Client</b> search parameter constant for <b>target</b>
    * <p>
    * Description: <b>Provides context to the mappings</b><br>
    * Type: <b>reference</b><br>
-   * Path: <b>ConceptMap.target[x]</b><br>
+   * Path: <b>ConceptMap.targetReference</b><br>
    * </p>
    */
   public static final ca.uhn.fhir.rest.gclient.ReferenceClientParam TARGET = new ca.uhn.fhir.rest.gclient.ReferenceClientParam(SP_TARGET);
@@ -2471,50 +2830,50 @@ public class ConceptMap extends DomainResource {
   public static final ca.uhn.fhir.model.api.Include INCLUDE_TARGET = new ca.uhn.fhir.model.api.Include("ConceptMap:target").toLocked();
 
  /**
-   * Search parameter: <b>sourcecode</b>
+   * Search parameter: <b>source-code</b>
    * <p>
    * Description: <b>Identifies element being mapped</b><br>
    * Type: <b>token</b><br>
-   * Path: <b>ConceptMap.element.code</b><br>
+   * Path: <b>ConceptMap.group.element.code</b><br>
    * </p>
    */
-  @SearchParamDefinition(name="sourcecode", path="ConceptMap.element.code", description="Identifies element being mapped", type="token" )
-  public static final String SP_SOURCECODE = "sourcecode";
+  @SearchParamDefinition(name="source-code", path="ConceptMap.group.element.code", description="Identifies element being mapped", type="token" )
+  public static final String SP_SOURCE_CODE = "source-code";
  /**
-   * <b>Fluent Client</b> search parameter constant for <b>sourcecode</b>
+   * <b>Fluent Client</b> search parameter constant for <b>source-code</b>
    * <p>
    * Description: <b>Identifies element being mapped</b><br>
    * Type: <b>token</b><br>
-   * Path: <b>ConceptMap.element.code</b><br>
+   * Path: <b>ConceptMap.group.element.code</b><br>
    * </p>
    */
-  public static final ca.uhn.fhir.rest.gclient.TokenClientParam SOURCECODE = new ca.uhn.fhir.rest.gclient.TokenClientParam(SP_SOURCECODE);
+  public static final ca.uhn.fhir.rest.gclient.TokenClientParam SOURCE_CODE = new ca.uhn.fhir.rest.gclient.TokenClientParam(SP_SOURCE_CODE);
 
  /**
-   * Search parameter: <b>sourceuri</b>
+   * Search parameter: <b>source-uri</b>
    * <p>
    * Description: <b>Identifies the source of the concepts which are being mapped</b><br>
    * Type: <b>reference</b><br>
    * Path: <b>ConceptMap.sourceUri</b><br>
    * </p>
    */
-  @SearchParamDefinition(name="sourceuri", path="ConceptMap.sourceUri", description="Identifies the source of the concepts which are being mapped", type="reference" )
-  public static final String SP_SOURCEURI = "sourceuri";
+  @SearchParamDefinition(name="source-uri", path="ConceptMap.source.as(Uri)", description="Identifies the source of the concepts which are being mapped", type="reference", target={StructureDefinition.class, ValueSet.class } )
+  public static final String SP_SOURCE_URI = "source-uri";
  /**
-   * <b>Fluent Client</b> search parameter constant for <b>sourceuri</b>
+   * <b>Fluent Client</b> search parameter constant for <b>source-uri</b>
    * <p>
    * Description: <b>Identifies the source of the concepts which are being mapped</b><br>
    * Type: <b>reference</b><br>
    * Path: <b>ConceptMap.sourceUri</b><br>
    * </p>
    */
-  public static final ca.uhn.fhir.rest.gclient.ReferenceClientParam SOURCEURI = new ca.uhn.fhir.rest.gclient.ReferenceClientParam(SP_SOURCEURI);
+  public static final ca.uhn.fhir.rest.gclient.ReferenceClientParam SOURCE_URI = new ca.uhn.fhir.rest.gclient.ReferenceClientParam(SP_SOURCE_URI);
 
 /**
    * Constant for fluent queries to be used to add include statements. Specifies
-   * the path value of "<b>ConceptMap:sourceuri</b>".
+   * the path value of "<b>ConceptMap:source-uri</b>".
    */
-  public static final ca.uhn.fhir.model.api.Include INCLUDE_SOURCEURI = new ca.uhn.fhir.model.api.Include("ConceptMap:sourceuri").toLocked();
+  public static final ca.uhn.fhir.model.api.Include INCLUDE_SOURCE_URI = new ca.uhn.fhir.model.api.Include("ConceptMap:source-uri").toLocked();
 
  /**
    * Search parameter: <b>name</b>
@@ -2577,24 +2936,44 @@ public class ConceptMap extends DomainResource {
   public static final ca.uhn.fhir.rest.gclient.StringClientParam PUBLISHER = new ca.uhn.fhir.rest.gclient.StringClientParam(SP_PUBLISHER);
 
  /**
-   * Search parameter: <b>targetcode</b>
+   * Search parameter: <b>source-system</b>
    * <p>
-   * Description: <b>Code that identifies the target element</b><br>
-   * Type: <b>token</b><br>
-   * Path: <b>ConceptMap.element.target.code</b><br>
+   * Description: <b>Code System (if value set crosses code systems)</b><br>
+   * Type: <b>uri</b><br>
+   * Path: <b>ConceptMap.group.source</b><br>
    * </p>
    */
-  @SearchParamDefinition(name="targetcode", path="ConceptMap.element.target.code", description="Code that identifies the target element", type="token" )
-  public static final String SP_TARGETCODE = "targetcode";
+  @SearchParamDefinition(name="source-system", path="ConceptMap.group.source", description="Code System (if value set crosses code systems)", type="uri" )
+  public static final String SP_SOURCE_SYSTEM = "source-system";
  /**
-   * <b>Fluent Client</b> search parameter constant for <b>targetcode</b>
+   * <b>Fluent Client</b> search parameter constant for <b>source-system</b>
+   * <p>
+   * Description: <b>Code System (if value set crosses code systems)</b><br>
+   * Type: <b>uri</b><br>
+   * Path: <b>ConceptMap.group.source</b><br>
+   * </p>
+   */
+  public static final ca.uhn.fhir.rest.gclient.UriClientParam SOURCE_SYSTEM = new ca.uhn.fhir.rest.gclient.UriClientParam(SP_SOURCE_SYSTEM);
+
+ /**
+   * Search parameter: <b>target-code</b>
    * <p>
    * Description: <b>Code that identifies the target element</b><br>
    * Type: <b>token</b><br>
-   * Path: <b>ConceptMap.element.target.code</b><br>
+   * Path: <b>ConceptMap.group.element.target.code</b><br>
    * </p>
    */
-  public static final ca.uhn.fhir.rest.gclient.TokenClientParam TARGETCODE = new ca.uhn.fhir.rest.gclient.TokenClientParam(SP_TARGETCODE);
+  @SearchParamDefinition(name="target-code", path="ConceptMap.group.element.target.code", description="Code that identifies the target element", type="token" )
+  public static final String SP_TARGET_CODE = "target-code";
+ /**
+   * <b>Fluent Client</b> search parameter constant for <b>target-code</b>
+   * <p>
+   * Description: <b>Code that identifies the target element</b><br>
+   * Type: <b>token</b><br>
+   * Path: <b>ConceptMap.group.element.target.code</b><br>
+   * </p>
+   */
+  public static final ca.uhn.fhir.rest.gclient.TokenClientParam TARGET_CODE = new ca.uhn.fhir.rest.gclient.TokenClientParam(SP_TARGET_CODE);
 
  /**
    * Search parameter: <b>status</b>
@@ -2615,6 +2994,32 @@ public class ConceptMap extends DomainResource {
    * </p>
    */
   public static final ca.uhn.fhir.rest.gclient.TokenClientParam STATUS = new ca.uhn.fhir.rest.gclient.TokenClientParam(SP_STATUS);
+
+ /**
+   * Search parameter: <b>target-uri</b>
+   * <p>
+   * Description: <b>Provides context to the mappings</b><br>
+   * Type: <b>reference</b><br>
+   * Path: <b>ConceptMap.targetUri</b><br>
+   * </p>
+   */
+  @SearchParamDefinition(name="target-uri", path="ConceptMap.target.as(Uri)", description="Provides context to the mappings", type="reference", target={StructureDefinition.class, ValueSet.class } )
+  public static final String SP_TARGET_URI = "target-uri";
+ /**
+   * <b>Fluent Client</b> search parameter constant for <b>target-uri</b>
+   * <p>
+   * Description: <b>Provides context to the mappings</b><br>
+   * Type: <b>reference</b><br>
+   * Path: <b>ConceptMap.targetUri</b><br>
+   * </p>
+   */
+  public static final ca.uhn.fhir.rest.gclient.ReferenceClientParam TARGET_URI = new ca.uhn.fhir.rest.gclient.ReferenceClientParam(SP_TARGET_URI);
+
+/**
+   * Constant for fluent queries to be used to add include statements. Specifies
+   * the path value of "<b>ConceptMap:target-uri</b>".
+   */
+  public static final ca.uhn.fhir.model.api.Include INCLUDE_TARGET_URI = new ca.uhn.fhir.model.api.Include("ConceptMap:target-uri").toLocked();
 
 
 }

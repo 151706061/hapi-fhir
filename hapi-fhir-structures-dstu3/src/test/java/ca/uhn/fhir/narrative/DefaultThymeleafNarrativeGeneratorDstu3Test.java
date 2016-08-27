@@ -1,7 +1,6 @@
 package ca.uhn.fhir.narrative;
 
 import static org.hamcrest.Matchers.containsString;
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
@@ -12,28 +11,27 @@ import org.hl7.fhir.dstu3.model.CodeableConcept;
 import org.hl7.fhir.dstu3.model.Coding;
 import org.hl7.fhir.dstu3.model.DateTimeType;
 import org.hl7.fhir.dstu3.model.DiagnosticReport;
-import org.hl7.fhir.dstu3.model.Encounter;
+import org.hl7.fhir.dstu3.model.DiagnosticReport.DiagnosticReportStatus;
 import org.hl7.fhir.dstu3.model.Medication;
 import org.hl7.fhir.dstu3.model.MedicationOrder;
+import org.hl7.fhir.dstu3.model.MedicationOrder.MedicationOrderStatus;
 import org.hl7.fhir.dstu3.model.Narrative;
 import org.hl7.fhir.dstu3.model.Observation;
+import org.hl7.fhir.dstu3.model.Observation.ObservationStatus;
 import org.hl7.fhir.dstu3.model.OperationOutcome;
 import org.hl7.fhir.dstu3.model.Patient;
-import org.hl7.fhir.dstu3.model.Period;
 import org.hl7.fhir.dstu3.model.Quantity;
 import org.hl7.fhir.dstu3.model.Reference;
 import org.hl7.fhir.dstu3.model.SimpleQuantity;
 import org.hl7.fhir.dstu3.model.StringType;
-import org.hl7.fhir.dstu3.model.DiagnosticReport.DiagnosticReportStatus;
-import org.hl7.fhir.dstu3.model.Encounter.EncounterClass;
-import org.hl7.fhir.dstu3.model.MedicationOrder.MedicationOrderStatus;
-import org.hl7.fhir.dstu3.model.Observation.ObservationStatus;
+import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.parser.DataFormatException;
+import ca.uhn.fhir.util.TestUtil;
 
 public class DefaultThymeleafNarrativeGeneratorDstu3Test {
 	private static FhirContext ourCtx = FhirContext.forDstu3();
@@ -49,6 +47,13 @@ public class DefaultThymeleafNarrativeGeneratorDstu3Test {
 
 		ourCtx.setNarrativeGenerator(myGen);
 	}
+
+
+	@AfterClass
+	public static void afterClassClearContext() {
+		TestUtil.clearAllStaticFieldsForUnitTest();
+	}
+
 
 	@Test
 	public void testGeneratePatient() throws DataFormatException {
@@ -68,7 +73,7 @@ public class DefaultThymeleafNarrativeGeneratorDstu3Test {
 		myGen.generateNarrative(ourCtx, value, narrative);
 		String output = narrative.getDiv().getValueAsString();
 		ourLog.info(output);
-		assertThat(output, StringContains.containsString("<div class=\"hapiHeaderText\"> joe john <b>BLOW </b></div>"));
+		assertThat(output, StringContains.containsString("<div class=\"hapiHeaderText\">joe john <b>BLOW </b></div>"));
 
 	}
 
@@ -135,7 +140,7 @@ public class DefaultThymeleafNarrativeGeneratorDstu3Test {
 			obs.setValue(new Quantity(null, 2.223, null, null, "mg/L"));
 			obs.addReferenceRange().setLow((SimpleQuantity) new SimpleQuantity().setValue(2.20)).setHigh((SimpleQuantity) new SimpleQuantity().setValue(2.99));
 			obs.setStatus(ObservationStatus.FINAL);
-			obs.setComments("This is a result comment");
+			obs.setComment("This is a result comment");
 
 			Reference result = value.addResult();
 			result.setResource(obs);

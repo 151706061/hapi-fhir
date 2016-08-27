@@ -29,7 +29,7 @@ package org.hl7.fhir.dstu3.model;
   
 */
 
-// Generated on Sat, Jan 30, 2016 09:18-0500 for FHIR v1.3.0
+// Generated on Thu, Aug 25, 2016 23:04-0400 for FHIR v1.6.0
 
 import java.util.*;
 
@@ -37,11 +37,11 @@ import org.hl7.fhir.utilities.Utilities;
 import ca.uhn.fhir.model.api.annotation.ResourceDef;
 import ca.uhn.fhir.model.api.annotation.SearchParamDefinition;
 import ca.uhn.fhir.model.api.annotation.Child;
+import ca.uhn.fhir.model.api.annotation.ChildOrder;
 import ca.uhn.fhir.model.api.annotation.Description;
 import ca.uhn.fhir.model.api.annotation.Block;
-
-import org.hl7.fhir.dstu3.exceptions.FHIRException;
 import org.hl7.fhir.instance.model.api.*;
+import org.hl7.fhir.dstu3.exceptions.FHIRException;
 /**
  * Identifies two or more records (resource instances) that are referring to the same real-world "occurrence".
  */
@@ -62,7 +62,7 @@ public class Linkage extends DomainResource {
          */
         HISTORICAL, 
         /**
-         * added to help the parsers
+         * added to help the parsers with the generic types
          */
         NULL;
         public static LinkageType fromCode(String codeString) throws FHIRException {
@@ -74,7 +74,10 @@ public class Linkage extends DomainResource {
           return ALTERNATE;
         if ("historical".equals(codeString))
           return HISTORICAL;
-        throw new FHIRException("Unknown LinkageType code '"+codeString+"'");
+        if (Configuration.isAcceptInvalidEnums())
+          return null;
+        else
+          throw new FHIRException("Unknown LinkageType code '"+codeString+"'");
         }
         public String toCode() {
           switch (this) {
@@ -158,6 +161,7 @@ public class Linkage extends DomainResource {
          */
         @Child(name = "type", type = {CodeType.class}, order=1, min=1, max=1, modifier=false, summary=true)
         @Description(shortDefinition="source | alternate | historical", formalDefinition="Distinguishes which item is \"source of truth\" (if any) and which items are no longer considered to be current representations." )
+        @ca.uhn.fhir.model.api.annotation.Binding(valueSet="http://hl7.org/fhir/ValueSet/linkage-type")
         protected Enumeration<LinkageType> type;
 
         /**
@@ -261,6 +265,30 @@ public class Linkage extends DomainResource {
         }
 
       @Override
+      public Base[] getProperty(int hash, String name, boolean checkValid) throws FHIRException {
+        switch (hash) {
+        case 3575610: /*type*/ return this.type == null ? new Base[0] : new Base[] {this.type}; // Enumeration<LinkageType>
+        case -341064690: /*resource*/ return this.resource == null ? new Base[0] : new Base[] {this.resource}; // Reference
+        default: return super.getProperty(hash, name, checkValid);
+        }
+
+      }
+
+      @Override
+      public void setProperty(int hash, String name, Base value) throws FHIRException {
+        switch (hash) {
+        case 3575610: // type
+          this.type = new LinkageTypeEnumFactory().fromType(value); // Enumeration<LinkageType>
+          break;
+        case -341064690: // resource
+          this.resource = castToReference(value); // Reference
+          break;
+        default: super.setProperty(hash, name, value);
+        }
+
+      }
+
+      @Override
       public void setProperty(String name, Base value) throws FHIRException {
         if (name.equals("type"))
           this.type = new LinkageTypeEnumFactory().fromType(value); // Enumeration<LinkageType>
@@ -268,6 +296,16 @@ public class Linkage extends DomainResource {
           this.resource = castToReference(value); // Reference
         else
           super.setProperty(name, value);
+      }
+
+      @Override
+      public Base makeProperty(int hash, String name) throws FHIRException {
+        switch (hash) {
+        case 3575610: throw new FHIRException("Cannot make property type as it is not a complex type"); // Enumeration<LinkageType>
+        case -341064690:  return getResource(); // Reference
+        default: return super.makeProperty(hash, name);
+        }
+
       }
 
       @Override
@@ -312,8 +350,7 @@ public class Linkage extends DomainResource {
       }
 
       public boolean isEmpty() {
-        return super.isEmpty() && (type == null || type.isEmpty()) && (resource == null || resource.isEmpty())
-          ;
+        return super.isEmpty() && ca.uhn.fhir.util.ElementUtil.isEmpty(type, resource);
       }
 
   public String fhirType() {
@@ -399,6 +436,14 @@ public class Linkage extends DomainResource {
       return this.item;
     }
 
+    /**
+     * @return Returns a reference to <code>this</code> for easy method chaining
+     */
+    public Linkage setItem(List<LinkageItemComponent> theItem) { 
+      this.item = theItem;
+      return this;
+    }
+
     public boolean hasItem() { 
       if (this.item == null)
         return false;
@@ -408,10 +453,6 @@ public class Linkage extends DomainResource {
       return false;
     }
 
-    /**
-     * @return {@link #item} (Identifies one of the records that is considered to refer to the same real-world occurrence as well as how the items hould be evaluated within the collection of linked items.)
-     */
-    // syntactic sugar
     public LinkageItemComponent addItem() { //3
       LinkageItemComponent t = new LinkageItemComponent();
       if (this.item == null)
@@ -420,7 +461,6 @@ public class Linkage extends DomainResource {
       return t;
     }
 
-    // syntactic sugar
     public Linkage addItem(LinkageItemComponent t) { //3
       if (t == null)
         return this;
@@ -430,10 +470,44 @@ public class Linkage extends DomainResource {
       return this;
     }
 
+    /**
+     * @return The first repetition of repeating field {@link #item}, creating it if it does not already exist
+     */
+    public LinkageItemComponent getItemFirstRep() { 
+      if (getItem().isEmpty()) {
+        addItem();
+      }
+      return getItem().get(0);
+    }
+
       protected void listChildren(List<Property> childrenList) {
         super.listChildren(childrenList);
         childrenList.add(new Property("author", "Reference(Practitioner|Organization)", "Identifies the user or organization responsible for asserting the linkages and who establishes the context for evaluating the nature of each linkage.", 0, java.lang.Integer.MAX_VALUE, author));
         childrenList.add(new Property("item", "", "Identifies one of the records that is considered to refer to the same real-world occurrence as well as how the items hould be evaluated within the collection of linked items.", 0, java.lang.Integer.MAX_VALUE, item));
+      }
+
+      @Override
+      public Base[] getProperty(int hash, String name, boolean checkValid) throws FHIRException {
+        switch (hash) {
+        case -1406328437: /*author*/ return this.author == null ? new Base[0] : new Base[] {this.author}; // Reference
+        case 3242771: /*item*/ return this.item == null ? new Base[0] : this.item.toArray(new Base[this.item.size()]); // LinkageItemComponent
+        default: return super.getProperty(hash, name, checkValid);
+        }
+
+      }
+
+      @Override
+      public void setProperty(int hash, String name, Base value) throws FHIRException {
+        switch (hash) {
+        case -1406328437: // author
+          this.author = castToReference(value); // Reference
+          break;
+        case 3242771: // item
+          this.getItem().add((LinkageItemComponent) value); // LinkageItemComponent
+          break;
+        default: super.setProperty(hash, name, value);
+        }
+
       }
 
       @Override
@@ -444,6 +518,16 @@ public class Linkage extends DomainResource {
           this.getItem().add((LinkageItemComponent) value);
         else
           super.setProperty(name, value);
+      }
+
+      @Override
+      public Base makeProperty(int hash, String name) throws FHIRException {
+        switch (hash) {
+        case -1406328437:  return getAuthor(); // Reference
+        case 3242771:  return addItem(); // LinkageItemComponent
+        default: return super.makeProperty(hash, name);
+        }
+
       }
 
       @Override
@@ -501,8 +585,7 @@ public class Linkage extends DomainResource {
       }
 
       public boolean isEmpty() {
-        return super.isEmpty() && (author == null || author.isEmpty()) && (item == null || item.isEmpty())
-          ;
+        return super.isEmpty() && ca.uhn.fhir.util.ElementUtil.isEmpty(author, item);
       }
 
   @Override
@@ -544,7 +627,7 @@ public class Linkage extends DomainResource {
    * Path: <b>Linkage.author</b><br>
    * </p>
    */
-  @SearchParamDefinition(name="author", path="Linkage.author", description="Author of the Linkage", type="reference" )
+  @SearchParamDefinition(name="author", path="Linkage.author", description="Author of the Linkage", type="reference", providesMembershipIn={ @ca.uhn.fhir.model.api.annotation.Compartment(name="Practitioner") }, target={Organization.class, Practitioner.class } )
   public static final String SP_AUTHOR = "author";
  /**
    * <b>Fluent Client</b> search parameter constant for <b>author</b>

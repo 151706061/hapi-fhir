@@ -6,6 +6,7 @@ import java.util.Arrays;
 
 import javax.servlet.ServletException;
 
+import org.junit.AfterClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
@@ -17,6 +18,7 @@ import ca.uhn.fhir.rest.annotation.Create;
 import ca.uhn.fhir.rest.annotation.Destroy;
 import ca.uhn.fhir.rest.annotation.ResourceParam;
 import ca.uhn.fhir.rest.api.MethodOutcome;
+import ca.uhn.fhir.util.TestUtil;
 
 /**
  * Created by Bill de Beaubien on 11/10/2014.
@@ -25,7 +27,7 @@ import ca.uhn.fhir.rest.api.MethodOutcome;
 @RunWith(MockitoJUnitRunner.class)
 public class DestroyTest {
 
-	private static final FhirContext ourCtx = FhirContext.forDstu1();
+	private static FhirContext ourCtx = FhirContext.forDstu1();
 
 	@Test
 	public void testDestroyCallsAnnotatedMethodsOnProviders() throws ServletException {
@@ -93,4 +95,10 @@ public class DestroyTest {
 			return new MethodOutcome();
 		}
 	}
+
+	@AfterClass
+	public static void afterClassClearContext() {
+		TestUtil.clearAllStaticFieldsForUnitTest();
+	}
+
 }

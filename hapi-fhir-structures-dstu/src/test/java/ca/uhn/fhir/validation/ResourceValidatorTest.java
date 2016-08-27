@@ -9,6 +9,7 @@ import java.util.Locale;
 
 import org.apache.commons.io.IOUtils;
 import org.hamcrest.core.StringContains;
+import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -18,6 +19,8 @@ import ca.uhn.fhir.model.dstu.resource.OperationOutcome;
 import ca.uhn.fhir.model.dstu.resource.Patient;
 import ca.uhn.fhir.model.dstu.valueset.ContactSystemEnum;
 import ca.uhn.fhir.model.primitive.DateTimeDt;
+import ca.uhn.fhir.parser.DataFormatException;
+import ca.uhn.fhir.util.TestUtil;
 
 public class ResourceValidatorTest {
 
@@ -65,25 +68,22 @@ public class ResourceValidatorTest {
 	public static void afterClass() {
 		Locale.setDefault(ourDefaultLocale);
 	}
-	
+
 	/**
 	 * See issue #50
 	 */
-	@Test
+	@Test(expected=DataFormatException.class)
 	public void testOutOfBoundsDate() {
 		Patient p = new Patient();
-		p.setBirthDate(new DateTimeDt("2000-15-31"));
+		p.setBirthDate(new DateTimeDt("2000-12-31"));
 
-		String encoded = ourCtx.newXmlParser().setPrettyPrint(true).encodeResourceToString(p);
+		// Put in an invalid date
+		String encoded = ourCtx.newXmlParser().setPrettyPrint(true).encodeResourceToString(p).replace("2000-12-31", "2000-15-31");
 		ourLog.info(encoded);
 
 		assertThat(encoded, StringContains.containsString("2000-15-31"));
 
-		p = ourCtx.newXmlParser().parseResource(Patient.class, encoded);
-		assertEquals("2000-15-31", p.getBirthDate().getValueAsString());
-		assertEquals("2001-03-31", new SimpleDateFormat("yyyy-MM-dd").format(p.getBirthDate().getValue()));
-
-		ValidationResult result = ourCtx.newValidator().validateWithResult(p);
+		ValidationResult result = ourCtx.newValidator().validateWithResult(encoded);
 		String resultString = ourCtx.newXmlParser().setPrettyPrint(true).encodeResourceToString(result.toOperationOutcome());
 		ourLog.info(resultString);
 
@@ -182,4 +182,10 @@ public class ResourceValidatorTest {
 		val.setValidateAgainstStandardSchematron(true);
 		return val;
 	}
+
+	@AfterClass
+	public static void afterClassClearContext() {
+		TestUtil.clearAllStaticFieldsForUnitTest();
+	}
+
 }

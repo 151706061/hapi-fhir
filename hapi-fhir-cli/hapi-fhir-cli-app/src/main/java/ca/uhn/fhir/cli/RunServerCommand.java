@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.SocketException;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
@@ -26,6 +27,8 @@ import ca.uhn.fhir.jpa.demo.FhirServerConfigDstu3;
 
 public class RunServerCommand extends BaseCommand {
 
+	private static final String OPTION_LOWMEM = "lowmem";
+	private static final String OPTION_ALLOW_EXTERNAL_REFS = "allow-external-refs";
 	private static final int DEFAULT_PORT = 8080;
 	private static final String OPTION_P = "p";
 
@@ -44,6 +47,8 @@ public class RunServerCommand extends BaseCommand {
 		Options options = new Options();
 		addFhirVersionOption(options);
 		options.addOption(OPTION_P, "port", true, "The port to listen on (default is " + DEFAULT_PORT + ")");
+		options.addOption(null, OPTION_LOWMEM, false, "If this flag is set, the server will operate in low memory mode (some features disabled)");
+		options.addOption(null, OPTION_ALLOW_EXTERNAL_REFS, false, "If this flag is set, the server will allow resources to be persisted contaning external resource references");
 		return options;
 	}
 
@@ -59,11 +64,19 @@ public class RunServerCommand extends BaseCommand {
 	public void run(CommandLine theCommandLine) throws ParseException {
 		myPort = parseOptionInteger(theCommandLine, OPTION_P, DEFAULT_PORT);
 		
+		if (theCommandLine.hasOption(OPTION_LOWMEM)) {
+			ourLog.info("Running in low memory mode, some features disabled");
+			System.setProperty(OPTION_LOWMEM, OPTION_LOWMEM);
+		}
+		
+		if (theCommandLine.hasOption(OPTION_ALLOW_EXTERNAL_REFS)) {
+			ourLog.info("Server is configured to allow external references");
+			ContextHolder.setAllowExternalRefs(true);
+		}
+
 		ContextHolder.setCtx(getSpecVersionContext(theCommandLine));
 
-//		((ch.qos.logback.classic.Logger)LoggerFactory.getLogger("/")).setLevel(Level.ERROR);
-
-		ourLog.info("Preparing HAPI FHIR JPA server");
+		ourLog.info("Preparing HAPI FHIR JPA server on port {}", myPort);
 		File tempWarFile;
 		try {
 			tempWarFile = File.createTempFile("hapi-fhir", ".war");
@@ -113,9 +126,11 @@ public class RunServerCommand extends BaseCommand {
 		myServer.setHandler(root);
 		try {
 			myServer.start();
+		} catch (SocketException e) {
+			throw new CommandFailureException("Server failed to start on port " + myPort + " because of the following error \"" + e.toString() + "\". Note that you can use the '-p' option to specify an alternate port."); 
 		} catch (Exception e) {
 			ourLog.error("Server failed to start", e);
-			return;
+			throw new CommandFailureException("Server failed to start", e);
 		}
 
 		ourLog.info("Server started on port {}", myPort);
@@ -125,21 +140,25 @@ public class RunServerCommand extends BaseCommand {
 		
 	}
 
-	public void run(String[] theArgs) {
+	public static void main(String[] theArgs) {
 
-		getOptions();
 
-		// myServer = new Server(myPort);
-		//
-		// WebAppContext webAppContext = new WebAppContext();
-		// webAppContext.setContextPath("/");
-		// webAppContext.setDescriptor(path + "/src/main/webapp/WEB-INF/web.xml");
-		// webAppContext.setResourceBase(path + "/target/hapi-fhir-jpaserver-example");
-		// webAppContext.setParentLoaderPriority(true);
-		//
-		// myServer.setHandler(webAppContext);
-		// myServer.start();
+		 Server server = new Server(22);
+		 String path = "../hapi-fhir-cli-jpaserver";
+		 WebAppContext webAppContext = new WebAppContext();
+		 webAppContext.setContextPath("/");
+		 webAppContext.setDescriptor(path + "/src/main/webapp/WEB-INF/web.xml");
+		 webAppContext.setResourceBase(path + "/target/hapi-fhir-jpaserver-example");
+		 webAppContext.setParentLoaderPriority(true);
+		
+		 server.setHandler(webAppContext);
+		 try {
+			server.start();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
+		 ourLog.info("Started");
 	}
 
 	@Override

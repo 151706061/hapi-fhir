@@ -1,14 +1,15 @@
 package ca.uhn.fhir.tinder.parser;
 
 import static org.apache.commons.lang3.StringUtils.isBlank;
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -17,10 +18,15 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.text.WordUtils;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
+import org.hl7.fhir.instance.hapi.validation.DefaultProfileValidationSupport;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
+import ca.uhn.fhir.context.FhirContext;
+import ca.uhn.fhir.model.dstu2.resource.Bundle;
+import ca.uhn.fhir.model.dstu2.resource.Bundle.Entry;
+import ca.uhn.fhir.model.dstu2.resource.ValueSet;
 import ca.uhn.fhir.tinder.model.AnyChild;
 import ca.uhn.fhir.tinder.model.BaseElement;
 import ca.uhn.fhir.tinder.model.BaseRootType;
@@ -35,6 +41,9 @@ public abstract class BaseStructureSpreadsheetParser extends BaseStructureParser
 
 	public BaseStructureSpreadsheetParser(String theVersion, String theBaseDir) {
 		super(theVersion, theBaseDir);
+
+		myBindingStrengths = new HashMap<String, String>();
+		myBindingRefs = new HashMap<String, String>();
 	}
 
 	private static final org.slf4j.Logger ourLog = org.slf4j.LoggerFactory.getLogger(BaseStructureSpreadsheetParser.class);
@@ -42,19 +51,38 @@ public abstract class BaseStructureSpreadsheetParser extends BaseStructureParser
 	private int myColModifier = -1;
 	private int myColSummary = -1;
 	private int myColCard = -1;
-	private int myColDefinition =-1;
-	private int myColName=-1;
-	private int myColRequirements=-1;
-	private int myColShortName=-1;
-	private int myColType=-1;
-	private int myColV2Mapping=-1;
+	private int myColDefinition = -1;
+	private int myColName = -1;
+	private int myColRequirements = -1;
+	private int myColShortName = -1;
+	private int myColType = -1;
+	private int myColV2Mapping = -1;
+	private HashMap<String, String> myBindingStrengths;
+	private HashMap<String, String> myBindingRefs;
+	private HashMap<String, String> myNameToValueSetUrl;
 
 	public void parse() throws Exception {
+
+		myNameToValueSetUrl = new HashMap<String, String>();
+		if (getVersion().equals("dstu2")) {
+			ourLog.info("Loading ValueSets...");
+			FhirContext ctx = FhirContext.forDstu2();
+			String path = ctx.getVersion().getPathToSchemaDefinitions().replace("/schema", "/valueset") + "/valuesets.xml";
+
+			InputStream valuesetText = DefaultProfileValidationSupport.class.getResourceAsStream(path);
+			Bundle bundle = ctx.newXmlParser().parseResource(Bundle.class, new InputStreamReader(valuesetText));
+			for (Entry next : bundle.getEntry()) {
+				ValueSet nextVs = (ValueSet) next.getResource();
+				myNameToValueSetUrl.put(nextVs.getName(), nextVs.getUrl());
+			}
+			ourLog.info("Done Loading ValueSets");
+		}
+
 		int index = 0;
 		for (InputStream nextInputStream : getInputStreams()) {
 
 			String spreadsheetName = getInputStreamNames().get(index);
-			ourLog.info("Reading spreadsheet file {}", spreadsheetName);
+			ourLog.debug("Reading spreadsheet file {}", spreadsheetName);
 
 			Document file;
 			try {
@@ -63,18 +91,12 @@ public abstract class BaseStructureSpreadsheetParser extends BaseStructureParser
 				throw new Exception("Failed during reading: " + spreadsheetName, e);
 			}
 
-			Element dataElementsSheet = null;
-			for (int i = 0; i < file.getElementsByTagName("Worksheet").getLength() && dataElementsSheet == null; i++) {
-				dataElementsSheet = (Element) file.getElementsByTagName("Worksheet").item(i);
-				if (!"Data Elements".equals(dataElementsSheet.getAttributeNS("urn:schemas-microsoft-com:office:spreadsheet", "Name"))) {
-					dataElementsSheet = null;
-				}
+			Element bindingsSheet = findSheetByName(spreadsheetName, "Bindings", file, false);
+			if (bindingsSheet != null) {
+				processBindingsSheet(bindingsSheet);
 			}
 
-			if (dataElementsSheet == null) {
-				throw new Exception("Failed to find worksheet with name 'Data Elements' in spreadsheet: " + spreadsheetName);
-			}
-
+			Element dataElementsSheet = findSheetByName(spreadsheetName, "Data Elements", file, true);
 			NodeList tableList = dataElementsSheet.getElementsByTagName("Table");
 			Element table = (Element) tableList.item(0);
 
@@ -158,29 +180,88 @@ public abstract class BaseStructureSpreadsheetParser extends BaseStructureParser
 			}
 
 			postProcess(resource);
-			
-			for (SearchParameter nextParam : resource.getSearchParameters()) {
-				if (nextParam.getType().equals("reference")) {
-					String path = nextParam.getPath();
-					List<String> targetTypes = pathToResourceTypes.get(path);
-					if (targetTypes != null) {
-						targetTypes = new ArrayList<String>(targetTypes);
-						for (Iterator<String> iter = targetTypes.iterator(); iter.hasNext();) {
-							String next = iter.next();
-							if (next.equals("Any") || next.endsWith("Dt")) {
-								iter.remove();
-							}
-						}
-					}
-					nextParam.setTargetTypes(targetTypes);
-				}
-			}
+
+			//			for (SearchParameter nextParam : resource.getSearchParameters()) {
+			//				if (nextParam.getType().equals("reference")) {
+			//					String path = nextParam.getPath();
+			//					List<String> targetTypes = pathToResourceTypes.get(path);
+			//					if (targetTypes != null) {
+			//						targetTypes = new ArrayList<String>(targetTypes);
+			//						for (Iterator<String> iter = targetTypes.iterator(); iter.hasNext();) {
+			//							String next = iter.next();
+			//							if (next.equals("Any") || next.endsWith("Dt")) {
+			//								iter.remove();
+			//							}
+			//						}
+			//					}
+			//					nextParam.setTargetTypes(targetTypes);
+			//				}
+			//			}
 
 			index++;
 		}
 
 		ourLog.info("Parsed {} spreadsheet structures", getResources().size());
 
+	}
+
+	private Element findSheetByName(String spreadsheetName, String wantedName, Document file, boolean theFailIfNotFound) throws Exception {
+		Element retVal = null;
+		for (int i = 0; i < file.getElementsByTagName("Worksheet").getLength() && retVal == null; i++) {
+			retVal = (Element) file.getElementsByTagName("Worksheet").item(i);
+			if (!wantedName.equals(retVal.getAttributeNS("urn:schemas-microsoft-com:office:spreadsheet", "Name"))) {
+				retVal = null;
+			}
+		}
+
+		if (retVal == null && theFailIfNotFound) {
+			throw new Exception("Failed to find worksheet with name '" + wantedName + "' in spreadsheet: " + spreadsheetName);
+		}
+		return retVal;
+	}
+
+	private void processBindingsSheet(Element theBindingsSheet) {
+		NodeList tableList = theBindingsSheet.getElementsByTagName("Table");
+		Element table = (Element) tableList.item(0);
+		NodeList rows = table.getElementsByTagName("Row");
+		Element defRow = (Element) rows.item(0);
+
+		int colName = 0;
+		int colStrength = 0;
+		int colRef = 0;
+		for (int j = 0; j < 20; j++) {
+			String nextName = cellValue(defRow, j);
+			if (nextName == null) {
+				continue;
+			}
+			nextName = nextName.toLowerCase().trim().replace(".", "");
+			if ("name".equals(nextName) || "binding name".equals(nextName)) {
+				colName = j;
+			} else if ("reference".equals(nextName)) {
+				colRef = j;
+			} else if ("conformance".equals(nextName)) {
+				colStrength = j;
+			}
+		}
+
+		for (int j = 1; j < rows.getLength(); j++) {
+			Element nextRow = (Element) rows.item(j);
+
+			String name = cellValue(nextRow, colName);
+			String strength = cellValue(nextRow, colStrength);
+			String ref = cellValue(nextRow, colRef);
+			if (isNotBlank(name) && isNotBlank(strength)) {
+				myBindingStrengths.put(name, strength);
+			}
+			if (isNotBlank(name) && isNotBlank(ref)) {
+				if (ref.startsWith("#")) {
+					ref = "http://hl7.org/fhir/ValueSet/" + ref.substring(1);
+				} else if (!ref.startsWith("http")) {
+					ref = "http://hl7.org/fhir/ValueSet/" + ref;
+				}
+				myBindingRefs.put(name, ref);
+			}
+		}
 	}
 
 	protected abstract BaseRootType createRootType();
@@ -201,6 +282,7 @@ public abstract class BaseStructureSpreadsheetParser extends BaseStructureParser
 				int colDesc = 0;
 				int colType = 0;
 				int colPath = 0;
+				int colTargetTypes = 0;
 				for (int j = 0; j < 20; j++) {
 					String nextName = cellValue(defRow, j);
 					if (nextName == null) {
@@ -215,6 +297,8 @@ public abstract class BaseStructureSpreadsheetParser extends BaseStructureParser
 						colType = j;
 					} else if ("path".equals(nextName)) {
 						colPath = j;
+					} else if ("target types".equals(nextName)) {
+						colTargetTypes = j;
 					}
 				}
 
@@ -234,6 +318,17 @@ public abstract class BaseStructureSpreadsheetParser extends BaseStructureParser
 							compositeParams.add(sp);
 						} else {
 							theResource.addSearchParameter(getVersion(), sp);
+						}
+					}
+
+					String targetTypes = cellValue(nextRow, colTargetTypes);
+					if (isNotBlank(targetTypes)) {
+						for (String next : targetTypes.trim().split("\\s*,\\s*")) {
+							if (isNotBlank(next)) {
+								if (Character.isUpperCase(next.charAt(0))) {
+									sp.addTargetType(next);
+								}
+							}
 						}
 					}
 				}
@@ -350,7 +445,7 @@ public abstract class BaseStructureSpreadsheetParser extends BaseStructureParser
 				myColV2Mapping = i;
 			}
 		}
-		
+
 		if (myColName == -1) {
 			throw new IllegalArgumentException("Unable to determine column: name");
 		}
@@ -397,9 +492,26 @@ public abstract class BaseStructureSpreadsheetParser extends BaseStructureParser
 		theTarget.setDefinition(cellValue(theRowXml, myColDefinition));
 		theTarget.setRequirement(cellValue(theRowXml, myColRequirements));
 		theTarget.setV2Mapping(cellValue(theRowXml, myColV2Mapping));
-		theTarget.setSummary(cellValue(theRowXml,myColSummary));
-		theTarget.setModifier(cellValue(theRowXml,myColModifier));
-		
+		theTarget.setSummary(cellValue(theRowXml, myColSummary));
+		theTarget.setModifier(cellValue(theRowXml, myColModifier));
+
+		// Per #320
+		if ("example".equals(myBindingStrengths.get(theTarget.getBinding()))) {
+			theTarget.setBinding(null);
+		}
+
+		if (isNotBlank(theTarget.getBinding())) {
+			String bindingUrl = myBindingRefs.get(theTarget.getBinding());
+			if (isNotBlank(bindingUrl)) {
+				theTarget.setBindingUrl(bindingUrl);
+			} else {
+				bindingUrl = myNameToValueSetUrl.get(theTarget.getBinding());
+				if (isNotBlank(bindingUrl)) {
+					theTarget.setBindingUrl(bindingUrl);
+				}
+			}
+		}
+
 	}
 
 	/**

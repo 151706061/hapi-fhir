@@ -1,5 +1,6 @@
 package ca.uhn.fhir.rest.server.provider.dstu2;
 
+import static org.apache.commons.lang3.StringUtils.isBlank;
 /*
  * #%L
  * HAPI FHIR Structures - DSTU2 (FHIR v1.0.0)
@@ -42,7 +43,6 @@ import org.hl7.fhir.instance.model.api.IBaseResource;
 
 import ca.uhn.fhir.context.RuntimeResourceDefinition;
 import ca.uhn.fhir.context.RuntimeSearchParam;
-import ca.uhn.fhir.model.api.IResource;
 import ca.uhn.fhir.model.dstu2.resource.Conformance;
 import ca.uhn.fhir.model.dstu2.resource.Conformance.Rest;
 import ca.uhn.fhir.model.dstu2.resource.Conformance.RestResource;
@@ -53,6 +53,7 @@ import ca.uhn.fhir.model.dstu2.resource.OperationDefinition.Parameter;
 import ca.uhn.fhir.model.dstu2.valueset.ConditionalDeleteStatusEnum;
 import ca.uhn.fhir.model.dstu2.valueset.ConformanceResourceStatusEnum;
 import ca.uhn.fhir.model.dstu2.valueset.ConformanceStatementKindEnum;
+import ca.uhn.fhir.model.dstu2.valueset.OperationKindEnum;
 import ca.uhn.fhir.model.dstu2.valueset.OperationParameterUseEnum;
 import ca.uhn.fhir.model.dstu2.valueset.ResourceTypeEnum;
 import ca.uhn.fhir.model.dstu2.valueset.RestfulConformanceModeEnum;
@@ -102,22 +103,19 @@ public class ServerConformanceProvider implements IServerConformanceProvider<Con
 	public ServerConformanceProvider(RestfulServer theRestfulServer) {
 		this.myServerConfiguration = theRestfulServer.createConfiguration();
 	}
-	
+
 	public ServerConformanceProvider(RestulfulServerConfiguration theServerConfiguration) {
-	    this.myServerConfiguration = theServerConfiguration;
+		this.myServerConfiguration = theServerConfiguration;
 	}
-	
+
 	/*
-	 * Add a no-arg constructor and seetter so that the
-	 * ServerConfirmanceProvider can be Spring-wired with
-	 * the RestfulService avoiding the potential reference
-	 * cycle that would happen.
+	 * Add a no-arg constructor and seetter so that the ServerConfirmanceProvider can be Spring-wired with the RestfulService avoiding the potential reference cycle that would happen.
 	 */
-	public ServerConformanceProvider () {
+	public ServerConformanceProvider() {
 		super();
 	}
-	
-	public void setRestfulServer (RestfulServer theRestfulServer) {
+
+	public void setRestfulServer(RestfulServer theRestfulServer) {
 		myServerConfiguration = theRestfulServer.createConfiguration();
 	}
 
@@ -159,7 +157,24 @@ public class ServerConformanceProvider implements IServerConformanceProvider<Con
 	}
 
 	private String createOperationName(OperationMethodBinding theMethodBinding) {
-		return theMethodBinding.getName().substring(1);
+		StringBuilder retVal = new StringBuilder();
+		if (theMethodBinding.getResourceName() != null) {
+			retVal.append(theMethodBinding.getResourceName());
+		}
+
+		retVal.append('-');
+		if (theMethodBinding.isCanOperateAtInstanceLevel()) {
+			retVal.append('i');
+		}
+		if (theMethodBinding.isCanOperateAtServerLevel()) {
+			retVal.append('s');
+		}
+		retVal.append('-');
+		
+		// Exclude the leading $
+		retVal.append(theMethodBinding.getName(), 1, theMethodBinding.getName().length());
+		
+		return retVal.toString();
 	}
 
 	/**
@@ -207,8 +222,8 @@ public class ServerConformanceProvider implements IServerConformanceProvider<Con
 				String resourceName = nextEntry.getKey();
 				RuntimeResourceDefinition def = myServerConfiguration.getFhirContext().getResourceDefinition(resourceName);
 				resource.getTypeElement().setValue(def.getName());
-				ServletContext servletContext  = (ServletContext) (theRequest == null ? null : theRequest.getAttribute(RestfulServer.SERVLET_CONTEXT_ATTRIBUTE));
-	            String serverBase = myServerConfiguration.getServerAddressStrategy().determineServerBase(servletContext, theRequest);
+				ServletContext servletContext = (ServletContext) (theRequest == null ? null : theRequest.getAttribute(RestfulServer.SERVLET_CONTEXT_ATTRIBUTE));
+				String serverBase = myServerConfiguration.getServerAddressStrategy().determineServerBase(servletContext, theRequest);
 				resource.getProfile().setReference(new IdDt(def.getResourceProfile(serverBase)));
 
 				TreeSet<String> includes = new TreeSet<String>();
@@ -268,7 +283,7 @@ public class ServerConformanceProvider implements IServerConformanceProvider<Con
 						String opName = myOperationBindingToName.get(methodBinding);
 						if (operationNames.add(opName)) {
 							// Only add each operation (by name) once
-							rest.addOperation().setName(methodBinding.getName()).getDefinition().setReference("OperationDefinition/" + opName);
+							rest.addOperation().setName(methodBinding.getName().substring(1)).getDefinition().setReference("OperationDefinition/" + opName);
 						}
 					}
 
@@ -302,7 +317,7 @@ public class ServerConformanceProvider implements IServerConformanceProvider<Con
 						OperationMethodBinding methodBinding = (OperationMethodBinding) nextMethodBinding;
 						String opName = myOperationBindingToName.get(methodBinding);
 						if (operationNames.add(opName)) {
-							rest.addOperation().setName(methodBinding.getName()).getDefinition().setReference("OperationDefinition/" + opName);
+							rest.addOperation().setName(methodBinding.getName().substring(1)).getDefinition().setReference("OperationDefinition/" + opName);
 						}
 					}
 				}
@@ -424,7 +439,7 @@ public class ServerConformanceProvider implements IServerConformanceProvider<Con
 				if (StringUtils.isNotBlank(chain)) {
 					param.addChain(chain);
 				}
-				
+
 				if (nextParameter.getParamType() == RestSearchParameterTypeEnum.REFERENCE) {
 					for (String nextWhitelist : new TreeSet<String>(nextParameter.getQualifierWhitelist())) {
 						if (nextWhitelist.startsWith(".")) {
@@ -432,7 +447,7 @@ public class ServerConformanceProvider implements IServerConformanceProvider<Con
 						}
 					}
 				}
-				
+
 				param.setDocumentation(nextParamDescription);
 				if (nextParameter.getParamType() != null) {
 					param.getTypeElement().setValueAsString(nextParameter.getParamType().getCode());
@@ -488,6 +503,7 @@ public class ServerConformanceProvider implements IServerConformanceProvider<Con
 
 		OperationDefinition op = new OperationDefinition();
 		op.setStatus(ConformanceResourceStatusEnum.ACTIVE);
+		op.setKind(OperationKindEnum.OPERATION);
 		op.setIdempotent(true);
 
 		Set<String> inParams = new HashSet<String>();
@@ -500,7 +516,7 @@ public class ServerConformanceProvider implements IServerConformanceProvider<Con
 			if (!sharedDescription.isIdempotent()) {
 				op.setIdempotent(sharedDescription.isIdempotent());
 			}
-			op.setCode(sharedDescription.getName());
+			op.setCode(sharedDescription.getName().substring(1));
 			if (sharedDescription.isCanOperateAtInstanceLevel()) {
 				op.setInstance(sharedDescription.isCanOperateAtInstanceLevel());
 			}
@@ -541,6 +557,21 @@ public class ServerConformanceProvider implements IServerConformanceProvider<Con
 				param.setMax(nextParam.getMax() == -1 ? "*" : Integer.toString(nextParam.getMax()));
 				param.setName(nextParam.getName());
 			}
+		}
+
+		if (isBlank(op.getName())) {
+			if (isNotBlank(op.getDescription())) {
+				op.setName(op.getDescription());
+			} else {
+				op.setName(op.getCode());
+			}
+		}
+		
+		if (op.getSystem() == null) {
+			op.setSystem(false);
+		}
+		if (op.getInstance() == null) {
+			op.setInstance(false);
 		}
 
 		return op;

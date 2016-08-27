@@ -29,19 +29,19 @@ package org.hl7.fhir.dstu3.model;
   
 */
 
-// Generated on Sat, Jan 30, 2016 09:18-0500 for FHIR v1.3.0
+// Generated on Thu, Aug 25, 2016 23:04-0400 for FHIR v1.6.0
 
 import java.util.*;
 import org.hl7.fhir.utilities.xhtml.XhtmlNode;
 
 import org.hl7.fhir.utilities.Utilities;
 import ca.uhn.fhir.model.api.annotation.Child;
+import ca.uhn.fhir.model.api.annotation.ChildOrder;
 import ca.uhn.fhir.model.api.annotation.Description;
 import ca.uhn.fhir.model.api.annotation.DatatypeDef;
 import ca.uhn.fhir.model.api.annotation.Block;
-
-import org.hl7.fhir.dstu3.exceptions.FHIRException;
 import org.hl7.fhir.instance.model.api.*;
+import org.hl7.fhir.dstu3.exceptions.FHIRException;
 /**
  * A human-readable formatted text, including images.
  */
@@ -58,7 +58,7 @@ public class Narrative extends BaseNarrative implements INarrative {
          */
         EXTENSIONS, 
         /**
-         * The contents of the narrative contain additional information not found in the structured data
+         * The contents of the narrative may contain additional information not found in the structured data. Note that there is no computable way to determine what the extra information is, other than by human inspection
          */
         ADDITIONAL, 
         /**
@@ -66,7 +66,7 @@ public class Narrative extends BaseNarrative implements INarrative {
          */
         EMPTY, 
         /**
-         * added to help the parsers
+         * added to help the parsers with the generic types
          */
         NULL;
         public static NarrativeStatus fromCode(String codeString) throws FHIRException {
@@ -80,7 +80,10 @@ public class Narrative extends BaseNarrative implements INarrative {
           return ADDITIONAL;
         if ("empty".equals(codeString))
           return EMPTY;
-        throw new FHIRException("Unknown NarrativeStatus code '"+codeString+"'");
+        if (Configuration.isAcceptInvalidEnums())
+          return null;
+        else
+          throw new FHIRException("Unknown NarrativeStatus code '"+codeString+"'");
         }
         public String toCode() {
           switch (this) {
@@ -104,7 +107,7 @@ public class Narrative extends BaseNarrative implements INarrative {
           switch (this) {
             case GENERATED: return "The contents of the narrative are entirely generated from the structured data in the content.";
             case EXTENSIONS: return "The contents of the narrative are entirely generated from the structured data in the content and some of the content is generated from extensions";
-            case ADDITIONAL: return "The contents of the narrative contain additional information not found in the structured data";
+            case ADDITIONAL: return "The contents of the narrative may contain additional information not found in the structured data. Note that there is no computable way to determine what the extra information is, other than by human inspection";
             case EMPTY: return "The contents of the narrative are some equivalent of \"No human-readable text provided in this case\"";
             default: return "?";
           }
@@ -172,6 +175,7 @@ public class Narrative extends BaseNarrative implements INarrative {
      */
     @Child(name = "status", type = {CodeType.class}, order=0, min=1, max=1, modifier=false, summary=false)
     @Description(shortDefinition="generated | extensions | additional | empty", formalDefinition="The status of the narrative - whether it's entirely generated (from just the defined data or the extensions too), or whether a human authored it and it may contain additional data." )
+    @ca.uhn.fhir.model.api.annotation.Binding(valueSet="http://hl7.org/fhir/ValueSet/narrative-status")
     protected Enumeration<NarrativeStatus> status;
 
     /**
@@ -274,11 +278,40 @@ public class Narrative extends BaseNarrative implements INarrative {
       }
 
       @Override
+      public Base[] getProperty(int hash, String name, boolean checkValid) throws FHIRException {
+        switch (hash) {
+        case -892481550: /*status*/ return this.status == null ? new Base[0] : new Base[] {this.status}; // Enumeration<NarrativeStatus>
+        default: return super.getProperty(hash, name, checkValid);
+        }
+
+      }
+
+      @Override
+      public void setProperty(int hash, String name, Base value) throws FHIRException {
+        switch (hash) {
+        case -892481550: // status
+          this.status = new NarrativeStatusEnumFactory().fromType(value); // Enumeration<NarrativeStatus>
+          break;
+        default: super.setProperty(hash, name, value);
+        }
+
+      }
+
+      @Override
       public void setProperty(String name, Base value) throws FHIRException {
         if (name.equals("status"))
           this.status = new NarrativeStatusEnumFactory().fromType(value); // Enumeration<NarrativeStatus>
         else
           super.setProperty(name, value);
+      }
+
+      @Override
+      public Base makeProperty(int hash, String name) throws FHIRException {
+        switch (hash) {
+        case -892481550: throw new FHIRException("Cannot make property status as it is not a complex type"); // Enumeration<NarrativeStatus>
+        default: return super.makeProperty(hash, name);
+        }
+
       }
 
       @Override
@@ -328,8 +361,7 @@ public class Narrative extends BaseNarrative implements INarrative {
       }
 
       public boolean isEmpty() {
-        return super.isEmpty() && (status == null || status.isEmpty()) && (div == null || div.isEmpty())
-          ;
+        return super.isEmpty() && ca.uhn.fhir.util.ElementUtil.isEmpty(status, div);
       }
 
 

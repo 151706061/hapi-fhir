@@ -29,19 +29,19 @@ package org.hl7.fhir.dstu3.model;
   
 */
 
-// Generated on Sat, Jan 30, 2016 09:18-0500 for FHIR v1.3.0
+// Generated on Thu, Aug 25, 2016 23:04-0400 for FHIR v1.6.0
 
 import java.util.*;
 
 import java.math.*;
 import org.hl7.fhir.utilities.Utilities;
 import ca.uhn.fhir.model.api.annotation.Child;
+import ca.uhn.fhir.model.api.annotation.ChildOrder;
 import ca.uhn.fhir.model.api.annotation.Description;
 import ca.uhn.fhir.model.api.annotation.DatatypeDef;
 import ca.uhn.fhir.model.api.annotation.Block;
-
-import org.hl7.fhir.dstu3.exceptions.FHIRException;
 import org.hl7.fhir.instance.model.api.*;
+import org.hl7.fhir.dstu3.exceptions.FHIRException;
 /**
  * A measured amount (or an amount that can potentially be measured). Note that measured amounts include amounts that are not precisely quantified, including amounts involving arbitrary units and floating currencies.
  */
@@ -66,7 +66,7 @@ public class Quantity extends Type implements ICompositeType {
          */
         GREATER_THAN, 
         /**
-         * added to help the parsers
+         * added to help the parsers with the generic types
          */
         NULL;
         public static QuantityComparator fromCode(String codeString) throws FHIRException {
@@ -80,7 +80,10 @@ public class Quantity extends Type implements ICompositeType {
           return GREATER_OR_EQUAL;
         if (">".equals(codeString))
           return GREATER_THAN;
-        throw new FHIRException("Unknown QuantityComparator code '"+codeString+"'");
+        if (Configuration.isAcceptInvalidEnums())
+          return null;
+        else
+          throw new FHIRException("Unknown QuantityComparator code '"+codeString+"'");
         }
         public String toCode() {
           switch (this) {
@@ -179,6 +182,7 @@ public class Quantity extends Type implements ICompositeType {
      */
     @Child(name = "comparator", type = {CodeType.class}, order=1, min=0, max=1, modifier=true, summary=true)
     @Description(shortDefinition="< | <= | >= | > - how to understand the value", formalDefinition="How the value should be understood and represented - whether the actual value is greater or less than the stated value due to measurement issues; e.g. if the comparator is \"<\" , then the real value is < stated value." )
+    @ca.uhn.fhir.model.api.annotation.Binding(valueSet="http://hl7.org/fhir/ValueSet/quantity-comparator")
     protected Enumeration<QuantityComparator> comparator;
 
     /**
@@ -535,6 +539,42 @@ public class Quantity extends Type implements ICompositeType {
       }
 
       @Override
+      public Base[] getProperty(int hash, String name, boolean checkValid) throws FHIRException {
+        switch (hash) {
+        case 111972721: /*value*/ return this.value == null ? new Base[0] : new Base[] {this.value}; // DecimalType
+        case -844673834: /*comparator*/ return this.comparator == null ? new Base[0] : new Base[] {this.comparator}; // Enumeration<QuantityComparator>
+        case 3594628: /*unit*/ return this.unit == null ? new Base[0] : new Base[] {this.unit}; // StringType
+        case -887328209: /*system*/ return this.system == null ? new Base[0] : new Base[] {this.system}; // UriType
+        case 3059181: /*code*/ return this.code == null ? new Base[0] : new Base[] {this.code}; // CodeType
+        default: return super.getProperty(hash, name, checkValid);
+        }
+
+      }
+
+      @Override
+      public void setProperty(int hash, String name, Base value) throws FHIRException {
+        switch (hash) {
+        case 111972721: // value
+          this.value = castToDecimal(value); // DecimalType
+          break;
+        case -844673834: // comparator
+          this.comparator = new QuantityComparatorEnumFactory().fromType(value); // Enumeration<QuantityComparator>
+          break;
+        case 3594628: // unit
+          this.unit = castToString(value); // StringType
+          break;
+        case -887328209: // system
+          this.system = castToUri(value); // UriType
+          break;
+        case 3059181: // code
+          this.code = castToCode(value); // CodeType
+          break;
+        default: super.setProperty(hash, name, value);
+        }
+
+      }
+
+      @Override
       public void setProperty(String name, Base value) throws FHIRException {
         if (name.equals("value"))
           this.value = castToDecimal(value); // DecimalType
@@ -548,6 +588,19 @@ public class Quantity extends Type implements ICompositeType {
           this.code = castToCode(value); // CodeType
         else
           super.setProperty(name, value);
+      }
+
+      @Override
+      public Base makeProperty(int hash, String name) throws FHIRException {
+        switch (hash) {
+        case 111972721: throw new FHIRException("Cannot make property value as it is not a complex type"); // DecimalType
+        case -844673834: throw new FHIRException("Cannot make property comparator as it is not a complex type"); // Enumeration<QuantityComparator>
+        case 3594628: throw new FHIRException("Cannot make property unit as it is not a complex type"); // StringType
+        case -887328209: throw new FHIRException("Cannot make property system as it is not a complex type"); // UriType
+        case 3059181: throw new FHIRException("Cannot make property code as it is not a complex type"); // CodeType
+        default: return super.makeProperty(hash, name);
+        }
+
       }
 
       @Override
@@ -614,9 +667,8 @@ public class Quantity extends Type implements ICompositeType {
       }
 
       public boolean isEmpty() {
-        return super.isEmpty() && (value == null || value.isEmpty()) && (comparator == null || comparator.isEmpty())
-           && (unit == null || unit.isEmpty()) && (system == null || system.isEmpty()) && (code == null || code.isEmpty())
-          ;
+        return super.isEmpty() && ca.uhn.fhir.util.ElementUtil.isEmpty(value, comparator, unit
+          , system, code);
       }
 
 

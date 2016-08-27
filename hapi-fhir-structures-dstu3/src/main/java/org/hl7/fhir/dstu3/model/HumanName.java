@@ -29,18 +29,18 @@ package org.hl7.fhir.dstu3.model;
   
 */
 
-// Generated on Sat, Jan 30, 2016 09:18-0500 for FHIR v1.3.0
+// Generated on Thu, Aug 25, 2016 23:04-0400 for FHIR v1.6.0
 
 import java.util.*;
 
 import org.hl7.fhir.utilities.Utilities;
 import ca.uhn.fhir.model.api.annotation.Child;
+import ca.uhn.fhir.model.api.annotation.ChildOrder;
 import ca.uhn.fhir.model.api.annotation.Description;
 import ca.uhn.fhir.model.api.annotation.DatatypeDef;
 import ca.uhn.fhir.model.api.annotation.Block;
-
-import org.hl7.fhir.dstu3.exceptions.FHIRException;
 import org.hl7.fhir.instance.model.api.*;
+import org.hl7.fhir.dstu3.exceptions.FHIRException;
 /**
  * A human's name with the ability to identify parts and usage.
  */
@@ -77,7 +77,7 @@ public class HumanName extends Type implements ICompositeType {
          */
         MAIDEN, 
         /**
-         * added to help the parsers
+         * added to help the parsers with the generic types
          */
         NULL;
         public static NameUse fromCode(String codeString) throws FHIRException {
@@ -97,7 +97,10 @@ public class HumanName extends Type implements ICompositeType {
           return OLD;
         if ("maiden".equals(codeString))
           return MAIDEN;
-        throw new FHIRException("Unknown NameUse code '"+codeString+"'");
+        if (Configuration.isAcceptInvalidEnums())
+          return null;
+        else
+          throw new FHIRException("Unknown NameUse code '"+codeString+"'");
         }
         public String toCode() {
           switch (this) {
@@ -219,6 +222,7 @@ public class HumanName extends Type implements ICompositeType {
      */
     @Child(name = "use", type = {CodeType.class}, order=0, min=0, max=1, modifier=true, summary=true)
     @Description(shortDefinition="usual | official | temp | nickname | anonymous | old | maiden", formalDefinition="Identifies the purpose for this name." )
+    @ca.uhn.fhir.model.api.annotation.Binding(valueSet="http://hl7.org/fhir/ValueSet/name-use")
     protected Enumeration<NameUse> use;
 
     /**
@@ -379,6 +383,14 @@ public class HumanName extends Type implements ICompositeType {
       return this.family;
     }
 
+    /**
+     * @return Returns a reference to <code>this</code> for easy method chaining
+     */
+    public HumanName setFamily(List<StringType> theFamily) { 
+      this.family = theFamily;
+      return this;
+    }
+
     public boolean hasFamily() { 
       if (this.family == null)
         return false;
@@ -391,7 +403,6 @@ public class HumanName extends Type implements ICompositeType {
     /**
      * @return {@link #family} (The part of a name that links to the genealogy. In some cultures (e.g. Eritrea) the family name of a son is the first name of his father.)
      */
-    // syntactic sugar
     public StringType addFamilyElement() {//2 
       StringType t = new StringType();
       if (this.family == null)
@@ -433,6 +444,14 @@ public class HumanName extends Type implements ICompositeType {
       return this.given;
     }
 
+    /**
+     * @return Returns a reference to <code>this</code> for easy method chaining
+     */
+    public HumanName setGiven(List<StringType> theGiven) { 
+      this.given = theGiven;
+      return this;
+    }
+
     public boolean hasGiven() { 
       if (this.given == null)
         return false;
@@ -445,7 +464,6 @@ public class HumanName extends Type implements ICompositeType {
     /**
      * @return {@link #given} (Given name.)
      */
-    // syntactic sugar
     public StringType addGivenElement() {//2 
       StringType t = new StringType();
       if (this.given == null)
@@ -487,6 +505,14 @@ public class HumanName extends Type implements ICompositeType {
       return this.prefix;
     }
 
+    /**
+     * @return Returns a reference to <code>this</code> for easy method chaining
+     */
+    public HumanName setPrefix(List<StringType> thePrefix) { 
+      this.prefix = thePrefix;
+      return this;
+    }
+
     public boolean hasPrefix() { 
       if (this.prefix == null)
         return false;
@@ -499,7 +525,6 @@ public class HumanName extends Type implements ICompositeType {
     /**
      * @return {@link #prefix} (Part of the name that is acquired as a title due to academic, legal, employment or nobility status, etc. and that appears at the start of the name.)
      */
-    // syntactic sugar
     public StringType addPrefixElement() {//2 
       StringType t = new StringType();
       if (this.prefix == null)
@@ -541,6 +566,14 @@ public class HumanName extends Type implements ICompositeType {
       return this.suffix;
     }
 
+    /**
+     * @return Returns a reference to <code>this</code> for easy method chaining
+     */
+    public HumanName setSuffix(List<StringType> theSuffix) { 
+      this.suffix = theSuffix;
+      return this;
+    }
+
     public boolean hasSuffix() { 
       if (this.suffix == null)
         return false;
@@ -553,7 +586,6 @@ public class HumanName extends Type implements ICompositeType {
     /**
      * @return {@link #suffix} (Part of the name that is acquired as a title due to academic, legal, employment or nobility status, etc. and that appears at the end of the name.)
      */
-    // syntactic sugar
     public StringType addSuffixElement() {//2 
       StringType t = new StringType();
       if (this.suffix == null)
@@ -696,6 +728,50 @@ public class HumanName extends Type implements ICompositeType {
       }
 
       @Override
+      public Base[] getProperty(int hash, String name, boolean checkValid) throws FHIRException {
+        switch (hash) {
+        case 116103: /*use*/ return this.use == null ? new Base[0] : new Base[] {this.use}; // Enumeration<NameUse>
+        case 3556653: /*text*/ return this.text == null ? new Base[0] : new Base[] {this.text}; // StringType
+        case -1281860764: /*family*/ return this.family == null ? new Base[0] : this.family.toArray(new Base[this.family.size()]); // StringType
+        case 98367357: /*given*/ return this.given == null ? new Base[0] : this.given.toArray(new Base[this.given.size()]); // StringType
+        case -980110702: /*prefix*/ return this.prefix == null ? new Base[0] : this.prefix.toArray(new Base[this.prefix.size()]); // StringType
+        case -891422895: /*suffix*/ return this.suffix == null ? new Base[0] : this.suffix.toArray(new Base[this.suffix.size()]); // StringType
+        case -991726143: /*period*/ return this.period == null ? new Base[0] : new Base[] {this.period}; // Period
+        default: return super.getProperty(hash, name, checkValid);
+        }
+
+      }
+
+      @Override
+      public void setProperty(int hash, String name, Base value) throws FHIRException {
+        switch (hash) {
+        case 116103: // use
+          this.use = new NameUseEnumFactory().fromType(value); // Enumeration<NameUse>
+          break;
+        case 3556653: // text
+          this.text = castToString(value); // StringType
+          break;
+        case -1281860764: // family
+          this.getFamily().add(castToString(value)); // StringType
+          break;
+        case 98367357: // given
+          this.getGiven().add(castToString(value)); // StringType
+          break;
+        case -980110702: // prefix
+          this.getPrefix().add(castToString(value)); // StringType
+          break;
+        case -891422895: // suffix
+          this.getSuffix().add(castToString(value)); // StringType
+          break;
+        case -991726143: // period
+          this.period = castToPeriod(value); // Period
+          break;
+        default: super.setProperty(hash, name, value);
+        }
+
+      }
+
+      @Override
       public void setProperty(String name, Base value) throws FHIRException {
         if (name.equals("use"))
           this.use = new NameUseEnumFactory().fromType(value); // Enumeration<NameUse>
@@ -713,6 +789,21 @@ public class HumanName extends Type implements ICompositeType {
           this.period = castToPeriod(value); // Period
         else
           super.setProperty(name, value);
+      }
+
+      @Override
+      public Base makeProperty(int hash, String name) throws FHIRException {
+        switch (hash) {
+        case 116103: throw new FHIRException("Cannot make property use as it is not a complex type"); // Enumeration<NameUse>
+        case 3556653: throw new FHIRException("Cannot make property text as it is not a complex type"); // StringType
+        case -1281860764: throw new FHIRException("Cannot make property family as it is not a complex type"); // StringType
+        case 98367357: throw new FHIRException("Cannot make property given as it is not a complex type"); // StringType
+        case -980110702: throw new FHIRException("Cannot make property prefix as it is not a complex type"); // StringType
+        case -891422895: throw new FHIRException("Cannot make property suffix as it is not a complex type"); // StringType
+        case -991726143:  return getPeriod(); // Period
+        default: return super.makeProperty(hash, name);
+        }
+
       }
 
       @Override
@@ -806,9 +897,8 @@ public class HumanName extends Type implements ICompositeType {
       }
 
       public boolean isEmpty() {
-        return super.isEmpty() && (use == null || use.isEmpty()) && (text == null || text.isEmpty())
-           && (family == null || family.isEmpty()) && (given == null || given.isEmpty()) && (prefix == null || prefix.isEmpty())
-           && (suffix == null || suffix.isEmpty()) && (period == null || period.isEmpty());
+        return super.isEmpty() && ca.uhn.fhir.util.ElementUtil.isEmpty(use, text, family, given
+          , prefix, suffix, period);
       }
 
 

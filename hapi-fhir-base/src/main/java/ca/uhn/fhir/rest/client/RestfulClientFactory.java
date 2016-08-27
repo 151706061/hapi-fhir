@@ -150,10 +150,11 @@ public abstract class RestfulClientFactory implements IRestfulClientFactory {
 	 */
 	@Override
 	public synchronized <T extends IRestfulClient> T newClient(Class<T> theClientType, String theServerBase) {
+		validateConfigured();
+		
 		if (!theClientType.isInterface()) {
 			throw new ConfigurationException(theClientType.getCanonicalName() + " is not an interface");
 		}
-
 		
 		ClientInvocationHandlerFactory invocationHandler = myInvocationHandlers.get(theClientType);
 		if (invocationHandler == null) {
@@ -171,8 +172,20 @@ public abstract class RestfulClientFactory implements IRestfulClientFactory {
 		return proxy;
 	}
 
+	/**
+	 * Called automatically before the first use of this factory to ensure that
+	 * the configuration is sane. Subclasses may override, but should also call 
+	 * <code>super.validateConfigured()</code>
+	 */
+	protected void validateConfigured() {
+		if (getFhirContext() == null) {
+			throw new IllegalStateException(getClass().getSimpleName() + " does not have FhirContext defined. This must be set via " + getClass().getSimpleName() + "#setFhirContext(FhirContext)");
+		}
+	}
+
 	@Override
 	public synchronized IGenericClient newGenericClient(String theServerBase) {
+		validateConfigured();
 		IHttpClient httpClient = getHttpClient(theServerBase);
 		return new GenericClient(myContext, httpClient, theServerBase, this);
 	}
@@ -181,7 +194,7 @@ public abstract class RestfulClientFactory implements IRestfulClientFactory {
 	public void validateServerBaseIfConfiguredToDoSo(String theServerBase, IHttpClient theHttpClient, BaseClient theClient) {
 		String serverBase = normalizeBaseUrlForMap(theServerBase);
 
-		switch (myServerValidationMode) {
+		switch (getServerValidationMode()) {
 		case NEVER:
 			break;
 		case ONCE:
@@ -254,22 +267,6 @@ public abstract class RestfulClientFactory implements IRestfulClientFactory {
 		myPoolMaxPerRoute = thePoolMaxPerRoute;
 		resetHttpClient();
 	}
-	
-	 /**
-	 * Instantiates a new client invocation handler
-	 * @param theClient 
-	 *                 the client which will invoke the call
-	 * @param theUrlBase 
-	 *                 the url base
-	 * @param theMethodToReturnValue
-	 * @param theBindings
-	 * @param theMethodToLambda
-	 * @return a newly created client invocation handler
-	 */
-	ClientInvocationHandler newInvocationHandler(IHttpClient theClient, String theUrlBase, Map<Method, Object> theMethodToReturnValue, Map<Method, BaseMethodBinding<?>> theBindings, Map<Method, ClientInvocationHandlerFactory.ILambda> theMethodToLambda) {
-		return new ClientInvocationHandler(theClient, getFhirContext(), theUrlBase.toString(), theMethodToReturnValue,
-				theBindings, theMethodToLambda, this);
-	}
 
 	@SuppressWarnings("unchecked")
 	@Override
@@ -287,7 +284,8 @@ public abstract class RestfulClientFactory implements IRestfulClientFactory {
 			Class implementingClass = myContext.getResourceDefinition("Conformance").getImplementingClass();
 			conformance = (IBaseResource) client.fetchConformance().ofType(implementingClass).execute();
 		} catch (FhirClientConnectionException e) {
-			throw new FhirClientConnectionException(myContext.getLocalizer().getMessage(RestfulClientFactory.class, "failedToRetrieveConformance", theServerBase + Constants.URL_TOKEN_METADATA), e);
+			String msg = myContext.getLocalizer().getMessage(RestfulClientFactory.class, "failedToRetrieveConformance", theServerBase + Constants.URL_TOKEN_METADATA);
+			throw new FhirClientConnectionException(msg, e);
 		}
 
 		FhirTerser t = myContext.newTerser();

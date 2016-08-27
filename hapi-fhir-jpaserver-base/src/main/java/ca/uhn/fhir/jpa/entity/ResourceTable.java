@@ -119,7 +119,11 @@ import ca.uhn.fhir.rest.server.exceptions.UnprocessableEntityException;
 		tokenizer = @TokenizerDef(factory = StandardTokenizerFactory.class),
 		filters = {
 			@TokenFilterDef(factory = LowerCaseFilterFactory.class),
-		}) // Def
+		}),
+	@AnalyzerDef(name = "exactAnalyzer",
+		tokenizer = @TokenizerDef(factory = StandardTokenizerFactory.class),
+		filters = {
+		})
 	}
 )
 //@formatter:on
@@ -149,8 +153,8 @@ public class ResourceTable extends BaseHasResource implements Serializable {
 	private boolean myHasLinks;
 
 	@Id
-	@SequenceGenerator(name="SEQ_RESOURCE_ID", sequenceName="SEQ_RESOURCE_ID")
-	@GeneratedValue(strategy = GenerationType.AUTO, generator="SEQ_RESOURCE_ID")
+	@SequenceGenerator(name = "SEQ_RESOURCE_ID", sequenceName = "SEQ_RESOURCE_ID")
+	@GeneratedValue(strategy = GenerationType.AUTO, generator = "SEQ_RESOURCE_ID")
 	@Column(name = "RES_ID")
 	private Long myId;
 
@@ -170,7 +174,12 @@ public class ResourceTable extends BaseHasResource implements Serializable {
 	 * Holds the narrative text only - Used for Fulltext searching but not directly stored in the DB
 	 */
 	@Transient()
-	@Field()
+	@Fields({
+		@Field(name = "myNarrativeText", index = org.hibernate.search.annotations.Index.YES, store = Store.YES, analyze = Analyze.YES, analyzer = @Analyzer(definition = "standardAnalyzer")),
+		@Field(name = "myNarrativeTextEdgeNGram", index = org.hibernate.search.annotations.Index.YES, store = Store.NO, analyze = Analyze.YES, analyzer = @Analyzer(definition = "autocompleteEdgeAnalyzer")),
+		@Field(name = "myNarrativeTextNGram", index = org.hibernate.search.annotations.Index.YES, store = Store.NO, analyze = Analyze.YES, analyzer = @Analyzer(definition = "autocompleteNGramAnalyzer")),
+		@Field(name = "myNarrativeTextPhonetic", index = org.hibernate.search.annotations.Index.YES, store = Store.NO, analyze = Analyze.YES, analyzer = @Analyzer(definition = "autocompletePhoneticAnalyzer"))
+	})
 	private String myNarrativeText;
 
 	@OneToMany(mappedBy = "myResource", cascade = {}, fetch = FetchType.LAZY, orphanRemoval = false)
@@ -187,7 +196,7 @@ public class ResourceTable extends BaseHasResource implements Serializable {
 
 	@OneToMany(mappedBy = "myResource", cascade = {}, fetch = FetchType.LAZY, orphanRemoval = false)
 	private Collection<ResourceIndexedSearchParamNumber> myParamsNumber;
-	
+
 	@Column(name = "SP_NUMBER_PRESENT")
 	private boolean myParamsNumberPopulated;
 
@@ -246,8 +255,12 @@ public class ResourceTable extends BaseHasResource implements Serializable {
 
 	@Override
 	public IdDt getIdDt() {
-		Object id = getForcedId() == null ? myId : getForcedId().getForcedId();
-		return new IdDt(myResourceType + '/' + id + '/' + Constants.PARAM_HISTORY + '/' + myVersion);
+		if (getForcedId() == null) {
+			Long id = myId;
+			return new IdDt(myResourceType + '/' + id + '/' + Constants.PARAM_HISTORY + '/' + myVersion);
+		} else {
+			return new IdDt(getForcedId().getResourceType() + '/' + getForcedId().getForcedId() + '/' + Constants.PARAM_HISTORY + '/' + myVersion);
+		}
 	}
 
 	public Long getIndexStatus() {
@@ -536,14 +549,14 @@ public class ResourceTable extends BaseHasResource implements Serializable {
 		retVal.setForcedId(getForcedId());
 
 		retVal.getTags().clear();
-		
+
 		retVal.setHasTags(isHasTags());
 		if (isHasTags()) {
 			for (ResourceTag next : getTags()) {
 				retVal.addTag(next);
 			}
 		}
-		
+
 		return retVal;
 	}
 

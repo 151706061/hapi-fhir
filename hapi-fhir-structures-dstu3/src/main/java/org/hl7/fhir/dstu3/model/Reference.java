@@ -29,18 +29,18 @@ package org.hl7.fhir.dstu3.model;
   
 */
 
-// Generated on Sat, Jan 30, 2016 09:18-0500 for FHIR v1.3.0
+// Generated on Thu, Aug 25, 2016 23:04-0400 for FHIR v1.6.0
 
 import java.util.*;
 
 import org.hl7.fhir.utilities.Utilities;
 import ca.uhn.fhir.model.api.annotation.Child;
+import ca.uhn.fhir.model.api.annotation.ChildOrder;
 import ca.uhn.fhir.model.api.annotation.Description;
 import ca.uhn.fhir.model.api.annotation.DatatypeDef;
 import ca.uhn.fhir.model.api.annotation.Block;
-
-import org.hl7.fhir.dstu3.exceptions.FHIRException;
 import org.hl7.fhir.instance.model.api.*;
+import org.hl7.fhir.dstu3.exceptions.FHIRException;
 /**
  * A reference from one resource to another.
  */
@@ -100,6 +100,15 @@ public class Reference extends BaseReference implements IBaseReference, IComposi
     /**
      * @return {@link #reference} (A reference to a location at which the other resource is found. The reference may be a relative reference, in which case it is relative to the service base URL, or an absolute URL that resolves to the location where the resource is found. The reference may be version specific or not. If the reference is not to a FHIR RESTful server, then it should be assumed to be version specific. Internal fragment references (start with '#') refer to contained resources.). This is the underlying object with id, value and extensions. The accessor "getReference" gives direct access to the value
      */
+    public StringType getReferenceElement_() { 
+      if (this.reference == null)
+        if (Configuration.errorOnAutoCreate())
+          throw new Error("Attempt to auto-create Reference.reference");
+        else if (Configuration.doAutoCreate())
+          this.reference = new StringType(); // bb
+      return this.reference;
+    }
+
     public boolean hasReferenceElement() { 
       return this.reference != null && !this.reference.isEmpty();
     }
@@ -209,6 +218,30 @@ public class Reference extends BaseReference implements IBaseReference, IComposi
       }
 
       @Override
+      public Base[] getProperty(int hash, String name, boolean checkValid) throws FHIRException {
+        switch (hash) {
+        case -925155509: /*reference*/ return this.reference == null ? new Base[0] : new Base[] {this.reference}; // StringType
+        case 1671764162: /*display*/ return this.display == null ? new Base[0] : new Base[] {this.display}; // StringType
+        default: return super.getProperty(hash, name, checkValid);
+        }
+
+      }
+
+      @Override
+      public void setProperty(int hash, String name, Base value) throws FHIRException {
+        switch (hash) {
+        case -925155509: // reference
+          this.reference = castToString(value); // StringType
+          break;
+        case 1671764162: // display
+          this.display = castToString(value); // StringType
+          break;
+        default: super.setProperty(hash, name, value);
+        }
+
+      }
+
+      @Override
       public void setProperty(String name, Base value) throws FHIRException {
         if (name.equals("reference"))
           this.reference = castToString(value); // StringType
@@ -216,6 +249,16 @@ public class Reference extends BaseReference implements IBaseReference, IComposi
           this.display = castToString(value); // StringType
         else
           super.setProperty(name, value);
+      }
+
+      @Override
+      public Base makeProperty(int hash, String name) throws FHIRException {
+        switch (hash) {
+        case -925155509: throw new FHIRException("Cannot make property reference as it is not a complex type"); // StringType
+        case 1671764162: throw new FHIRException("Cannot make property display as it is not a complex type"); // StringType
+        default: return super.makeProperty(hash, name);
+        }
+
       }
 
       @Override
@@ -268,8 +311,7 @@ public class Reference extends BaseReference implements IBaseReference, IComposi
       }
 
       public boolean isEmpty() {
-        return super.isEmpty() && (reference == null || reference.isEmpty()) && (display == null || display.isEmpty())
-          ;
+        return super.isEmpty() && ca.uhn.fhir.util.ElementUtil.isEmpty(reference, display);
       }
 
 

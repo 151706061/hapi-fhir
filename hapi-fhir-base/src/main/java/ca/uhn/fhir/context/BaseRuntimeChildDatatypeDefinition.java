@@ -28,13 +28,11 @@ import java.util.Set;
 
 import org.hl7.fhir.instance.model.api.IBase;
 
-import ca.uhn.fhir.model.api.ICodeEnum;
 import ca.uhn.fhir.model.api.annotation.Child;
 import ca.uhn.fhir.model.api.annotation.Description;
 
 public abstract class BaseRuntimeChildDatatypeDefinition extends BaseRuntimeDeclaredChildDefinition {
 
-	private Class<? extends ICodeEnum> myCodeType;
 	private Class<? extends IBase> myDatatype;
 
 	private BaseRuntimeElementDefinition<?> myElementDefinition;
@@ -47,14 +45,18 @@ public abstract class BaseRuntimeChildDatatypeDefinition extends BaseRuntimeDecl
 		myDatatype = theDatatype;
 	}
 
+	/**
+	 * If this child has a bound type, this method will return the Enum type that
+	 * it is bound to. Otherwise, will return <code>null</code>.
+	 */
+	public Class<? extends Enum<?>> getBoundEnumType() {
+		return null;
+	}
+
 	@Override
-	public String getChildNameByDatatype(Class<? extends IBase> theDatatype) {
-		Class<?> nextType = theDatatype;
-		while (nextType.equals(Object.class) == false) {
-			if (myDatatype.equals(nextType)) {
-				return getElementName();
-			}
-			nextType = nextType.getSuperclass();
+	public BaseRuntimeElementDefinition<?> getChildByName(String theName) {
+		if (getElementName().equals(theName)) {
+			return myElementDefinition;
 		}
 		return null;
 	}
@@ -72,15 +74,15 @@ public abstract class BaseRuntimeChildDatatypeDefinition extends BaseRuntimeDecl
 	}
 
 	@Override
-	public BaseRuntimeElementDefinition<?> getChildByName(String theName) {
-		if (getElementName().equals(theName)) {
-			return myElementDefinition;
+	public String getChildNameByDatatype(Class<? extends IBase> theDatatype) {
+		Class<?> nextType = theDatatype;
+		while (nextType.equals(Object.class) == false) {
+			if (myDatatype.equals(nextType)) {
+				return getElementName();
+			}
+			nextType = nextType.getSuperclass();
 		}
 		return null;
-	}
-
-	public Class<? extends ICodeEnum> getCodeType() {
-		return myCodeType;
 	}
 
 	public Class<? extends IBase> getDatatype() {
@@ -95,14 +97,10 @@ public abstract class BaseRuntimeChildDatatypeDefinition extends BaseRuntimeDecl
 	@Override
 	void sealAndInitialize(FhirContext theContext, Map<Class<? extends IBase>, BaseRuntimeElementDefinition<?>> theClassToElementDefinitions) {
 		myElementDefinition = theClassToElementDefinitions.get(getDatatype());
-		assert myElementDefinition != null : "Unknown type: " + getDatatype();
-	}
-
-	public void setCodeType(Class<? extends ICodeEnum> theType) {
-		if (myElementDefinition != null) {
-			throw new IllegalStateException("Can not set code type at runtime");
+		if (myElementDefinition == null) {
+			myElementDefinition = theContext.getElementDefinition(getDatatype());
 		}
-		myCodeType = theType;
+		assert myElementDefinition != null : "Unknown type: " + getDatatype();
 	}
 
 	@Override

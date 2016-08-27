@@ -27,20 +27,25 @@ import ca.uhn.fhir.rest.server.exceptions.InvalidRequestException;
 import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
 import ca.uhn.fhir.rest.server.exceptions.UnprocessableEntityException;
 import ca.uhn.fhir.rest.server.servlet.ServletRequestDetails;
+import ca.uhn.fhir.util.TestUtil;
 
 @SuppressWarnings("unused")
-public class FhirResourceDaoDstu1Test  extends BaseJpaTest {
-
-	private static AnnotationConfigApplicationContext ourCtx;
+public class FhirResourceDaoDstu1Test extends BaseJpaTest {
+	private static AnnotationConfigApplicationContext ourAppCtx;
+	private static FhirContext ourCtx;
 	private static IFhirResourceDao<Device> ourDeviceDao;
 	private static IFhirResourceDao<DiagnosticReport> ourDiagnosticReportDao;
 	private static IFhirResourceDao<Encounter> ourEncounterDao;
-	private static FhirContext ourFhirCtx;
 	private static IFhirResourceDao<Location> ourLocationDao;
 	private static final org.slf4j.Logger ourLog = org.slf4j.LoggerFactory.getLogger(FhirResourceDaoDstu1Test.class);
 	private static IFhirResourceDao<Observation> ourObservationDao;
 	private static IFhirResourceDao<Organization> ourOrganizationDao;
 	private static IFhirResourceDao<Patient> ourPatientDao;
+
+	@Override
+	protected FhirContext getContext() {
+		return ourCtx;
+	}
 
 	@Test
 	public void testCreateDuplicateIdFails() {
@@ -49,7 +54,7 @@ public class FhirResourceDaoDstu1Test  extends BaseJpaTest {
 		Patient p = new Patient();
 		p.addIdentifier().setSystem("urn:system").setValue(methodName);
 		p.setId("Patient/" + methodName);
-		IIdType id = ourPatientDao.create(p, new ServletRequestDetails()).getId();
+		IIdType id = ourPatientDao.create(p, mySrd).getId();
 		ourLog.info("Created patient, got it: {}", id);
 
 		p = new Patient();
@@ -57,13 +62,13 @@ public class FhirResourceDaoDstu1Test  extends BaseJpaTest {
 		p.addName().addFamily("Hello");
 		p.setId("Patient/" + methodName);
 		try {
-			ourPatientDao.create(p, new ServletRequestDetails());
+			ourPatientDao.create(p, mySrd);
 			fail();
 		} catch (UnprocessableEntityException e) {
 			assertThat(e.getMessage(), containsString("Can not create entity with ID[" + methodName + "], a resource with this ID already exists"));
 		}
 	}
-	
+
 	@Test
 	public void testCreateNumericIdFails() {
 		Patient p = new Patient();
@@ -71,7 +76,7 @@ public class FhirResourceDaoDstu1Test  extends BaseJpaTest {
 		p.addName().addFamily("Hello");
 		p.setId("Patient/123");
 		try {
-			ourPatientDao.create(p, new ServletRequestDetails());
+			ourPatientDao.create(p, mySrd);
 			fail();
 		} catch (InvalidRequestException e) {
 			assertThat(e.getMessage(), containsString("clients may only assign IDs which contain at least one non-numeric"));
@@ -82,9 +87,9 @@ public class FhirResourceDaoDstu1Test  extends BaseJpaTest {
 	public void testCreateWithInvalidReferenceFailsGracefully() {
 		Patient patient = new Patient();
 		patient.addName().addFamily("testSearchResourceLinkWithChainWithMultipleTypes01");
-		patient.setManagingOrganization(new ResourceReferenceDt("Patient/99999999"));
+		patient.setManagingOrganization(new ResourceReferenceDt("Organization/99999999"));
 		try {
-			ourPatientDao.create(patient, new ServletRequestDetails());
+			ourPatientDao.create(patient, mySrd);
 			fail();
 		} catch (InvalidRequestException e) {
 			assertThat(e.getMessage(), StringContains.containsString("99999 not found"));
@@ -98,17 +103,17 @@ public class FhirResourceDaoDstu1Test  extends BaseJpaTest {
 		p1.addIdentifier().setSystem("urn:system").setValue("testUpdateRejectsIdWhichPointsToForcedId01");
 		p1.addName().addFamily("Tester").addGiven("testUpdateRejectsIdWhichPointsToForcedId01");
 		p1.setId("ABABA");
-		IIdType p1id = ourPatientDao.create(p1, new ServletRequestDetails()).getId();
+		IIdType p1id = ourPatientDao.create(p1, mySrd).getId();
 		assertEquals("ABABA", p1id.getIdPart());
 
 		Patient p2 = new Patient();
 		p2.addIdentifier().setSystem("urn:system").setValue("testUpdateRejectsIdWhichPointsToForcedId02");
 		p2.addName().addFamily("Tester").addGiven("testUpdateRejectsIdWhichPointsToForcedId02");
-		IIdType p2id = ourPatientDao.create(p2, new ServletRequestDetails()).getId();
+		IIdType p2id = ourPatientDao.create(p2, mySrd).getId();
 		long p1longId = p2id.getIdPartAsLong() - 1;
 
 		try {
-			ourPatientDao.read(new IdDt("Patient/" + p1longId), new ServletRequestDetails());
+			ourPatientDao.read(new IdDt("Patient/" + p1longId), mySrd);
 			fail();
 		} catch (ResourceNotFoundException e) {
 			// good
@@ -116,7 +121,7 @@ public class FhirResourceDaoDstu1Test  extends BaseJpaTest {
 
 		try {
 			p1.setId(new IdDt("Patient/" + p1longId));
-			ourPatientDao.update(p1, new ServletRequestDetails());
+			ourPatientDao.update(p1, mySrd);
 			fail();
 		} catch (InvalidRequestException e) {
 			assertThat(e.getMessage(), containsString("clients may only assign IDs which contain at least one non-numeric"));
@@ -125,22 +130,23 @@ public class FhirResourceDaoDstu1Test  extends BaseJpaTest {
 	}
 
 	@AfterClass
-	public static void afterClass() {
-		ourCtx.close();
+	public static void afterClassClearContext() {
+		ourAppCtx.close();
+		TestUtil.clearAllStaticFieldsForUnitTest();
 	}
 
 	@SuppressWarnings("unchecked")
 	@BeforeClass
 	public static void beforeClass() {
-		ourCtx = new AnnotationConfigApplicationContext(TestDstu1Config.class);
-		ourPatientDao = ourCtx.getBean("myPatientDaoDstu1", IFhirResourceDao.class);
-		ourObservationDao = ourCtx.getBean("myObservationDaoDstu1", IFhirResourceDao.class);
-		ourDiagnosticReportDao = ourCtx.getBean("myDiagnosticReportDaoDstu1", IFhirResourceDao.class);
-		ourDeviceDao = ourCtx.getBean("myDeviceDaoDstu1", IFhirResourceDao.class);
-		ourOrganizationDao = ourCtx.getBean("myOrganizationDaoDstu1", IFhirResourceDao.class);
-		ourLocationDao = ourCtx.getBean("myLocationDaoDstu1", IFhirResourceDao.class);
-		ourEncounterDao = ourCtx.getBean("myEncounterDaoDstu1", IFhirResourceDao.class);
-		ourFhirCtx = ourCtx.getBean(FhirContext.class);
+		ourAppCtx = new AnnotationConfigApplicationContext(TestDstu1Config.class);
+		ourPatientDao = ourAppCtx.getBean("myPatientDaoDstu1", IFhirResourceDao.class);
+		ourObservationDao = ourAppCtx.getBean("myObservationDaoDstu1", IFhirResourceDao.class);
+		ourDiagnosticReportDao = ourAppCtx.getBean("myDiagnosticReportDaoDstu1", IFhirResourceDao.class);
+		ourDeviceDao = ourAppCtx.getBean("myDeviceDaoDstu1", IFhirResourceDao.class);
+		ourOrganizationDao = ourAppCtx.getBean("myOrganizationDaoDstu1", IFhirResourceDao.class);
+		ourLocationDao = ourAppCtx.getBean("myLocationDaoDstu1", IFhirResourceDao.class);
+		ourEncounterDao = ourAppCtx.getBean("myEncounterDaoDstu1", IFhirResourceDao.class);
+		ourCtx = ourAppCtx.getBean(FhirContext.class);
 	}
 
 }

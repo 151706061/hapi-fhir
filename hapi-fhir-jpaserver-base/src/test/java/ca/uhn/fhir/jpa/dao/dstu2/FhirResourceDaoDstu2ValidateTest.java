@@ -8,8 +8,12 @@ import java.io.IOException;
 import java.util.Arrays;
 
 import org.hl7.fhir.instance.model.api.IIdType;
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Before;
 import org.junit.Test;
 
+import ca.uhn.fhir.jpa.dao.DaoConfig;
 import ca.uhn.fhir.model.api.IResource;
 import ca.uhn.fhir.model.api.ResourceMetadataKeyEnum;
 import ca.uhn.fhir.model.dstu2.resource.Bundle;
@@ -28,10 +32,26 @@ import ca.uhn.fhir.rest.server.EncodingEnum;
 import ca.uhn.fhir.rest.server.exceptions.InvalidRequestException;
 import ca.uhn.fhir.rest.server.exceptions.PreconditionFailedException;
 import ca.uhn.fhir.rest.server.exceptions.ResourceVersionConflictException;
-import ca.uhn.fhir.rest.server.servlet.ServletRequestDetails;
+import ca.uhn.fhir.util.TestUtil;
 
 public class FhirResourceDaoDstu2ValidateTest extends BaseJpaDstu2Test {
 	private static final org.slf4j.Logger ourLog = org.slf4j.LoggerFactory.getLogger(FhirResourceDaoDstu2ValidateTest.class);
+
+	@AfterClass
+	public static void afterClassClearContext() {
+		TestUtil.clearAllStaticFieldsForUnitTest();
+	}
+
+	
+	@Before
+	public void before() {
+		myDaoConfig.setAllowExternalReferences(true);
+	}
+	
+	@After
+	public void after() {
+		myDaoConfig.setAllowExternalReferences(new DaoConfig().isAllowExternalReferences());
+	}
 
 	@Test
 	public void testValidateResourceContainingProfileDeclarationJson() throws Exception {
@@ -59,20 +79,20 @@ public class FhirResourceDaoDstu2ValidateTest extends BaseJpaDstu2Test {
 
 	private OperationOutcome doTestValidateResourceContainingProfileDeclaration(String methodName, EncodingEnum enc) throws IOException {
 		Bundle vss = loadResourceFromClasspath(Bundle.class, "/org/hl7/fhir/instance/model/valueset/valuesets.xml");
-		myValueSetDao.update((ValueSet) findResourceByIdInBundle(vss, "observation-status"), new ServletRequestDetails());
-		myValueSetDao.update((ValueSet) findResourceByIdInBundle(vss, "observation-category"), new ServletRequestDetails());
-		myValueSetDao.update((ValueSet) findResourceByIdInBundle(vss, "observation-codes"), new ServletRequestDetails());
-		myValueSetDao.update((ValueSet) findResourceByIdInBundle(vss, "observation-methods"), new ServletRequestDetails());
-		myValueSetDao.update((ValueSet) findResourceByIdInBundle(vss, "observation-valueabsentreason"), new ServletRequestDetails());
-		myValueSetDao.update((ValueSet) findResourceByIdInBundle(vss, "observation-interpretation"), new ServletRequestDetails());
-		myValueSetDao.update((ValueSet) findResourceByIdInBundle(vss, "body-site"), new ServletRequestDetails());
-		myValueSetDao.update((ValueSet) findResourceByIdInBundle(vss, "referencerange-meaning"), new ServletRequestDetails());
-		myValueSetDao.update((ValueSet) findResourceByIdInBundle(vss, "observation-relationshiptypes"), new ServletRequestDetails());
+		myValueSetDao.update((ValueSet) findResourceByIdInBundle(vss, "observation-status"), mySrd);
+		myValueSetDao.update((ValueSet) findResourceByIdInBundle(vss, "observation-category"), mySrd);
+		myValueSetDao.update((ValueSet) findResourceByIdInBundle(vss, "observation-codes"), mySrd);
+		myValueSetDao.update((ValueSet) findResourceByIdInBundle(vss, "observation-methods"), mySrd);
+		myValueSetDao.update((ValueSet) findResourceByIdInBundle(vss, "observation-valueabsentreason"), mySrd);
+		myValueSetDao.update((ValueSet) findResourceByIdInBundle(vss, "observation-interpretation"), mySrd);
+		myValueSetDao.update((ValueSet) findResourceByIdInBundle(vss, "body-site"), mySrd);
+		myValueSetDao.update((ValueSet) findResourceByIdInBundle(vss, "referencerange-meaning"), mySrd);
+		myValueSetDao.update((ValueSet) findResourceByIdInBundle(vss, "observation-relationshiptypes"), mySrd);
 
 		StructureDefinition sd = loadResourceFromClasspath(StructureDefinition.class, "/org/hl7/fhir/instance/model/profile/devicemetricobservation.profile.xml");
 		sd.setId(new IdDt());
 		sd.setUrl("http://example.com/foo/bar/" + methodName);
-		myStructureDefinitionDao.create(sd, new ServletRequestDetails());
+		myStructureDefinitionDao.create(sd, mySrd);
 
 		Observation input = new Observation();
 		ResourceMetadataKeyEnum.PROFILES.put(input, Arrays.asList(new IdDt(sd.getUrl())));
@@ -89,7 +109,7 @@ public class FhirResourceDaoDstu2ValidateTest extends BaseJpaDstu2Test {
 		case JSON:
 			encoded = myFhirCtx.newJsonParser().encodeResourceToString(input);
 			try {
-			myObservationDao.validate(input, null, encoded, EncodingEnum.JSON, mode, null, new ServletRequestDetails());
+			myObservationDao.validate(input, null, encoded, EncodingEnum.JSON, mode, null, mySrd);
 			fail();
 			} catch (PreconditionFailedException e) {
 				return (OperationOutcome) e.getOperationOutcome();
@@ -97,7 +117,7 @@ public class FhirResourceDaoDstu2ValidateTest extends BaseJpaDstu2Test {
 		case XML:
 			encoded = myFhirCtx.newXmlParser().encodeResourceToString(input);
 			try {
-			myObservationDao.validate(input, null, encoded, EncodingEnum.XML, mode, null, new ServletRequestDetails());
+			myObservationDao.validate(input, null, encoded, EncodingEnum.XML, mode, null, mySrd);
 			fail();
 			} catch (PreconditionFailedException e) {
 				return (OperationOutcome) e.getOperationOutcome();
@@ -122,7 +142,7 @@ public class FhirResourceDaoDstu2ValidateTest extends BaseJpaDstu2Test {
 
 		ValidationModeEnum mode = ValidationModeEnum.CREATE;
 		String encoded = myFhirCtx.newJsonParser().encodeResourceToString(input);
-		MethodOutcome outcome = myObservationDao.validate(input, null, encoded, EncodingEnum.JSON, mode, null, new ServletRequestDetails());
+		MethodOutcome outcome = myObservationDao.validate(input, null, encoded, EncodingEnum.JSON, mode, null, mySrd);
 		
 		String ooString = myFhirCtx.newJsonParser().setPrettyPrint(true).encodeResourceToString(outcome.getOperationOutcome());
 		ourLog.info(ooString);
@@ -139,14 +159,14 @@ public class FhirResourceDaoDstu2ValidateTest extends BaseJpaDstu2Test {
 		pat.addName().addFamily(methodName);
 		
 		try {
-			myPatientDao.validate(pat, null, null, null, ValidationModeEnum.CREATE, null, new ServletRequestDetails());
+			myPatientDao.validate(pat, null, null, null, ValidationModeEnum.CREATE, null, mySrd);
 			fail();
 		} catch (InvalidRequestException e) {
 			assertThat(e.getMessage(), containsString("ID must not be populated"));
 		}
 
 		pat.setId("");
-		myPatientDao.validate(pat, null, null, null, ValidationModeEnum.CREATE, null, new ServletRequestDetails());
+		myPatientDao.validate(pat, null, null, null, ValidationModeEnum.CREATE, null, mySrd);
 
 	}
 	
@@ -157,12 +177,12 @@ public class FhirResourceDaoDstu2ValidateTest extends BaseJpaDstu2Test {
 		Patient pat = new Patient();
 		pat.setId("Patient/123");
 		pat.addName().addFamily(methodName);
-		myPatientDao.validate(pat, null, null, null, ValidationModeEnum.UPDATE, null, new ServletRequestDetails());
+		myPatientDao.validate(pat, null, null, null, ValidationModeEnum.UPDATE, null, mySrd);
 
 		pat.setId("");
 		
 		try {
-			myPatientDao.validate(pat, null, null, null, ValidationModeEnum.UPDATE, null, new ServletRequestDetails());
+			myPatientDao.validate(pat, null, null, null, ValidationModeEnum.UPDATE, null, mySrd);
 			fail();
 		} catch (InvalidRequestException e) {
 			assertThat(e.getMessage(), containsString("ID must be populated"));
@@ -180,12 +200,12 @@ public class FhirResourceDaoDstu2ValidateTest extends BaseJpaDstu2Test {
 		Patient pat = new Patient();
 		pat.setId("Patient/123");
 		pat.addName().addFamily(methodName);
-		myPatientDao.validate(pat, null, null, null, ValidationModeEnum.UPDATE, null, new ServletRequestDetails());
+		myPatientDao.validate(pat, null, null, null, ValidationModeEnum.UPDATE, null, mySrd);
 
 		pat.setId("");
 		
 		try {
-			myPatientDao.validate(pat, null, null, null, ValidationModeEnum.UPDATE, null, new ServletRequestDetails());
+			myPatientDao.validate(pat, null, null, null, ValidationModeEnum.UPDATE, null, mySrd);
 			fail();
 		} catch (InvalidRequestException e) {
 			assertThat(e.getMessage(), containsString("ID must be populated"));
@@ -200,16 +220,16 @@ public class FhirResourceDaoDstu2ValidateTest extends BaseJpaDstu2Test {
 		
 		Organization org = new Organization();
 		org.setName(methodName);
-		IIdType orgId = myOrganizationDao.create(org, new ServletRequestDetails()).getId().toUnqualifiedVersionless();
+		IIdType orgId = myOrganizationDao.create(org, mySrd).getId().toUnqualifiedVersionless();
 		
 		Patient pat = new Patient();
 		pat.addName().addFamily(methodName);
 		pat.getManagingOrganization().setReference(orgId);
-		IIdType patId = myPatientDao.create(pat, new ServletRequestDetails()).getId().toUnqualifiedVersionless();
+		IIdType patId = myPatientDao.create(pat, mySrd).getId().toUnqualifiedVersionless();
 		
 		OperationOutcome outcome=null;
 		try {
-			myOrganizationDao.validate(null, orgId, null, null, ValidationModeEnum.DELETE, null, new ServletRequestDetails());
+			myOrganizationDao.validate(null, orgId, null, null, ValidationModeEnum.DELETE, null, mySrd);
 			fail();
 		} catch (ResourceVersionConflictException e) {
 			outcome= (OperationOutcome) e.getOperationOutcome();
@@ -221,9 +241,9 @@ public class FhirResourceDaoDstu2ValidateTest extends BaseJpaDstu2Test {
 
 		pat.setId(patId);
 		pat.getManagingOrganization().setReference("");
-		myPatientDao.update(pat, new ServletRequestDetails());
+		myPatientDao.update(pat, mySrd);
 
-		outcome = (OperationOutcome) myOrganizationDao.validate(null, orgId, null, null, ValidationModeEnum.DELETE, null, new ServletRequestDetails()).getOperationOutcome();
+		outcome = (OperationOutcome) myOrganizationDao.validate(null, orgId, null, null, ValidationModeEnum.DELETE, null, mySrd).getOperationOutcome();
 		ooString = myFhirCtx.newJsonParser().setPrettyPrint(true).encodeResourceToString(outcome);
 		ourLog.info(ooString);
 		assertThat(ooString, containsString("Ok to delete"));

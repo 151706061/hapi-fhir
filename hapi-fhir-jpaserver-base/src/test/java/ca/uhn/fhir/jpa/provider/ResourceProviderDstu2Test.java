@@ -24,6 +24,7 @@ import java.io.InputStreamReader;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -33,14 +34,16 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpDelete;
+import org.apache.http.client.methods.HttpEntityEnclosingRequestBase;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
-import org.hl7.fhir.dstu3.model.OperationOutcome;
 import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.hl7.fhir.instance.model.api.IIdType;
+import org.junit.AfterClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import ca.uhn.fhir.model.api.Bundle;
@@ -64,6 +67,7 @@ import ca.uhn.fhir.model.dstu2.resource.Location;
 import ca.uhn.fhir.model.dstu2.resource.Medication;
 import ca.uhn.fhir.model.dstu2.resource.MedicationOrder;
 import ca.uhn.fhir.model.dstu2.resource.Observation;
+import ca.uhn.fhir.model.dstu2.resource.OperationOutcome;
 import ca.uhn.fhir.model.dstu2.resource.Organization;
 import ca.uhn.fhir.model.dstu2.resource.Parameters;
 import ca.uhn.fhir.model.dstu2.resource.Patient;
@@ -100,12 +104,18 @@ import ca.uhn.fhir.rest.server.exceptions.InvalidRequestException;
 import ca.uhn.fhir.rest.server.exceptions.PreconditionFailedException;
 import ca.uhn.fhir.rest.server.exceptions.ResourceGoneException;
 import ca.uhn.fhir.rest.server.exceptions.UnprocessableEntityException;
-import ca.uhn.fhir.rest.server.servlet.ServletRequestDetails;
+import ca.uhn.fhir.util.TestUtil;
 import ca.uhn.fhir.util.UrlUtil;
 
 public class ResourceProviderDstu2Test extends BaseResourceProviderDstu2Test {
 
 	private static final org.slf4j.Logger ourLog = org.slf4j.LoggerFactory.getLogger(ResourceProviderDstu2Test.class);
+
+	@AfterClass
+	public static void afterClassClearContext() {
+		TestUtil.clearAllStaticFieldsForUnitTest();
+	}
+
 
 	@Override
 	public void before() throws Exception {
@@ -125,19 +135,19 @@ public class ResourceProviderDstu2Test extends BaseResourceProviderDstu2Test {
 	public void testEverythingInstanceWithContentFilter() {
 		Patient pt1 = new Patient();
 		pt1.addName().addFamily("Everything").addGiven("Arthur");
-		IIdType ptId1 = myPatientDao.create(pt1, new ServletRequestDetails()).getId().toUnqualifiedVersionless();
+		IIdType ptId1 = myPatientDao.create(pt1, mySrd).getId().toUnqualifiedVersionless();
 
 		Patient pt2 = new Patient();
 		pt2.addName().addFamily("Everything").addGiven("Arthur");
-		IIdType ptId2 = myPatientDao.create(pt2, new ServletRequestDetails()).getId().toUnqualifiedVersionless();
+		IIdType ptId2 = myPatientDao.create(pt2, mySrd).getId().toUnqualifiedVersionless();
 
 		Device dev1 = new Device();
 		dev1.setManufacturer("Some Manufacturer");
-		IIdType devId1 = myDeviceDao.create(dev1, new ServletRequestDetails()).getId().toUnqualifiedVersionless();
+		IIdType devId1 = myDeviceDao.create(dev1, mySrd).getId().toUnqualifiedVersionless();
 		
 		Device dev2 = new Device();
 		dev2.setManufacturer("Some Manufacturer 2");
-		myDeviceDao.create(dev2, new ServletRequestDetails()).getId().toUnqualifiedVersionless();
+		myDeviceDao.create(dev2, mySrd).getId().toUnqualifiedVersionless();
 
 		Observation obs1 = new Observation();
 		obs1.getText().setDiv("<div>OBSTEXT1</div>");
@@ -145,19 +155,19 @@ public class ResourceProviderDstu2Test extends BaseResourceProviderDstu2Test {
 		obs1.getCode().addCoding().setCode("CODE1");
 		obs1.setValue(new StringDt("obsvalue1"));
 		obs1.getDevice().setReference(devId1);
-		IIdType obsId1 = myObservationDao.create(obs1, new ServletRequestDetails()).getId().toUnqualifiedVersionless();
+		IIdType obsId1 = myObservationDao.create(obs1, mySrd).getId().toUnqualifiedVersionless();
 
 		Observation obs2 = new Observation();
 		obs2.getSubject().setReference(ptId1);
 		obs2.getCode().addCoding().setCode("CODE2");
 		obs2.setValue(new StringDt("obsvalue2"));
-		IIdType obsId2 = myObservationDao.create(obs2, new ServletRequestDetails()).getId().toUnqualifiedVersionless();
+		IIdType obsId2 = myObservationDao.create(obs2, mySrd).getId().toUnqualifiedVersionless();
 
 		Observation obs3 = new Observation();
 		obs3.getSubject().setReference(ptId2);
 		obs3.getCode().addCoding().setCode("CODE3");
 		obs3.setValue(new StringDt("obsvalue3"));
-		IIdType obsId3 = myObservationDao.create(obs3, new ServletRequestDetails()).getId().toUnqualifiedVersionless();
+		IIdType obsId3 = myObservationDao.create(obs3, mySrd).getId().toUnqualifiedVersionless();
 		
 		List<IIdType> actual;
 		StringAndListParam param;
@@ -186,7 +196,7 @@ public class ResourceProviderDstu2Test extends BaseResourceProviderDstu2Test {
 	public void testBundleCreate() throws Exception {
 		IGenericClient client = ourClient;
 
-		String resBody = IOUtils.toString(ResourceProviderDstu2Test.class.getResource("/document-father.json"));
+		String resBody = IOUtils.toString(ResourceProviderDstu2Test.class.getResource("/document-father.json"), StandardCharsets.UTF_8);
 		IIdType id = client.create().resource(resBody).execute().getId();
 
 		ourLog.info("Created: {}", id);
@@ -200,13 +210,13 @@ public class ResourceProviderDstu2Test extends BaseResourceProviderDstu2Test {
 	public void testBundleCreateWithTypeTransaction() throws Exception {
 		IGenericClient client = ourClient;
 
-		String resBody = IOUtils.toString(ResourceProviderDstu2Test.class.getResource("/document-father.json"));
+		String resBody = IOUtils.toString(ResourceProviderDstu2Test.class.getResource("/document-father.json"), StandardCharsets.UTF_8);
 		resBody = resBody.replace("\"type\": \"document\"", "\"type\": \"transaction\"");
 		try {
 			client.create().resource(resBody).execute().getId();
 			fail();
 		} catch (UnprocessableEntityException e) {
-			assertThat(e.getMessage(), containsString("Unable to store a Bundle resource on this server with a Bundle.type value other than 'document' - Value was: transaction"));
+			assertThat(e.getMessage(), containsString("Unable to store a Bundle resource on this server with a Bundle.type of: transaction"));
 		}
 	}
 
@@ -295,11 +305,11 @@ public class ResourceProviderDstu2Test extends BaseResourceProviderDstu2Test {
 		}
 		ourClient.transaction().withResources(resources).prettyPrint().encodedXml().execute();
 
-		Bundle found = ourClient.search().forResource(Organization.class).where(Organization.NAME.matches().value("rpdstu2_testCountParam_01")).limitTo(10).execute();
+		Bundle found = ourClient.search().forResource(Organization.class).where(Organization.NAME.matches().value("rpdstu2_testCountParam_01")).count(10).execute();
 		assertEquals(100, found.getTotalResults().getValue().intValue());
 		assertEquals(10, found.getEntries().size());
 
-		found = ourClient.search().forResource(Organization.class).where(Organization.NAME.matches().value("rpdstu2_testCountParam_01")).limitTo(999).execute();
+		found = ourClient.search().forResource(Organization.class).where(Organization.NAME.matches().value("rpdstu2_testCountParam_01")).count(999).execute();
 		assertEquals(100, found.getTotalResults().getValue().intValue());
 		assertEquals(50, found.getEntries().size());
 
@@ -468,7 +478,7 @@ public class ResourceProviderDstu2Test extends BaseResourceProviderDstu2Test {
 		CloseableHttpResponse response = ourHttpClient.execute(post);
 		try {
 			assertEquals(201, response.getStatusLine().getStatusCode());
-			String respString = IOUtils.toString(response.getEntity().getContent());
+			String respString = IOUtils.toString(response.getEntity().getContent(), StandardCharsets.UTF_8);
 			ourLog.info(response.toString());
 			ourLog.info(respString);
 			assertThat(respString, containsString("<OperationOutcome xmlns=\"http://hl7.org/fhir\">"));
@@ -487,7 +497,7 @@ public class ResourceProviderDstu2Test extends BaseResourceProviderDstu2Test {
 
 		CloseableHttpResponse response = ourHttpClient.execute(post);
 		try {
-			String responseString = IOUtils.toString(response.getEntity().getContent());
+			String responseString = IOUtils.toString(response.getEntity().getContent(), StandardCharsets.UTF_8);
 			ourLog.info(responseString);
 			assertEquals(400, response.getStatusLine().getStatusCode());
 			OperationOutcome oo = myFhirCtx.newXmlParser().parseResource(OperationOutcome.class, responseString);
@@ -555,12 +565,12 @@ public class ResourceProviderDstu2Test extends BaseResourceProviderDstu2Test {
 		Patient p = new Patient();
 		p.addIdentifier().setSystem("urn:system").setValue(methodName);
 		p.addName().addFamily("FAM1");
-		IIdType id1 = myPatientDao.create(p, new ServletRequestDetails()).getId().toUnqualifiedVersionless();
+		IIdType id1 = myPatientDao.create(p, mySrd).getId().toUnqualifiedVersionless();
 		
 		p = new Patient();
 		p.addIdentifier().setSystem("urn:system").setValue(methodName);
 		p.addName().addFamily("FAM2");
-		IIdType id2 = myPatientDao.create(p, new ServletRequestDetails()).getId().toUnqualifiedVersionless();
+		IIdType id2 = myPatientDao.create(p, mySrd).getId().toUnqualifiedVersionless();
 
 		try {
 			//@formatter:off
@@ -608,7 +618,7 @@ public class ResourceProviderDstu2Test extends BaseResourceProviderDstu2Test {
 		HttpDelete delete = new HttpDelete(ourServerBase + "/Patient");
 		CloseableHttpResponse response = ourHttpClient.execute(delete);
 		try {
-			String responseString = IOUtils.toString(response.getEntity().getContent());
+			String responseString = IOUtils.toString(response.getEntity().getContent(), StandardCharsets.UTF_8);
 			ourLog.info(responseString);
 			assertEquals(400, response.getStatusLine().getStatusCode());
 			assertThat(responseString, containsString("Can not perform delete, no ID provided"));
@@ -641,7 +651,7 @@ public class ResourceProviderDstu2Test extends BaseResourceProviderDstu2Test {
 		HttpDelete delete = new HttpDelete(ourServerBase + "/Patient?name=" + methodName);
 		response = ourHttpClient.execute(delete);
 		try {
-			assertEquals(204, response.getStatusLine().getStatusCode());
+			assertEquals(200, response.getStatusLine().getStatusCode());
 		} finally {
 			response.close();
 		}
@@ -750,13 +760,13 @@ public class ResourceProviderDstu2Test extends BaseResourceProviderDstu2Test {
 	@Test
 	public void testDocumentManifestResources() throws Exception {
 		myFhirCtx.getResourceDefinition(Practitioner.class);
-		myFhirCtx.getResourceDefinition(ca.uhn.fhir.model.dstu.resource.DocumentManifest.class);
+		myFhirCtx.getResourceDefinition(DocumentManifest.class);
 
 		IGenericClient client = ourClient;
 
 		int initialSize = client.search().forResource(DocumentManifest.class).execute().size();
 
-		String resBody = IOUtils.toString(ResourceProviderDstu2Test.class.getResource("/documentmanifest.json"));
+		String resBody = IOUtils.toString(ResourceProviderDstu2Test.class.getResource("/documentmanifest.json"), StandardCharsets.UTF_8);
 		client.create().resource(resBody).execute();
 
 		int newSize = client.search().forResource(DocumentManifest.class).execute().size();
@@ -975,16 +985,16 @@ public class ResourceProviderDstu2Test extends BaseResourceProviderDstu2Test {
 		
 		Medication med = new Medication();
 		med.getCode().setText(methodName);
-		IIdType medId = myMedicationDao.create(med, new ServletRequestDetails()).getId().toUnqualifiedVersionless();
+		IIdType medId = myMedicationDao.create(med, mySrd).getId().toUnqualifiedVersionless();
 		
 		Patient pat = new Patient();
 		pat.addAddress().addLine(methodName);
-		IIdType patId = myPatientDao.create(pat, new ServletRequestDetails()).getId().toUnqualifiedVersionless();
+		IIdType patId = myPatientDao.create(pat, mySrd).getId().toUnqualifiedVersionless();
 
 		MedicationOrder mo = new MedicationOrder();
 		mo.getPatient().setReference(patId);
 		mo.setMedication(new ResourceReferenceDt(medId));
-		IIdType moId = myMedicationOrderDao.create(mo, new ServletRequestDetails()).getId().toUnqualifiedVersionless();
+		IIdType moId = myMedicationOrderDao.create(mo, mySrd).getId().toUnqualifiedVersionless();
 		
 		Parameters output = ourClient.operation().onInstance(patId).named("everything").withNoParameters(Parameters.class).execute();
 		ca.uhn.fhir.model.dstu2.resource.Bundle b = (ca.uhn.fhir.model.dstu2.resource.Bundle) output.getParameterFirstRep().getResource();
@@ -1148,7 +1158,7 @@ public class ResourceProviderDstu2Test extends BaseResourceProviderDstu2Test {
 		CloseableHttpResponse response = ourHttpClient.execute(get);
 		try {
 			assertEquals(200, response.getStatusLine().getStatusCode());
-			String output = IOUtils.toString(response.getEntity().getContent());
+			String output = IOUtils.toString(response.getEntity().getContent(), StandardCharsets.UTF_8);
 			IOUtils.closeQuietly(response.getEntity().getContent());
 			ourLog.info(output);
 			List<IdDt> ids = toIdListUnqualifiedVersionless(myFhirCtx.newXmlParser().parseBundle(output));
@@ -1162,7 +1172,7 @@ public class ResourceProviderDstu2Test extends BaseResourceProviderDstu2Test {
 		response = ourHttpClient.execute(get);
 		try {
 			assertEquals(200, response.getStatusLine().getStatusCode());
-			String output = IOUtils.toString(response.getEntity().getContent());
+			String output = IOUtils.toString(response.getEntity().getContent(), StandardCharsets.UTF_8);
 			IOUtils.closeQuietly(response.getEntity().getContent());
 			ourLog.info(output);
 			List<IdDt> ids = toIdListUnqualifiedVersionless(myFhirCtx.newXmlParser().parseBundle(output));
@@ -1176,7 +1186,7 @@ public class ResourceProviderDstu2Test extends BaseResourceProviderDstu2Test {
 		response = ourHttpClient.execute(get);
 		try {
 			assertEquals(200, response.getStatusLine().getStatusCode());
-			String output = IOUtils.toString(response.getEntity().getContent());
+			String output = IOUtils.toString(response.getEntity().getContent(), StandardCharsets.UTF_8);
 			IOUtils.closeQuietly(response.getEntity().getContent());
 			ourLog.info(output);
 			List<IdDt> ids = toIdListUnqualifiedVersionless(myFhirCtx.newXmlParser().parseBundle(output));
@@ -1190,7 +1200,7 @@ public class ResourceProviderDstu2Test extends BaseResourceProviderDstu2Test {
 		response = ourHttpClient.execute(get);
 		try {
 			assertEquals(200, response.getStatusLine().getStatusCode());
-			String output = IOUtils.toString(response.getEntity().getContent());
+			String output = IOUtils.toString(response.getEntity().getContent(), StandardCharsets.UTF_8);
 			IOUtils.closeQuietly(response.getEntity().getContent());
 			ourLog.info(output);
 			List<IdDt> ids = toIdListUnqualifiedVersionless(myFhirCtx.newXmlParser().parseBundle(output));
@@ -1214,7 +1224,7 @@ public class ResourceProviderDstu2Test extends BaseResourceProviderDstu2Test {
 		CloseableHttpResponse response = ourHttpClient.execute(get);
 		try {
 			assertEquals(200, response.getStatusLine().getStatusCode());
-			String output = IOUtils.toString(response.getEntity().getContent());
+			String output = IOUtils.toString(response.getEntity().getContent(), StandardCharsets.UTF_8);
 			IOUtils.closeQuietly(response.getEntity().getContent());
 			ourLog.info(output);
 			assertThat(output, containsString("<parameter><name value=\"Patient\"/><valueInteger value=\""));
@@ -1256,7 +1266,7 @@ public class ResourceProviderDstu2Test extends BaseResourceProviderDstu2Test {
 
 		int initialSize = client.search().forResource(ImagingStudy.class).execute().size();
 
-		String resBody = IOUtils.toString(ResourceProviderDstu2Test.class.getResource("/imagingstudy.json"));
+		String resBody = IOUtils.toString(ResourceProviderDstu2Test.class.getResource("/imagingstudy.json"), StandardCharsets.UTF_8);
 		client.create().resource(resBody).execute();
 
 		int newSize = client.search().forResource(ImagingStudy.class).execute().size();
@@ -1270,7 +1280,7 @@ public class ResourceProviderDstu2Test extends BaseResourceProviderDstu2Test {
 		HttpGet get = new HttpGet(ourServerBase + "/metadata");
 		CloseableHttpResponse response = ourHttpClient.execute(get);
 		try {
-			String resp = IOUtils.toString(response.getEntity().getContent());
+			String resp = IOUtils.toString(response.getEntity().getContent(), StandardCharsets.UTF_8);
 			ourLog.info(resp);
 			assertEquals(200, response.getStatusLine().getStatusCode());
 			assertThat(resp, stringContainsInOrder("THIS IS THE DESC"));
@@ -1325,7 +1335,7 @@ public class ResourceProviderDstu2Test extends BaseResourceProviderDstu2Test {
 		post.setEntity(new StringEntity(input, ContentType.create(Constants.CT_FHIR_XML, "UTF-8")));
 		CloseableHttpResponse response = ourHttpClient.execute(post);
 		try {
-			String output = IOUtils.toString(response.getEntity().getContent());
+			String output = IOUtils.toString(response.getEntity().getContent(), StandardCharsets.UTF_8);
 			ourLog.info(output);
 			assertEquals(400, response.getStatusLine().getStatusCode());
 			assertThat(output, containsString("Input contains no parameter with name 'meta'"));
@@ -1337,7 +1347,7 @@ public class ResourceProviderDstu2Test extends BaseResourceProviderDstu2Test {
 		post.setEntity(new StringEntity(input, ContentType.create(Constants.CT_FHIR_XML, "UTF-8")));
 		response = ourHttpClient.execute(post);
 		try {
-			String output = IOUtils.toString(response.getEntity().getContent());
+			String output = IOUtils.toString(response.getEntity().getContent(), StandardCharsets.UTF_8);
 			ourLog.info(output);
 			assertEquals(400, response.getStatusLine().getStatusCode());
 			assertThat(output, containsString("Input contains no parameter with name 'meta'"));
@@ -1383,7 +1393,7 @@ public class ResourceProviderDstu2Test extends BaseResourceProviderDstu2Test {
 		IIdType newId = ourClient.create().resource(p1).encodedJson().execute().getId();
 
 		Patient actual = ourClient.read().resource(Patient.class).withId(newId).encodedJson().execute();
-		assertEquals("<div>HELLO WORLD</div>", actual.getText().getDiv().getValueAsString());
+		assertEquals("<div xmlns=\"http://www.w3.org/1999/xhtml\">HELLO WORLD</div>", actual.getText().getDiv().getValueAsString());
 	}
 
 	@Test
@@ -1436,7 +1446,7 @@ public class ResourceProviderDstu2Test extends BaseResourceProviderDstu2Test {
 		HttpGet read = new HttpGet(ourServerBase + "/Patient?_format=json");
 		CloseableHttpResponse response = ourHttpClient.execute(read);
 		try {
-			String text = IOUtils.toString(response.getEntity().getContent());
+			String text = IOUtils.toString(response.getEntity().getContent(), StandardCharsets.UTF_8);
 			ourLog.info(text);
 			assertEquals(Constants.STATUS_HTTP_200_OK, response.getStatusLine().getStatusCode());
 			assertThat(text, not(containsString("\"text\",\"type\"")));
@@ -1493,13 +1503,13 @@ public class ResourceProviderDstu2Test extends BaseResourceProviderDstu2Test {
 		{
 			Patient patient = new Patient();
 			patient.addIdentifier().setSystem("urn:system").setValue("001");
-			id1 = myPatientDao.create(patient, new ServletRequestDetails()).getId().toUnqualifiedVersionless();
+			id1 = myPatientDao.create(patient, mySrd).getId().toUnqualifiedVersionless();
 		}
 		IIdType id2;
 		{
 			Patient patient = new Patient();
 			patient.addIdentifier().setSystem("urn:system").setValue("001");
-			id2 = myPatientDao.create(patient, new ServletRequestDetails()).getId().toUnqualifiedVersionless();
+			id2 = myPatientDao.create(patient, mySrd).getId().toUnqualifiedVersionless();
 		}
 
 		//@formatter:off
@@ -1519,12 +1529,12 @@ public class ResourceProviderDstu2Test extends BaseResourceProviderDstu2Test {
 
 		Organization o1 = new Organization();
 		o1.setName("testSearchByResourceChainName01");
-		IdDt o1id = (IdDt) ourClient.create().resource(o1).execute().getId();
+		IdDt o1id = (IdDt) ourClient.create().resource(o1).execute().getId().toUnqualifiedVersionless();		
 
 		Patient p1 = new Patient();
 		p1.addIdentifier().setSystem("urn:system").setValue("testSearchByResourceChain01");
 		p1.addName().addFamily("testSearchByResourceChainFamily01").addGiven("testSearchByResourceChainGiven01");
-		p1.setManagingOrganization(new ResourceReferenceDt(o1id));
+		p1.setManagingOrganization(new ResourceReferenceDt(o1id.toUnqualifiedVersionless()));
 		IdDt p1Id = (IdDt) ourClient.create().resource(p1).execute().getId();
 
 		//@formatter:off
@@ -1550,6 +1560,7 @@ public class ResourceProviderDstu2Test extends BaseResourceProviderDstu2Test {
 	@Test
 	public void testSearchLastUpdatedParamRp() throws InterruptedException {
 		String methodName = "testSearchLastUpdatedParamRp";
+		ourLog.info("Starting " + methodName);
 
 		int sleep = 100;
 		Thread.sleep(sleep);
@@ -1581,17 +1592,8 @@ public class ResourceProviderDstu2Test extends BaseResourceProviderDstu2Test {
 			patient.addName().addFamily(methodName).addGiven("John");
 			id2 = (IdDt) ourClient.create().resource(patient).execute().getId().toUnqualifiedVersionless();
 		}
-
-		{
-			//@formatter:off
-			Bundle found = ourClient.search()
-					.forResource(Patient.class)
-					.where(Patient.NAME.matches().value("testSearchLastUpdatedParamRp"))
-					.execute();
-			//@formatter:on
-			List<IdDt> patients = toIdListUnqualifiedVersionless(found);
-			assertThat(patients, hasItems(id1a, id1b, id2));
-		}
+		
+		ourLog.info("Before: {}", beforeAny.getValue());
 		{
 			//@formatter:off
 			Bundle found = ourClient.search()
@@ -1603,6 +1605,18 @@ public class ResourceProviderDstu2Test extends BaseResourceProviderDstu2Test {
 			List<IdDt> patients = toIdListUnqualifiedVersionless(found);
 			assertThat(patients, hasItems(id1a, id1b, id2));
 		}
+
+		{
+			//@formatter:off
+			Bundle found = ourClient.search()
+					.forResource(Patient.class)
+					.where(Patient.NAME.matches().value("testSearchLastUpdatedParamRp"))
+					.execute();
+			//@formatter:on
+			List<IdDt> patients = toIdListUnqualifiedVersionless(found);
+			assertThat(patients, hasItems(id1a, id1b, id2));
+		}
+		
 		{
 			//@formatter:off
 			Bundle found = ourClient.search()
@@ -1645,7 +1659,7 @@ public class ResourceProviderDstu2Test extends BaseResourceProviderDstu2Test {
 		int matches;
 		HttpGet get = new HttpGet(ourServerBase + search);
 		CloseableHttpResponse response = ourHttpClient.execute(get);
-		String resp = IOUtils.toString(response.getEntity().getContent());
+		String resp = IOUtils.toString(response.getEntity().getContent(), StandardCharsets.UTF_8);
 		IOUtils.closeQuietly(response.getEntity().getContent());
 		ourLog.info(resp);
 		ca.uhn.fhir.model.dstu2.resource.Bundle bundle = myFhirCtx.newXmlParser().parseResource(ca.uhn.fhir.model.dstu2.resource.Bundle.class, resp);
@@ -1656,8 +1670,10 @@ public class ResourceProviderDstu2Test extends BaseResourceProviderDstu2Test {
 
 	@Test
 	public void testSearchReturnsSearchDate() throws Exception {
+		ourLog.info("Starting testSearchReturnsSearchDate");
+		
 		Date before = new Date();
-		Thread.sleep(1);
+		Thread.sleep(100);
 
 		//@formatter:off
 		ca.uhn.fhir.model.dstu2.resource.Bundle found = ourClient
@@ -1668,7 +1684,7 @@ public class ResourceProviderDstu2Test extends BaseResourceProviderDstu2Test {
 				.execute();
 		//@formatter:on
 
-		Thread.sleep(1);
+		Thread.sleep(100);
 		Date after = new Date();
 
 		InstantDt updated = ResourceMetadataKeyEnum.UPDATED.get(found);
@@ -1689,7 +1705,7 @@ public class ResourceProviderDstu2Test extends BaseResourceProviderDstu2Test {
 
 		Patient pat = new Patient();
 		pat.addIdentifier().setSystem("urn:system:rpdstu2").setValue("testSearchWithInclude02");
-		pat.getManagingOrganization().setReference(orgId);
+		pat.getManagingOrganization().setReference(orgId.toUnqualifiedVersionless());
 		ourClient.create().resource(pat).prettyPrint().encodedXml().execute().getId();
 
 		//@formatter:off
@@ -1716,7 +1732,7 @@ public class ResourceProviderDstu2Test extends BaseResourceProviderDstu2Test {
 	public void testSearchWithInvalidSort() throws Exception {
 		Observation o = new Observation();
 		o.getCode().setText("testSearchWithInvalidSort");
-		myObservationDao.create(o, new ServletRequestDetails());
+		myObservationDao.create(o, mySrd);
 		//@formatter:off
 		ourClient
 				.search()
@@ -1765,7 +1781,7 @@ public class ResourceProviderDstu2Test extends BaseResourceProviderDstu2Test {
 					.search()
 					.forResource(Organization.class)
 					.where(Organization.NAME.isMissing(false))
-					.limitTo(100)
+					.count(100)
 					.prettyPrint()
 					.execute();
 			//@formatter:on
@@ -1783,7 +1799,7 @@ public class ResourceProviderDstu2Test extends BaseResourceProviderDstu2Test {
 					.search()
 					.forResource(Organization.class)
 					.where(Organization.NAME.isMissing(true))
-					.limitTo(100)
+					.count(100)
 					.prettyPrint()
 					.execute();
 			//@formatter:on
@@ -1917,7 +1933,7 @@ public class ResourceProviderDstu2Test extends BaseResourceProviderDstu2Test {
 			.where(Patient.IDENTIFIER.exactly().systemAndCode("urn:system", methodName))
 			.sort().ascending(Patient.FAMILY)
 			.sort().ascending(Patient.GIVEN)
-			.limitTo(100)
+			.count(100)
 			.execute();
 		//@formatter:on
 
@@ -1959,7 +1975,7 @@ public class ResourceProviderDstu2Test extends BaseResourceProviderDstu2Test {
 
 		// Read back directly from the DAO
 		{
-			Organization returned = myOrganizationDao.read(orgId, new ServletRequestDetails());
+			Organization returned = myOrganizationDao.read(orgId, mySrd);
 			String val = myFhirCtx.newXmlParser().setPrettyPrint(true).encodeResourceToString(returned);
 			ourLog.info(val);
 			assertThat(val, containsString("<name value=\"測試醫院\"/>"));
@@ -2005,7 +2021,7 @@ public class ResourceProviderDstu2Test extends BaseResourceProviderDstu2Test {
 	}
 
 	@Test
-	public void testUpdateInvalidReference() throws IOException, Exception {
+	public void testUpdateInvalidUrl() throws IOException, Exception {
 		String methodName = "testUpdateInvalidReference";
 
 		Patient pt = new Patient();
@@ -2016,11 +2032,11 @@ public class ResourceProviderDstu2Test extends BaseResourceProviderDstu2Test {
 		post.setEntity(new StringEntity(resource, ContentType.create(Constants.CT_FHIR_XML, "UTF-8")));
 		CloseableHttpResponse response = ourHttpClient.execute(post);
 		try {
-			String responseString = IOUtils.toString(response.getEntity().getContent());
+			String responseString = IOUtils.toString(response.getEntity().getContent(), StandardCharsets.UTF_8);
 			ourLog.info(responseString);
 			assertEquals(400, response.getStatusLine().getStatusCode());
 			OperationOutcome oo = myFhirCtx.newXmlParser().parseResource(OperationOutcome.class, responseString);
-			assertThat(oo.getIssue().get(0).getDiagnostics(), containsString("Can not update resource, resource body must contain an ID element for update (PUT) operation"));
+			assertThat(oo.getIssue().get(0).getDiagnostics(), containsString("Can not update resource, request URL must contain an ID element for update (PUT) operation (it must be of the form [base]/[resource type]/[id])"));
 		} finally {
 			response.close();
 		}
@@ -2120,7 +2136,7 @@ public class ResourceProviderDstu2Test extends BaseResourceProviderDstu2Test {
 		response = ourHttpClient.execute(put);
 		try {
 			assertEquals(200, response.getStatusLine().getStatusCode());
-			String responseString = IOUtils.toString(response.getEntity().getContent());
+			String responseString = IOUtils.toString(response.getEntity().getContent(), StandardCharsets.UTF_8);
 			IOUtils.closeQuietly(response.getEntity().getContent());
 
 			Patient respPt = myFhirCtx.newXmlParser().parseResource(Patient.class, responseString);
@@ -2169,7 +2185,7 @@ public class ResourceProviderDstu2Test extends BaseResourceProviderDstu2Test {
 
 		CloseableHttpResponse response = ourHttpClient.execute(post);
 		try {
-			String resp = IOUtils.toString(response.getEntity().getContent());
+			String resp = IOUtils.toString(response.getEntity().getContent(), StandardCharsets.UTF_8);
 			ourLog.info(resp);
 			assertEquals(200, response.getStatusLine().getStatusCode());
 			assertThat(resp, not(containsString("Resource has no id")));
@@ -2178,6 +2194,53 @@ public class ResourceProviderDstu2Test extends BaseResourceProviderDstu2Test {
 			response.close();
 		}
 	}
+	
+	/**
+	 * From example from david hay - moved to the hl7org_dstu2 project
+	 */
+	@Test
+	@Ignore
+	public void testValidateDavidsAllergyIntolerance() throws Exception {
+		myDaoConfig.setAllowExternalReferences(true);
+		
+		/*
+		 * Upload structurredef 
+		 */
+		
+		String contents = IOUtils.toString(getClass().getResourceAsStream("/allergyintolerance-sd-david.json"), "UTF-8");
+		HttpEntityEnclosingRequestBase post = new HttpPut(ourServerBase + "/StructureDefinition/ohAllergyIntolerance");
+		post.setEntity(new StringEntity(contents, ContentType.create(Constants.CT_FHIR_JSON, "UTF-8")));
+		CloseableHttpResponse response = ourHttpClient.execute(post);
+		try {
+			String resp = IOUtils.toString(response.getEntity().getContent(), StandardCharsets.UTF_8);
+			ourLog.info(resp);
+			assertEquals(201, response.getStatusLine().getStatusCode());
+		} finally {
+			IOUtils.closeQuietly(response.getEntity().getContent());
+			response.close();
+		}
+		
+		/*
+		 * Validate
+		 */
+		
+		contents = IOUtils.toString(getClass().getResourceAsStream("/allergyintolerance-david.json"), "UTF-8");
+
+		post = new HttpPost(ourServerBase + "/AllergyIntolerance/$validate?_pretty=true");
+		post.setEntity(new StringEntity(contents, ContentType.create(Constants.CT_FHIR_JSON, "UTF-8")));
+
+		response = ourHttpClient.execute(post);
+		try {
+			String resp = IOUtils.toString(response.getEntity().getContent(), StandardCharsets.UTF_8);
+			ourLog.info(resp);
+			assertEquals(200, response.getStatusLine().getStatusCode());
+			assertThat(resp, not(containsString("Resource has no id")));
+		} finally {
+			IOUtils.closeQuietly(response.getEntity().getContent());
+			response.close();
+		}
+	}
+
 
 	@Test
 	public void testValidateResourceHuge() throws IOException {
@@ -2191,14 +2254,14 @@ public class ResourceProviderDstu2Test extends BaseResourceProviderDstu2Test {
 		input.addParameter().setName("resource").setResource(patient);
 
 		String inputStr = myFhirCtx.newXmlParser().encodeResourceToString(input);
-		ourLog.info(inputStr);
+//		ourLog.info(inputStr);
 
 		HttpPost post = new HttpPost(ourServerBase + "/Patient/$validate");
 		post.setEntity(new StringEntity(inputStr, ContentType.create(Constants.CT_FHIR_XML, "UTF-8")));
 
 		CloseableHttpResponse response = ourHttpClient.execute(post);
 		try {
-			String resp = IOUtils.toString(response.getEntity().getContent());
+			String resp = IOUtils.toString(response.getEntity().getContent(), StandardCharsets.UTF_8);
 			ourLog.info(resp);
 			assertEquals(200, response.getStatusLine().getStatusCode());
 		} finally {
@@ -2225,7 +2288,7 @@ public class ResourceProviderDstu2Test extends BaseResourceProviderDstu2Test {
 
 		CloseableHttpResponse response = ourHttpClient.execute(post);
 		try {
-			String resp = IOUtils.toString(response.getEntity().getContent());
+			String resp = IOUtils.toString(response.getEntity().getContent(), StandardCharsets.UTF_8);
 			ourLog.info(resp);
 			assertEquals(200, response.getStatusLine().getStatusCode());
 		} finally {
@@ -2243,7 +2306,7 @@ public class ResourceProviderDstu2Test extends BaseResourceProviderDstu2Test {
 		HttpGet get = new HttpGet(ourServerBase + "/ValueSet/" + vsid.getIdPart() + "/$expand");
 		CloseableHttpResponse response = ourHttpClient.execute(get);
 		try {
-			String resp = IOUtils.toString(response.getEntity().getContent());
+			String resp = IOUtils.toString(response.getEntity().getContent(), StandardCharsets.UTF_8);
 			ourLog.info(resp);
 			assertEquals(200, response.getStatusLine().getStatusCode());
 			// @formatter:off
@@ -2275,7 +2338,7 @@ public class ResourceProviderDstu2Test extends BaseResourceProviderDstu2Test {
 		get = new HttpGet(ourServerBase + "/ValueSet/" + vsid.getIdPart() + "/$expand?filter=systolic");
 		response = ourHttpClient.execute(get);
 		try {
-			String resp = IOUtils.toString(response.getEntity().getContent());
+			String resp = IOUtils.toString(response.getEntity().getContent(), StandardCharsets.UTF_8);
 			ourLog.info(resp);
 			assertEquals(200, response.getStatusLine().getStatusCode());
 			//@formatter:off
@@ -2295,7 +2358,7 @@ public class ResourceProviderDstu2Test extends BaseResourceProviderDstu2Test {
 		get = new HttpGet(ourServerBase + "/ValueSet/" + vsid.getIdPart() + "/$expand?filter=11378");
 		response = ourHttpClient.execute(get);
 		try {
-			String resp = IOUtils.toString(response.getEntity().getContent());
+			String resp = IOUtils.toString(response.getEntity().getContent(), StandardCharsets.UTF_8);
 			ourLog.info(resp);
 			assertEquals(200, response.getStatusLine().getStatusCode());
 			//@formatter:off
@@ -2311,4 +2374,5 @@ public class ResourceProviderDstu2Test extends BaseResourceProviderDstu2Test {
 
 	}
 
+	
 }

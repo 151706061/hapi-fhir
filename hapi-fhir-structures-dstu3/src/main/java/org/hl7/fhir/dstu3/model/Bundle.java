@@ -29,7 +29,7 @@ package org.hl7.fhir.dstu3.model;
   
 */
 
-// Generated on Sat, Jan 30, 2016 09:18-0500 for FHIR v1.3.0
+// Generated on Thu, Aug 25, 2016 23:04-0400 for FHIR v1.6.0
 
 import java.util.*;
 
@@ -38,11 +38,11 @@ import org.hl7.fhir.utilities.Utilities;
 import ca.uhn.fhir.model.api.annotation.ResourceDef;
 import ca.uhn.fhir.model.api.annotation.SearchParamDefinition;
 import ca.uhn.fhir.model.api.annotation.Child;
+import ca.uhn.fhir.model.api.annotation.ChildOrder;
 import ca.uhn.fhir.model.api.annotation.Description;
 import ca.uhn.fhir.model.api.annotation.Block;
-
-import org.hl7.fhir.dstu3.exceptions.FHIRException;
 import org.hl7.fhir.instance.model.api.*;
+import org.hl7.fhir.dstu3.exceptions.FHIRException;
 /**
  * A container for a collection of resources.
  */
@@ -87,7 +87,7 @@ public class Bundle extends Resource implements IBaseBundle {
          */
         COLLECTION, 
         /**
-         * added to help the parsers
+         * added to help the parsers with the generic types
          */
         NULL;
         public static BundleType fromCode(String codeString) throws FHIRException {
@@ -111,7 +111,10 @@ public class Bundle extends Resource implements IBaseBundle {
           return SEARCHSET;
         if ("collection".equals(codeString))
           return COLLECTION;
-        throw new FHIRException("Unknown BundleType code '"+codeString+"'");
+        if (Configuration.isAcceptInvalidEnums())
+          return null;
+        else
+          throw new FHIRException("Unknown BundleType code '"+codeString+"'");
         }
         public String toCode() {
           switch (this) {
@@ -262,7 +265,7 @@ public class Bundle extends Resource implements IBaseBundle {
          */
         OUTCOME, 
         /**
-         * added to help the parsers
+         * added to help the parsers with the generic types
          */
         NULL;
         public static SearchEntryMode fromCode(String codeString) throws FHIRException {
@@ -274,7 +277,10 @@ public class Bundle extends Resource implements IBaseBundle {
           return INCLUDE;
         if ("outcome".equals(codeString))
           return OUTCOME;
-        throw new FHIRException("Unknown SearchEntryMode code '"+codeString+"'");
+        if (Configuration.isAcceptInvalidEnums())
+          return null;
+        else
+          throw new FHIRException("Unknown SearchEntryMode code '"+codeString+"'");
         }
         public String toCode() {
           switch (this) {
@@ -369,7 +375,7 @@ public class Bundle extends Resource implements IBaseBundle {
          */
         DELETE, 
         /**
-         * added to help the parsers
+         * added to help the parsers with the generic types
          */
         NULL;
         public static HTTPVerb fromCode(String codeString) throws FHIRException {
@@ -383,7 +389,10 @@ public class Bundle extends Resource implements IBaseBundle {
           return PUT;
         if ("DELETE".equals(codeString))
           return DELETE;
-        throw new FHIRException("Unknown HTTPVerb code '"+codeString+"'");
+        if (Configuration.isAcceptInvalidEnums())
+          return null;
+        else
+          throw new FHIRException("Unknown HTTPVerb code '"+codeString+"'");
         }
         public String toCode() {
           switch (this) {
@@ -601,6 +610,30 @@ public class Bundle extends Resource implements IBaseBundle {
         }
 
       @Override
+      public Base[] getProperty(int hash, String name, boolean checkValid) throws FHIRException {
+        switch (hash) {
+        case -554436100: /*relation*/ return this.relation == null ? new Base[0] : new Base[] {this.relation}; // StringType
+        case 116079: /*url*/ return this.url == null ? new Base[0] : new Base[] {this.url}; // UriType
+        default: return super.getProperty(hash, name, checkValid);
+        }
+
+      }
+
+      @Override
+      public void setProperty(int hash, String name, Base value) throws FHIRException {
+        switch (hash) {
+        case -554436100: // relation
+          this.relation = castToString(value); // StringType
+          break;
+        case 116079: // url
+          this.url = castToUri(value); // UriType
+          break;
+        default: super.setProperty(hash, name, value);
+        }
+
+      }
+
+      @Override
       public void setProperty(String name, Base value) throws FHIRException {
         if (name.equals("relation"))
           this.relation = castToString(value); // StringType
@@ -608,6 +641,16 @@ public class Bundle extends Resource implements IBaseBundle {
           this.url = castToUri(value); // UriType
         else
           super.setProperty(name, value);
+      }
+
+      @Override
+      public Base makeProperty(int hash, String name) throws FHIRException {
+        switch (hash) {
+        case -554436100: throw new FHIRException("Cannot make property relation as it is not a complex type"); // StringType
+        case 116079: throw new FHIRException("Cannot make property url as it is not a complex type"); // UriType
+        default: return super.makeProperty(hash, name);
+        }
+
       }
 
       @Override
@@ -651,8 +694,7 @@ public class Bundle extends Resource implements IBaseBundle {
       }
 
       public boolean isEmpty() {
-        return super.isEmpty() && (relation == null || relation.isEmpty()) && (url == null || url.isEmpty())
-          ;
+        return super.isEmpty() && ca.uhn.fhir.util.ElementUtil.isEmpty(relation, url);
       }
 
   public String fhirType() {
@@ -672,10 +714,12 @@ public class Bundle extends Resource implements IBaseBundle {
         protected List<BundleLinkComponent> link;
 
         /**
-         * The Absolute URL for the resource. This must be provided for all resources. The fullUrl SHALL not disagree with the id in the resource. The fullUrl is a version independent reference to the resource.
+         * The Absolute URL for the resource.  The fullUrl SHALL not disagree with the id in the resource. The fullUrl is a version independent reference to the resource. The fullUrl element SHALL have a value except that: 
+* fullUrl can be empty on a POST (although it does not need to when specifying a temporary id for reference in the bundle)
+* Results from operations might involve resources that are not identified.
          */
         @Child(name = "fullUrl", type = {UriType.class}, order=2, min=0, max=1, modifier=false, summary=true)
-        @Description(shortDefinition="Absolute URL for resource (server address, or UUID/OID)", formalDefinition="The Absolute URL for the resource. This must be provided for all resources. The fullUrl SHALL not disagree with the id in the resource. The fullUrl is a version independent reference to the resource." )
+        @Description(shortDefinition="Absolute URL for resource (server address, or UUID/OID)", formalDefinition="The Absolute URL for the resource.  The fullUrl SHALL not disagree with the id in the resource. The fullUrl is a version independent reference to the resource. The fullUrl element SHALL have a value except that: \n* fullUrl can be empty on a POST (although it does not need to when specifying a temporary id for reference in the bundle)\n* Results from operations might involve resources that are not identified." )
         protected UriType fullUrl;
 
         /**
@@ -724,6 +768,14 @@ public class Bundle extends Resource implements IBaseBundle {
           return this.link;
         }
 
+        /**
+         * @return Returns a reference to <code>this</code> for easy method chaining
+         */
+        public BundleEntryComponent setLink(List<BundleLinkComponent> theLink) { 
+          this.link = theLink;
+          return this;
+        }
+
         public boolean hasLink() { 
           if (this.link == null)
             return false;
@@ -733,10 +785,6 @@ public class Bundle extends Resource implements IBaseBundle {
           return false;
         }
 
-        /**
-         * @return {@link #link} (A series of links that provide context to this entry.)
-         */
-    // syntactic sugar
         public BundleLinkComponent addLink() { //3
           BundleLinkComponent t = new BundleLinkComponent();
           if (this.link == null)
@@ -745,7 +793,6 @@ public class Bundle extends Resource implements IBaseBundle {
           return t;
         }
 
-    // syntactic sugar
         public BundleEntryComponent addLink(BundleLinkComponent t) { //3
           if (t == null)
             return this;
@@ -756,7 +803,19 @@ public class Bundle extends Resource implements IBaseBundle {
         }
 
         /**
-         * @return {@link #fullUrl} (The Absolute URL for the resource. This must be provided for all resources. The fullUrl SHALL not disagree with the id in the resource. The fullUrl is a version independent reference to the resource.). This is the underlying object with id, value and extensions. The accessor "getFullUrl" gives direct access to the value
+         * @return The first repetition of repeating field {@link #link}, creating it if it does not already exist
+         */
+        public BundleLinkComponent getLinkFirstRep() { 
+          if (getLink().isEmpty()) {
+            addLink();
+          }
+          return getLink().get(0);
+        }
+
+        /**
+         * @return {@link #fullUrl} (The Absolute URL for the resource.  The fullUrl SHALL not disagree with the id in the resource. The fullUrl is a version independent reference to the resource. The fullUrl element SHALL have a value except that: 
+* fullUrl can be empty on a POST (although it does not need to when specifying a temporary id for reference in the bundle)
+* Results from operations might involve resources that are not identified.). This is the underlying object with id, value and extensions. The accessor "getFullUrl" gives direct access to the value
          */
         public UriType getFullUrlElement() { 
           if (this.fullUrl == null)
@@ -776,7 +835,9 @@ public class Bundle extends Resource implements IBaseBundle {
         }
 
         /**
-         * @param value {@link #fullUrl} (The Absolute URL for the resource. This must be provided for all resources. The fullUrl SHALL not disagree with the id in the resource. The fullUrl is a version independent reference to the resource.). This is the underlying object with id, value and extensions. The accessor "getFullUrl" gives direct access to the value
+         * @param value {@link #fullUrl} (The Absolute URL for the resource.  The fullUrl SHALL not disagree with the id in the resource. The fullUrl is a version independent reference to the resource. The fullUrl element SHALL have a value except that: 
+* fullUrl can be empty on a POST (although it does not need to when specifying a temporary id for reference in the bundle)
+* Results from operations might involve resources that are not identified.). This is the underlying object with id, value and extensions. The accessor "getFullUrl" gives direct access to the value
          */
         public BundleEntryComponent setFullUrlElement(UriType value) { 
           this.fullUrl = value;
@@ -784,14 +845,18 @@ public class Bundle extends Resource implements IBaseBundle {
         }
 
         /**
-         * @return The Absolute URL for the resource. This must be provided for all resources. The fullUrl SHALL not disagree with the id in the resource. The fullUrl is a version independent reference to the resource.
+         * @return The Absolute URL for the resource.  The fullUrl SHALL not disagree with the id in the resource. The fullUrl is a version independent reference to the resource. The fullUrl element SHALL have a value except that: 
+* fullUrl can be empty on a POST (although it does not need to when specifying a temporary id for reference in the bundle)
+* Results from operations might involve resources that are not identified.
          */
         public String getFullUrl() { 
           return this.fullUrl == null ? null : this.fullUrl.getValue();
         }
 
         /**
-         * @param value The Absolute URL for the resource. This must be provided for all resources. The fullUrl SHALL not disagree with the id in the resource. The fullUrl is a version independent reference to the resource.
+         * @param value The Absolute URL for the resource.  The fullUrl SHALL not disagree with the id in the resource. The fullUrl is a version independent reference to the resource. The fullUrl element SHALL have a value except that: 
+* fullUrl can be empty on a POST (although it does not need to when specifying a temporary id for reference in the bundle)
+* Results from operations might involve resources that are not identified.
          */
         public BundleEntryComponent setFullUrl(String value) { 
           if (Utilities.noString(value))
@@ -945,12 +1010,52 @@ public class Bundle extends Resource implements IBaseBundle {
         protected void listChildren(List<Property> childrenList) {
           super.listChildren(childrenList);
           childrenList.add(new Property("link", "@Bundle.link", "A series of links that provide context to this entry.", 0, java.lang.Integer.MAX_VALUE, link));
-          childrenList.add(new Property("fullUrl", "uri", "The Absolute URL for the resource. This must be provided for all resources. The fullUrl SHALL not disagree with the id in the resource. The fullUrl is a version independent reference to the resource.", 0, java.lang.Integer.MAX_VALUE, fullUrl));
+          childrenList.add(new Property("fullUrl", "uri", "The Absolute URL for the resource.  The fullUrl SHALL not disagree with the id in the resource. The fullUrl is a version independent reference to the resource. The fullUrl element SHALL have a value except that: \n* fullUrl can be empty on a POST (although it does not need to when specifying a temporary id for reference in the bundle)\n* Results from operations might involve resources that are not identified.", 0, java.lang.Integer.MAX_VALUE, fullUrl));
           childrenList.add(new Property("resource", "Resource", "The Resources for the entry.", 0, java.lang.Integer.MAX_VALUE, resource));
           childrenList.add(new Property("search", "", "Information about the search process that lead to the creation of this entry.", 0, java.lang.Integer.MAX_VALUE, search));
           childrenList.add(new Property("request", "", "Additional information about how this entry should be processed as part of a transaction.", 0, java.lang.Integer.MAX_VALUE, request));
           childrenList.add(new Property("response", "", "Additional information about how this entry should be processed as part of a transaction.", 0, java.lang.Integer.MAX_VALUE, response));
         }
+
+      @Override
+      public Base[] getProperty(int hash, String name, boolean checkValid) throws FHIRException {
+        switch (hash) {
+        case 3321850: /*link*/ return this.link == null ? new Base[0] : this.link.toArray(new Base[this.link.size()]); // BundleLinkComponent
+        case -511251360: /*fullUrl*/ return this.fullUrl == null ? new Base[0] : new Base[] {this.fullUrl}; // UriType
+        case -341064690: /*resource*/ return this.resource == null ? new Base[0] : new Base[] {this.resource}; // Resource
+        case -906336856: /*search*/ return this.search == null ? new Base[0] : new Base[] {this.search}; // BundleEntrySearchComponent
+        case 1095692943: /*request*/ return this.request == null ? new Base[0] : new Base[] {this.request}; // BundleEntryRequestComponent
+        case -340323263: /*response*/ return this.response == null ? new Base[0] : new Base[] {this.response}; // BundleEntryResponseComponent
+        default: return super.getProperty(hash, name, checkValid);
+        }
+
+      }
+
+      @Override
+      public void setProperty(int hash, String name, Base value) throws FHIRException {
+        switch (hash) {
+        case 3321850: // link
+          this.getLink().add((BundleLinkComponent) value); // BundleLinkComponent
+          break;
+        case -511251360: // fullUrl
+          this.fullUrl = castToUri(value); // UriType
+          break;
+        case -341064690: // resource
+          this.resource = castToResource(value); // Resource
+          break;
+        case -906336856: // search
+          this.search = (BundleEntrySearchComponent) value; // BundleEntrySearchComponent
+          break;
+        case 1095692943: // request
+          this.request = (BundleEntryRequestComponent) value; // BundleEntryRequestComponent
+          break;
+        case -340323263: // response
+          this.response = (BundleEntryResponseComponent) value; // BundleEntryResponseComponent
+          break;
+        default: super.setProperty(hash, name, value);
+        }
+
+      }
 
       @Override
       public void setProperty(String name, Base value) throws FHIRException {
@@ -968,6 +1073,20 @@ public class Bundle extends Resource implements IBaseBundle {
           this.response = (BundleEntryResponseComponent) value; // BundleEntryResponseComponent
         else
           super.setProperty(name, value);
+      }
+
+      @Override
+      public Base makeProperty(int hash, String name) throws FHIRException {
+        switch (hash) {
+        case 3321850:  return addLink(); // BundleLinkComponent
+        case -511251360: throw new FHIRException("Cannot make property fullUrl as it is not a complex type"); // UriType
+        case -341064690: throw new FHIRException("Cannot make property resource as it is not a complex type"); // Resource
+        case -906336856:  return getSearch(); // BundleEntrySearchComponent
+        case 1095692943:  return getRequest(); // BundleEntryRequestComponent
+        case -340323263:  return getResponse(); // BundleEntryResponseComponent
+        default: return super.makeProperty(hash, name);
+        }
+
       }
 
       @Override
@@ -1036,9 +1155,8 @@ public class Bundle extends Resource implements IBaseBundle {
       }
 
       public boolean isEmpty() {
-        return super.isEmpty() && (link == null || link.isEmpty()) && (fullUrl == null || fullUrl.isEmpty())
-           && (resource == null || resource.isEmpty()) && (search == null || search.isEmpty()) && (request == null || request.isEmpty())
-           && (response == null || response.isEmpty());
+        return super.isEmpty() && ca.uhn.fhir.util.ElementUtil.isEmpty(link, fullUrl, resource
+          , search, request, response);
       }
 
   public String fhirType() {
@@ -1055,6 +1173,7 @@ public class Bundle extends Resource implements IBaseBundle {
          */
         @Child(name = "mode", type = {CodeType.class}, order=1, min=0, max=1, modifier=false, summary=true)
         @Description(shortDefinition="match | include | outcome - why this is in the result set", formalDefinition="Why this entry is in the result set - whether it's included as a match or because of an _include requirement." )
+        @ca.uhn.fhir.model.api.annotation.Binding(valueSet="http://hl7.org/fhir/ValueSet/search-entry-mode")
         protected Enumeration<SearchEntryMode> mode;
 
         /**
@@ -1196,6 +1315,30 @@ public class Bundle extends Resource implements IBaseBundle {
         }
 
       @Override
+      public Base[] getProperty(int hash, String name, boolean checkValid) throws FHIRException {
+        switch (hash) {
+        case 3357091: /*mode*/ return this.mode == null ? new Base[0] : new Base[] {this.mode}; // Enumeration<SearchEntryMode>
+        case 109264530: /*score*/ return this.score == null ? new Base[0] : new Base[] {this.score}; // DecimalType
+        default: return super.getProperty(hash, name, checkValid);
+        }
+
+      }
+
+      @Override
+      public void setProperty(int hash, String name, Base value) throws FHIRException {
+        switch (hash) {
+        case 3357091: // mode
+          this.mode = new SearchEntryModeEnumFactory().fromType(value); // Enumeration<SearchEntryMode>
+          break;
+        case 109264530: // score
+          this.score = castToDecimal(value); // DecimalType
+          break;
+        default: super.setProperty(hash, name, value);
+        }
+
+      }
+
+      @Override
       public void setProperty(String name, Base value) throws FHIRException {
         if (name.equals("mode"))
           this.mode = new SearchEntryModeEnumFactory().fromType(value); // Enumeration<SearchEntryMode>
@@ -1203,6 +1346,16 @@ public class Bundle extends Resource implements IBaseBundle {
           this.score = castToDecimal(value); // DecimalType
         else
           super.setProperty(name, value);
+      }
+
+      @Override
+      public Base makeProperty(int hash, String name) throws FHIRException {
+        switch (hash) {
+        case 3357091: throw new FHIRException("Cannot make property mode as it is not a complex type"); // Enumeration<SearchEntryMode>
+        case 109264530: throw new FHIRException("Cannot make property score as it is not a complex type"); // DecimalType
+        default: return super.makeProperty(hash, name);
+        }
+
       }
 
       @Override
@@ -1246,8 +1399,7 @@ public class Bundle extends Resource implements IBaseBundle {
       }
 
       public boolean isEmpty() {
-        return super.isEmpty() && (mode == null || mode.isEmpty()) && (score == null || score.isEmpty())
-          ;
+        return super.isEmpty() && ca.uhn.fhir.util.ElementUtil.isEmpty(mode, score);
       }
 
   public String fhirType() {
@@ -1260,10 +1412,11 @@ public class Bundle extends Resource implements IBaseBundle {
     @Block()
     public static class BundleEntryRequestComponent extends BackboneElement implements IBaseBackboneElement {
         /**
-         * The HTTP verb for this entry in either a update history, or a transaction/ transaction response.
+         * The HTTP verb for this entry in either a change history, or a transaction/ transaction response.
          */
         @Child(name = "method", type = {CodeType.class}, order=1, min=1, max=1, modifier=false, summary=true)
-        @Description(shortDefinition="GET | POST | PUT | DELETE", formalDefinition="The HTTP verb for this entry in either a update history, or a transaction/ transaction response." )
+        @Description(shortDefinition="GET | POST | PUT | DELETE", formalDefinition="The HTTP verb for this entry in either a change history, or a transaction/ transaction response." )
+        @ca.uhn.fhir.model.api.annotation.Binding(valueSet="http://hl7.org/fhir/ValueSet/http-verb")
         protected Enumeration<HTTPVerb> method;
 
         /**
@@ -1320,7 +1473,7 @@ public class Bundle extends Resource implements IBaseBundle {
       }
 
         /**
-         * @return {@link #method} (The HTTP verb for this entry in either a update history, or a transaction/ transaction response.). This is the underlying object with id, value and extensions. The accessor "getMethod" gives direct access to the value
+         * @return {@link #method} (The HTTP verb for this entry in either a change history, or a transaction/ transaction response.). This is the underlying object with id, value and extensions. The accessor "getMethod" gives direct access to the value
          */
         public Enumeration<HTTPVerb> getMethodElement() { 
           if (this.method == null)
@@ -1340,7 +1493,7 @@ public class Bundle extends Resource implements IBaseBundle {
         }
 
         /**
-         * @param value {@link #method} (The HTTP verb for this entry in either a update history, or a transaction/ transaction response.). This is the underlying object with id, value and extensions. The accessor "getMethod" gives direct access to the value
+         * @param value {@link #method} (The HTTP verb for this entry in either a change history, or a transaction/ transaction response.). This is the underlying object with id, value and extensions. The accessor "getMethod" gives direct access to the value
          */
         public BundleEntryRequestComponent setMethodElement(Enumeration<HTTPVerb> value) { 
           this.method = value;
@@ -1348,14 +1501,14 @@ public class Bundle extends Resource implements IBaseBundle {
         }
 
         /**
-         * @return The HTTP verb for this entry in either a update history, or a transaction/ transaction response.
+         * @return The HTTP verb for this entry in either a change history, or a transaction/ transaction response.
          */
         public HTTPVerb getMethod() { 
           return this.method == null ? null : this.method.getValue();
         }
 
         /**
-         * @param value The HTTP verb for this entry in either a update history, or a transaction/ transaction response.
+         * @param value The HTTP verb for this entry in either a change history, or a transaction/ transaction response.
          */
         public BundleEntryRequestComponent setMethod(HTTPVerb value) { 
             if (this.method == null)
@@ -1607,13 +1760,53 @@ public class Bundle extends Resource implements IBaseBundle {
 
         protected void listChildren(List<Property> childrenList) {
           super.listChildren(childrenList);
-          childrenList.add(new Property("method", "code", "The HTTP verb for this entry in either a update history, or a transaction/ transaction response.", 0, java.lang.Integer.MAX_VALUE, method));
+          childrenList.add(new Property("method", "code", "The HTTP verb for this entry in either a change history, or a transaction/ transaction response.", 0, java.lang.Integer.MAX_VALUE, method));
           childrenList.add(new Property("url", "uri", "The URL for this entry, relative to the root (the address to which the request is posted).", 0, java.lang.Integer.MAX_VALUE, url));
           childrenList.add(new Property("ifNoneMatch", "string", "If the ETag values match, return a 304 Not modified status. See the API documentation for [\"Conditional Read\"](http.html#cread).", 0, java.lang.Integer.MAX_VALUE, ifNoneMatch));
           childrenList.add(new Property("ifModifiedSince", "instant", "Only perform the operation if the last updated date matches. See the API documentation for [\"Conditional Read\"](http.html#cread).", 0, java.lang.Integer.MAX_VALUE, ifModifiedSince));
           childrenList.add(new Property("ifMatch", "string", "Only perform the operation if the Etag value matches. For more information, see the API section [\"Managing Resource Contention\"](http.html#concurrency).", 0, java.lang.Integer.MAX_VALUE, ifMatch));
           childrenList.add(new Property("ifNoneExist", "string", "Instruct the server not to perform the create if a specified resource already exists. For further information, see the API documentation for [\"Conditional Create\"](http.html#ccreate). This is just the query portion of the URL - what follows the \"?\" (not including the \"?\").", 0, java.lang.Integer.MAX_VALUE, ifNoneExist));
         }
+
+      @Override
+      public Base[] getProperty(int hash, String name, boolean checkValid) throws FHIRException {
+        switch (hash) {
+        case -1077554975: /*method*/ return this.method == null ? new Base[0] : new Base[] {this.method}; // Enumeration<HTTPVerb>
+        case 116079: /*url*/ return this.url == null ? new Base[0] : new Base[] {this.url}; // UriType
+        case 171868368: /*ifNoneMatch*/ return this.ifNoneMatch == null ? new Base[0] : new Base[] {this.ifNoneMatch}; // StringType
+        case -2061602860: /*ifModifiedSince*/ return this.ifModifiedSince == null ? new Base[0] : new Base[] {this.ifModifiedSince}; // InstantType
+        case 1692894888: /*ifMatch*/ return this.ifMatch == null ? new Base[0] : new Base[] {this.ifMatch}; // StringType
+        case 165155330: /*ifNoneExist*/ return this.ifNoneExist == null ? new Base[0] : new Base[] {this.ifNoneExist}; // StringType
+        default: return super.getProperty(hash, name, checkValid);
+        }
+
+      }
+
+      @Override
+      public void setProperty(int hash, String name, Base value) throws FHIRException {
+        switch (hash) {
+        case -1077554975: // method
+          this.method = new HTTPVerbEnumFactory().fromType(value); // Enumeration<HTTPVerb>
+          break;
+        case 116079: // url
+          this.url = castToUri(value); // UriType
+          break;
+        case 171868368: // ifNoneMatch
+          this.ifNoneMatch = castToString(value); // StringType
+          break;
+        case -2061602860: // ifModifiedSince
+          this.ifModifiedSince = castToInstant(value); // InstantType
+          break;
+        case 1692894888: // ifMatch
+          this.ifMatch = castToString(value); // StringType
+          break;
+        case 165155330: // ifNoneExist
+          this.ifNoneExist = castToString(value); // StringType
+          break;
+        default: super.setProperty(hash, name, value);
+        }
+
+      }
 
       @Override
       public void setProperty(String name, Base value) throws FHIRException {
@@ -1631,6 +1824,20 @@ public class Bundle extends Resource implements IBaseBundle {
           this.ifNoneExist = castToString(value); // StringType
         else
           super.setProperty(name, value);
+      }
+
+      @Override
+      public Base makeProperty(int hash, String name) throws FHIRException {
+        switch (hash) {
+        case -1077554975: throw new FHIRException("Cannot make property method as it is not a complex type"); // Enumeration<HTTPVerb>
+        case 116079: throw new FHIRException("Cannot make property url as it is not a complex type"); // UriType
+        case 171868368: throw new FHIRException("Cannot make property ifNoneMatch as it is not a complex type"); // StringType
+        case -2061602860: throw new FHIRException("Cannot make property ifModifiedSince as it is not a complex type"); // InstantType
+        case 1692894888: throw new FHIRException("Cannot make property ifMatch as it is not a complex type"); // StringType
+        case 165155330: throw new FHIRException("Cannot make property ifNoneExist as it is not a complex type"); // StringType
+        default: return super.makeProperty(hash, name);
+        }
+
       }
 
       @Override
@@ -1694,10 +1901,8 @@ public class Bundle extends Resource implements IBaseBundle {
       }
 
       public boolean isEmpty() {
-        return super.isEmpty() && (method == null || method.isEmpty()) && (url == null || url.isEmpty())
-           && (ifNoneMatch == null || ifNoneMatch.isEmpty()) && (ifModifiedSince == null || ifModifiedSince.isEmpty())
-           && (ifMatch == null || ifMatch.isEmpty()) && (ifNoneExist == null || ifNoneExist.isEmpty())
-          ;
+        return super.isEmpty() && ca.uhn.fhir.util.ElementUtil.isEmpty(method, url, ifNoneMatch
+          , ifModifiedSince, ifMatch, ifNoneExist);
       }
 
   public String fhirType() {
@@ -1710,10 +1915,10 @@ public class Bundle extends Resource implements IBaseBundle {
     @Block()
     public static class BundleEntryResponseComponent extends BackboneElement implements IBaseBackboneElement {
         /**
-         * The status code returned by processing this entry.
+         * The status code returned by processing this entry. The status SHALL start with a 3 digit HTTP code (e.g. 404) and may contain the standard HTTP description associated with the status code.
          */
         @Child(name = "status", type = {StringType.class}, order=1, min=1, max=1, modifier=false, summary=true)
-        @Description(shortDefinition="Status return code for entry", formalDefinition="The status code returned by processing this entry." )
+        @Description(shortDefinition="Status response code (text optional)", formalDefinition="The status code returned by processing this entry. The status SHALL start with a 3 digit HTTP code (e.g. 404) and may contain the standard HTTP description associated with the status code." )
         protected StringType status;
 
         /**
@@ -1737,7 +1942,14 @@ public class Bundle extends Resource implements IBaseBundle {
         @Description(shortDefinition="Server's date time modified", formalDefinition="The date/time that the resource was modified on the server." )
         protected InstantType lastModified;
 
-        private static final long serialVersionUID = -1526413234L;
+        /**
+         * An OperationOutcome containing hints and warnings produced as part of processing this entry in a batch or transaction.
+         */
+        @Child(name = "outcome", type = {Resource.class}, order=5, min=0, max=1, modifier=false, summary=true)
+        @Description(shortDefinition="OperationOutcome with hints and warnings (for batch/transaction)", formalDefinition="An OperationOutcome containing hints and warnings produced as part of processing this entry in a batch or transaction." )
+        protected Resource outcome;
+
+        private static final long serialVersionUID = 923278008L;
 
     /**
      * Constructor
@@ -1755,7 +1967,7 @@ public class Bundle extends Resource implements IBaseBundle {
       }
 
         /**
-         * @return {@link #status} (The status code returned by processing this entry.). This is the underlying object with id, value and extensions. The accessor "getStatus" gives direct access to the value
+         * @return {@link #status} (The status code returned by processing this entry. The status SHALL start with a 3 digit HTTP code (e.g. 404) and may contain the standard HTTP description associated with the status code.). This is the underlying object with id, value and extensions. The accessor "getStatus" gives direct access to the value
          */
         public StringType getStatusElement() { 
           if (this.status == null)
@@ -1775,7 +1987,7 @@ public class Bundle extends Resource implements IBaseBundle {
         }
 
         /**
-         * @param value {@link #status} (The status code returned by processing this entry.). This is the underlying object with id, value and extensions. The accessor "getStatus" gives direct access to the value
+         * @param value {@link #status} (The status code returned by processing this entry. The status SHALL start with a 3 digit HTTP code (e.g. 404) and may contain the standard HTTP description associated with the status code.). This is the underlying object with id, value and extensions. The accessor "getStatus" gives direct access to the value
          */
         public BundleEntryResponseComponent setStatusElement(StringType value) { 
           this.status = value;
@@ -1783,14 +1995,14 @@ public class Bundle extends Resource implements IBaseBundle {
         }
 
         /**
-         * @return The status code returned by processing this entry.
+         * @return The status code returned by processing this entry. The status SHALL start with a 3 digit HTTP code (e.g. 404) and may contain the standard HTTP description associated with the status code.
          */
         public String getStatus() { 
           return this.status == null ? null : this.status.getValue();
         }
 
         /**
-         * @param value The status code returned by processing this entry.
+         * @param value The status code returned by processing this entry. The status SHALL start with a 3 digit HTTP code (e.g. 404) and may contain the standard HTTP description associated with the status code.
          */
         public BundleEntryResponseComponent setStatus(String value) { 
             if (this.status == null)
@@ -1946,13 +2158,69 @@ public class Bundle extends Resource implements IBaseBundle {
           return this;
         }
 
+        /**
+         * @return {@link #outcome} (An OperationOutcome containing hints and warnings produced as part of processing this entry in a batch or transaction.)
+         */
+        public Resource getOutcome() { 
+          return this.outcome;
+        }
+
+        public boolean hasOutcome() { 
+          return this.outcome != null && !this.outcome.isEmpty();
+        }
+
+        /**
+         * @param value {@link #outcome} (An OperationOutcome containing hints and warnings produced as part of processing this entry in a batch or transaction.)
+         */
+        public BundleEntryResponseComponent setOutcome(Resource value) { 
+          this.outcome = value;
+          return this;
+        }
+
         protected void listChildren(List<Property> childrenList) {
           super.listChildren(childrenList);
-          childrenList.add(new Property("status", "string", "The status code returned by processing this entry.", 0, java.lang.Integer.MAX_VALUE, status));
+          childrenList.add(new Property("status", "string", "The status code returned by processing this entry. The status SHALL start with a 3 digit HTTP code (e.g. 404) and may contain the standard HTTP description associated with the status code.", 0, java.lang.Integer.MAX_VALUE, status));
           childrenList.add(new Property("location", "uri", "The location header created by processing this operation.", 0, java.lang.Integer.MAX_VALUE, location));
           childrenList.add(new Property("etag", "string", "The etag for the resource, it the operation for the entry produced a versioned resource.", 0, java.lang.Integer.MAX_VALUE, etag));
           childrenList.add(new Property("lastModified", "instant", "The date/time that the resource was modified on the server.", 0, java.lang.Integer.MAX_VALUE, lastModified));
+          childrenList.add(new Property("outcome", "Resource", "An OperationOutcome containing hints and warnings produced as part of processing this entry in a batch or transaction.", 0, java.lang.Integer.MAX_VALUE, outcome));
         }
+
+      @Override
+      public Base[] getProperty(int hash, String name, boolean checkValid) throws FHIRException {
+        switch (hash) {
+        case -892481550: /*status*/ return this.status == null ? new Base[0] : new Base[] {this.status}; // StringType
+        case 1901043637: /*location*/ return this.location == null ? new Base[0] : new Base[] {this.location}; // UriType
+        case 3123477: /*etag*/ return this.etag == null ? new Base[0] : new Base[] {this.etag}; // StringType
+        case 1959003007: /*lastModified*/ return this.lastModified == null ? new Base[0] : new Base[] {this.lastModified}; // InstantType
+        case -1106507950: /*outcome*/ return this.outcome == null ? new Base[0] : new Base[] {this.outcome}; // Resource
+        default: return super.getProperty(hash, name, checkValid);
+        }
+
+      }
+
+      @Override
+      public void setProperty(int hash, String name, Base value) throws FHIRException {
+        switch (hash) {
+        case -892481550: // status
+          this.status = castToString(value); // StringType
+          break;
+        case 1901043637: // location
+          this.location = castToUri(value); // UriType
+          break;
+        case 3123477: // etag
+          this.etag = castToString(value); // StringType
+          break;
+        case 1959003007: // lastModified
+          this.lastModified = castToInstant(value); // InstantType
+          break;
+        case -1106507950: // outcome
+          this.outcome = castToResource(value); // Resource
+          break;
+        default: super.setProperty(hash, name, value);
+        }
+
+      }
 
       @Override
       public void setProperty(String name, Base value) throws FHIRException {
@@ -1964,8 +2232,23 @@ public class Bundle extends Resource implements IBaseBundle {
           this.etag = castToString(value); // StringType
         else if (name.equals("lastModified"))
           this.lastModified = castToInstant(value); // InstantType
+        else if (name.equals("outcome"))
+          this.outcome = castToResource(value); // Resource
         else
           super.setProperty(name, value);
+      }
+
+      @Override
+      public Base makeProperty(int hash, String name) throws FHIRException {
+        switch (hash) {
+        case -892481550: throw new FHIRException("Cannot make property status as it is not a complex type"); // StringType
+        case 1901043637: throw new FHIRException("Cannot make property location as it is not a complex type"); // UriType
+        case 3123477: throw new FHIRException("Cannot make property etag as it is not a complex type"); // StringType
+        case 1959003007: throw new FHIRException("Cannot make property lastModified as it is not a complex type"); // InstantType
+        case -1106507950: throw new FHIRException("Cannot make property outcome as it is not a complex type"); // Resource
+        default: return super.makeProperty(hash, name);
+        }
+
       }
 
       @Override
@@ -1982,6 +2265,9 @@ public class Bundle extends Resource implements IBaseBundle {
         else if (name.equals("lastModified")) {
           throw new FHIRException("Cannot call addChild on a primitive type Bundle.lastModified");
         }
+        else if (name.equals("outcome")) {
+          throw new FHIRException("Cannot call addChild on an abstract type Bundle.outcome");
+        }
         else
           return super.addChild(name);
       }
@@ -1993,6 +2279,7 @@ public class Bundle extends Resource implements IBaseBundle {
         dst.location = location == null ? null : location.copy();
         dst.etag = etag == null ? null : etag.copy();
         dst.lastModified = lastModified == null ? null : lastModified.copy();
+        dst.outcome = outcome == null ? null : outcome.copy();
         return dst;
       }
 
@@ -2004,7 +2291,7 @@ public class Bundle extends Resource implements IBaseBundle {
           return false;
         BundleEntryResponseComponent o = (BundleEntryResponseComponent) other;
         return compareDeep(status, o.status, true) && compareDeep(location, o.location, true) && compareDeep(etag, o.etag, true)
-           && compareDeep(lastModified, o.lastModified, true);
+           && compareDeep(lastModified, o.lastModified, true) && compareDeep(outcome, o.outcome, true);
       }
 
       @Override
@@ -2019,8 +2306,8 @@ public class Bundle extends Resource implements IBaseBundle {
       }
 
       public boolean isEmpty() {
-        return super.isEmpty() && (status == null || status.isEmpty()) && (location == null || location.isEmpty())
-           && (etag == null || etag.isEmpty()) && (lastModified == null || lastModified.isEmpty());
+        return super.isEmpty() && ca.uhn.fhir.util.ElementUtil.isEmpty(status, location, etag, lastModified
+          , outcome);
       }
 
   public String fhirType() {
@@ -2035,6 +2322,7 @@ public class Bundle extends Resource implements IBaseBundle {
      */
     @Child(name = "type", type = {CodeType.class}, order=0, min=1, max=1, modifier=false, summary=true)
     @Description(shortDefinition="document | message | transaction | transaction-response | batch | batch-response | history | searchset | collection", formalDefinition="Indicates the purpose of this bundle- how it was intended to be used." )
+    @ca.uhn.fhir.model.api.annotation.Binding(valueSet="http://hl7.org/fhir/ValueSet/bundle-type")
     protected Enumeration<BundleType> type;
 
     /**
@@ -2181,6 +2469,14 @@ public class Bundle extends Resource implements IBaseBundle {
       return this.link;
     }
 
+    /**
+     * @return Returns a reference to <code>this</code> for easy method chaining
+     */
+    public Bundle setLink(List<BundleLinkComponent> theLink) { 
+      this.link = theLink;
+      return this;
+    }
+
     public boolean hasLink() { 
       if (this.link == null)
         return false;
@@ -2190,10 +2486,6 @@ public class Bundle extends Resource implements IBaseBundle {
       return false;
     }
 
-    /**
-     * @return {@link #link} (A series of links that provide context to this bundle.)
-     */
-    // syntactic sugar
     public BundleLinkComponent addLink() { //3
       BundleLinkComponent t = new BundleLinkComponent();
       if (this.link == null)
@@ -2202,7 +2494,6 @@ public class Bundle extends Resource implements IBaseBundle {
       return t;
     }
 
-    // syntactic sugar
     public Bundle addLink(BundleLinkComponent t) { //3
       if (t == null)
         return this;
@@ -2210,6 +2501,16 @@ public class Bundle extends Resource implements IBaseBundle {
         this.link = new ArrayList<BundleLinkComponent>();
       this.link.add(t);
       return this;
+    }
+
+    /**
+     * @return The first repetition of repeating field {@link #link}, creating it if it does not already exist
+     */
+    public BundleLinkComponent getLinkFirstRep() { 
+      if (getLink().isEmpty()) {
+        addLink();
+      }
+      return getLink().get(0);
     }
 
     /**
@@ -2221,6 +2522,14 @@ public class Bundle extends Resource implements IBaseBundle {
       return this.entry;
     }
 
+    /**
+     * @return Returns a reference to <code>this</code> for easy method chaining
+     */
+    public Bundle setEntry(List<BundleEntryComponent> theEntry) { 
+      this.entry = theEntry;
+      return this;
+    }
+
     public boolean hasEntry() { 
       if (this.entry == null)
         return false;
@@ -2230,10 +2539,6 @@ public class Bundle extends Resource implements IBaseBundle {
       return false;
     }
 
-    /**
-     * @return {@link #entry} (An entry in a bundle resource - will either contain a resource, or information about a resource (transactions and history only).)
-     */
-    // syntactic sugar
     public BundleEntryComponent addEntry() { //3
       BundleEntryComponent t = new BundleEntryComponent();
       if (this.entry == null)
@@ -2242,7 +2547,6 @@ public class Bundle extends Resource implements IBaseBundle {
       return t;
     }
 
-    // syntactic sugar
     public Bundle addEntry(BundleEntryComponent t) { //3
       if (t == null)
         return this;
@@ -2250,6 +2554,16 @@ public class Bundle extends Resource implements IBaseBundle {
         this.entry = new ArrayList<BundleEntryComponent>();
       this.entry.add(t);
       return this;
+    }
+
+    /**
+     * @return The first repetition of repeating field {@link #entry}, creating it if it does not already exist
+     */
+    public BundleEntryComponent getEntryFirstRep() { 
+      if (getEntry().isEmpty()) {
+        addEntry();
+      }
+      return getEntry().get(0);
     }
 
     /**
@@ -2333,6 +2647,42 @@ public class Bundle extends Resource implements IBaseBundle {
       }
 
       @Override
+      public Base[] getProperty(int hash, String name, boolean checkValid) throws FHIRException {
+        switch (hash) {
+        case 3575610: /*type*/ return this.type == null ? new Base[0] : new Base[] {this.type}; // Enumeration<BundleType>
+        case 110549828: /*total*/ return this.total == null ? new Base[0] : new Base[] {this.total}; // UnsignedIntType
+        case 3321850: /*link*/ return this.link == null ? new Base[0] : this.link.toArray(new Base[this.link.size()]); // BundleLinkComponent
+        case 96667762: /*entry*/ return this.entry == null ? new Base[0] : this.entry.toArray(new Base[this.entry.size()]); // BundleEntryComponent
+        case 1073584312: /*signature*/ return this.signature == null ? new Base[0] : new Base[] {this.signature}; // Signature
+        default: return super.getProperty(hash, name, checkValid);
+        }
+
+      }
+
+      @Override
+      public void setProperty(int hash, String name, Base value) throws FHIRException {
+        switch (hash) {
+        case 3575610: // type
+          this.type = new BundleTypeEnumFactory().fromType(value); // Enumeration<BundleType>
+          break;
+        case 110549828: // total
+          this.total = castToUnsignedInt(value); // UnsignedIntType
+          break;
+        case 3321850: // link
+          this.getLink().add((BundleLinkComponent) value); // BundleLinkComponent
+          break;
+        case 96667762: // entry
+          this.getEntry().add((BundleEntryComponent) value); // BundleEntryComponent
+          break;
+        case 1073584312: // signature
+          this.signature = castToSignature(value); // Signature
+          break;
+        default: super.setProperty(hash, name, value);
+        }
+
+      }
+
+      @Override
       public void setProperty(String name, Base value) throws FHIRException {
         if (name.equals("type"))
           this.type = new BundleTypeEnumFactory().fromType(value); // Enumeration<BundleType>
@@ -2346,6 +2696,19 @@ public class Bundle extends Resource implements IBaseBundle {
           this.signature = castToSignature(value); // Signature
         else
           super.setProperty(name, value);
+      }
+
+      @Override
+      public Base makeProperty(int hash, String name) throws FHIRException {
+        switch (hash) {
+        case 3575610: throw new FHIRException("Cannot make property type as it is not a complex type"); // Enumeration<BundleType>
+        case 110549828: throw new FHIRException("Cannot make property total as it is not a complex type"); // UnsignedIntType
+        case 3321850:  return addLink(); // BundleLinkComponent
+        case 96667762:  return addEntry(); // BundleEntryComponent
+        case 1073584312:  return getSignature(); // Signature
+        default: return super.makeProperty(hash, name);
+        }
+
       }
 
       @Override
@@ -2420,9 +2783,8 @@ public class Bundle extends Resource implements IBaseBundle {
       }
 
       public boolean isEmpty() {
-        return super.isEmpty() && (type == null || type.isEmpty()) && (total == null || total.isEmpty())
-           && (link == null || link.isEmpty()) && (entry == null || entry.isEmpty()) && (signature == null || signature.isEmpty())
-          ;
+        return super.isEmpty() && ca.uhn.fhir.util.ElementUtil.isEmpty(type, total, link, entry
+          , signature);
       }
 
   @Override
@@ -2435,17 +2797,17 @@ public class Bundle extends Resource implements IBaseBundle {
    * <p>
    * Description: <b>The first resource in the bundle, if the bundle type is "document" - this is a composition, and this parameter provides access to searches its contents</b><br>
    * Type: <b>reference</b><br>
-   * Path: <b>Bundle.entry.resource(0)</b><br>
+   * Path: <b>Bundle.entry(0).resource</b><br>
    * </p>
    */
-  @SearchParamDefinition(name="composition", path="Bundle.entry.resource.item(0)", description="The first resource in the bundle, if the bundle type is \"document\" - this is a composition, and this parameter provides access to searches its contents", type="reference" )
+  @SearchParamDefinition(name="composition", path="Bundle.entry[0].resource", description="The first resource in the bundle, if the bundle type is \"document\" - this is a composition, and this parameter provides access to searches its contents", type="reference", target={Composition.class } )
   public static final String SP_COMPOSITION = "composition";
  /**
    * <b>Fluent Client</b> search parameter constant for <b>composition</b>
    * <p>
    * Description: <b>The first resource in the bundle, if the bundle type is "document" - this is a composition, and this parameter provides access to searches its contents</b><br>
    * Type: <b>reference</b><br>
-   * Path: <b>Bundle.entry.resource(0)</b><br>
+   * Path: <b>Bundle.entry(0).resource</b><br>
    * </p>
    */
   public static final ca.uhn.fhir.rest.gclient.ReferenceClientParam COMPOSITION = new ca.uhn.fhir.rest.gclient.ReferenceClientParam(SP_COMPOSITION);
@@ -2481,17 +2843,17 @@ public class Bundle extends Resource implements IBaseBundle {
    * <p>
    * Description: <b>The first resource in the bundle, if the bundle type is "message" - this is a message header, and this parameter provides access to search its contents</b><br>
    * Type: <b>reference</b><br>
-   * Path: <b>Bundle.entry.resource(0)</b><br>
+   * Path: <b>Bundle.entry(0).resource</b><br>
    * </p>
    */
-  @SearchParamDefinition(name="message", path="Bundle.entry.resource.item(0)", description="The first resource in the bundle, if the bundle type is \"message\" - this is a message header, and this parameter provides access to search its contents", type="reference" )
+  @SearchParamDefinition(name="message", path="Bundle.entry[0].resource", description="The first resource in the bundle, if the bundle type is \"message\" - this is a message header, and this parameter provides access to search its contents", type="reference", target={MessageHeader.class } )
   public static final String SP_MESSAGE = "message";
  /**
    * <b>Fluent Client</b> search parameter constant for <b>message</b>
    * <p>
    * Description: <b>The first resource in the bundle, if the bundle type is "message" - this is a message header, and this parameter provides access to search its contents</b><br>
    * Type: <b>reference</b><br>
-   * Path: <b>Bundle.entry.resource(0)</b><br>
+   * Path: <b>Bundle.entry(0).resource</b><br>
    * </p>
    */
   public static final ca.uhn.fhir.rest.gclient.ReferenceClientParam MESSAGE = new ca.uhn.fhir.rest.gclient.ReferenceClientParam(SP_MESSAGE);

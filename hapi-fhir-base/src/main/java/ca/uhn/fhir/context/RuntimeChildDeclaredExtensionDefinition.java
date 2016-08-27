@@ -138,6 +138,7 @@ public class RuntimeChildDeclaredExtensionDefinition extends BaseRuntimeDeclared
 		return myDefinedLocally;
 	}
 
+	@Override
 	public boolean isModifier() {
 		return myModifier;
 	}
@@ -157,6 +158,15 @@ public class RuntimeChildDeclaredExtensionDefinition extends BaseRuntimeDeclared
 		myUrlToChildExtension = new HashMap<String, RuntimeChildDeclaredExtensionDefinition>();
 		
 		BaseRuntimeElementDefinition<?> elementDef = theClassToElementDefinitions.get(myChildType);
+		
+		/*
+		 * This will happen for any type that isn't defined in the base set of 
+		 * built-in types, e.g. custom structures or custom extensions
+		 */
+		if (elementDef == null) {
+			elementDef = theContext.getElementDefinition(myChildType);
+		}
+		
 		if (elementDef instanceof RuntimePrimitiveDatatypeDefinition || elementDef instanceof RuntimeCompositeDatatypeDefinition) {
 			myDatatypeChildName = "value" + elementDef.getName().substring(0, 1).toUpperCase() + elementDef.getName().substring(1);
 			if ("valueResourceReference".equals(myDatatypeChildName)) {
@@ -164,7 +174,7 @@ public class RuntimeChildDeclaredExtensionDefinition extends BaseRuntimeDeclared
 				myDatatypeChildName = "valueResource";
 				List<Class<? extends IBaseResource>> types = new ArrayList<Class<? extends IBaseResource>>();
 				types.add(IResource.class);
-				myChildDef = new RuntimeResourceReferenceDefinition("valueResource", types, false);
+				myChildDef = findResourceReferenceDefinition(theClassToElementDefinitions);
 			} else {
 				myChildDef = elementDef;
 			}

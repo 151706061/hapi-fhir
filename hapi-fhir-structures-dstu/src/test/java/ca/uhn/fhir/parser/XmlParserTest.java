@@ -1,7 +1,16 @@
 package ca.uhn.fhir.parser;
 
-import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.*;
+import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.stringContainsInOrder;
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -22,6 +31,7 @@ import org.hamcrest.core.StringContains;
 import org.hamcrest.text.StringContainsInOrder;
 import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.hl7.fhir.instance.model.api.INarrative;
+import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.xml.sax.SAXException;
@@ -35,7 +45,6 @@ import ca.uhn.fhir.model.api.ExtensionDt;
 import ca.uhn.fhir.model.api.IResource;
 import ca.uhn.fhir.model.api.ResourceMetadataKeyEnum;
 import ca.uhn.fhir.model.api.TagList;
-import ca.uhn.fhir.model.base.composite.BaseNarrativeDt;
 import ca.uhn.fhir.model.dstu.composite.AddressDt;
 import ca.uhn.fhir.model.dstu.composite.AttachmentDt;
 import ca.uhn.fhir.model.dstu.composite.CodeableConceptDt;
@@ -43,6 +52,7 @@ import ca.uhn.fhir.model.dstu.composite.HumanNameDt;
 import ca.uhn.fhir.model.dstu.composite.ResourceReferenceDt;
 import ca.uhn.fhir.model.dstu.resource.AllergyIntolerance;
 import ca.uhn.fhir.model.dstu.resource.Binary;
+import ca.uhn.fhir.model.dstu.resource.CarePlan;
 import ca.uhn.fhir.model.dstu.resource.Composition;
 import ca.uhn.fhir.model.dstu.resource.Condition;
 import ca.uhn.fhir.model.dstu.resource.Conformance;
@@ -66,12 +76,14 @@ import ca.uhn.fhir.model.primitive.DateDt;
 import ca.uhn.fhir.model.primitive.DateTimeDt;
 import ca.uhn.fhir.model.primitive.DecimalDt;
 import ca.uhn.fhir.model.primitive.IdDt;
+import ca.uhn.fhir.model.primitive.IdrefDt;
 import ca.uhn.fhir.model.primitive.InstantDt;
 import ca.uhn.fhir.model.primitive.StringDt;
 import ca.uhn.fhir.narrative.DefaultThymeleafNarrativeGenerator;
 import ca.uhn.fhir.narrative.INarrativeGenerator;
 import ca.uhn.fhir.parser.JsonParserTest.MyPatientWithOneDeclaredAddressExtension;
 import ca.uhn.fhir.parser.JsonParserTest.MyPatientWithOneDeclaredExtension;
+import ca.uhn.fhir.util.TestUtil;
 
 public class XmlParserTest {
 
@@ -92,7 +104,29 @@ public class XmlParserTest {
 		// comp.
 
 	}
+	
+	@Test
+	public void testUnknownElementInDstu1() throws Exception {
+		String input = IOUtils.toString(getClass().getResourceAsStream("/old_07_feed.xml"));
+		Bundle b = ourCtx.newXmlParser().parseBundle(input);
+		assertEquals(1, b.getEntries().size());
+	}
 
+	@Test
+	public void testEncodeAndParseIdref() {
+		CarePlan cp = new CarePlan();
+		cp.addGoal().setNotes("Goal Notes").setElementSpecificId("goalId0");
+		
+		IdrefDt idref = new IdrefDt();
+		idref.setValue("#goalId0");
+		idref.setTarget(cp);
+		idref.getTarget();
+		cp.addActivity().getGoal().add(idref);
+		
+		String encoded = ourCtx.newXmlParser().setPrettyPrint(true).encodeResourceToString(cp);
+		ourLog.info(encoded);
+	}
+	
 	/**
 	 * Test for #82 - Not yet enabled because the test won't pass
 	 */
@@ -149,7 +183,7 @@ public class XmlParserTest {
 		MyPatientWithUnorderedExtensions pat = new MyPatientWithUnorderedExtensions();
 		pat.getExtAtt1().setValue(true);
 		pat.getExtAtt2().setValue("val2");
-		pat.getExtAtt3().setValueAsString("20110102");
+		pat.getExtAtt3().setValueAsString("2011-01-02");
 
 		String string = ourCtx.newXmlParser().encodeResourceToString(pat);
 		ourLog.info(string);
@@ -158,7 +192,7 @@ public class XmlParserTest {
 		assertThat(string, stringContainsInOrder(Arrays.asList(
 			"<extension url=\"urn:ex1\"><valueBoolean value=\"true\"/></extension>",
 			"<extension url=\"urn:ex2\"><valueString value=\"val2\"/></extension>",
-			"<extension url=\"urn:ex3\"><valueDate value=\"20110102\"/></extension>"
+			"<extension url=\"urn:ex3\"><valueDate value=\"2011-01-02\"/></extension>"
 			)));
 		//@formatter:on
 
@@ -711,8 +745,9 @@ public class XmlParserTest {
 		patient.addUndeclaredExtension(false, "urn:foo", new ResourceReferenceDt("Organization/123"));
 
 		String val = parser.encodeResourceToString(patient);
-		ourLog.info(val);
 		assertThat(val, StringContains.containsString("<extension url=\"urn:foo\"><valueResource><reference value=\"Organization/123\"/></valueResource></extension>"));
+		
+		ourLog.info(ourCtx.newXmlParser().setPrettyPrint(true).encodeResourceToString(patient));
 
 		Patient actual = parser.parseResource(Patient.class, val);
 		assertEquals(AddressUseEnum.HOME, patient.getAddressFirstRep().getUse().getValueAsEnum());
@@ -875,7 +910,12 @@ public class XmlParserTest {
 		String val = ourCtx.newXmlParser().encodeResourceToString(q);
 		ourLog.info(val);
 
-		assertEquals("<Query xmlns=\"http://hl7.org/fhir\"><parameter url=\"http://foo\"><valueString value=\"bar\"/></parameter></Query>", val);
+		String expected = "<Query xmlns=\"http://hl7.org/fhir\"><parameter url=\"http://foo\"><valueString value=\"bar\"/></parameter></Query>";
+		
+		ourLog.info("Expected: {}", expected);
+		ourLog.info("Actual  : {}", val);
+		
+		assertEquals(expected, val);
 
 	}
 
@@ -1033,9 +1073,6 @@ public class XmlParserTest {
 				"	<extension url=\"http://foo/#f1\">\n" + 
 				"		<valueString value=\"Foo1Value2\"/>\n" + 
 				"	</extension>\n" + 
-				"	<modifierExtension url=\"http://foo/#f2\">\n" + 
-				"		<valueString value=\"Foo2Value1\"/>\n" + 
-				"	</modifierExtension>\n" + 
 				"	<extension url=\"http://bar/#b1\">\n" + 
 				"		<extension url=\"http://bar/#b1/1\">\n" +
 				"			<valueDate value=\"2013-01-01\"/>\n" +
@@ -1052,6 +1089,9 @@ public class XmlParserTest {
 				"			</extension>\n" + 
 				"		</extension>\n" + 
 				"	</extension>\n" + 
+				"	<modifierExtension url=\"http://foo/#f2\">\n" + 
+				"		<valueString value=\"Foo2Value1\"/>\n" + 
+				"	</modifierExtension>\n" + 
 				"	<identifier>\n" + 
 				"		<label value=\"IdentifierLabel\"/>\n" + 
 				"	</identifier>\n" + 
@@ -1951,4 +1991,10 @@ public class XmlParserTest {
 		 System.setProperty("file.encoding", "ISO-8859-1");
 	}
 	
+
+	@AfterClass
+	public static void afterClassClearContext() {
+		TestUtil.clearAllStaticFieldsForUnitTest();
+	}
+
 }

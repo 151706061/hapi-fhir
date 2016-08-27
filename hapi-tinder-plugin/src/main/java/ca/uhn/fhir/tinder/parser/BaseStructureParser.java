@@ -4,6 +4,7 @@ import static org.apache.commons.lang.StringUtils.defaultString;
 import static org.apache.commons.lang.StringUtils.isNotBlank;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -37,6 +38,8 @@ import ca.uhn.fhir.model.api.IResource;
 import ca.uhn.fhir.model.api.annotation.SimpleSetter;
 import ca.uhn.fhir.model.dstu.composite.ResourceReferenceDt;
 import ca.uhn.fhir.model.dstu.resource.Binary;
+import ca.uhn.fhir.model.primitive.BoundCodeDt;
+import ca.uhn.fhir.model.primitive.BoundCodeableConceptDt;
 import ca.uhn.fhir.tinder.TinderStructuresMojo;
 import ca.uhn.fhir.tinder.ValueSetGenerator;
 import ca.uhn.fhir.tinder.model.BaseElement;
@@ -172,6 +175,8 @@ public abstract class BaseStructureParser {
 	}
 
 	protected abstract String getTemplate();
+	
+	protected abstract File getTemplateFile();
 
 	protected boolean isSpreadsheet(String theFileName) {
 		return true;
@@ -246,6 +251,9 @@ public abstract class BaseStructureParser {
 		if ("Binary".equals(nextType)) {
 			return "ca.uhn.fhir.model." + myVersion + ".resource." + Binary.class.getSimpleName();
 		}
+		if ("ListResource".equals(nextType)) {
+			return "ca.uhn.fhir.model." + myVersion + ".resource.ListResource";
+		}
 		// if ("BoundCodeableConceptDt".equals(theNextType)) {
 		// return "ca.uhn.fhir.model." + myVersion + ".composite.BoundCodeableConceptDt";
 		// }
@@ -316,6 +324,7 @@ public abstract class BaseStructureParser {
 			ourLog.debug("Element Name: {}", next.getName());
 			if (next instanceof SimpleChild) {
 				for (String nextType : next.getType()) {
+					ourLog.debug("* Element Type: {}", nextType);
 					if (((SimpleChild) next).isBoundCode()) {
 						scanForImportsNames(((SimpleChild) next).getBoundDatatype());
 					}
@@ -480,7 +489,10 @@ public abstract class BaseStructureParser {
 		v.setProperty("cp.resource.loader.class", "org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader");
 		v.setProperty("runtime.references.strict", Boolean.TRUE);
 
-		InputStream templateIs = ResourceGeneratorUsingSpreadsheet.class.getResourceAsStream(getTemplate());
+		InputStream templateIs =
+			getTemplateFile() != null
+				? new FileInputStream(getTemplateFile())
+				: ResourceGeneratorUsingSpreadsheet.class.getResourceAsStream(getTemplate());
 		InputStreamReader templateReader = new InputStreamReader(templateIs);
 		v.evaluate(ctx, w, "", templateReader);
 
@@ -507,8 +519,9 @@ public abstract class BaseStructureParser {
 		}
 
 		if (!myImportsResolved) {
+			ourLog.info("Scanning resources for imports...");
 			for (BaseRootType next : myResources) {
-				ourLog.info("Scanning resource for imports {}", next.getName());
+				ourLog.debug("Scanning resource for imports {}", next.getName());
 				scanForImportsNames(next);
 			}
 			myImportsResolved = true;
@@ -524,7 +537,14 @@ public abstract class BaseStructureParser {
 			// File f = new File(theOutputDirectory, (next.getDeclaringClassNameComplete()) /*+ getFilenameSuffix()*/ +
 			// ".java");
 			String elementName = Resource.correctName(next.getElementName());
-			File f = new File(theOutputDirectory, elementName + getFilenameSuffix() + ".java");
+			String fwork = getFilenameSuffix();
+			// TODO -- how to generate multiple non-Java files??
+			if (fwork.endsWith(".java")) {
+				fwork = elementName + fwork;
+			} else {
+				fwork = elementName + fwork + ".java";
+			}
+			File f = new File(theOutputDirectory, fwork);
 			try {
 				write(next, f, thePackageBase);
 			} catch (IOException e) {
@@ -544,7 +564,16 @@ public abstract class BaseStructureParser {
 
 			// Binary is manually generated but should still go in the list
 			myNameToResourceClass.put("Binary", thePackageBase + ".resource.Binary");
+			myNameToDatatypeClass.put("Extension", ExtensionDt.class.getName());
 
+			if (determineVersionEnum() == FhirVersionEnum.DSTU1) {
+				myNameToDatatypeClass.put("boundCode", BoundCodeDt.class.getName());
+				myNameToDatatypeClass.put("boundCodeableConcept", BoundCodeableConceptDt.class.getName());
+			} else if (determineVersionEnum() == FhirVersionEnum.DSTU2) {
+				myNameToDatatypeClass.put("boundCode", BoundCodeDt.class.getName());
+				myNameToDatatypeClass.put("boundCodeableConcept", ca.uhn.fhir.model.dstu2.composite.BoundCodeableConceptDt.class.getName());
+			}
+			
 			try {
 				File versionFile = new File(theResourceOutputDirectory, "fhirversion.properties");
 				OutputStreamWriter w = new OutputStreamWriter(new FileOutputStream(versionFile, false), "UTF-8");

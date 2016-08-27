@@ -29,7 +29,7 @@ package org.hl7.fhir.dstu3.model;
   
 */
 
-// Generated on Sat, Jan 30, 2016 09:18-0500 for FHIR v1.3.0
+// Generated on Thu, Aug 25, 2016 23:04-0400 for FHIR v1.6.0
 
 import java.util.*;
 
@@ -38,11 +38,11 @@ import org.hl7.fhir.utilities.Utilities;
 import ca.uhn.fhir.model.api.annotation.ResourceDef;
 import ca.uhn.fhir.model.api.annotation.SearchParamDefinition;
 import ca.uhn.fhir.model.api.annotation.Child;
+import ca.uhn.fhir.model.api.annotation.ChildOrder;
 import ca.uhn.fhir.model.api.annotation.Description;
 import ca.uhn.fhir.model.api.annotation.Block;
-
-import org.hl7.fhir.dstu3.exceptions.FHIRException;
 import org.hl7.fhir.instance.model.api.*;
+import org.hl7.fhir.dstu3.exceptions.FHIRException;
 /**
  * An authorization for the supply of glasses and/or contact lenses to a patient.
  */
@@ -59,7 +59,7 @@ public class VisionPrescription extends DomainResource {
          */
         LEFT, 
         /**
-         * added to help the parsers
+         * added to help the parsers with the generic types
          */
         NULL;
         public static VisionEyes fromCode(String codeString) throws FHIRException {
@@ -69,7 +69,10 @@ public class VisionPrescription extends DomainResource {
           return RIGHT;
         if ("left".equals(codeString))
           return LEFT;
-        throw new FHIRException("Unknown VisionEyes code '"+codeString+"'");
+        if (Configuration.isAcceptInvalidEnums())
+          return null;
+        else
+          throw new FHIRException("Unknown VisionEyes code '"+codeString+"'");
         }
         public String toCode() {
           switch (this) {
@@ -154,7 +157,7 @@ public class VisionPrescription extends DomainResource {
          */
         OUT, 
         /**
-         * added to help the parsers
+         * added to help the parsers with the generic types
          */
         NULL;
         public static VisionBase fromCode(String codeString) throws FHIRException {
@@ -168,7 +171,10 @@ public class VisionPrescription extends DomainResource {
           return IN;
         if ("out".equals(codeString))
           return OUT;
-        throw new FHIRException("Unknown VisionBase code '"+codeString+"'");
+        if (Configuration.isAcceptInvalidEnums())
+          return null;
+        else
+          throw new FHIRException("Unknown VisionBase code '"+codeString+"'");
         }
         public String toCode() {
           switch (this) {
@@ -262,6 +268,7 @@ public class VisionPrescription extends DomainResource {
          */
         @Child(name = "product", type = {Coding.class}, order=1, min=1, max=1, modifier=false, summary=true)
         @Description(shortDefinition="Product to be supplied", formalDefinition="Identifies the type of vision correction product which is required for the patient." )
+        @ca.uhn.fhir.model.api.annotation.Binding(valueSet="http://hl7.org/fhir/ValueSet/vision-product")
         protected Coding product;
 
         /**
@@ -269,6 +276,7 @@ public class VisionPrescription extends DomainResource {
          */
         @Child(name = "eye", type = {CodeType.class}, order=2, min=0, max=1, modifier=false, summary=true)
         @Description(shortDefinition="right | left", formalDefinition="The eye for which the lens applies." )
+        @ca.uhn.fhir.model.api.annotation.Binding(valueSet="http://hl7.org/fhir/ValueSet/vision-eye-codes")
         protected Enumeration<VisionEyes> eye;
 
         /**
@@ -304,6 +312,7 @@ public class VisionPrescription extends DomainResource {
          */
         @Child(name = "base", type = {CodeType.class}, order=7, min=0, max=1, modifier=false, summary=true)
         @Description(shortDefinition="up | down | in | out", formalDefinition="The relative base, or reference lens edge, for the prism." )
+        @ca.uhn.fhir.model.api.annotation.Binding(valueSet="http://hl7.org/fhir/ValueSet/vision-base-codes")
         protected Enumeration<VisionBase> base;
 
         /**
@@ -345,14 +354,14 @@ public class VisionPrescription extends DomainResource {
          * Special color or pattern.
          */
         @Child(name = "color", type = {StringType.class}, order=13, min=0, max=1, modifier=false, summary=true)
-        @Description(shortDefinition="Lens add", formalDefinition="Special color or pattern." )
+        @Description(shortDefinition="Color required", formalDefinition="Special color or pattern." )
         protected StringType color;
 
         /**
          * Brand recommendations or restrictions.
          */
         @Child(name = "brand", type = {StringType.class}, order=14, min=0, max=1, modifier=false, summary=true)
-        @Description(shortDefinition="Lens add", formalDefinition="Brand recommendations or restrictions." )
+        @Description(shortDefinition="Brand required", formalDefinition="Brand recommendations or restrictions." )
         protected StringType brand;
 
         /**
@@ -1206,6 +1215,82 @@ public class VisionPrescription extends DomainResource {
         }
 
       @Override
+      public Base[] getProperty(int hash, String name, boolean checkValid) throws FHIRException {
+        switch (hash) {
+        case -309474065: /*product*/ return this.product == null ? new Base[0] : new Base[] {this.product}; // Coding
+        case 100913: /*eye*/ return this.eye == null ? new Base[0] : new Base[] {this.eye}; // Enumeration<VisionEyes>
+        case -895981619: /*sphere*/ return this.sphere == null ? new Base[0] : new Base[] {this.sphere}; // DecimalType
+        case -349378602: /*cylinder*/ return this.cylinder == null ? new Base[0] : new Base[] {this.cylinder}; // DecimalType
+        case 3008417: /*axis*/ return this.axis == null ? new Base[0] : new Base[] {this.axis}; // IntegerType
+        case 106935105: /*prism*/ return this.prism == null ? new Base[0] : new Base[] {this.prism}; // DecimalType
+        case 3016401: /*base*/ return this.base == null ? new Base[0] : new Base[] {this.base}; // Enumeration<VisionBase>
+        case 96417: /*add*/ return this.add == null ? new Base[0] : new Base[] {this.add}; // DecimalType
+        case 106858757: /*power*/ return this.power == null ? new Base[0] : new Base[] {this.power}; // DecimalType
+        case 1309344840: /*backCurve*/ return this.backCurve == null ? new Base[0] : new Base[] {this.backCurve}; // DecimalType
+        case -233204595: /*diameter*/ return this.diameter == null ? new Base[0] : new Base[] {this.diameter}; // DecimalType
+        case -1992012396: /*duration*/ return this.duration == null ? new Base[0] : new Base[] {this.duration}; // SimpleQuantity
+        case 94842723: /*color*/ return this.color == null ? new Base[0] : new Base[] {this.color}; // StringType
+        case 93997959: /*brand*/ return this.brand == null ? new Base[0] : new Base[] {this.brand}; // StringType
+        case 105008833: /*notes*/ return this.notes == null ? new Base[0] : new Base[] {this.notes}; // StringType
+        default: return super.getProperty(hash, name, checkValid);
+        }
+
+      }
+
+      @Override
+      public void setProperty(int hash, String name, Base value) throws FHIRException {
+        switch (hash) {
+        case -309474065: // product
+          this.product = castToCoding(value); // Coding
+          break;
+        case 100913: // eye
+          this.eye = new VisionEyesEnumFactory().fromType(value); // Enumeration<VisionEyes>
+          break;
+        case -895981619: // sphere
+          this.sphere = castToDecimal(value); // DecimalType
+          break;
+        case -349378602: // cylinder
+          this.cylinder = castToDecimal(value); // DecimalType
+          break;
+        case 3008417: // axis
+          this.axis = castToInteger(value); // IntegerType
+          break;
+        case 106935105: // prism
+          this.prism = castToDecimal(value); // DecimalType
+          break;
+        case 3016401: // base
+          this.base = new VisionBaseEnumFactory().fromType(value); // Enumeration<VisionBase>
+          break;
+        case 96417: // add
+          this.add = castToDecimal(value); // DecimalType
+          break;
+        case 106858757: // power
+          this.power = castToDecimal(value); // DecimalType
+          break;
+        case 1309344840: // backCurve
+          this.backCurve = castToDecimal(value); // DecimalType
+          break;
+        case -233204595: // diameter
+          this.diameter = castToDecimal(value); // DecimalType
+          break;
+        case -1992012396: // duration
+          this.duration = castToSimpleQuantity(value); // SimpleQuantity
+          break;
+        case 94842723: // color
+          this.color = castToString(value); // StringType
+          break;
+        case 93997959: // brand
+          this.brand = castToString(value); // StringType
+          break;
+        case 105008833: // notes
+          this.notes = castToString(value); // StringType
+          break;
+        default: super.setProperty(hash, name, value);
+        }
+
+      }
+
+      @Override
       public void setProperty(String name, Base value) throws FHIRException {
         if (name.equals("product"))
           this.product = castToCoding(value); // Coding
@@ -1239,6 +1324,29 @@ public class VisionPrescription extends DomainResource {
           this.notes = castToString(value); // StringType
         else
           super.setProperty(name, value);
+      }
+
+      @Override
+      public Base makeProperty(int hash, String name) throws FHIRException {
+        switch (hash) {
+        case -309474065:  return getProduct(); // Coding
+        case 100913: throw new FHIRException("Cannot make property eye as it is not a complex type"); // Enumeration<VisionEyes>
+        case -895981619: throw new FHIRException("Cannot make property sphere as it is not a complex type"); // DecimalType
+        case -349378602: throw new FHIRException("Cannot make property cylinder as it is not a complex type"); // DecimalType
+        case 3008417: throw new FHIRException("Cannot make property axis as it is not a complex type"); // IntegerType
+        case 106935105: throw new FHIRException("Cannot make property prism as it is not a complex type"); // DecimalType
+        case 3016401: throw new FHIRException("Cannot make property base as it is not a complex type"); // Enumeration<VisionBase>
+        case 96417: throw new FHIRException("Cannot make property add as it is not a complex type"); // DecimalType
+        case 106858757: throw new FHIRException("Cannot make property power as it is not a complex type"); // DecimalType
+        case 1309344840: throw new FHIRException("Cannot make property backCurve as it is not a complex type"); // DecimalType
+        case -233204595: throw new FHIRException("Cannot make property diameter as it is not a complex type"); // DecimalType
+        case -1992012396:  return getDuration(); // SimpleQuantity
+        case 94842723: throw new FHIRException("Cannot make property color as it is not a complex type"); // StringType
+        case 93997959: throw new FHIRException("Cannot make property brand as it is not a complex type"); // StringType
+        case 105008833: throw new FHIRException("Cannot make property notes as it is not a complex type"); // StringType
+        default: return super.makeProperty(hash, name);
+        }
+
       }
 
       @Override
@@ -1345,12 +1453,9 @@ public class VisionPrescription extends DomainResource {
       }
 
       public boolean isEmpty() {
-        return super.isEmpty() && (product == null || product.isEmpty()) && (eye == null || eye.isEmpty())
-           && (sphere == null || sphere.isEmpty()) && (cylinder == null || cylinder.isEmpty()) && (axis == null || axis.isEmpty())
-           && (prism == null || prism.isEmpty()) && (base == null || base.isEmpty()) && (add == null || add.isEmpty())
-           && (power == null || power.isEmpty()) && (backCurve == null || backCurve.isEmpty()) && (diameter == null || diameter.isEmpty())
-           && (duration == null || duration.isEmpty()) && (color == null || color.isEmpty()) && (brand == null || brand.isEmpty())
-           && (notes == null || notes.isEmpty());
+        return super.isEmpty() && ca.uhn.fhir.util.ElementUtil.isEmpty(product, eye, sphere, cylinder
+          , axis, prism, base, add, power, backCurve, diameter, duration, color, brand
+          , notes);
       }
 
   public String fhirType() {
@@ -1442,6 +1547,14 @@ public class VisionPrescription extends DomainResource {
       return this.identifier;
     }
 
+    /**
+     * @return Returns a reference to <code>this</code> for easy method chaining
+     */
+    public VisionPrescription setIdentifier(List<Identifier> theIdentifier) { 
+      this.identifier = theIdentifier;
+      return this;
+    }
+
     public boolean hasIdentifier() { 
       if (this.identifier == null)
         return false;
@@ -1451,10 +1564,6 @@ public class VisionPrescription extends DomainResource {
       return false;
     }
 
-    /**
-     * @return {@link #identifier} (Business identifier which may be used by other parties to reference or identify the prescription.)
-     */
-    // syntactic sugar
     public Identifier addIdentifier() { //3
       Identifier t = new Identifier();
       if (this.identifier == null)
@@ -1463,7 +1572,6 @@ public class VisionPrescription extends DomainResource {
       return t;
     }
 
-    // syntactic sugar
     public VisionPrescription addIdentifier(Identifier t) { //3
       if (t == null)
         return this;
@@ -1471,6 +1579,16 @@ public class VisionPrescription extends DomainResource {
         this.identifier = new ArrayList<Identifier>();
       this.identifier.add(t);
       return this;
+    }
+
+    /**
+     * @return The first repetition of repeating field {@link #identifier}, creating it if it does not already exist
+     */
+    public Identifier getIdentifierFirstRep() { 
+      if (getIdentifier().isEmpty()) {
+        addIdentifier();
+      }
+      return getIdentifier().get(0);
     }
 
     /**
@@ -1708,6 +1826,14 @@ public class VisionPrescription extends DomainResource {
       return this.dispense;
     }
 
+    /**
+     * @return Returns a reference to <code>this</code> for easy method chaining
+     */
+    public VisionPrescription setDispense(List<VisionPrescriptionDispenseComponent> theDispense) { 
+      this.dispense = theDispense;
+      return this;
+    }
+
     public boolean hasDispense() { 
       if (this.dispense == null)
         return false;
@@ -1717,10 +1843,6 @@ public class VisionPrescription extends DomainResource {
       return false;
     }
 
-    /**
-     * @return {@link #dispense} (Deals with details of the dispense part of the supply specification.)
-     */
-    // syntactic sugar
     public VisionPrescriptionDispenseComponent addDispense() { //3
       VisionPrescriptionDispenseComponent t = new VisionPrescriptionDispenseComponent();
       if (this.dispense == null)
@@ -1729,7 +1851,6 @@ public class VisionPrescription extends DomainResource {
       return t;
     }
 
-    // syntactic sugar
     public VisionPrescription addDispense(VisionPrescriptionDispenseComponent t) { //3
       if (t == null)
         return this;
@@ -1737,6 +1858,16 @@ public class VisionPrescription extends DomainResource {
         this.dispense = new ArrayList<VisionPrescriptionDispenseComponent>();
       this.dispense.add(t);
       return this;
+    }
+
+    /**
+     * @return The first repetition of repeating field {@link #dispense}, creating it if it does not already exist
+     */
+    public VisionPrescriptionDispenseComponent getDispenseFirstRep() { 
+      if (getDispense().isEmpty()) {
+        addDispense();
+      }
+      return getDispense().get(0);
     }
 
       protected void listChildren(List<Property> childrenList) {
@@ -1748,6 +1879,50 @@ public class VisionPrescription extends DomainResource {
         childrenList.add(new Property("encounter", "Reference(Encounter)", "A link to a resource that identifies the particular occurrence of contact between patient and health care provider.", 0, java.lang.Integer.MAX_VALUE, encounter));
         childrenList.add(new Property("reason[x]", "CodeableConcept|Reference(Condition)", "Can be the reason or the indication for writing the prescription.", 0, java.lang.Integer.MAX_VALUE, reason));
         childrenList.add(new Property("dispense", "", "Deals with details of the dispense part of the supply specification.", 0, java.lang.Integer.MAX_VALUE, dispense));
+      }
+
+      @Override
+      public Base[] getProperty(int hash, String name, boolean checkValid) throws FHIRException {
+        switch (hash) {
+        case -1618432855: /*identifier*/ return this.identifier == null ? new Base[0] : this.identifier.toArray(new Base[this.identifier.size()]); // Identifier
+        case -1496880759: /*dateWritten*/ return this.dateWritten == null ? new Base[0] : new Base[] {this.dateWritten}; // DateTimeType
+        case -791418107: /*patient*/ return this.patient == null ? new Base[0] : new Base[] {this.patient}; // Reference
+        case 1430631077: /*prescriber*/ return this.prescriber == null ? new Base[0] : new Base[] {this.prescriber}; // Reference
+        case 1524132147: /*encounter*/ return this.encounter == null ? new Base[0] : new Base[] {this.encounter}; // Reference
+        case -934964668: /*reason*/ return this.reason == null ? new Base[0] : new Base[] {this.reason}; // Type
+        case 284885341: /*dispense*/ return this.dispense == null ? new Base[0] : this.dispense.toArray(new Base[this.dispense.size()]); // VisionPrescriptionDispenseComponent
+        default: return super.getProperty(hash, name, checkValid);
+        }
+
+      }
+
+      @Override
+      public void setProperty(int hash, String name, Base value) throws FHIRException {
+        switch (hash) {
+        case -1618432855: // identifier
+          this.getIdentifier().add(castToIdentifier(value)); // Identifier
+          break;
+        case -1496880759: // dateWritten
+          this.dateWritten = castToDateTime(value); // DateTimeType
+          break;
+        case -791418107: // patient
+          this.patient = castToReference(value); // Reference
+          break;
+        case 1430631077: // prescriber
+          this.prescriber = castToReference(value); // Reference
+          break;
+        case 1524132147: // encounter
+          this.encounter = castToReference(value); // Reference
+          break;
+        case -934964668: // reason
+          this.reason = (Type) value; // Type
+          break;
+        case 284885341: // dispense
+          this.getDispense().add((VisionPrescriptionDispenseComponent) value); // VisionPrescriptionDispenseComponent
+          break;
+        default: super.setProperty(hash, name, value);
+        }
+
       }
 
       @Override
@@ -1768,6 +1943,21 @@ public class VisionPrescription extends DomainResource {
           this.getDispense().add((VisionPrescriptionDispenseComponent) value);
         else
           super.setProperty(name, value);
+      }
+
+      @Override
+      public Base makeProperty(int hash, String name) throws FHIRException {
+        switch (hash) {
+        case -1618432855:  return addIdentifier(); // Identifier
+        case -1496880759: throw new FHIRException("Cannot make property dateWritten as it is not a complex type"); // DateTimeType
+        case -791418107:  return getPatient(); // Reference
+        case 1430631077:  return getPrescriber(); // Reference
+        case 1524132147:  return getEncounter(); // Reference
+        case -669418564:  return getReason(); // Type
+        case 284885341:  return addDispense(); // VisionPrescriptionDispenseComponent
+        default: return super.makeProperty(hash, name);
+        }
+
       }
 
       @Override
@@ -1858,10 +2048,8 @@ public class VisionPrescription extends DomainResource {
       }
 
       public boolean isEmpty() {
-        return super.isEmpty() && (identifier == null || identifier.isEmpty()) && (dateWritten == null || dateWritten.isEmpty())
-           && (patient == null || patient.isEmpty()) && (prescriber == null || prescriber.isEmpty())
-           && (encounter == null || encounter.isEmpty()) && (reason == null || reason.isEmpty()) && (dispense == null || dispense.isEmpty())
-          ;
+        return super.isEmpty() && ca.uhn.fhir.util.ElementUtil.isEmpty(identifier, dateWritten, patient
+          , prescriber, encounter, reason, dispense);
       }
 
   @Override
@@ -1877,7 +2065,7 @@ public class VisionPrescription extends DomainResource {
    * Path: <b>VisionPrescription.prescriber</b><br>
    * </p>
    */
-  @SearchParamDefinition(name="prescriber", path="VisionPrescription.prescriber", description="Who authorizes the vision product", type="reference" )
+  @SearchParamDefinition(name="prescriber", path="VisionPrescription.prescriber", description="Who authorizes the vision product", type="reference", providesMembershipIn={ @ca.uhn.fhir.model.api.annotation.Compartment(name="Practitioner") }, target={Practitioner.class } )
   public static final String SP_PRESCRIBER = "prescriber";
  /**
    * <b>Fluent Client</b> search parameter constant for <b>prescriber</b>
@@ -1923,7 +2111,7 @@ public class VisionPrescription extends DomainResource {
    * Path: <b>VisionPrescription.patient</b><br>
    * </p>
    */
-  @SearchParamDefinition(name="patient", path="VisionPrescription.patient", description="The identity of a patient to list dispenses for", type="reference" )
+  @SearchParamDefinition(name="patient", path="VisionPrescription.patient", description="The identity of a patient to list dispenses for", type="reference", providesMembershipIn={ @ca.uhn.fhir.model.api.annotation.Compartment(name="Patient") }, target={Patient.class } )
   public static final String SP_PATIENT = "patient";
  /**
    * <b>Fluent Client</b> search parameter constant for <b>patient</b>
@@ -1969,7 +2157,7 @@ public class VisionPrescription extends DomainResource {
    * Path: <b>VisionPrescription.encounter</b><br>
    * </p>
    */
-  @SearchParamDefinition(name="encounter", path="VisionPrescription.encounter", description="Return prescriptions with this encounter identifier", type="reference" )
+  @SearchParamDefinition(name="encounter", path="VisionPrescription.encounter", description="Return prescriptions with this encounter identifier", type="reference", providesMembershipIn={ @ca.uhn.fhir.model.api.annotation.Compartment(name="Encounter") }, target={Encounter.class } )
   public static final String SP_ENCOUNTER = "encounter";
  /**
    * <b>Fluent Client</b> search parameter constant for <b>encounter</b>

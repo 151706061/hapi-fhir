@@ -29,18 +29,18 @@ package org.hl7.fhir.dstu3.model;
   
 */
 
-// Generated on Sat, Jan 30, 2016 09:18-0500 for FHIR v1.3.0
+// Generated on Thu, Aug 25, 2016 23:04-0400 for FHIR v1.6.0
 
 import java.util.*;
 
 import ca.uhn.fhir.model.api.annotation.ResourceDef;
 import ca.uhn.fhir.model.api.annotation.SearchParamDefinition;
 import ca.uhn.fhir.model.api.annotation.Child;
+import ca.uhn.fhir.model.api.annotation.ChildOrder;
 import ca.uhn.fhir.model.api.annotation.Description;
 import ca.uhn.fhir.model.api.annotation.Block;
-
-import org.hl7.fhir.dstu3.exceptions.FHIRException;
 import org.hl7.fhir.instance.model.api.*;
+import org.hl7.fhir.dstu3.exceptions.FHIRException;
 /**
  * A resource that includes narrative, extensions, and contained resources.
  */
@@ -116,6 +116,14 @@ public abstract class DomainResource extends Resource implements IBaseHasExtensi
       return this.contained;
     }
 
+    /**
+     * @return Returns a reference to <code>this</code> for easy method chaining
+     */
+    public DomainResource setContained(List<Resource> theContained) { 
+      this.contained = theContained;
+      return this;
+    }
+
     public boolean hasContained() { 
       if (this.contained == null)
         return false;
@@ -125,9 +133,15 @@ public abstract class DomainResource extends Resource implements IBaseHasExtensi
       return false;
     }
 
-    /**
-     * @return {@link #contained} (These resources do not have an independent existence apart from the resource that contains them - they cannot be identified independently, and nor can they have their own independent transaction scope.)
-     */
+    public DomainResource addContained(Resource t) { //3
+      if (t == null)
+        return this;
+      if (this.contained == null)
+        this.contained = new ArrayList<Resource>();
+      this.contained.add(t);
+      return this;
+    }
+
     /**
      * @return {@link #extension} (May be used to represent additional information that is not part of the basic definition of the resource. In order to make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer is allowed to define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.)
      */
@@ -135,6 +149,14 @@ public abstract class DomainResource extends Resource implements IBaseHasExtensi
       if (this.extension == null)
         this.extension = new ArrayList<Extension>();
       return this.extension;
+    }
+
+    /**
+     * @return Returns a reference to <code>this</code> for easy method chaining
+     */
+    public DomainResource setExtension(List<Extension> theExtension) { 
+      this.extension = theExtension;
+      return this;
     }
 
     public boolean hasExtension() { 
@@ -146,10 +168,6 @@ public abstract class DomainResource extends Resource implements IBaseHasExtensi
       return false;
     }
 
-    /**
-     * @return {@link #extension} (May be used to represent additional information that is not part of the basic definition of the resource. In order to make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer is allowed to define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.)
-     */
-    // syntactic sugar
     public Extension addExtension() { //3
       Extension t = new Extension();
       if (this.extension == null)
@@ -158,7 +176,6 @@ public abstract class DomainResource extends Resource implements IBaseHasExtensi
       return t;
     }
 
-    // syntactic sugar
     public DomainResource addExtension(Extension t) { //3
       if (t == null)
         return this;
@@ -177,6 +194,14 @@ public abstract class DomainResource extends Resource implements IBaseHasExtensi
       return this.modifierExtension;
     }
 
+    /**
+     * @return Returns a reference to <code>this</code> for easy method chaining
+     */
+    public DomainResource setModifierExtension(List<Extension> theModifierExtension) { 
+      this.modifierExtension = theModifierExtension;
+      return this;
+    }
+
     public boolean hasModifierExtension() { 
       if (this.modifierExtension == null)
         return false;
@@ -186,10 +211,6 @@ public abstract class DomainResource extends Resource implements IBaseHasExtensi
       return false;
     }
 
-    /**
-     * @return {@link #modifierExtension} (May be used to represent additional information that is not part of the basic definition of the resource, and that modifies the understanding of the element that contains it. Usually modifier elements provide negation or qualification. In order to make the use of extensions safe and manageable, there is a strict set of governance applied to the definition and use of extensions. Though any implementer is allowed to define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension. Applications processing a resource are required to check for modifier extensions.)
-     */
-    // syntactic sugar
     public Extension addModifierExtension() { //3
       Extension t = new Extension();
       if (this.modifierExtension == null)
@@ -198,7 +219,6 @@ public abstract class DomainResource extends Resource implements IBaseHasExtensi
       return t;
     }
 
-    // syntactic sugar
     public DomainResource addModifierExtension(Extension t) { //3
       if (t == null)
         return this;
@@ -246,6 +266,38 @@ public abstract class DomainResource extends Resource implements IBaseHasExtensi
       }
 
       @Override
+      public Base[] getProperty(int hash, String name, boolean checkValid) throws FHIRException {
+        switch (hash) {
+        case 3556653: /*text*/ return this.text == null ? new Base[0] : new Base[] {this.text}; // Narrative
+        case -410956685: /*contained*/ return this.contained == null ? new Base[0] : this.contained.toArray(new Base[this.contained.size()]); // Resource
+        case -612557761: /*extension*/ return this.extension == null ? new Base[0] : this.extension.toArray(new Base[this.extension.size()]); // Extension
+        case -298878168: /*modifierExtension*/ return this.modifierExtension == null ? new Base[0] : this.modifierExtension.toArray(new Base[this.modifierExtension.size()]); // Extension
+        default: return super.getProperty(hash, name, checkValid);
+        }
+
+      }
+
+      @Override
+      public void setProperty(int hash, String name, Base value) throws FHIRException {
+        switch (hash) {
+        case 3556653: // text
+          this.text = castToNarrative(value); // Narrative
+          break;
+        case -410956685: // contained
+          this.getContained().add(castToResource(value)); // Resource
+          break;
+        case -612557761: // extension
+          this.getExtension().add(castToExtension(value)); // Extension
+          break;
+        case -298878168: // modifierExtension
+          this.getModifierExtension().add(castToExtension(value)); // Extension
+          break;
+        default: super.setProperty(hash, name, value);
+        }
+
+      }
+
+      @Override
       public void setProperty(String name, Base value) throws FHIRException {
         if (name.equals("text"))
           this.text = castToNarrative(value); // Narrative
@@ -257,6 +309,18 @@ public abstract class DomainResource extends Resource implements IBaseHasExtensi
           this.getModifierExtension().add(castToExtension(value));
         else
           super.setProperty(name, value);
+      }
+
+      @Override
+      public Base makeProperty(int hash, String name) throws FHIRException {
+        switch (hash) {
+        case 3556653:  return getText(); // Narrative
+        case -410956685: throw new FHIRException("Cannot make property contained as it is not a complex type"); // Resource
+        case -612557761:  return addExtension(); // Extension
+        case -298878168:  return addModifierExtension(); // Extension
+        default: return super.makeProperty(hash, name);
+        }
+
       }
 
       @Override
@@ -326,9 +390,8 @@ public abstract class DomainResource extends Resource implements IBaseHasExtensi
       }
 
       public boolean isEmpty() {
-        return super.isEmpty() && (text == null || text.isEmpty()) && (contained == null || contained.isEmpty())
-           && (extension == null || extension.isEmpty()) && (modifierExtension == null || modifierExtension.isEmpty())
-          ;
+        return super.isEmpty() && ca.uhn.fhir.util.ElementUtil.isEmpty(text, contained, extension
+          , modifierExtension);
       }
 
 

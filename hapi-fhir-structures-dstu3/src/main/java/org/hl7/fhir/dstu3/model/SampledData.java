@@ -29,19 +29,19 @@ package org.hl7.fhir.dstu3.model;
   
 */
 
-// Generated on Sat, Jan 30, 2016 09:18-0500 for FHIR v1.3.0
+// Generated on Thu, Aug 25, 2016 23:04-0400 for FHIR v1.6.0
 
 import java.util.*;
 
 import java.math.*;
 import org.hl7.fhir.utilities.Utilities;
 import ca.uhn.fhir.model.api.annotation.Child;
+import ca.uhn.fhir.model.api.annotation.ChildOrder;
 import ca.uhn.fhir.model.api.annotation.Description;
 import ca.uhn.fhir.model.api.annotation.DatatypeDef;
 import ca.uhn.fhir.model.api.annotation.Block;
-
-import org.hl7.fhir.dstu3.exceptions.FHIRException;
 import org.hl7.fhir.instance.model.api.*;
+import org.hl7.fhir.dstu3.exceptions.FHIRException;
 /**
  * A series of measurements taken by a device, with upper and lower limits. There may be more than one dimension in the data.
  */
@@ -93,7 +93,7 @@ public class SampledData extends Type implements ICompositeType {
     /**
      * A series of data points which are decimal values separated by a single space (character u20). The special values "E" (error), "L" (below detection limit) and "U" (above detection limit) can also be used in place of a decimal value.
      */
-    @Child(name = "data", type = {StringType.class}, order=6, min=1, max=1, modifier=false, summary=true)
+    @Child(name = "data", type = {StringType.class}, order=6, min=1, max=1, modifier=false, summary=false)
     @Description(shortDefinition="Decimal values with spaces, or \"E\" | \"U\" | \"L\"", formalDefinition="A series of data points which are decimal values separated by a single space (character u20). The special values \"E\" (error), \"L\" (below detection limit) and \"U\" (above detection limit) can also be used in place of a decimal value." )
     protected StringType data;
 
@@ -507,6 +507,50 @@ public class SampledData extends Type implements ICompositeType {
       }
 
       @Override
+      public Base[] getProperty(int hash, String name, boolean checkValid) throws FHIRException {
+        switch (hash) {
+        case -1008619738: /*origin*/ return this.origin == null ? new Base[0] : new Base[] {this.origin}; // SimpleQuantity
+        case -991726143: /*period*/ return this.period == null ? new Base[0] : new Base[] {this.period}; // DecimalType
+        case -1282148017: /*factor*/ return this.factor == null ? new Base[0] : new Base[] {this.factor}; // DecimalType
+        case 1209133370: /*lowerLimit*/ return this.lowerLimit == null ? new Base[0] : new Base[] {this.lowerLimit}; // DecimalType
+        case -1681713095: /*upperLimit*/ return this.upperLimit == null ? new Base[0] : new Base[] {this.upperLimit}; // DecimalType
+        case 414334925: /*dimensions*/ return this.dimensions == null ? new Base[0] : new Base[] {this.dimensions}; // PositiveIntType
+        case 3076010: /*data*/ return this.data == null ? new Base[0] : new Base[] {this.data}; // StringType
+        default: return super.getProperty(hash, name, checkValid);
+        }
+
+      }
+
+      @Override
+      public void setProperty(int hash, String name, Base value) throws FHIRException {
+        switch (hash) {
+        case -1008619738: // origin
+          this.origin = castToSimpleQuantity(value); // SimpleQuantity
+          break;
+        case -991726143: // period
+          this.period = castToDecimal(value); // DecimalType
+          break;
+        case -1282148017: // factor
+          this.factor = castToDecimal(value); // DecimalType
+          break;
+        case 1209133370: // lowerLimit
+          this.lowerLimit = castToDecimal(value); // DecimalType
+          break;
+        case -1681713095: // upperLimit
+          this.upperLimit = castToDecimal(value); // DecimalType
+          break;
+        case 414334925: // dimensions
+          this.dimensions = castToPositiveInt(value); // PositiveIntType
+          break;
+        case 3076010: // data
+          this.data = castToString(value); // StringType
+          break;
+        default: super.setProperty(hash, name, value);
+        }
+
+      }
+
+      @Override
       public void setProperty(String name, Base value) throws FHIRException {
         if (name.equals("origin"))
           this.origin = castToSimpleQuantity(value); // SimpleQuantity
@@ -524,6 +568,21 @@ public class SampledData extends Type implements ICompositeType {
           this.data = castToString(value); // StringType
         else
           super.setProperty(name, value);
+      }
+
+      @Override
+      public Base makeProperty(int hash, String name) throws FHIRException {
+        switch (hash) {
+        case -1008619738:  return getOrigin(); // SimpleQuantity
+        case -991726143: throw new FHIRException("Cannot make property period as it is not a complex type"); // DecimalType
+        case -1282148017: throw new FHIRException("Cannot make property factor as it is not a complex type"); // DecimalType
+        case 1209133370: throw new FHIRException("Cannot make property lowerLimit as it is not a complex type"); // DecimalType
+        case -1681713095: throw new FHIRException("Cannot make property upperLimit as it is not a complex type"); // DecimalType
+        case 414334925: throw new FHIRException("Cannot make property dimensions as it is not a complex type"); // PositiveIntType
+        case 3076010: throw new FHIRException("Cannot make property data as it is not a complex type"); // StringType
+        default: return super.makeProperty(hash, name);
+        }
+
       }
 
       @Override
@@ -601,9 +660,8 @@ public class SampledData extends Type implements ICompositeType {
       }
 
       public boolean isEmpty() {
-        return super.isEmpty() && (origin == null || origin.isEmpty()) && (period == null || period.isEmpty())
-           && (factor == null || factor.isEmpty()) && (lowerLimit == null || lowerLimit.isEmpty()) && (upperLimit == null || upperLimit.isEmpty())
-           && (dimensions == null || dimensions.isEmpty()) && (data == null || data.isEmpty());
+        return super.isEmpty() && ca.uhn.fhir.util.ElementUtil.isEmpty(origin, period, factor, lowerLimit
+          , upperLimit, dimensions, data);
       }
 
 

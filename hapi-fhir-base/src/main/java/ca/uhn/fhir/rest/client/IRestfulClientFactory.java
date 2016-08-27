@@ -96,7 +96,7 @@ public interface IRestfulClientFactory {
 	IHttpClient getHttpClient(StringBuilder theUrl, Map<String, List<String>> theIfNoneExistParams, String theIfNoneExistString, RequestTypeEnum theRequestType, List<Header> theHeaders);
 
 	/**
-	 * @deprecated Use {@link #getServerValidationMode()} instead
+	 * @deprecated Use {@link #getServerValidationMode()} instead (this method is a synonym for that method, but this method is poorly named and will be removed at some point)
 	 */
 	@Deprecated
 	ServerValidationModeEnum getServerValidationModeEnum();
@@ -215,6 +215,10 @@ public interface IRestfulClientFactory {
 	 * Sets the server validation mode for any clients created from this factory. Server 
 	 * validation involves the client requesting the server's conformance statement
 	 * to determine whether the server is appropriate for the given client. 
+	 * <p>
+	 * This check is primarily to validate that the server supports an appropriate
+	 * version of FHIR
+	 * </p> 
 	 * <p>
 	 * The default value for this setting is defined by {@link #DEFAULT_SERVER_VALIDATION_MODE}
 	 * </p>

@@ -29,17 +29,17 @@ package org.hl7.fhir.dstu3.model;
   
 */
 
-// Generated on Sat, Jan 30, 2016 09:18-0500 for FHIR v1.3.0
+// Generated on Thu, Aug 25, 2016 23:04-0400 for FHIR v1.6.0
 
 import java.util.*;
 
 import ca.uhn.fhir.model.api.annotation.Child;
+import ca.uhn.fhir.model.api.annotation.ChildOrder;
 import ca.uhn.fhir.model.api.annotation.Description;
 import ca.uhn.fhir.model.api.annotation.DatatypeDef;
 import ca.uhn.fhir.model.api.annotation.Block;
-
-import org.hl7.fhir.dstu3.exceptions.FHIRException;
 import org.hl7.fhir.instance.model.api.*;
+import org.hl7.fhir.dstu3.exceptions.FHIRException;
 /**
  * A set of ordered Quantities defined by a low and high limit.
  */
@@ -124,6 +124,30 @@ public class Range extends Type implements ICompositeType {
       }
 
       @Override
+      public Base[] getProperty(int hash, String name, boolean checkValid) throws FHIRException {
+        switch (hash) {
+        case 107348: /*low*/ return this.low == null ? new Base[0] : new Base[] {this.low}; // SimpleQuantity
+        case 3202466: /*high*/ return this.high == null ? new Base[0] : new Base[] {this.high}; // SimpleQuantity
+        default: return super.getProperty(hash, name, checkValid);
+        }
+
+      }
+
+      @Override
+      public void setProperty(int hash, String name, Base value) throws FHIRException {
+        switch (hash) {
+        case 107348: // low
+          this.low = castToSimpleQuantity(value); // SimpleQuantity
+          break;
+        case 3202466: // high
+          this.high = castToSimpleQuantity(value); // SimpleQuantity
+          break;
+        default: super.setProperty(hash, name, value);
+        }
+
+      }
+
+      @Override
       public void setProperty(String name, Base value) throws FHIRException {
         if (name.equals("low"))
           this.low = castToSimpleQuantity(value); // SimpleQuantity
@@ -131,6 +155,16 @@ public class Range extends Type implements ICompositeType {
           this.high = castToSimpleQuantity(value); // SimpleQuantity
         else
           super.setProperty(name, value);
+      }
+
+      @Override
+      public Base makeProperty(int hash, String name) throws FHIRException {
+        switch (hash) {
+        case 107348:  return getLow(); // SimpleQuantity
+        case 3202466:  return getHigh(); // SimpleQuantity
+        default: return super.makeProperty(hash, name);
+        }
+
       }
 
       @Override
@@ -185,8 +219,7 @@ public class Range extends Type implements ICompositeType {
       }
 
       public boolean isEmpty() {
-        return super.isEmpty() && (low == null || low.isEmpty()) && (high == null || high.isEmpty())
-          ;
+        return super.isEmpty() && ca.uhn.fhir.util.ElementUtil.isEmpty(low, high);
       }
 
 

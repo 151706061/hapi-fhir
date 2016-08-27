@@ -29,7 +29,7 @@ package org.hl7.fhir.dstu3.model;
   
 */
 
-// Generated on Sat, Jan 30, 2016 09:18-0500 for FHIR v1.3.0
+// Generated on Thu, Aug 25, 2016 23:04-0400 for FHIR v1.6.0
 
 import java.util.*;
 
@@ -37,11 +37,11 @@ import org.hl7.fhir.utilities.Utilities;
 import ca.uhn.fhir.model.api.annotation.ResourceDef;
 import ca.uhn.fhir.model.api.annotation.SearchParamDefinition;
 import ca.uhn.fhir.model.api.annotation.Child;
+import ca.uhn.fhir.model.api.annotation.ChildOrder;
 import ca.uhn.fhir.model.api.annotation.Description;
 import ca.uhn.fhir.model.api.annotation.Block;
-
-import org.hl7.fhir.dstu3.exceptions.FHIRException;
 import org.hl7.fhir.instance.model.api.*;
+import org.hl7.fhir.dstu3.exceptions.FHIRException;
 /**
  * A set of healthcare-related information that is assembled together into a single logical document that provides a single coherent statement of meaning, establishes its own context and that has clinical attestation with regard to who is making the statement. While a Composition defines the structure, it does not actually contain the content: rather the full content of a document is contained in a Bundle, of which the Composition is the first resource contained.
  */
@@ -66,7 +66,7 @@ public class Composition extends DomainResource {
          */
         ENTEREDINERROR, 
         /**
-         * added to help the parsers
+         * added to help the parsers with the generic types
          */
         NULL;
         public static CompositionStatus fromCode(String codeString) throws FHIRException {
@@ -80,7 +80,10 @@ public class Composition extends DomainResource {
           return AMENDED;
         if ("entered-in-error".equals(codeString))
           return ENTEREDINERROR;
-        throw new FHIRException("Unknown CompositionStatus code '"+codeString+"'");
+        if (Configuration.isAcceptInvalidEnums())
+          return null;
+        else
+          throw new FHIRException("Unknown CompositionStatus code '"+codeString+"'");
         }
         public String toCode() {
           switch (this) {
@@ -167,6 +170,160 @@ public class Composition extends DomainResource {
       }
     }
 
+    public enum DocumentConfidentiality {
+        /**
+         * null
+         */
+        U, 
+        /**
+         * null
+         */
+        L, 
+        /**
+         * null
+         */
+        M, 
+        /**
+         * null
+         */
+        N, 
+        /**
+         * null
+         */
+        R, 
+        /**
+         * null
+         */
+        V, 
+        /**
+         * added to help the parsers with the generic types
+         */
+        NULL;
+        public static DocumentConfidentiality fromCode(String codeString) throws FHIRException {
+            if (codeString == null || "".equals(codeString))
+                return null;
+        if ("U".equals(codeString))
+          return U;
+        if ("L".equals(codeString))
+          return L;
+        if ("M".equals(codeString))
+          return M;
+        if ("N".equals(codeString))
+          return N;
+        if ("R".equals(codeString))
+          return R;
+        if ("V".equals(codeString))
+          return V;
+        if (Configuration.isAcceptInvalidEnums())
+          return null;
+        else
+          throw new FHIRException("Unknown DocumentConfidentiality code '"+codeString+"'");
+        }
+        public String toCode() {
+          switch (this) {
+            case U: return "U";
+            case L: return "L";
+            case M: return "M";
+            case N: return "N";
+            case R: return "R";
+            case V: return "V";
+            default: return "?";
+          }
+        }
+        public String getSystem() {
+          switch (this) {
+            case U: return "http://hl7.org/fhir/v3/Confidentiality";
+            case L: return "http://hl7.org/fhir/v3/Confidentiality";
+            case M: return "http://hl7.org/fhir/v3/Confidentiality";
+            case N: return "http://hl7.org/fhir/v3/Confidentiality";
+            case R: return "http://hl7.org/fhir/v3/Confidentiality";
+            case V: return "http://hl7.org/fhir/v3/Confidentiality";
+            default: return "?";
+          }
+        }
+        public String getDefinition() {
+          switch (this) {
+            case U: return "";
+            case L: return "";
+            case M: return "";
+            case N: return "";
+            case R: return "";
+            case V: return "";
+            default: return "?";
+          }
+        }
+        public String getDisplay() {
+          switch (this) {
+            case U: return "U";
+            case L: return "L";
+            case M: return "M";
+            case N: return "N";
+            case R: return "R";
+            case V: return "V";
+            default: return "?";
+          }
+        }
+    }
+
+  public static class DocumentConfidentialityEnumFactory implements EnumFactory<DocumentConfidentiality> {
+    public DocumentConfidentiality fromCode(String codeString) throws IllegalArgumentException {
+      if (codeString == null || "".equals(codeString))
+            if (codeString == null || "".equals(codeString))
+                return null;
+        if ("U".equals(codeString))
+          return DocumentConfidentiality.U;
+        if ("L".equals(codeString))
+          return DocumentConfidentiality.L;
+        if ("M".equals(codeString))
+          return DocumentConfidentiality.M;
+        if ("N".equals(codeString))
+          return DocumentConfidentiality.N;
+        if ("R".equals(codeString))
+          return DocumentConfidentiality.R;
+        if ("V".equals(codeString))
+          return DocumentConfidentiality.V;
+        throw new IllegalArgumentException("Unknown DocumentConfidentiality code '"+codeString+"'");
+        }
+        public Enumeration<DocumentConfidentiality> fromType(Base code) throws FHIRException {
+          if (code == null || code.isEmpty())
+            return null;
+          String codeString = ((PrimitiveType) code).asStringValue();
+          if (codeString == null || "".equals(codeString))
+            return null;
+        if ("U".equals(codeString))
+          return new Enumeration<DocumentConfidentiality>(this, DocumentConfidentiality.U);
+        if ("L".equals(codeString))
+          return new Enumeration<DocumentConfidentiality>(this, DocumentConfidentiality.L);
+        if ("M".equals(codeString))
+          return new Enumeration<DocumentConfidentiality>(this, DocumentConfidentiality.M);
+        if ("N".equals(codeString))
+          return new Enumeration<DocumentConfidentiality>(this, DocumentConfidentiality.N);
+        if ("R".equals(codeString))
+          return new Enumeration<DocumentConfidentiality>(this, DocumentConfidentiality.R);
+        if ("V".equals(codeString))
+          return new Enumeration<DocumentConfidentiality>(this, DocumentConfidentiality.V);
+        throw new FHIRException("Unknown DocumentConfidentiality code '"+codeString+"'");
+        }
+    public String toCode(DocumentConfidentiality code) {
+      if (code == DocumentConfidentiality.U)
+        return "U";
+      if (code == DocumentConfidentiality.L)
+        return "L";
+      if (code == DocumentConfidentiality.M)
+        return "M";
+      if (code == DocumentConfidentiality.N)
+        return "N";
+      if (code == DocumentConfidentiality.R)
+        return "R";
+      if (code == DocumentConfidentiality.V)
+        return "V";
+      return "?";
+      }
+    public String toSystem(DocumentConfidentiality code) {
+      return code.getSystem();
+      }
+    }
+
     public enum CompositionAttestationMode {
         /**
          * The person authenticated the content in their personal capacity.
@@ -185,7 +342,7 @@ public class Composition extends DomainResource {
          */
         OFFICIAL, 
         /**
-         * added to help the parsers
+         * added to help the parsers with the generic types
          */
         NULL;
         public static CompositionAttestationMode fromCode(String codeString) throws FHIRException {
@@ -199,7 +356,10 @@ public class Composition extends DomainResource {
           return LEGAL;
         if ("official".equals(codeString))
           return OFFICIAL;
-        throw new FHIRException("Unknown CompositionAttestationMode code '"+codeString+"'");
+        if (Configuration.isAcceptInvalidEnums())
+          return null;
+        else
+          throw new FHIRException("Unknown CompositionAttestationMode code '"+codeString+"'");
         }
         public String toCode() {
           switch (this) {
@@ -286,6 +446,112 @@ public class Composition extends DomainResource {
       }
     }
 
+    public enum SectionMode {
+        /**
+         * This list is the master list, maintained in an ongoing fashion with regular updates as the real world list it is tracking changes
+         */
+        WORKING, 
+        /**
+         * This list was prepared as a snapshot. It should not be assumed to be current
+         */
+        SNAPSHOT, 
+        /**
+         * A list that indicates where changes have been made or recommended
+         */
+        CHANGES, 
+        /**
+         * added to help the parsers with the generic types
+         */
+        NULL;
+        public static SectionMode fromCode(String codeString) throws FHIRException {
+            if (codeString == null || "".equals(codeString))
+                return null;
+        if ("working".equals(codeString))
+          return WORKING;
+        if ("snapshot".equals(codeString))
+          return SNAPSHOT;
+        if ("changes".equals(codeString))
+          return CHANGES;
+        if (Configuration.isAcceptInvalidEnums())
+          return null;
+        else
+          throw new FHIRException("Unknown SectionMode code '"+codeString+"'");
+        }
+        public String toCode() {
+          switch (this) {
+            case WORKING: return "working";
+            case SNAPSHOT: return "snapshot";
+            case CHANGES: return "changes";
+            default: return "?";
+          }
+        }
+        public String getSystem() {
+          switch (this) {
+            case WORKING: return "http://hl7.org/fhir/list-mode";
+            case SNAPSHOT: return "http://hl7.org/fhir/list-mode";
+            case CHANGES: return "http://hl7.org/fhir/list-mode";
+            default: return "?";
+          }
+        }
+        public String getDefinition() {
+          switch (this) {
+            case WORKING: return "This list is the master list, maintained in an ongoing fashion with regular updates as the real world list it is tracking changes";
+            case SNAPSHOT: return "This list was prepared as a snapshot. It should not be assumed to be current";
+            case CHANGES: return "A list that indicates where changes have been made or recommended";
+            default: return "?";
+          }
+        }
+        public String getDisplay() {
+          switch (this) {
+            case WORKING: return "Working List";
+            case SNAPSHOT: return "Snapshot List";
+            case CHANGES: return "Change List";
+            default: return "?";
+          }
+        }
+    }
+
+  public static class SectionModeEnumFactory implements EnumFactory<SectionMode> {
+    public SectionMode fromCode(String codeString) throws IllegalArgumentException {
+      if (codeString == null || "".equals(codeString))
+            if (codeString == null || "".equals(codeString))
+                return null;
+        if ("working".equals(codeString))
+          return SectionMode.WORKING;
+        if ("snapshot".equals(codeString))
+          return SectionMode.SNAPSHOT;
+        if ("changes".equals(codeString))
+          return SectionMode.CHANGES;
+        throw new IllegalArgumentException("Unknown SectionMode code '"+codeString+"'");
+        }
+        public Enumeration<SectionMode> fromType(Base code) throws FHIRException {
+          if (code == null || code.isEmpty())
+            return null;
+          String codeString = ((PrimitiveType) code).asStringValue();
+          if (codeString == null || "".equals(codeString))
+            return null;
+        if ("working".equals(codeString))
+          return new Enumeration<SectionMode>(this, SectionMode.WORKING);
+        if ("snapshot".equals(codeString))
+          return new Enumeration<SectionMode>(this, SectionMode.SNAPSHOT);
+        if ("changes".equals(codeString))
+          return new Enumeration<SectionMode>(this, SectionMode.CHANGES);
+        throw new FHIRException("Unknown SectionMode code '"+codeString+"'");
+        }
+    public String toCode(SectionMode code) {
+      if (code == SectionMode.WORKING)
+        return "working";
+      if (code == SectionMode.SNAPSHOT)
+        return "snapshot";
+      if (code == SectionMode.CHANGES)
+        return "changes";
+      return "?";
+      }
+    public String toSystem(SectionMode code) {
+      return code.getSystem();
+      }
+    }
+
     @Block()
     public static class CompositionAttesterComponent extends BackboneElement implements IBaseBackboneElement {
         /**
@@ -293,6 +559,7 @@ public class Composition extends DomainResource {
          */
         @Child(name = "mode", type = {CodeType.class}, order=1, min=1, max=Child.MAX_UNLIMITED, modifier=false, summary=true)
         @Description(shortDefinition="personal | professional | legal | official", formalDefinition="The type of attestation the authenticator offers." )
+        @ca.uhn.fhir.model.api.annotation.Binding(valueSet="http://hl7.org/fhir/ValueSet/composition-attestation-mode")
         protected List<Enumeration<CompositionAttestationMode>> mode;
 
         /**
@@ -332,6 +599,14 @@ public class Composition extends DomainResource {
           return this.mode;
         }
 
+        /**
+         * @return Returns a reference to <code>this</code> for easy method chaining
+         */
+        public CompositionAttesterComponent setMode(List<Enumeration<CompositionAttestationMode>> theMode) { 
+          this.mode = theMode;
+          return this;
+        }
+
         public boolean hasMode() { 
           if (this.mode == null)
             return false;
@@ -344,7 +619,6 @@ public class Composition extends DomainResource {
         /**
          * @return {@link #mode} (The type of attestation the authenticator offers.)
          */
-    // syntactic sugar
         public Enumeration<CompositionAttestationMode> addModeElement() {//2 
           Enumeration<CompositionAttestationMode> t = new Enumeration<CompositionAttestationMode>(new CompositionAttestationModeEnumFactory());
           if (this.mode == null)
@@ -372,7 +646,7 @@ public class Composition extends DomainResource {
           if (this.mode == null)
             return false;
           for (Enumeration<CompositionAttestationMode> v : this.mode)
-            if (v.equals(value)) // code
+            if (v.getValue().equals(value)) // code
               return true;
           return false;
         }
@@ -473,6 +747,34 @@ public class Composition extends DomainResource {
         }
 
       @Override
+      public Base[] getProperty(int hash, String name, boolean checkValid) throws FHIRException {
+        switch (hash) {
+        case 3357091: /*mode*/ return this.mode == null ? new Base[0] : this.mode.toArray(new Base[this.mode.size()]); // Enumeration<CompositionAttestationMode>
+        case 3560141: /*time*/ return this.time == null ? new Base[0] : new Base[] {this.time}; // DateTimeType
+        case 106437350: /*party*/ return this.party == null ? new Base[0] : new Base[] {this.party}; // Reference
+        default: return super.getProperty(hash, name, checkValid);
+        }
+
+      }
+
+      @Override
+      public void setProperty(int hash, String name, Base value) throws FHIRException {
+        switch (hash) {
+        case 3357091: // mode
+          this.getMode().add(new CompositionAttestationModeEnumFactory().fromType(value)); // Enumeration<CompositionAttestationMode>
+          break;
+        case 3560141: // time
+          this.time = castToDateTime(value); // DateTimeType
+          break;
+        case 106437350: // party
+          this.party = castToReference(value); // Reference
+          break;
+        default: super.setProperty(hash, name, value);
+        }
+
+      }
+
+      @Override
       public void setProperty(String name, Base value) throws FHIRException {
         if (name.equals("mode"))
           this.getMode().add(new CompositionAttestationModeEnumFactory().fromType(value));
@@ -482,6 +784,17 @@ public class Composition extends DomainResource {
           this.party = castToReference(value); // Reference
         else
           super.setProperty(name, value);
+      }
+
+      @Override
+      public Base makeProperty(int hash, String name) throws FHIRException {
+        switch (hash) {
+        case 3357091: throw new FHIRException("Cannot make property mode as it is not a complex type"); // Enumeration<CompositionAttestationMode>
+        case 3560141: throw new FHIRException("Cannot make property time as it is not a complex type"); // DateTimeType
+        case 106437350:  return getParty(); // Reference
+        default: return super.makeProperty(hash, name);
+        }
+
       }
 
       @Override
@@ -535,8 +848,7 @@ public class Composition extends DomainResource {
       }
 
       public boolean isEmpty() {
-        return super.isEmpty() && (mode == null || mode.isEmpty()) && (time == null || time.isEmpty())
-           && (party == null || party.isEmpty());
+        return super.isEmpty() && ca.uhn.fhir.util.ElementUtil.isEmpty(mode, time, party);
       }
 
   public String fhirType() {
@@ -553,6 +865,7 @@ public class Composition extends DomainResource {
          */
         @Child(name = "code", type = {CodeableConcept.class}, order=1, min=0, max=Child.MAX_UNLIMITED, modifier=false, summary=true)
         @Description(shortDefinition="Code(s) that apply to the event being documented", formalDefinition="This list of codes represents the main clinical acts, such as a colonoscopy or an appendectomy, being documented. In some cases, the event is inherent in the typeCode, such as a \"History and Physical Report\" in which the procedure being documented is necessarily a \"History and Physical\" act." )
+        @ca.uhn.fhir.model.api.annotation.Binding(valueSet="http://hl7.org/fhir/ValueSet/v3-ActCode")
         protected List<CodeableConcept> code;
 
         /**
@@ -565,7 +878,7 @@ public class Composition extends DomainResource {
         /**
          * The description and/or reference of the event(s) being documented. For example, this could be used to document such a colonoscopy or an appendectomy.
          */
-        @Child(name = "detail", type = {}, order=3, min=0, max=Child.MAX_UNLIMITED, modifier=false, summary=true)
+        @Child(name = "detail", type = {Reference.class}, order=3, min=0, max=Child.MAX_UNLIMITED, modifier=false, summary=true)
         @Description(shortDefinition="The event(s) being documented", formalDefinition="The description and/or reference of the event(s) being documented. For example, this could be used to document such a colonoscopy or an appendectomy." )
         protected List<Reference> detail;
         /**
@@ -592,6 +905,14 @@ public class Composition extends DomainResource {
           return this.code;
         }
 
+        /**
+         * @return Returns a reference to <code>this</code> for easy method chaining
+         */
+        public CompositionEventComponent setCode(List<CodeableConcept> theCode) { 
+          this.code = theCode;
+          return this;
+        }
+
         public boolean hasCode() { 
           if (this.code == null)
             return false;
@@ -601,10 +922,6 @@ public class Composition extends DomainResource {
           return false;
         }
 
-        /**
-         * @return {@link #code} (This list of codes represents the main clinical acts, such as a colonoscopy or an appendectomy, being documented. In some cases, the event is inherent in the typeCode, such as a "History and Physical Report" in which the procedure being documented is necessarily a "History and Physical" act.)
-         */
-    // syntactic sugar
         public CodeableConcept addCode() { //3
           CodeableConcept t = new CodeableConcept();
           if (this.code == null)
@@ -613,7 +930,6 @@ public class Composition extends DomainResource {
           return t;
         }
 
-    // syntactic sugar
         public CompositionEventComponent addCode(CodeableConcept t) { //3
           if (t == null)
             return this;
@@ -621,6 +937,16 @@ public class Composition extends DomainResource {
             this.code = new ArrayList<CodeableConcept>();
           this.code.add(t);
           return this;
+        }
+
+        /**
+         * @return The first repetition of repeating field {@link #code}, creating it if it does not already exist
+         */
+        public CodeableConcept getCodeFirstRep() { 
+          if (getCode().isEmpty()) {
+            addCode();
+          }
+          return getCode().get(0);
         }
 
         /**
@@ -656,6 +982,14 @@ public class Composition extends DomainResource {
           return this.detail;
         }
 
+        /**
+         * @return Returns a reference to <code>this</code> for easy method chaining
+         */
+        public CompositionEventComponent setDetail(List<Reference> theDetail) { 
+          this.detail = theDetail;
+          return this;
+        }
+
         public boolean hasDetail() { 
           if (this.detail == null)
             return false;
@@ -665,10 +999,6 @@ public class Composition extends DomainResource {
           return false;
         }
 
-        /**
-         * @return {@link #detail} (The description and/or reference of the event(s) being documented. For example, this could be used to document such a colonoscopy or an appendectomy.)
-         */
-    // syntactic sugar
         public Reference addDetail() { //3
           Reference t = new Reference();
           if (this.detail == null)
@@ -677,7 +1007,6 @@ public class Composition extends DomainResource {
           return t;
         }
 
-    // syntactic sugar
         public CompositionEventComponent addDetail(Reference t) { //3
           if (t == null)
             return this;
@@ -688,8 +1017,19 @@ public class Composition extends DomainResource {
         }
 
         /**
-         * @return {@link #detail} (The actual objects that are the target of the reference. The reference library doesn't populate this, but you can use this to hold the resources if you resolvethemt. The description and/or reference of the event(s) being documented. For example, this could be used to document such a colonoscopy or an appendectomy.)
+         * @return The first repetition of repeating field {@link #detail}, creating it if it does not already exist
          */
+        public Reference getDetailFirstRep() { 
+          if (getDetail().isEmpty()) {
+            addDetail();
+          }
+          return getDetail().get(0);
+        }
+
+        /**
+         * @deprecated Use Reference#setResource(IBaseResource) instead
+         */
+        @Deprecated
         public List<Resource> getDetailTarget() { 
           if (this.detailTarget == null)
             this.detailTarget = new ArrayList<Resource>();
@@ -704,6 +1044,34 @@ public class Composition extends DomainResource {
         }
 
       @Override
+      public Base[] getProperty(int hash, String name, boolean checkValid) throws FHIRException {
+        switch (hash) {
+        case 3059181: /*code*/ return this.code == null ? new Base[0] : this.code.toArray(new Base[this.code.size()]); // CodeableConcept
+        case -991726143: /*period*/ return this.period == null ? new Base[0] : new Base[] {this.period}; // Period
+        case -1335224239: /*detail*/ return this.detail == null ? new Base[0] : this.detail.toArray(new Base[this.detail.size()]); // Reference
+        default: return super.getProperty(hash, name, checkValid);
+        }
+
+      }
+
+      @Override
+      public void setProperty(int hash, String name, Base value) throws FHIRException {
+        switch (hash) {
+        case 3059181: // code
+          this.getCode().add(castToCodeableConcept(value)); // CodeableConcept
+          break;
+        case -991726143: // period
+          this.period = castToPeriod(value); // Period
+          break;
+        case -1335224239: // detail
+          this.getDetail().add(castToReference(value)); // Reference
+          break;
+        default: super.setProperty(hash, name, value);
+        }
+
+      }
+
+      @Override
       public void setProperty(String name, Base value) throws FHIRException {
         if (name.equals("code"))
           this.getCode().add(castToCodeableConcept(value));
@@ -713,6 +1081,17 @@ public class Composition extends DomainResource {
           this.getDetail().add(castToReference(value));
         else
           super.setProperty(name, value);
+      }
+
+      @Override
+      public Base makeProperty(int hash, String name) throws FHIRException {
+        switch (hash) {
+        case 3059181:  return addCode(); // CodeableConcept
+        case -991726143:  return getPeriod(); // Period
+        case -1335224239:  return addDetail(); // Reference
+        default: return super.makeProperty(hash, name);
+        }
+
       }
 
       @Override
@@ -770,8 +1149,7 @@ public class Composition extends DomainResource {
       }
 
       public boolean isEmpty() {
-        return super.isEmpty() && (code == null || code.isEmpty()) && (period == null || period.isEmpty())
-           && (detail == null || detail.isEmpty());
+        return super.isEmpty() && ca.uhn.fhir.util.ElementUtil.isEmpty(code, period, detail);
       }
 
   public String fhirType() {
@@ -795,6 +1173,7 @@ public class Composition extends DomainResource {
          */
         @Child(name = "code", type = {CodeableConcept.class}, order=2, min=0, max=1, modifier=false, summary=false)
         @Description(shortDefinition="Classification of section (recommended)", formalDefinition="A code identifying the kind of content contained within the section. This must be consistent with the section title." )
+        @ca.uhn.fhir.model.api.annotation.Binding(valueSet="http://hl7.org/fhir/ValueSet/doc-section-codes")
         protected CodeableConcept code;
 
         /**
@@ -809,19 +1188,21 @@ public class Composition extends DomainResource {
          */
         @Child(name = "mode", type = {CodeType.class}, order=4, min=0, max=1, modifier=true, summary=true)
         @Description(shortDefinition="working | snapshot | changes", formalDefinition="How the entry list was prepared - whether it is a working list that is suitable for being maintained on an ongoing basis, or if it represents a snapshot of a list of items from another source, or whether it is a prepared list where items may be marked as added, modified or deleted." )
-        protected CodeType mode;
+        @ca.uhn.fhir.model.api.annotation.Binding(valueSet="http://hl7.org/fhir/ValueSet/list-mode")
+        protected Enumeration<SectionMode> mode;
 
         /**
          * Specifies the order applied to the items in the section entries.
          */
         @Child(name = "orderedBy", type = {CodeableConcept.class}, order=5, min=0, max=1, modifier=false, summary=false)
         @Description(shortDefinition="Order of section entries", formalDefinition="Specifies the order applied to the items in the section entries." )
+        @ca.uhn.fhir.model.api.annotation.Binding(valueSet="http://hl7.org/fhir/ValueSet/list-order")
         protected CodeableConcept orderedBy;
 
         /**
          * A reference to the actual resource from which the narrative in the section is derived.
          */
-        @Child(name = "entry", type = {}, order=6, min=0, max=Child.MAX_UNLIMITED, modifier=false, summary=false)
+        @Child(name = "entry", type = {Reference.class}, order=6, min=0, max=Child.MAX_UNLIMITED, modifier=false, summary=false)
         @Description(shortDefinition="A reference to data that supports this section", formalDefinition="A reference to the actual resource from which the narrative in the section is derived." )
         protected List<Reference> entry;
         /**
@@ -835,6 +1216,7 @@ public class Composition extends DomainResource {
          */
         @Child(name = "emptyReason", type = {CodeableConcept.class}, order=7, min=0, max=1, modifier=false, summary=false)
         @Description(shortDefinition="Why the section is empty", formalDefinition="If the section is empty, why the list is empty. An empty section typically has some text explaining the empty reason." )
+        @ca.uhn.fhir.model.api.annotation.Binding(valueSet="http://hl7.org/fhir/ValueSet/list-empty-reason")
         protected CodeableConcept emptyReason;
 
         /**
@@ -844,7 +1226,7 @@ public class Composition extends DomainResource {
         @Description(shortDefinition="Nested Section", formalDefinition="A nested sub-section within this section." )
         protected List<SectionComponent> section;
 
-        private static final long serialVersionUID = -726390626L;
+        private static final long serialVersionUID = -128426142L;
 
     /**
      * Constructor
@@ -953,12 +1335,12 @@ public class Composition extends DomainResource {
         /**
          * @return {@link #mode} (How the entry list was prepared - whether it is a working list that is suitable for being maintained on an ongoing basis, or if it represents a snapshot of a list of items from another source, or whether it is a prepared list where items may be marked as added, modified or deleted.). This is the underlying object with id, value and extensions. The accessor "getMode" gives direct access to the value
          */
-        public CodeType getModeElement() { 
+        public Enumeration<SectionMode> getModeElement() { 
           if (this.mode == null)
             if (Configuration.errorOnAutoCreate())
               throw new Error("Attempt to auto-create SectionComponent.mode");
             else if (Configuration.doAutoCreate())
-              this.mode = new CodeType(); // bb
+              this.mode = new Enumeration<SectionMode>(new SectionModeEnumFactory()); // bb
           return this.mode;
         }
 
@@ -973,7 +1355,7 @@ public class Composition extends DomainResource {
         /**
          * @param value {@link #mode} (How the entry list was prepared - whether it is a working list that is suitable for being maintained on an ongoing basis, or if it represents a snapshot of a list of items from another source, or whether it is a prepared list where items may be marked as added, modified or deleted.). This is the underlying object with id, value and extensions. The accessor "getMode" gives direct access to the value
          */
-        public SectionComponent setModeElement(CodeType value) { 
+        public SectionComponent setModeElement(Enumeration<SectionMode> value) { 
           this.mode = value;
           return this;
         }
@@ -981,19 +1363,19 @@ public class Composition extends DomainResource {
         /**
          * @return How the entry list was prepared - whether it is a working list that is suitable for being maintained on an ongoing basis, or if it represents a snapshot of a list of items from another source, or whether it is a prepared list where items may be marked as added, modified or deleted.
          */
-        public String getMode() { 
+        public SectionMode getMode() { 
           return this.mode == null ? null : this.mode.getValue();
         }
 
         /**
          * @param value How the entry list was prepared - whether it is a working list that is suitable for being maintained on an ongoing basis, or if it represents a snapshot of a list of items from another source, or whether it is a prepared list where items may be marked as added, modified or deleted.
          */
-        public SectionComponent setMode(String value) { 
-          if (Utilities.noString(value))
+        public SectionComponent setMode(SectionMode value) { 
+          if (value == null)
             this.mode = null;
           else {
             if (this.mode == null)
-              this.mode = new CodeType();
+              this.mode = new Enumeration<SectionMode>(new SectionModeEnumFactory());
             this.mode.setValue(value);
           }
           return this;
@@ -1032,6 +1414,14 @@ public class Composition extends DomainResource {
           return this.entry;
         }
 
+        /**
+         * @return Returns a reference to <code>this</code> for easy method chaining
+         */
+        public SectionComponent setEntry(List<Reference> theEntry) { 
+          this.entry = theEntry;
+          return this;
+        }
+
         public boolean hasEntry() { 
           if (this.entry == null)
             return false;
@@ -1041,10 +1431,6 @@ public class Composition extends DomainResource {
           return false;
         }
 
-        /**
-         * @return {@link #entry} (A reference to the actual resource from which the narrative in the section is derived.)
-         */
-    // syntactic sugar
         public Reference addEntry() { //3
           Reference t = new Reference();
           if (this.entry == null)
@@ -1053,7 +1439,6 @@ public class Composition extends DomainResource {
           return t;
         }
 
-    // syntactic sugar
         public SectionComponent addEntry(Reference t) { //3
           if (t == null)
             return this;
@@ -1064,8 +1449,19 @@ public class Composition extends DomainResource {
         }
 
         /**
-         * @return {@link #entry} (The actual objects that are the target of the reference. The reference library doesn't populate this, but you can use this to hold the resources if you resolvethemt. A reference to the actual resource from which the narrative in the section is derived.)
+         * @return The first repetition of repeating field {@link #entry}, creating it if it does not already exist
          */
+        public Reference getEntryFirstRep() { 
+          if (getEntry().isEmpty()) {
+            addEntry();
+          }
+          return getEntry().get(0);
+        }
+
+        /**
+         * @deprecated Use Reference#setResource(IBaseResource) instead
+         */
+        @Deprecated
         public List<Resource> getEntryTarget() { 
           if (this.entryTarget == null)
             this.entryTarget = new ArrayList<Resource>();
@@ -1105,6 +1501,14 @@ public class Composition extends DomainResource {
           return this.section;
         }
 
+        /**
+         * @return Returns a reference to <code>this</code> for easy method chaining
+         */
+        public SectionComponent setSection(List<SectionComponent> theSection) { 
+          this.section = theSection;
+          return this;
+        }
+
         public boolean hasSection() { 
           if (this.section == null)
             return false;
@@ -1114,10 +1518,6 @@ public class Composition extends DomainResource {
           return false;
         }
 
-        /**
-         * @return {@link #section} (A nested sub-section within this section.)
-         */
-    // syntactic sugar
         public SectionComponent addSection() { //3
           SectionComponent t = new SectionComponent();
           if (this.section == null)
@@ -1126,7 +1526,6 @@ public class Composition extends DomainResource {
           return t;
         }
 
-    // syntactic sugar
         public SectionComponent addSection(SectionComponent t) { //3
           if (t == null)
             return this;
@@ -1134,6 +1533,16 @@ public class Composition extends DomainResource {
             this.section = new ArrayList<SectionComponent>();
           this.section.add(t);
           return this;
+        }
+
+        /**
+         * @return The first repetition of repeating field {@link #section}, creating it if it does not already exist
+         */
+        public SectionComponent getSectionFirstRep() { 
+          if (getSection().isEmpty()) {
+            addSection();
+          }
+          return getSection().get(0);
         }
 
         protected void listChildren(List<Property> childrenList) {
@@ -1149,6 +1558,54 @@ public class Composition extends DomainResource {
         }
 
       @Override
+      public Base[] getProperty(int hash, String name, boolean checkValid) throws FHIRException {
+        switch (hash) {
+        case 110371416: /*title*/ return this.title == null ? new Base[0] : new Base[] {this.title}; // StringType
+        case 3059181: /*code*/ return this.code == null ? new Base[0] : new Base[] {this.code}; // CodeableConcept
+        case 3556653: /*text*/ return this.text == null ? new Base[0] : new Base[] {this.text}; // Narrative
+        case 3357091: /*mode*/ return this.mode == null ? new Base[0] : new Base[] {this.mode}; // Enumeration<SectionMode>
+        case -391079516: /*orderedBy*/ return this.orderedBy == null ? new Base[0] : new Base[] {this.orderedBy}; // CodeableConcept
+        case 96667762: /*entry*/ return this.entry == null ? new Base[0] : this.entry.toArray(new Base[this.entry.size()]); // Reference
+        case 1140135409: /*emptyReason*/ return this.emptyReason == null ? new Base[0] : new Base[] {this.emptyReason}; // CodeableConcept
+        case 1970241253: /*section*/ return this.section == null ? new Base[0] : this.section.toArray(new Base[this.section.size()]); // SectionComponent
+        default: return super.getProperty(hash, name, checkValid);
+        }
+
+      }
+
+      @Override
+      public void setProperty(int hash, String name, Base value) throws FHIRException {
+        switch (hash) {
+        case 110371416: // title
+          this.title = castToString(value); // StringType
+          break;
+        case 3059181: // code
+          this.code = castToCodeableConcept(value); // CodeableConcept
+          break;
+        case 3556653: // text
+          this.text = castToNarrative(value); // Narrative
+          break;
+        case 3357091: // mode
+          this.mode = new SectionModeEnumFactory().fromType(value); // Enumeration<SectionMode>
+          break;
+        case -391079516: // orderedBy
+          this.orderedBy = castToCodeableConcept(value); // CodeableConcept
+          break;
+        case 96667762: // entry
+          this.getEntry().add(castToReference(value)); // Reference
+          break;
+        case 1140135409: // emptyReason
+          this.emptyReason = castToCodeableConcept(value); // CodeableConcept
+          break;
+        case 1970241253: // section
+          this.getSection().add((SectionComponent) value); // SectionComponent
+          break;
+        default: super.setProperty(hash, name, value);
+        }
+
+      }
+
+      @Override
       public void setProperty(String name, Base value) throws FHIRException {
         if (name.equals("title"))
           this.title = castToString(value); // StringType
@@ -1157,7 +1614,7 @@ public class Composition extends DomainResource {
         else if (name.equals("text"))
           this.text = castToNarrative(value); // Narrative
         else if (name.equals("mode"))
-          this.mode = castToCode(value); // CodeType
+          this.mode = new SectionModeEnumFactory().fromType(value); // Enumeration<SectionMode>
         else if (name.equals("orderedBy"))
           this.orderedBy = castToCodeableConcept(value); // CodeableConcept
         else if (name.equals("entry"))
@@ -1168,6 +1625,22 @@ public class Composition extends DomainResource {
           this.getSection().add((SectionComponent) value);
         else
           super.setProperty(name, value);
+      }
+
+      @Override
+      public Base makeProperty(int hash, String name) throws FHIRException {
+        switch (hash) {
+        case 110371416: throw new FHIRException("Cannot make property title as it is not a complex type"); // StringType
+        case 3059181:  return getCode(); // CodeableConcept
+        case 3556653:  return getText(); // Narrative
+        case 3357091: throw new FHIRException("Cannot make property mode as it is not a complex type"); // Enumeration<SectionMode>
+        case -391079516:  return getOrderedBy(); // CodeableConcept
+        case 96667762:  return addEntry(); // Reference
+        case 1140135409:  return getEmptyReason(); // CodeableConcept
+        case 1970241253:  return addSection(); // SectionComponent
+        default: return super.makeProperty(hash, name);
+        }
+
       }
 
       @Override
@@ -1249,10 +1722,8 @@ public class Composition extends DomainResource {
       }
 
       public boolean isEmpty() {
-        return super.isEmpty() && (title == null || title.isEmpty()) && (code == null || code.isEmpty())
-           && (text == null || text.isEmpty()) && (mode == null || mode.isEmpty()) && (orderedBy == null || orderedBy.isEmpty())
-           && (entry == null || entry.isEmpty()) && (emptyReason == null || emptyReason.isEmpty()) && (section == null || section.isEmpty())
-          ;
+        return super.isEmpty() && ca.uhn.fhir.util.ElementUtil.isEmpty(title, code, text, mode
+          , orderedBy, entry, emptyReason, section);
       }
 
   public String fhirType() {
@@ -1281,6 +1752,7 @@ public class Composition extends DomainResource {
      */
     @Child(name = "type", type = {CodeableConcept.class}, order=2, min=1, max=1, modifier=false, summary=true)
     @Description(shortDefinition="Kind of composition (LOINC if possible)", formalDefinition="Specifies the particular kind of composition (e.g. History and Physical, Discharge Summary, Progress Note). This usually equates to the purpose of making the composition." )
+    @ca.uhn.fhir.model.api.annotation.Binding(valueSet="http://hl7.org/fhir/ValueSet/doc-typecodes")
     protected CodeableConcept type;
 
     /**
@@ -1288,6 +1760,7 @@ public class Composition extends DomainResource {
      */
     @Child(name = "class", type = {CodeableConcept.class}, order=3, min=0, max=1, modifier=false, summary=true)
     @Description(shortDefinition="Categorization of Composition", formalDefinition="A categorization for the type of the composition - helps for indexing and searching. This may be implied by or derived from the code specified in the Composition Type." )
+    @ca.uhn.fhir.model.api.annotation.Binding(valueSet="http://hl7.org/fhir/ValueSet/doc-classcodes")
     protected CodeableConcept class_;
 
     /**
@@ -1302,6 +1775,7 @@ public class Composition extends DomainResource {
      */
     @Child(name = "status", type = {CodeType.class}, order=5, min=1, max=1, modifier=true, summary=true)
     @Description(shortDefinition="preliminary | final | amended | entered-in-error", formalDefinition="The workflow/clinical status of this composition. The status is a marker for the clinical standing of the document." )
+    @ca.uhn.fhir.model.api.annotation.Binding(valueSet="http://hl7.org/fhir/ValueSet/composition-status")
     protected Enumeration<CompositionStatus> status;
 
     /**
@@ -1309,12 +1783,13 @@ public class Composition extends DomainResource {
      */
     @Child(name = "confidentiality", type = {CodeType.class}, order=6, min=0, max=1, modifier=true, summary=true)
     @Description(shortDefinition="As defined by affinity domain", formalDefinition="The code specifying the level of confidentiality of the Composition." )
-    protected CodeType confidentiality;
+    @ca.uhn.fhir.model.api.annotation.Binding(valueSet="http://hl7.org/fhir/ValueSet/v3-ConfidentialityClassification")
+    protected Enumeration<DocumentConfidentiality> confidentiality;
 
     /**
      * Who or what the composition is about. The composition can be about a person, (patient or healthcare practitioner), a device (e.g. a machine) or even a group of subjects (such as a document about a herd of livestock, or a set of patients that share a common exposure).
      */
-    @Child(name = "subject", type = {}, order=7, min=1, max=1, modifier=false, summary=true)
+    @Child(name = "subject", type = {Reference.class}, order=7, min=1, max=1, modifier=false, summary=true)
     @Description(shortDefinition="Who and/or what the composition is about", formalDefinition="Who or what the composition is about. The composition can be about a person, (patient or healthcare practitioner), a device (e.g. a machine) or even a group of subjects (such as a document about a herd of livestock, or a set of patients that share a common exposure)." )
     protected Reference subject;
 
@@ -1380,7 +1855,7 @@ public class Composition extends DomainResource {
     @Description(shortDefinition="Composition is broken into sections", formalDefinition="The root of the sections that make up the composition." )
     protected List<SectionComponent> section;
 
-    private static final long serialVersionUID = 2127852326L;
+    private static final long serialVersionUID = 1076817605L;
 
   /**
    * Constructor
@@ -1611,12 +2086,12 @@ public class Composition extends DomainResource {
     /**
      * @return {@link #confidentiality} (The code specifying the level of confidentiality of the Composition.). This is the underlying object with id, value and extensions. The accessor "getConfidentiality" gives direct access to the value
      */
-    public CodeType getConfidentialityElement() { 
+    public Enumeration<DocumentConfidentiality> getConfidentialityElement() { 
       if (this.confidentiality == null)
         if (Configuration.errorOnAutoCreate())
           throw new Error("Attempt to auto-create Composition.confidentiality");
         else if (Configuration.doAutoCreate())
-          this.confidentiality = new CodeType(); // bb
+          this.confidentiality = new Enumeration<DocumentConfidentiality>(new DocumentConfidentialityEnumFactory()); // bb
       return this.confidentiality;
     }
 
@@ -1631,7 +2106,7 @@ public class Composition extends DomainResource {
     /**
      * @param value {@link #confidentiality} (The code specifying the level of confidentiality of the Composition.). This is the underlying object with id, value and extensions. The accessor "getConfidentiality" gives direct access to the value
      */
-    public Composition setConfidentialityElement(CodeType value) { 
+    public Composition setConfidentialityElement(Enumeration<DocumentConfidentiality> value) { 
       this.confidentiality = value;
       return this;
     }
@@ -1639,19 +2114,19 @@ public class Composition extends DomainResource {
     /**
      * @return The code specifying the level of confidentiality of the Composition.
      */
-    public String getConfidentiality() { 
+    public DocumentConfidentiality getConfidentiality() { 
       return this.confidentiality == null ? null : this.confidentiality.getValue();
     }
 
     /**
      * @param value The code specifying the level of confidentiality of the Composition.
      */
-    public Composition setConfidentiality(String value) { 
-      if (Utilities.noString(value))
+    public Composition setConfidentiality(DocumentConfidentiality value) { 
+      if (value == null)
         this.confidentiality = null;
       else {
         if (this.confidentiality == null)
-          this.confidentiality = new CodeType();
+          this.confidentiality = new Enumeration<DocumentConfidentiality>(new DocumentConfidentialityEnumFactory());
         this.confidentiality.setValue(value);
       }
       return this;
@@ -1705,6 +2180,14 @@ public class Composition extends DomainResource {
       return this.author;
     }
 
+    /**
+     * @return Returns a reference to <code>this</code> for easy method chaining
+     */
+    public Composition setAuthor(List<Reference> theAuthor) { 
+      this.author = theAuthor;
+      return this;
+    }
+
     public boolean hasAuthor() { 
       if (this.author == null)
         return false;
@@ -1714,10 +2197,6 @@ public class Composition extends DomainResource {
       return false;
     }
 
-    /**
-     * @return {@link #author} (Identifies who is responsible for the information in the composition, not necessarily who typed it in.)
-     */
-    // syntactic sugar
     public Reference addAuthor() { //3
       Reference t = new Reference();
       if (this.author == null)
@@ -1726,7 +2205,6 @@ public class Composition extends DomainResource {
       return t;
     }
 
-    // syntactic sugar
     public Composition addAuthor(Reference t) { //3
       if (t == null)
         return this;
@@ -1737,8 +2215,19 @@ public class Composition extends DomainResource {
     }
 
     /**
-     * @return {@link #author} (The actual objects that are the target of the reference. The reference library doesn't populate this, but you can use this to hold the resources if you resolvethemt. Identifies who is responsible for the information in the composition, not necessarily who typed it in.)
+     * @return The first repetition of repeating field {@link #author}, creating it if it does not already exist
      */
+    public Reference getAuthorFirstRep() { 
+      if (getAuthor().isEmpty()) {
+        addAuthor();
+      }
+      return getAuthor().get(0);
+    }
+
+    /**
+     * @deprecated Use Reference#setResource(IBaseResource) instead
+     */
+    @Deprecated
     public List<Resource> getAuthorTarget() { 
       if (this.authorTarget == null)
         this.authorTarget = new ArrayList<Resource>();
@@ -1754,6 +2243,14 @@ public class Composition extends DomainResource {
       return this.attester;
     }
 
+    /**
+     * @return Returns a reference to <code>this</code> for easy method chaining
+     */
+    public Composition setAttester(List<CompositionAttesterComponent> theAttester) { 
+      this.attester = theAttester;
+      return this;
+    }
+
     public boolean hasAttester() { 
       if (this.attester == null)
         return false;
@@ -1763,10 +2260,6 @@ public class Composition extends DomainResource {
       return false;
     }
 
-    /**
-     * @return {@link #attester} (A participant who has attested to the accuracy of the composition/document.)
-     */
-    // syntactic sugar
     public CompositionAttesterComponent addAttester() { //3
       CompositionAttesterComponent t = new CompositionAttesterComponent();
       if (this.attester == null)
@@ -1775,7 +2268,6 @@ public class Composition extends DomainResource {
       return t;
     }
 
-    // syntactic sugar
     public Composition addAttester(CompositionAttesterComponent t) { //3
       if (t == null)
         return this;
@@ -1783,6 +2275,16 @@ public class Composition extends DomainResource {
         this.attester = new ArrayList<CompositionAttesterComponent>();
       this.attester.add(t);
       return this;
+    }
+
+    /**
+     * @return The first repetition of repeating field {@link #attester}, creating it if it does not already exist
+     */
+    public CompositionAttesterComponent getAttesterFirstRep() { 
+      if (getAttester().isEmpty()) {
+        addAttester();
+      }
+      return getAttester().get(0);
     }
 
     /**
@@ -1838,6 +2340,14 @@ public class Composition extends DomainResource {
       return this.event;
     }
 
+    /**
+     * @return Returns a reference to <code>this</code> for easy method chaining
+     */
+    public Composition setEvent(List<CompositionEventComponent> theEvent) { 
+      this.event = theEvent;
+      return this;
+    }
+
     public boolean hasEvent() { 
       if (this.event == null)
         return false;
@@ -1847,10 +2357,6 @@ public class Composition extends DomainResource {
       return false;
     }
 
-    /**
-     * @return {@link #event} (The clinical service, such as a colonoscopy or an appendectomy, being documented.)
-     */
-    // syntactic sugar
     public CompositionEventComponent addEvent() { //3
       CompositionEventComponent t = new CompositionEventComponent();
       if (this.event == null)
@@ -1859,7 +2365,6 @@ public class Composition extends DomainResource {
       return t;
     }
 
-    // syntactic sugar
     public Composition addEvent(CompositionEventComponent t) { //3
       if (t == null)
         return this;
@@ -1867,6 +2372,16 @@ public class Composition extends DomainResource {
         this.event = new ArrayList<CompositionEventComponent>();
       this.event.add(t);
       return this;
+    }
+
+    /**
+     * @return The first repetition of repeating field {@link #event}, creating it if it does not already exist
+     */
+    public CompositionEventComponent getEventFirstRep() { 
+      if (getEvent().isEmpty()) {
+        addEvent();
+      }
+      return getEvent().get(0);
     }
 
     /**
@@ -1922,6 +2437,14 @@ public class Composition extends DomainResource {
       return this.section;
     }
 
+    /**
+     * @return Returns a reference to <code>this</code> for easy method chaining
+     */
+    public Composition setSection(List<SectionComponent> theSection) { 
+      this.section = theSection;
+      return this;
+    }
+
     public boolean hasSection() { 
       if (this.section == null)
         return false;
@@ -1931,10 +2454,6 @@ public class Composition extends DomainResource {
       return false;
     }
 
-    /**
-     * @return {@link #section} (The root of the sections that make up the composition.)
-     */
-    // syntactic sugar
     public SectionComponent addSection() { //3
       SectionComponent t = new SectionComponent();
       if (this.section == null)
@@ -1943,7 +2462,6 @@ public class Composition extends DomainResource {
       return t;
     }
 
-    // syntactic sugar
     public Composition addSection(SectionComponent t) { //3
       if (t == null)
         return this;
@@ -1951,6 +2469,16 @@ public class Composition extends DomainResource {
         this.section = new ArrayList<SectionComponent>();
       this.section.add(t);
       return this;
+    }
+
+    /**
+     * @return The first repetition of repeating field {@link #section}, creating it if it does not already exist
+     */
+    public SectionComponent getSectionFirstRep() { 
+      if (getSection().isEmpty()) {
+        addSection();
+      }
+      return getSection().get(0);
     }
 
       protected void listChildren(List<Property> childrenList) {
@@ -1972,6 +2500,78 @@ public class Composition extends DomainResource {
       }
 
       @Override
+      public Base[] getProperty(int hash, String name, boolean checkValid) throws FHIRException {
+        switch (hash) {
+        case -1618432855: /*identifier*/ return this.identifier == null ? new Base[0] : new Base[] {this.identifier}; // Identifier
+        case 3076014: /*date*/ return this.date == null ? new Base[0] : new Base[] {this.date}; // DateTimeType
+        case 3575610: /*type*/ return this.type == null ? new Base[0] : new Base[] {this.type}; // CodeableConcept
+        case 94742904: /*class*/ return this.class_ == null ? new Base[0] : new Base[] {this.class_}; // CodeableConcept
+        case 110371416: /*title*/ return this.title == null ? new Base[0] : new Base[] {this.title}; // StringType
+        case -892481550: /*status*/ return this.status == null ? new Base[0] : new Base[] {this.status}; // Enumeration<CompositionStatus>
+        case -1923018202: /*confidentiality*/ return this.confidentiality == null ? new Base[0] : new Base[] {this.confidentiality}; // Enumeration<DocumentConfidentiality>
+        case -1867885268: /*subject*/ return this.subject == null ? new Base[0] : new Base[] {this.subject}; // Reference
+        case -1406328437: /*author*/ return this.author == null ? new Base[0] : this.author.toArray(new Base[this.author.size()]); // Reference
+        case 542920370: /*attester*/ return this.attester == null ? new Base[0] : this.attester.toArray(new Base[this.attester.size()]); // CompositionAttesterComponent
+        case 1611297262: /*custodian*/ return this.custodian == null ? new Base[0] : new Base[] {this.custodian}; // Reference
+        case 96891546: /*event*/ return this.event == null ? new Base[0] : this.event.toArray(new Base[this.event.size()]); // CompositionEventComponent
+        case 1524132147: /*encounter*/ return this.encounter == null ? new Base[0] : new Base[] {this.encounter}; // Reference
+        case 1970241253: /*section*/ return this.section == null ? new Base[0] : this.section.toArray(new Base[this.section.size()]); // SectionComponent
+        default: return super.getProperty(hash, name, checkValid);
+        }
+
+      }
+
+      @Override
+      public void setProperty(int hash, String name, Base value) throws FHIRException {
+        switch (hash) {
+        case -1618432855: // identifier
+          this.identifier = castToIdentifier(value); // Identifier
+          break;
+        case 3076014: // date
+          this.date = castToDateTime(value); // DateTimeType
+          break;
+        case 3575610: // type
+          this.type = castToCodeableConcept(value); // CodeableConcept
+          break;
+        case 94742904: // class
+          this.class_ = castToCodeableConcept(value); // CodeableConcept
+          break;
+        case 110371416: // title
+          this.title = castToString(value); // StringType
+          break;
+        case -892481550: // status
+          this.status = new CompositionStatusEnumFactory().fromType(value); // Enumeration<CompositionStatus>
+          break;
+        case -1923018202: // confidentiality
+          this.confidentiality = new DocumentConfidentialityEnumFactory().fromType(value); // Enumeration<DocumentConfidentiality>
+          break;
+        case -1867885268: // subject
+          this.subject = castToReference(value); // Reference
+          break;
+        case -1406328437: // author
+          this.getAuthor().add(castToReference(value)); // Reference
+          break;
+        case 542920370: // attester
+          this.getAttester().add((CompositionAttesterComponent) value); // CompositionAttesterComponent
+          break;
+        case 1611297262: // custodian
+          this.custodian = castToReference(value); // Reference
+          break;
+        case 96891546: // event
+          this.getEvent().add((CompositionEventComponent) value); // CompositionEventComponent
+          break;
+        case 1524132147: // encounter
+          this.encounter = castToReference(value); // Reference
+          break;
+        case 1970241253: // section
+          this.getSection().add((SectionComponent) value); // SectionComponent
+          break;
+        default: super.setProperty(hash, name, value);
+        }
+
+      }
+
+      @Override
       public void setProperty(String name, Base value) throws FHIRException {
         if (name.equals("identifier"))
           this.identifier = castToIdentifier(value); // Identifier
@@ -1986,7 +2586,7 @@ public class Composition extends DomainResource {
         else if (name.equals("status"))
           this.status = new CompositionStatusEnumFactory().fromType(value); // Enumeration<CompositionStatus>
         else if (name.equals("confidentiality"))
-          this.confidentiality = castToCode(value); // CodeType
+          this.confidentiality = new DocumentConfidentialityEnumFactory().fromType(value); // Enumeration<DocumentConfidentiality>
         else if (name.equals("subject"))
           this.subject = castToReference(value); // Reference
         else if (name.equals("author"))
@@ -2003,6 +2603,28 @@ public class Composition extends DomainResource {
           this.getSection().add((SectionComponent) value);
         else
           super.setProperty(name, value);
+      }
+
+      @Override
+      public Base makeProperty(int hash, String name) throws FHIRException {
+        switch (hash) {
+        case -1618432855:  return getIdentifier(); // Identifier
+        case 3076014: throw new FHIRException("Cannot make property date as it is not a complex type"); // DateTimeType
+        case 3575610:  return getType(); // CodeableConcept
+        case 94742904:  return getClass_(); // CodeableConcept
+        case 110371416: throw new FHIRException("Cannot make property title as it is not a complex type"); // StringType
+        case -892481550: throw new FHIRException("Cannot make property status as it is not a complex type"); // Enumeration<CompositionStatus>
+        case -1923018202: throw new FHIRException("Cannot make property confidentiality as it is not a complex type"); // Enumeration<DocumentConfidentiality>
+        case -1867885268:  return getSubject(); // Reference
+        case -1406328437:  return addAuthor(); // Reference
+        case 542920370:  return addAttester(); // CompositionAttesterComponent
+        case 1611297262:  return getCustodian(); // Reference
+        case 96891546:  return addEvent(); // CompositionEventComponent
+        case 1524132147:  return getEncounter(); // Reference
+        case 1970241253:  return addSection(); // SectionComponent
+        default: return super.makeProperty(hash, name);
+        }
+
       }
 
       @Override
@@ -2131,12 +2753,9 @@ public class Composition extends DomainResource {
       }
 
       public boolean isEmpty() {
-        return super.isEmpty() && (identifier == null || identifier.isEmpty()) && (date == null || date.isEmpty())
-           && (type == null || type.isEmpty()) && (class_ == null || class_.isEmpty()) && (title == null || title.isEmpty())
-           && (status == null || status.isEmpty()) && (confidentiality == null || confidentiality.isEmpty())
-           && (subject == null || subject.isEmpty()) && (author == null || author.isEmpty()) && (attester == null || attester.isEmpty())
-           && (custodian == null || custodian.isEmpty()) && (event == null || event.isEmpty()) && (encounter == null || encounter.isEmpty())
-           && (section == null || section.isEmpty());
+        return super.isEmpty() && ca.uhn.fhir.util.ElementUtil.isEmpty(identifier, date, type, class_
+          , title, status, confidentiality, subject, author, attester, custodian, event
+          , encounter, section);
       }
 
   @Override
@@ -2212,7 +2831,7 @@ public class Composition extends DomainResource {
    * Path: <b>Composition.subject</b><br>
    * </p>
    */
-  @SearchParamDefinition(name="subject", path="Composition.subject", description="Who and/or what the composition is about", type="reference" )
+  @SearchParamDefinition(name="subject", path="Composition.subject", description="Who and/or what the composition is about", type="reference", providesMembershipIn={ @ca.uhn.fhir.model.api.annotation.Compartment(name="Patient"), @ca.uhn.fhir.model.api.annotation.Compartment(name="Practitioner") } )
   public static final String SP_SUBJECT = "subject";
  /**
    * <b>Fluent Client</b> search parameter constant for <b>subject</b>
@@ -2238,7 +2857,7 @@ public class Composition extends DomainResource {
    * Path: <b>Composition.author</b><br>
    * </p>
    */
-  @SearchParamDefinition(name="author", path="Composition.author", description="Who and/or what authored the composition", type="reference" )
+  @SearchParamDefinition(name="author", path="Composition.author", description="Who and/or what authored the composition", type="reference", providesMembershipIn={ @ca.uhn.fhir.model.api.annotation.Compartment(name="Device"), @ca.uhn.fhir.model.api.annotation.Compartment(name="Patient"), @ca.uhn.fhir.model.api.annotation.Compartment(name="Practitioner"), @ca.uhn.fhir.model.api.annotation.Compartment(name="RelatedPerson") }, target={Device.class, Patient.class, Practitioner.class, RelatedPerson.class } )
   public static final String SP_AUTHOR = "author";
  /**
    * <b>Fluent Client</b> search parameter constant for <b>author</b>
@@ -2304,7 +2923,7 @@ public class Composition extends DomainResource {
    * Path: <b>Composition.encounter</b><br>
    * </p>
    */
-  @SearchParamDefinition(name="encounter", path="Composition.encounter", description="Context of the Composition", type="reference" )
+  @SearchParamDefinition(name="encounter", path="Composition.encounter", description="Context of the Composition", type="reference", providesMembershipIn={ @ca.uhn.fhir.model.api.annotation.Compartment(name="Encounter") }, target={Encounter.class } )
   public static final String SP_ENCOUNTER = "encounter";
  /**
    * <b>Fluent Client</b> search parameter constant for <b>encounter</b>
@@ -2370,7 +2989,7 @@ public class Composition extends DomainResource {
    * Path: <b>Composition.attester.party</b><br>
    * </p>
    */
-  @SearchParamDefinition(name="attester", path="Composition.attester.party", description="Who attested the composition", type="reference" )
+  @SearchParamDefinition(name="attester", path="Composition.attester.party", description="Who attested the composition", type="reference", providesMembershipIn={ @ca.uhn.fhir.model.api.annotation.Compartment(name="Patient"), @ca.uhn.fhir.model.api.annotation.Compartment(name="Practitioner") }, target={Organization.class, Patient.class, Practitioner.class } )
   public static final String SP_ATTESTER = "attester";
  /**
    * <b>Fluent Client</b> search parameter constant for <b>attester</b>
@@ -2422,7 +3041,7 @@ public class Composition extends DomainResource {
    * Path: <b>Composition.subject</b><br>
    * </p>
    */
-  @SearchParamDefinition(name="patient", path="Composition.subject", description="Who and/or what the composition is about", type="reference" )
+  @SearchParamDefinition(name="patient", path="Composition.subject", description="Who and/or what the composition is about", type="reference", target={Patient.class } )
   public static final String SP_PATIENT = "patient";
  /**
    * <b>Fluent Client</b> search parameter constant for <b>patient</b>

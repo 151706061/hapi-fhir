@@ -10,7 +10,6 @@ import org.hibernate.jpa.HibernatePersistenceProvider;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.DependsOn;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.orm.jpa.JpaTransactionManager;
@@ -19,13 +18,17 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import ca.uhn.fhir.jpa.config.BaseJavaConfigDstu1;
 import ca.uhn.fhir.jpa.dao.DaoConfig;
+import ca.uhn.fhir.rest.server.interceptor.IServerInterceptor;
+import ca.uhn.fhirtest.interceptor.PublicSecurityInterceptor;
 
 @Configuration
 @Import(CommonConfig.class)
 @EnableTransactionManagement()
 public class TestDstu1Config extends BaseJavaConfigDstu1 {
 
-	@Value("${fhir.db.location}")
+	public static final String FHIR_DB_LOCATION = "${fhir.db.location}";
+	
+	@Value(FHIR_DB_LOCATION)
 	private String myFhirDbLocation;
 
 	/**
@@ -41,6 +44,9 @@ public class TestDstu1Config extends BaseJavaConfigDstu1 {
 		DaoConfig retVal = new DaoConfig();
 		retVal.setSubscriptionEnabled(false);
 		retVal.setAllowMultipleDelete(false);
+		retVal.setAllowExternalReferences(true);
+		retVal.getTreatBaseUrlsAsLocal().add("http://fhirtest.uhn.ca/baseDstu1");
+		retVal.getTreatBaseUrlsAsLocal().add("https://fhirtest.uhn.ca/baseDstu1");
 		return retVal;
 	}
 

@@ -29,21 +29,20 @@ package org.hl7.fhir.dstu3.model;
   
 */
 
-// Generated on Sat, Jan 30, 2016 09:18-0500 for FHIR v1.3.0
+// Generated on Thu, Aug 25, 2016 23:04-0400 for FHIR v1.6.0
 
 import java.util.*;
 
 import org.hl7.fhir.utilities.Utilities;
-
+import org.hl7.fhir.dstu3.model.Enumerations.*;
 import ca.uhn.fhir.model.api.annotation.ResourceDef;
 import ca.uhn.fhir.model.api.annotation.SearchParamDefinition;
 import ca.uhn.fhir.model.api.annotation.Child;
+import ca.uhn.fhir.model.api.annotation.ChildOrder;
 import ca.uhn.fhir.model.api.annotation.Description;
 import ca.uhn.fhir.model.api.annotation.Block;
-
-import org.hl7.fhir.dstu3.exceptions.FHIRException;
-import org.hl7.fhir.dstu3.model.Enumerations.*;
 import org.hl7.fhir.instance.model.api.*;
+import org.hl7.fhir.dstu3.exceptions.FHIRException;
 /**
  * A reference to a document .
  */
@@ -68,7 +67,7 @@ public class DocumentReference extends DomainResource {
          */
         APPENDS, 
         /**
-         * added to help the parsers
+         * added to help the parsers with the generic types
          */
         NULL;
         public static DocumentRelationshipType fromCode(String codeString) throws FHIRException {
@@ -82,7 +81,10 @@ public class DocumentReference extends DomainResource {
           return SIGNS;
         if ("appends".equals(codeString))
           return APPENDS;
-        throw new FHIRException("Unknown DocumentRelationshipType code '"+codeString+"'");
+        if (Configuration.isAcceptInvalidEnums())
+          return null;
+        else
+          throw new FHIRException("Unknown DocumentRelationshipType code '"+codeString+"'");
         }
         public String toCode() {
           switch (this) {
@@ -176,6 +178,7 @@ public class DocumentReference extends DomainResource {
          */
         @Child(name = "code", type = {CodeType.class}, order=1, min=1, max=1, modifier=false, summary=true)
         @Description(shortDefinition="replaces | transforms | signs | appends", formalDefinition="The type of relationship that this document has with anther document." )
+        @ca.uhn.fhir.model.api.annotation.Binding(valueSet="http://hl7.org/fhir/ValueSet/document-relationship-type")
         protected Enumeration<DocumentRelationshipType> code;
 
         /**
@@ -304,6 +307,30 @@ public class DocumentReference extends DomainResource {
         }
 
       @Override
+      public Base[] getProperty(int hash, String name, boolean checkValid) throws FHIRException {
+        switch (hash) {
+        case 3059181: /*code*/ return this.code == null ? new Base[0] : new Base[] {this.code}; // Enumeration<DocumentRelationshipType>
+        case -880905839: /*target*/ return this.target == null ? new Base[0] : new Base[] {this.target}; // Reference
+        default: return super.getProperty(hash, name, checkValid);
+        }
+
+      }
+
+      @Override
+      public void setProperty(int hash, String name, Base value) throws FHIRException {
+        switch (hash) {
+        case 3059181: // code
+          this.code = new DocumentRelationshipTypeEnumFactory().fromType(value); // Enumeration<DocumentRelationshipType>
+          break;
+        case -880905839: // target
+          this.target = castToReference(value); // Reference
+          break;
+        default: super.setProperty(hash, name, value);
+        }
+
+      }
+
+      @Override
       public void setProperty(String name, Base value) throws FHIRException {
         if (name.equals("code"))
           this.code = new DocumentRelationshipTypeEnumFactory().fromType(value); // Enumeration<DocumentRelationshipType>
@@ -311,6 +338,16 @@ public class DocumentReference extends DomainResource {
           this.target = castToReference(value); // Reference
         else
           super.setProperty(name, value);
+      }
+
+      @Override
+      public Base makeProperty(int hash, String name) throws FHIRException {
+        switch (hash) {
+        case 3059181: throw new FHIRException("Cannot make property code as it is not a complex type"); // Enumeration<DocumentRelationshipType>
+        case -880905839:  return getTarget(); // Reference
+        default: return super.makeProperty(hash, name);
+        }
+
       }
 
       @Override
@@ -355,8 +392,7 @@ public class DocumentReference extends DomainResource {
       }
 
       public boolean isEmpty() {
-        return super.isEmpty() && (code == null || code.isEmpty()) && (target == null || target.isEmpty())
-          ;
+        return super.isEmpty() && ca.uhn.fhir.util.ElementUtil.isEmpty(code, target);
       }
 
   public String fhirType() {
@@ -380,6 +416,7 @@ public class DocumentReference extends DomainResource {
          */
         @Child(name = "format", type = {Coding.class}, order=2, min=0, max=Child.MAX_UNLIMITED, modifier=false, summary=true)
         @Description(shortDefinition="Format/content rules for the document", formalDefinition="An identifier of the document encoding, structure, and template that the document conforms to beyond the base format indicated in the mimeType." )
+        @ca.uhn.fhir.model.api.annotation.Binding(valueSet="http://hl7.org/fhir/ValueSet/formatcodes")
         protected List<Coding> format;
 
         private static final long serialVersionUID = -1412643085L;
@@ -432,6 +469,14 @@ public class DocumentReference extends DomainResource {
           return this.format;
         }
 
+        /**
+         * @return Returns a reference to <code>this</code> for easy method chaining
+         */
+        public DocumentReferenceContentComponent setFormat(List<Coding> theFormat) { 
+          this.format = theFormat;
+          return this;
+        }
+
         public boolean hasFormat() { 
           if (this.format == null)
             return false;
@@ -441,10 +486,6 @@ public class DocumentReference extends DomainResource {
           return false;
         }
 
-        /**
-         * @return {@link #format} (An identifier of the document encoding, structure, and template that the document conforms to beyond the base format indicated in the mimeType.)
-         */
-    // syntactic sugar
         public Coding addFormat() { //3
           Coding t = new Coding();
           if (this.format == null)
@@ -453,7 +494,6 @@ public class DocumentReference extends DomainResource {
           return t;
         }
 
-    // syntactic sugar
         public DocumentReferenceContentComponent addFormat(Coding t) { //3
           if (t == null)
             return this;
@@ -463,11 +503,45 @@ public class DocumentReference extends DomainResource {
           return this;
         }
 
+        /**
+         * @return The first repetition of repeating field {@link #format}, creating it if it does not already exist
+         */
+        public Coding getFormatFirstRep() { 
+          if (getFormat().isEmpty()) {
+            addFormat();
+          }
+          return getFormat().get(0);
+        }
+
         protected void listChildren(List<Property> childrenList) {
           super.listChildren(childrenList);
           childrenList.add(new Property("attachment", "Attachment", "The document or url of the document along with critical metadata to prove content has integrity.", 0, java.lang.Integer.MAX_VALUE, attachment));
           childrenList.add(new Property("format", "Coding", "An identifier of the document encoding, structure, and template that the document conforms to beyond the base format indicated in the mimeType.", 0, java.lang.Integer.MAX_VALUE, format));
         }
+
+      @Override
+      public Base[] getProperty(int hash, String name, boolean checkValid) throws FHIRException {
+        switch (hash) {
+        case -1963501277: /*attachment*/ return this.attachment == null ? new Base[0] : new Base[] {this.attachment}; // Attachment
+        case -1268779017: /*format*/ return this.format == null ? new Base[0] : this.format.toArray(new Base[this.format.size()]); // Coding
+        default: return super.getProperty(hash, name, checkValid);
+        }
+
+      }
+
+      @Override
+      public void setProperty(int hash, String name, Base value) throws FHIRException {
+        switch (hash) {
+        case -1963501277: // attachment
+          this.attachment = castToAttachment(value); // Attachment
+          break;
+        case -1268779017: // format
+          this.getFormat().add(castToCoding(value)); // Coding
+          break;
+        default: super.setProperty(hash, name, value);
+        }
+
+      }
 
       @Override
       public void setProperty(String name, Base value) throws FHIRException {
@@ -477,6 +551,16 @@ public class DocumentReference extends DomainResource {
           this.getFormat().add(castToCoding(value));
         else
           super.setProperty(name, value);
+      }
+
+      @Override
+      public Base makeProperty(int hash, String name) throws FHIRException {
+        switch (hash) {
+        case -1963501277:  return getAttachment(); // Attachment
+        case -1268779017:  return addFormat(); // Coding
+        default: return super.makeProperty(hash, name);
+        }
+
       }
 
       @Override
@@ -525,8 +609,7 @@ public class DocumentReference extends DomainResource {
       }
 
       public boolean isEmpty() {
-        return super.isEmpty() && (attachment == null || attachment.isEmpty()) && (format == null || format.isEmpty())
-          ;
+        return super.isEmpty() && ca.uhn.fhir.util.ElementUtil.isEmpty(attachment, format);
       }
 
   public String fhirType() {
@@ -555,6 +638,7 @@ public class DocumentReference extends DomainResource {
          */
         @Child(name = "event", type = {CodeableConcept.class}, order=2, min=0, max=Child.MAX_UNLIMITED, modifier=false, summary=true)
         @Description(shortDefinition="Main Clinical Acts Documented", formalDefinition="This list of codes represents the main clinical acts, such as a colonoscopy or an appendectomy, being documented. In some cases, the event is inherent in the typeCode, such as a \"History and Physical Report\" in which the procedure being documented is necessarily a \"History and Physical\" act." )
+        @ca.uhn.fhir.model.api.annotation.Binding(valueSet="http://hl7.org/fhir/ValueSet/v3-ActCode")
         protected List<CodeableConcept> event;
 
         /**
@@ -569,6 +653,7 @@ public class DocumentReference extends DomainResource {
          */
         @Child(name = "facilityType", type = {CodeableConcept.class}, order=4, min=0, max=1, modifier=false, summary=true)
         @Description(shortDefinition="Kind of facility where patient was seen", formalDefinition="The kind of facility where the patient was seen." )
+        @ca.uhn.fhir.model.api.annotation.Binding(valueSet="http://hl7.org/fhir/ValueSet/c80-facilitycodes")
         protected CodeableConcept facilityType;
 
         /**
@@ -576,6 +661,7 @@ public class DocumentReference extends DomainResource {
          */
         @Child(name = "practiceSetting", type = {CodeableConcept.class}, order=5, min=0, max=1, modifier=false, summary=true)
         @Description(shortDefinition="Additional details about where the content was created (e.g. clinical specialty)", formalDefinition="This property may convey specifics about the practice setting where the content was created, often reflecting the clinical specialty." )
+        @ca.uhn.fhir.model.api.annotation.Binding(valueSet="http://hl7.org/fhir/ValueSet/c80-practice-codes")
         protected CodeableConcept practiceSetting;
 
         /**
@@ -659,6 +745,14 @@ public class DocumentReference extends DomainResource {
           return this.event;
         }
 
+        /**
+         * @return Returns a reference to <code>this</code> for easy method chaining
+         */
+        public DocumentReferenceContextComponent setEvent(List<CodeableConcept> theEvent) { 
+          this.event = theEvent;
+          return this;
+        }
+
         public boolean hasEvent() { 
           if (this.event == null)
             return false;
@@ -668,10 +762,6 @@ public class DocumentReference extends DomainResource {
           return false;
         }
 
-        /**
-         * @return {@link #event} (This list of codes represents the main clinical acts, such as a colonoscopy or an appendectomy, being documented. In some cases, the event is inherent in the typeCode, such as a "History and Physical Report" in which the procedure being documented is necessarily a "History and Physical" act.)
-         */
-    // syntactic sugar
         public CodeableConcept addEvent() { //3
           CodeableConcept t = new CodeableConcept();
           if (this.event == null)
@@ -680,7 +770,6 @@ public class DocumentReference extends DomainResource {
           return t;
         }
 
-    // syntactic sugar
         public DocumentReferenceContextComponent addEvent(CodeableConcept t) { //3
           if (t == null)
             return this;
@@ -688,6 +777,16 @@ public class DocumentReference extends DomainResource {
             this.event = new ArrayList<CodeableConcept>();
           this.event.add(t);
           return this;
+        }
+
+        /**
+         * @return The first repetition of repeating field {@link #event}, creating it if it does not already exist
+         */
+        public CodeableConcept getEventFirstRep() { 
+          if (getEvent().isEmpty()) {
+            addEvent();
+          }
+          return getEvent().get(0);
         }
 
         /**
@@ -815,6 +914,14 @@ public class DocumentReference extends DomainResource {
           return this.related;
         }
 
+        /**
+         * @return Returns a reference to <code>this</code> for easy method chaining
+         */
+        public DocumentReferenceContextComponent setRelated(List<DocumentReferenceContextRelatedComponent> theRelated) { 
+          this.related = theRelated;
+          return this;
+        }
+
         public boolean hasRelated() { 
           if (this.related == null)
             return false;
@@ -824,10 +931,6 @@ public class DocumentReference extends DomainResource {
           return false;
         }
 
-        /**
-         * @return {@link #related} (Related identifiers or resources associated with the DocumentReference.)
-         */
-    // syntactic sugar
         public DocumentReferenceContextRelatedComponent addRelated() { //3
           DocumentReferenceContextRelatedComponent t = new DocumentReferenceContextRelatedComponent();
           if (this.related == null)
@@ -836,7 +939,6 @@ public class DocumentReference extends DomainResource {
           return t;
         }
 
-    // syntactic sugar
         public DocumentReferenceContextComponent addRelated(DocumentReferenceContextRelatedComponent t) { //3
           if (t == null)
             return this;
@@ -844,6 +946,16 @@ public class DocumentReference extends DomainResource {
             this.related = new ArrayList<DocumentReferenceContextRelatedComponent>();
           this.related.add(t);
           return this;
+        }
+
+        /**
+         * @return The first repetition of repeating field {@link #related}, creating it if it does not already exist
+         */
+        public DocumentReferenceContextRelatedComponent getRelatedFirstRep() { 
+          if (getRelated().isEmpty()) {
+            addRelated();
+          }
+          return getRelated().get(0);
         }
 
         protected void listChildren(List<Property> childrenList) {
@@ -856,6 +968,50 @@ public class DocumentReference extends DomainResource {
           childrenList.add(new Property("sourcePatientInfo", "Reference(Patient)", "The Patient Information as known when the document was published. May be a reference to a version specific, or contained.", 0, java.lang.Integer.MAX_VALUE, sourcePatientInfo));
           childrenList.add(new Property("related", "", "Related identifiers or resources associated with the DocumentReference.", 0, java.lang.Integer.MAX_VALUE, related));
         }
+
+      @Override
+      public Base[] getProperty(int hash, String name, boolean checkValid) throws FHIRException {
+        switch (hash) {
+        case 1524132147: /*encounter*/ return this.encounter == null ? new Base[0] : new Base[] {this.encounter}; // Reference
+        case 96891546: /*event*/ return this.event == null ? new Base[0] : this.event.toArray(new Base[this.event.size()]); // CodeableConcept
+        case -991726143: /*period*/ return this.period == null ? new Base[0] : new Base[] {this.period}; // Period
+        case 370698365: /*facilityType*/ return this.facilityType == null ? new Base[0] : new Base[] {this.facilityType}; // CodeableConcept
+        case 331373717: /*practiceSetting*/ return this.practiceSetting == null ? new Base[0] : new Base[] {this.practiceSetting}; // CodeableConcept
+        case 2031381048: /*sourcePatientInfo*/ return this.sourcePatientInfo == null ? new Base[0] : new Base[] {this.sourcePatientInfo}; // Reference
+        case 1090493483: /*related*/ return this.related == null ? new Base[0] : this.related.toArray(new Base[this.related.size()]); // DocumentReferenceContextRelatedComponent
+        default: return super.getProperty(hash, name, checkValid);
+        }
+
+      }
+
+      @Override
+      public void setProperty(int hash, String name, Base value) throws FHIRException {
+        switch (hash) {
+        case 1524132147: // encounter
+          this.encounter = castToReference(value); // Reference
+          break;
+        case 96891546: // event
+          this.getEvent().add(castToCodeableConcept(value)); // CodeableConcept
+          break;
+        case -991726143: // period
+          this.period = castToPeriod(value); // Period
+          break;
+        case 370698365: // facilityType
+          this.facilityType = castToCodeableConcept(value); // CodeableConcept
+          break;
+        case 331373717: // practiceSetting
+          this.practiceSetting = castToCodeableConcept(value); // CodeableConcept
+          break;
+        case 2031381048: // sourcePatientInfo
+          this.sourcePatientInfo = castToReference(value); // Reference
+          break;
+        case 1090493483: // related
+          this.getRelated().add((DocumentReferenceContextRelatedComponent) value); // DocumentReferenceContextRelatedComponent
+          break;
+        default: super.setProperty(hash, name, value);
+        }
+
+      }
 
       @Override
       public void setProperty(String name, Base value) throws FHIRException {
@@ -875,6 +1031,21 @@ public class DocumentReference extends DomainResource {
           this.getRelated().add((DocumentReferenceContextRelatedComponent) value);
         else
           super.setProperty(name, value);
+      }
+
+      @Override
+      public Base makeProperty(int hash, String name) throws FHIRException {
+        switch (hash) {
+        case 1524132147:  return getEncounter(); // Reference
+        case 96891546:  return addEvent(); // CodeableConcept
+        case -991726143:  return getPeriod(); // Period
+        case 370698365:  return getFacilityType(); // CodeableConcept
+        case 331373717:  return getPracticeSetting(); // CodeableConcept
+        case 2031381048:  return getSourcePatientInfo(); // Reference
+        case 1090493483:  return addRelated(); // DocumentReferenceContextRelatedComponent
+        default: return super.makeProperty(hash, name);
+        }
+
       }
 
       @Override
@@ -954,10 +1125,8 @@ public class DocumentReference extends DomainResource {
       }
 
       public boolean isEmpty() {
-        return super.isEmpty() && (encounter == null || encounter.isEmpty()) && (event == null || event.isEmpty())
-           && (period == null || period.isEmpty()) && (facilityType == null || facilityType.isEmpty())
-           && (practiceSetting == null || practiceSetting.isEmpty()) && (sourcePatientInfo == null || sourcePatientInfo.isEmpty())
-           && (related == null || related.isEmpty());
+        return super.isEmpty() && ca.uhn.fhir.util.ElementUtil.isEmpty(encounter, event, period
+          , facilityType, practiceSetting, sourcePatientInfo, related);
       }
 
   public String fhirType() {
@@ -979,7 +1148,7 @@ public class DocumentReference extends DomainResource {
         /**
          * Related Resource to this DocumentReference. If both id and ref are present they shall refer to the same thing.
          */
-        @Child(name = "ref", type = {}, order=2, min=0, max=1, modifier=false, summary=true)
+        @Child(name = "ref", type = {Reference.class}, order=2, min=0, max=1, modifier=false, summary=true)
         @Description(shortDefinition="Related Resource", formalDefinition="Related Resource to this DocumentReference. If both id and ref are present they shall refer to the same thing." )
         protected Reference ref;
 
@@ -1067,6 +1236,30 @@ public class DocumentReference extends DomainResource {
         }
 
       @Override
+      public Base[] getProperty(int hash, String name, boolean checkValid) throws FHIRException {
+        switch (hash) {
+        case -1618432855: /*identifier*/ return this.identifier == null ? new Base[0] : new Base[] {this.identifier}; // Identifier
+        case 112787: /*ref*/ return this.ref == null ? new Base[0] : new Base[] {this.ref}; // Reference
+        default: return super.getProperty(hash, name, checkValid);
+        }
+
+      }
+
+      @Override
+      public void setProperty(int hash, String name, Base value) throws FHIRException {
+        switch (hash) {
+        case -1618432855: // identifier
+          this.identifier = castToIdentifier(value); // Identifier
+          break;
+        case 112787: // ref
+          this.ref = castToReference(value); // Reference
+          break;
+        default: super.setProperty(hash, name, value);
+        }
+
+      }
+
+      @Override
       public void setProperty(String name, Base value) throws FHIRException {
         if (name.equals("identifier"))
           this.identifier = castToIdentifier(value); // Identifier
@@ -1074,6 +1267,16 @@ public class DocumentReference extends DomainResource {
           this.ref = castToReference(value); // Reference
         else
           super.setProperty(name, value);
+      }
+
+      @Override
+      public Base makeProperty(int hash, String name) throws FHIRException {
+        switch (hash) {
+        case -1618432855:  return getIdentifier(); // Identifier
+        case 112787:  return getRef(); // Reference
+        default: return super.makeProperty(hash, name);
+        }
+
       }
 
       @Override
@@ -1119,8 +1322,7 @@ public class DocumentReference extends DomainResource {
       }
 
       public boolean isEmpty() {
-        return super.isEmpty() && (identifier == null || identifier.isEmpty()) && (ref == null || ref.isEmpty())
-          ;
+        return super.isEmpty() && ca.uhn.fhir.util.ElementUtil.isEmpty(identifier, ref);
       }
 
   public String fhirType() {
@@ -1161,6 +1363,7 @@ public class DocumentReference extends DomainResource {
      */
     @Child(name = "type", type = {CodeableConcept.class}, order=3, min=1, max=1, modifier=false, summary=true)
     @Description(shortDefinition="Kind of document (LOINC if possible)", formalDefinition="Specifies the particular kind of document referenced  (e.g. History and Physical, Discharge Summary, Progress Note). This usually equates to the purpose of making the document referenced." )
+    @ca.uhn.fhir.model.api.annotation.Binding(valueSet="http://hl7.org/fhir/ValueSet/c80-doc-typecodes")
     protected CodeableConcept type;
 
     /**
@@ -1168,6 +1371,7 @@ public class DocumentReference extends DomainResource {
      */
     @Child(name = "class", type = {CodeableConcept.class}, order=4, min=0, max=1, modifier=false, summary=true)
     @Description(shortDefinition="Categorization of document", formalDefinition="A categorization for the type of document referenced - helps for indexing and searching. This may be implied by or derived from the code specified in the DocumentReference.type." )
+    @ca.uhn.fhir.model.api.annotation.Binding(valueSet="http://hl7.org/fhir/ValueSet/c80-doc-classcodes")
     protected CodeableConcept class_;
 
     /**
@@ -1225,6 +1429,7 @@ public class DocumentReference extends DomainResource {
      */
     @Child(name = "status", type = {CodeType.class}, order=10, min=1, max=1, modifier=true, summary=true)
     @Description(shortDefinition="current | superseded | entered-in-error", formalDefinition="The status of this document reference." )
+    @ca.uhn.fhir.model.api.annotation.Binding(valueSet="http://hl7.org/fhir/ValueSet/document-reference-status")
     protected Enumeration<DocumentReferenceStatus> status;
 
     /**
@@ -1232,6 +1437,7 @@ public class DocumentReference extends DomainResource {
      */
     @Child(name = "docStatus", type = {CodeableConcept.class}, order=11, min=0, max=1, modifier=false, summary=true)
     @Description(shortDefinition="preliminary | final | appended | amended | entered-in-error", formalDefinition="The status of the underlying document." )
+    @ca.uhn.fhir.model.api.annotation.Binding(valueSet="http://hl7.org/fhir/ValueSet/composition-status")
     protected CodeableConcept docStatus;
 
     /**
@@ -1253,6 +1459,7 @@ public class DocumentReference extends DomainResource {
      */
     @Child(name = "securityLabel", type = {CodeableConcept.class}, order=14, min=0, max=Child.MAX_UNLIMITED, modifier=false, summary=true)
     @Description(shortDefinition="Document security-tags", formalDefinition="A set of Security-Tag codes specifying the level of privacy/security of the Document. Note that DocumentReference.meta.security contains the security labels of the \"reference\" to the document, while DocumentReference.securityLabel contains a snapshot of the security labels on the document the reference refers to." )
+    @ca.uhn.fhir.model.api.annotation.Binding(valueSet="http://hl7.org/fhir/ValueSet/security-labels")
     protected List<CodeableConcept> securityLabel;
 
     /**
@@ -1321,6 +1528,14 @@ public class DocumentReference extends DomainResource {
       return this.identifier;
     }
 
+    /**
+     * @return Returns a reference to <code>this</code> for easy method chaining
+     */
+    public DocumentReference setIdentifier(List<Identifier> theIdentifier) { 
+      this.identifier = theIdentifier;
+      return this;
+    }
+
     public boolean hasIdentifier() { 
       if (this.identifier == null)
         return false;
@@ -1330,10 +1545,6 @@ public class DocumentReference extends DomainResource {
       return false;
     }
 
-    /**
-     * @return {@link #identifier} (Other identifiers associated with the document, including version independent identifiers.)
-     */
-    // syntactic sugar
     public Identifier addIdentifier() { //3
       Identifier t = new Identifier();
       if (this.identifier == null)
@@ -1342,7 +1553,6 @@ public class DocumentReference extends DomainResource {
       return t;
     }
 
-    // syntactic sugar
     public DocumentReference addIdentifier(Identifier t) { //3
       if (t == null)
         return this;
@@ -1350,6 +1560,16 @@ public class DocumentReference extends DomainResource {
         this.identifier = new ArrayList<Identifier>();
       this.identifier.add(t);
       return this;
+    }
+
+    /**
+     * @return The first repetition of repeating field {@link #identifier}, creating it if it does not already exist
+     */
+    public Identifier getIdentifierFirstRep() { 
+      if (getIdentifier().isEmpty()) {
+        addIdentifier();
+      }
+      return getIdentifier().get(0);
     }
 
     /**
@@ -1448,6 +1668,14 @@ public class DocumentReference extends DomainResource {
       return this.author;
     }
 
+    /**
+     * @return Returns a reference to <code>this</code> for easy method chaining
+     */
+    public DocumentReference setAuthor(List<Reference> theAuthor) { 
+      this.author = theAuthor;
+      return this;
+    }
+
     public boolean hasAuthor() { 
       if (this.author == null)
         return false;
@@ -1457,10 +1685,6 @@ public class DocumentReference extends DomainResource {
       return false;
     }
 
-    /**
-     * @return {@link #author} (Identifies who is responsible for adding the information to the document.)
-     */
-    // syntactic sugar
     public Reference addAuthor() { //3
       Reference t = new Reference();
       if (this.author == null)
@@ -1469,7 +1693,6 @@ public class DocumentReference extends DomainResource {
       return t;
     }
 
-    // syntactic sugar
     public DocumentReference addAuthor(Reference t) { //3
       if (t == null)
         return this;
@@ -1480,8 +1703,19 @@ public class DocumentReference extends DomainResource {
     }
 
     /**
-     * @return {@link #author} (The actual objects that are the target of the reference. The reference library doesn't populate this, but you can use this to hold the resources if you resolvethemt. Identifies who is responsible for adding the information to the document.)
+     * @return The first repetition of repeating field {@link #author}, creating it if it does not already exist
      */
+    public Reference getAuthorFirstRep() { 
+      if (getAuthor().isEmpty()) {
+        addAuthor();
+      }
+      return getAuthor().get(0);
+    }
+
+    /**
+     * @deprecated Use Reference#setResource(IBaseResource) instead
+     */
+    @Deprecated
     public List<Resource> getAuthorTarget() { 
       if (this.authorTarget == null)
         this.authorTarget = new ArrayList<Resource>();
@@ -1743,6 +1977,14 @@ public class DocumentReference extends DomainResource {
       return this.relatesTo;
     }
 
+    /**
+     * @return Returns a reference to <code>this</code> for easy method chaining
+     */
+    public DocumentReference setRelatesTo(List<DocumentReferenceRelatesToComponent> theRelatesTo) { 
+      this.relatesTo = theRelatesTo;
+      return this;
+    }
+
     public boolean hasRelatesTo() { 
       if (this.relatesTo == null)
         return false;
@@ -1752,10 +1994,6 @@ public class DocumentReference extends DomainResource {
       return false;
     }
 
-    /**
-     * @return {@link #relatesTo} (Relationships that this document has with other document references that already exist.)
-     */
-    // syntactic sugar
     public DocumentReferenceRelatesToComponent addRelatesTo() { //3
       DocumentReferenceRelatesToComponent t = new DocumentReferenceRelatesToComponent();
       if (this.relatesTo == null)
@@ -1764,7 +2002,6 @@ public class DocumentReference extends DomainResource {
       return t;
     }
 
-    // syntactic sugar
     public DocumentReference addRelatesTo(DocumentReferenceRelatesToComponent t) { //3
       if (t == null)
         return this;
@@ -1772,6 +2009,16 @@ public class DocumentReference extends DomainResource {
         this.relatesTo = new ArrayList<DocumentReferenceRelatesToComponent>();
       this.relatesTo.add(t);
       return this;
+    }
+
+    /**
+     * @return The first repetition of repeating field {@link #relatesTo}, creating it if it does not already exist
+     */
+    public DocumentReferenceRelatesToComponent getRelatesToFirstRep() { 
+      if (getRelatesTo().isEmpty()) {
+        addRelatesTo();
+      }
+      return getRelatesTo().get(0);
     }
 
     /**
@@ -1832,6 +2079,14 @@ public class DocumentReference extends DomainResource {
       return this.securityLabel;
     }
 
+    /**
+     * @return Returns a reference to <code>this</code> for easy method chaining
+     */
+    public DocumentReference setSecurityLabel(List<CodeableConcept> theSecurityLabel) { 
+      this.securityLabel = theSecurityLabel;
+      return this;
+    }
+
     public boolean hasSecurityLabel() { 
       if (this.securityLabel == null)
         return false;
@@ -1841,10 +2096,6 @@ public class DocumentReference extends DomainResource {
       return false;
     }
 
-    /**
-     * @return {@link #securityLabel} (A set of Security-Tag codes specifying the level of privacy/security of the Document. Note that DocumentReference.meta.security contains the security labels of the "reference" to the document, while DocumentReference.securityLabel contains a snapshot of the security labels on the document the reference refers to.)
-     */
-    // syntactic sugar
     public CodeableConcept addSecurityLabel() { //3
       CodeableConcept t = new CodeableConcept();
       if (this.securityLabel == null)
@@ -1853,7 +2104,6 @@ public class DocumentReference extends DomainResource {
       return t;
     }
 
-    // syntactic sugar
     public DocumentReference addSecurityLabel(CodeableConcept t) { //3
       if (t == null)
         return this;
@@ -1861,6 +2111,16 @@ public class DocumentReference extends DomainResource {
         this.securityLabel = new ArrayList<CodeableConcept>();
       this.securityLabel.add(t);
       return this;
+    }
+
+    /**
+     * @return The first repetition of repeating field {@link #securityLabel}, creating it if it does not already exist
+     */
+    public CodeableConcept getSecurityLabelFirstRep() { 
+      if (getSecurityLabel().isEmpty()) {
+        addSecurityLabel();
+      }
+      return getSecurityLabel().get(0);
     }
 
     /**
@@ -1872,6 +2132,14 @@ public class DocumentReference extends DomainResource {
       return this.content;
     }
 
+    /**
+     * @return Returns a reference to <code>this</code> for easy method chaining
+     */
+    public DocumentReference setContent(List<DocumentReferenceContentComponent> theContent) { 
+      this.content = theContent;
+      return this;
+    }
+
     public boolean hasContent() { 
       if (this.content == null)
         return false;
@@ -1881,10 +2149,6 @@ public class DocumentReference extends DomainResource {
       return false;
     }
 
-    /**
-     * @return {@link #content} (The document and format referenced. There may be multiple content element repetitions, each with a different format.)
-     */
-    // syntactic sugar
     public DocumentReferenceContentComponent addContent() { //3
       DocumentReferenceContentComponent t = new DocumentReferenceContentComponent();
       if (this.content == null)
@@ -1893,7 +2157,6 @@ public class DocumentReference extends DomainResource {
       return t;
     }
 
-    // syntactic sugar
     public DocumentReference addContent(DocumentReferenceContentComponent t) { //3
       if (t == null)
         return this;
@@ -1901,6 +2164,16 @@ public class DocumentReference extends DomainResource {
         this.content = new ArrayList<DocumentReferenceContentComponent>();
       this.content.add(t);
       return this;
+    }
+
+    /**
+     * @return The first repetition of repeating field {@link #content}, creating it if it does not already exist
+     */
+    public DocumentReferenceContentComponent getContentFirstRep() { 
+      if (getContent().isEmpty()) {
+        addContent();
+      }
+      return getContent().get(0);
     }
 
     /**
@@ -1949,6 +2222,90 @@ public class DocumentReference extends DomainResource {
       }
 
       @Override
+      public Base[] getProperty(int hash, String name, boolean checkValid) throws FHIRException {
+        switch (hash) {
+        case 243769515: /*masterIdentifier*/ return this.masterIdentifier == null ? new Base[0] : new Base[] {this.masterIdentifier}; // Identifier
+        case -1618432855: /*identifier*/ return this.identifier == null ? new Base[0] : this.identifier.toArray(new Base[this.identifier.size()]); // Identifier
+        case -1867885268: /*subject*/ return this.subject == null ? new Base[0] : new Base[] {this.subject}; // Reference
+        case 3575610: /*type*/ return this.type == null ? new Base[0] : new Base[] {this.type}; // CodeableConcept
+        case 94742904: /*class*/ return this.class_ == null ? new Base[0] : new Base[] {this.class_}; // CodeableConcept
+        case -1406328437: /*author*/ return this.author == null ? new Base[0] : this.author.toArray(new Base[this.author.size()]); // Reference
+        case 1611297262: /*custodian*/ return this.custodian == null ? new Base[0] : new Base[] {this.custodian}; // Reference
+        case 1815000435: /*authenticator*/ return this.authenticator == null ? new Base[0] : new Base[] {this.authenticator}; // Reference
+        case 1028554472: /*created*/ return this.created == null ? new Base[0] : new Base[] {this.created}; // DateTimeType
+        case 1943292145: /*indexed*/ return this.indexed == null ? new Base[0] : new Base[] {this.indexed}; // InstantType
+        case -892481550: /*status*/ return this.status == null ? new Base[0] : new Base[] {this.status}; // Enumeration<DocumentReferenceStatus>
+        case -23496886: /*docStatus*/ return this.docStatus == null ? new Base[0] : new Base[] {this.docStatus}; // CodeableConcept
+        case -7765931: /*relatesTo*/ return this.relatesTo == null ? new Base[0] : this.relatesTo.toArray(new Base[this.relatesTo.size()]); // DocumentReferenceRelatesToComponent
+        case -1724546052: /*description*/ return this.description == null ? new Base[0] : new Base[] {this.description}; // StringType
+        case -722296940: /*securityLabel*/ return this.securityLabel == null ? new Base[0] : this.securityLabel.toArray(new Base[this.securityLabel.size()]); // CodeableConcept
+        case 951530617: /*content*/ return this.content == null ? new Base[0] : this.content.toArray(new Base[this.content.size()]); // DocumentReferenceContentComponent
+        case 951530927: /*context*/ return this.context == null ? new Base[0] : new Base[] {this.context}; // DocumentReferenceContextComponent
+        default: return super.getProperty(hash, name, checkValid);
+        }
+
+      }
+
+      @Override
+      public void setProperty(int hash, String name, Base value) throws FHIRException {
+        switch (hash) {
+        case 243769515: // masterIdentifier
+          this.masterIdentifier = castToIdentifier(value); // Identifier
+          break;
+        case -1618432855: // identifier
+          this.getIdentifier().add(castToIdentifier(value)); // Identifier
+          break;
+        case -1867885268: // subject
+          this.subject = castToReference(value); // Reference
+          break;
+        case 3575610: // type
+          this.type = castToCodeableConcept(value); // CodeableConcept
+          break;
+        case 94742904: // class
+          this.class_ = castToCodeableConcept(value); // CodeableConcept
+          break;
+        case -1406328437: // author
+          this.getAuthor().add(castToReference(value)); // Reference
+          break;
+        case 1611297262: // custodian
+          this.custodian = castToReference(value); // Reference
+          break;
+        case 1815000435: // authenticator
+          this.authenticator = castToReference(value); // Reference
+          break;
+        case 1028554472: // created
+          this.created = castToDateTime(value); // DateTimeType
+          break;
+        case 1943292145: // indexed
+          this.indexed = castToInstant(value); // InstantType
+          break;
+        case -892481550: // status
+          this.status = new DocumentReferenceStatusEnumFactory().fromType(value); // Enumeration<DocumentReferenceStatus>
+          break;
+        case -23496886: // docStatus
+          this.docStatus = castToCodeableConcept(value); // CodeableConcept
+          break;
+        case -7765931: // relatesTo
+          this.getRelatesTo().add((DocumentReferenceRelatesToComponent) value); // DocumentReferenceRelatesToComponent
+          break;
+        case -1724546052: // description
+          this.description = castToString(value); // StringType
+          break;
+        case -722296940: // securityLabel
+          this.getSecurityLabel().add(castToCodeableConcept(value)); // CodeableConcept
+          break;
+        case 951530617: // content
+          this.getContent().add((DocumentReferenceContentComponent) value); // DocumentReferenceContentComponent
+          break;
+        case 951530927: // context
+          this.context = (DocumentReferenceContextComponent) value; // DocumentReferenceContextComponent
+          break;
+        default: super.setProperty(hash, name, value);
+        }
+
+      }
+
+      @Override
       public void setProperty(String name, Base value) throws FHIRException {
         if (name.equals("masterIdentifier"))
           this.masterIdentifier = castToIdentifier(value); // Identifier
@@ -1986,6 +2343,31 @@ public class DocumentReference extends DomainResource {
           this.context = (DocumentReferenceContextComponent) value; // DocumentReferenceContextComponent
         else
           super.setProperty(name, value);
+      }
+
+      @Override
+      public Base makeProperty(int hash, String name) throws FHIRException {
+        switch (hash) {
+        case 243769515:  return getMasterIdentifier(); // Identifier
+        case -1618432855:  return addIdentifier(); // Identifier
+        case -1867885268:  return getSubject(); // Reference
+        case 3575610:  return getType(); // CodeableConcept
+        case 94742904:  return getClass_(); // CodeableConcept
+        case -1406328437:  return addAuthor(); // Reference
+        case 1611297262:  return getCustodian(); // Reference
+        case 1815000435:  return getAuthenticator(); // Reference
+        case 1028554472: throw new FHIRException("Cannot make property created as it is not a complex type"); // DateTimeType
+        case 1943292145: throw new FHIRException("Cannot make property indexed as it is not a complex type"); // InstantType
+        case -892481550: throw new FHIRException("Cannot make property status as it is not a complex type"); // Enumeration<DocumentReferenceStatus>
+        case -23496886:  return getDocStatus(); // CodeableConcept
+        case -7765931:  return addRelatesTo(); // DocumentReferenceRelatesToComponent
+        case -1724546052: throw new FHIRException("Cannot make property description as it is not a complex type"); // StringType
+        case -722296940:  return addSecurityLabel(); // CodeableConcept
+        case 951530617:  return addContent(); // DocumentReferenceContentComponent
+        case 951530927:  return getContext(); // DocumentReferenceContextComponent
+        default: return super.makeProperty(hash, name);
+        }
+
       }
 
       @Override
@@ -2133,13 +2515,9 @@ public class DocumentReference extends DomainResource {
       }
 
       public boolean isEmpty() {
-        return super.isEmpty() && (masterIdentifier == null || masterIdentifier.isEmpty()) && (identifier == null || identifier.isEmpty())
-           && (subject == null || subject.isEmpty()) && (type == null || type.isEmpty()) && (class_ == null || class_.isEmpty())
-           && (author == null || author.isEmpty()) && (custodian == null || custodian.isEmpty()) && (authenticator == null || authenticator.isEmpty())
-           && (created == null || created.isEmpty()) && (indexed == null || indexed.isEmpty()) && (status == null || status.isEmpty())
-           && (docStatus == null || docStatus.isEmpty()) && (relatesTo == null || relatesTo.isEmpty())
-           && (description == null || description.isEmpty()) && (securityLabel == null || securityLabel.isEmpty())
-           && (content == null || content.isEmpty()) && (context == null || context.isEmpty());
+        return super.isEmpty() && ca.uhn.fhir.util.ElementUtil.isEmpty(masterIdentifier, identifier
+          , subject, type, class_, author, custodian, authenticator, created, indexed
+          , status, docStatus, relatesTo, description, securityLabel, content, context);
       }
 
   @Override
@@ -2175,7 +2553,7 @@ public class DocumentReference extends DomainResource {
    * Path: <b>DocumentReference.subject</b><br>
    * </p>
    */
-  @SearchParamDefinition(name="subject", path="DocumentReference.subject", description="Who/what is the subject of the document", type="reference" )
+  @SearchParamDefinition(name="subject", path="DocumentReference.subject", description="Who/what is the subject of the document", type="reference", providesMembershipIn={ @ca.uhn.fhir.model.api.annotation.Compartment(name="Device"), @ca.uhn.fhir.model.api.annotation.Compartment(name="Patient"), @ca.uhn.fhir.model.api.annotation.Compartment(name="Practitioner") }, target={Device.class, Group.class, Patient.class, Practitioner.class } )
   public static final String SP_SUBJECT = "subject";
  /**
    * <b>Fluent Client</b> search parameter constant for <b>subject</b>
@@ -2301,7 +2679,7 @@ public class DocumentReference extends DomainResource {
    * Path: <b>DocumentReference.subject</b><br>
    * </p>
    */
-  @SearchParamDefinition(name="patient", path="DocumentReference.subject", description="Who/what is the subject of the document", type="reference" )
+  @SearchParamDefinition(name="patient", path="DocumentReference.subject", description="Who/what is the subject of the document", type="reference", target={Patient.class } )
   public static final String SP_PATIENT = "patient";
  /**
    * <b>Fluent Client</b> search parameter constant for <b>patient</b>
@@ -2387,7 +2765,7 @@ public class DocumentReference extends DomainResource {
    * Path: <b>DocumentReference.authenticator</b><br>
    * </p>
    */
-  @SearchParamDefinition(name="authenticator", path="DocumentReference.authenticator", description="Who/what authenticated the document", type="reference" )
+  @SearchParamDefinition(name="authenticator", path="DocumentReference.authenticator", description="Who/what authenticated the document", type="reference", providesMembershipIn={ @ca.uhn.fhir.model.api.annotation.Compartment(name="Practitioner") }, target={Organization.class, Practitioner.class } )
   public static final String SP_AUTHENTICATOR = "authenticator";
  /**
    * <b>Fluent Client</b> search parameter constant for <b>authenticator</b>
@@ -2473,7 +2851,7 @@ public class DocumentReference extends DomainResource {
    * Path: <b>DocumentReference.custodian</b><br>
    * </p>
    */
-  @SearchParamDefinition(name="custodian", path="DocumentReference.custodian", description="Organization which maintains the document", type="reference" )
+  @SearchParamDefinition(name="custodian", path="DocumentReference.custodian", description="Organization which maintains the document", type="reference", target={Organization.class } )
   public static final String SP_CUSTODIAN = "custodian";
  /**
    * <b>Fluent Client</b> search parameter constant for <b>custodian</b>
@@ -2519,7 +2897,7 @@ public class DocumentReference extends DomainResource {
    * Path: <b>DocumentReference.author</b><br>
    * </p>
    */
-  @SearchParamDefinition(name="author", path="DocumentReference.author", description="Who and/or what authored the document", type="reference" )
+  @SearchParamDefinition(name="author", path="DocumentReference.author", description="Who and/or what authored the document", type="reference", providesMembershipIn={ @ca.uhn.fhir.model.api.annotation.Compartment(name="Device"), @ca.uhn.fhir.model.api.annotation.Compartment(name="Patient"), @ca.uhn.fhir.model.api.annotation.Compartment(name="Practitioner"), @ca.uhn.fhir.model.api.annotation.Compartment(name="RelatedPerson") }, target={Device.class, Organization.class, Patient.class, Practitioner.class, RelatedPerson.class } )
   public static final String SP_AUTHOR = "author";
  /**
    * <b>Fluent Client</b> search parameter constant for <b>author</b>
@@ -2585,7 +2963,7 @@ public class DocumentReference extends DomainResource {
    * Path: <b>DocumentReference.context.encounter</b><br>
    * </p>
    */
-  @SearchParamDefinition(name="encounter", path="DocumentReference.context.encounter", description="Context of the document  content", type="reference" )
+  @SearchParamDefinition(name="encounter", path="DocumentReference.context.encounter", description="Context of the document  content", type="reference", target={Encounter.class } )
   public static final String SP_ENCOUNTER = "encounter";
  /**
    * <b>Fluent Client</b> search parameter constant for <b>encounter</b>
@@ -2657,7 +3035,7 @@ public class DocumentReference extends DomainResource {
    * Path: <b>DocumentReference.relatesTo.target</b><br>
    * </p>
    */
-  @SearchParamDefinition(name="relatesto", path="DocumentReference.relatesTo.target", description="Target of the relationship", type="reference" )
+  @SearchParamDefinition(name="relatesto", path="DocumentReference.relatesTo.target", description="Target of the relationship", type="reference", target={DocumentReference.class } )
   public static final String SP_RELATESTO = "relatesto";
  /**
    * <b>Fluent Client</b> search parameter constant for <b>relatesto</b>

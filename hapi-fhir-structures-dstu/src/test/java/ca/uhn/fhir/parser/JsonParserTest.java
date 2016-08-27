@@ -26,8 +26,10 @@ import org.hamcrest.core.StringContains;
 import org.hamcrest.text.StringContainsInOrder;
 import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.hl7.fhir.instance.model.api.INarrative;
+import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import ca.uhn.fhir.context.ConfigurationException;
@@ -41,7 +43,6 @@ import ca.uhn.fhir.model.api.TagList;
 import ca.uhn.fhir.model.api.annotation.Child;
 import ca.uhn.fhir.model.api.annotation.Extension;
 import ca.uhn.fhir.model.api.annotation.ResourceDef;
-import ca.uhn.fhir.model.base.composite.BaseNarrativeDt;
 import ca.uhn.fhir.model.dstu.composite.AddressDt;
 import ca.uhn.fhir.model.dstu.composite.HumanNameDt;
 import ca.uhn.fhir.model.dstu.composite.ResourceReferenceDt;
@@ -74,6 +75,7 @@ import ca.uhn.fhir.model.primitive.InstantDt;
 import ca.uhn.fhir.model.primitive.StringDt;
 import ca.uhn.fhir.model.primitive.XhtmlDt;
 import ca.uhn.fhir.narrative.INarrativeGenerator;
+import ca.uhn.fhir.util.TestUtil;
 import net.sf.json.JSON;
 import net.sf.json.JSONSerializer;
 
@@ -85,6 +87,8 @@ public class JsonParserTest {
 		String msg = IOUtils.toString(XmlParser.class.getResourceAsStream(name));
 		// ourLog.info(msg);
 
+		msg = msg.replace("\"div\": \"<div>", "\"div\":\"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\">");
+		
 		IParser p = ourCtx.newJsonParser();
 		Profile res = p.parseResource(Profile.class, msg);
 
@@ -290,10 +294,10 @@ public class JsonParserTest {
 		ourLog.info(bundleString);
 
 		List<String> strings = new ArrayList<String>();
-		strings.addAll(Arrays.asList("\"id\":\"1\""));
+		strings.addAll(Arrays.asList("\"id\": \"1\""));
 		strings.addAll(Arrays.asList("this is the summary"));
-		strings.addAll(Arrays.asList("\"id\":\"2\"", "\"rel\":\"alternate\"", "\"href\":\"http://foo/bar\""));
-		strings.addAll(Arrays.asList("\"deleted\":\"" + nowDt.getValueAsString() + "\"", "\"id\":\"Patient/3\""));
+		strings.addAll(Arrays.asList("\"id\": \"2\"", "\"rel\": \"alternate\"", "\"href\": \"http://foo/bar\""));
+		strings.addAll(Arrays.asList("\"deleted\": \"" + nowDt.getValueAsString() + "\"", "\"id\": \"Patient/3\""));
 		assertThat(bundleString, StringContainsInOrder.stringContainsInOrder(strings));
 
 		b.getEntries().remove(2);
@@ -368,7 +372,7 @@ public class JsonParserTest {
 
 		String encoded = xmlParser.encodeResourceToString(patient);
 		ourLog.info(encoded);
-		assertThat(encoded, stringContainsInOrder(Arrays.asList("\"contained\":[", "\"id\":\"1\"", "\"identifier\"", "\"reference\":\"#1\"")));
+		assertThat(encoded, stringContainsInOrder(Arrays.asList("\"contained\": [", "\"id\": \"1\"", "\"identifier\"", "\"reference\": \"#1\"")));
 
 		// Create a bundle with just the patient resource
 		List<IResource> resources = new ArrayList<IResource>();
@@ -378,7 +382,7 @@ public class JsonParserTest {
 		// Encode the bundle
 		encoded = xmlParser.encodeBundleToString(b);
 		ourLog.info(encoded);
-		assertThat(encoded, stringContainsInOrder(Arrays.asList("\"contained\":[", "\"id\":\"1\"", "\"identifier\"", "\"reference\":\"#1\"")));
+		assertThat(encoded, stringContainsInOrder(Arrays.asList("\"contained\": [", "\"id\": \"1\"", "\"identifier\"", "\"reference\": \"#1\"")));
 
 		// Re-parse the bundle
 		patient = (Patient) xmlParser.parseResource(xmlParser.encodeResourceToString(patient));
@@ -392,7 +396,7 @@ public class JsonParserTest {
 		// And re-encode a second time
 		encoded = xmlParser.encodeResourceToString(patient);
 		ourLog.info(encoded);
-		assertThat(encoded, stringContainsInOrder(Arrays.asList("\"contained\":[", "\"id\":\"1\"", "\"identifier\"", "\"reference\":\"#1\"")));
+		assertThat(encoded, stringContainsInOrder(Arrays.asList("\"contained\": [", "\"id\": \"1\"", "\"identifier\"", "\"reference\": \"#1\"")));
 		assertThat(encoded, not(stringContainsInOrder(Arrays.asList("\"contained\":", "[", "\"contained\":"))));
 
 		// And re-encode once more, with the references cleared
@@ -400,7 +404,7 @@ public class JsonParserTest {
 		patient.getManagingOrganization().setReference((IdDt) null);
 		encoded = xmlParser.encodeResourceToString(patient);
 		ourLog.info(encoded);
-		assertThat(encoded, stringContainsInOrder(Arrays.asList("\"contained\":[", "\"id\":\"1\"", "\"identifier\"", "\"reference\":\"#1\"")));
+		assertThat(encoded, stringContainsInOrder(Arrays.asList("\"contained\": [", "\"id\": \"1\"", "\"identifier\"", "\"reference\": \"#1\"")));
 		assertThat(encoded, not(stringContainsInOrder(Arrays.asList("\"contained\":", "[", "\"contained\":"))));
 
 		// And re-encode once more, with the references cleared and a manually set local ID
@@ -409,7 +413,7 @@ public class JsonParserTest {
 		patient.getManagingOrganization().getResource().setId(new IdDt("#333"));
 		encoded = xmlParser.encodeResourceToString(patient);
 		ourLog.info(encoded);
-		assertThat(encoded, stringContainsInOrder(Arrays.asList("\"contained\":[", "\"id\":\"333\"", "\"identifier\"", "\"reference\":\"#333\"")));
+		assertThat(encoded, stringContainsInOrder(Arrays.asList("\"contained\": [", "\"id\": \"333\"", "\"identifier\"", "\"reference\": \"#333\"")));
 		assertThat(encoded, not(stringContainsInOrder(Arrays.asList("\"contained\":", "[", "\"contained\":"))));
 
 	}
@@ -434,13 +438,13 @@ public class JsonParserTest {
 		// Encode the buntdle
 		String encoded = ourCtx.newJsonParser().setPrettyPrint(true).encodeBundleToString(b);
 		ourLog.info(encoded);
-		assertThat(encoded, stringContainsInOrder(Arrays.asList("\"contained\"", "resourceType\":\"Organization", "id\":\"1\"")));
-		assertThat(encoded, containsString("reference\":\"#1\""));
+		assertThat(encoded, stringContainsInOrder(Arrays.asList("\"contained\"", "resourceType\": \"Organization", "id\": \"1\"")));
+		assertThat(encoded, containsString("reference\": \"#1\""));
 
 		encoded = ourCtx.newJsonParser().setPrettyPrint(true).encodeResourceToString(patient);
 		ourLog.info(encoded);
-		assertThat(encoded, stringContainsInOrder(Arrays.asList("\"contained\"", "resourceType\":\"Organization", "id\":\"1\"")));
-		assertThat(encoded, containsString("reference\":\"#1\""));
+		assertThat(encoded, stringContainsInOrder(Arrays.asList("\"contained\"", "resourceType\": \"Organization", "id\": \"1\"")));
+		assertThat(encoded, containsString("reference\": \"#1\""));
 	}
 
 	@Test
@@ -467,14 +471,14 @@ public class JsonParserTest {
 		String str = p.encodeResourceToString(rpt);
 
 		ourLog.info(str);
-		assertThat(str, StringContains.containsString("<div>AAA</div>"));
-		String substring = "\"reference\":\"#";
+		assertThat(str, StringContains.containsString("<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\">AAA</div>"));
+		String substring = "\"reference\": \"#";
 		assertThat(str, StringContains.containsString(substring));
 
 		int idx = str.indexOf(substring) + substring.length();
 		int idx2 = str.indexOf('"', idx + 1);
 		String id = str.substring(idx, idx2);
-		assertThat(str, StringContains.containsString("\"id\":\"" + id + "\""));
+		assertThat(str, StringContains.containsString("\"id\": \"" + id + "\""));
 		assertThat(str, IsNot.not(StringContains.containsString("<?xml version='1.0'?>")));
 
 	}
@@ -552,12 +556,17 @@ public class JsonParserTest {
 		code.setDisplay("someDisplay");
 		code.addUndeclaredExtension(false, "urn:alt", new StringDt("alt name"));
 
-		String encoded = ourCtx.newJsonParser().encodeResourceToString(valueSet);
+		IParser parser = ourCtx.newJsonParser();
+		String encoded = parser.encodeResourceToString(valueSet);
 		ourLog.info(encoded);
 
 		assertThat(encoded, not(containsString("123456")));
-		assertEquals("{\"resourceType\":\"ValueSet\",\"define\":{\"concept\":[{\"extension\":[{\"url\":\"urn:alt\",\"valueString\":\"alt name\"}],\"code\":\"someCode\",\"display\":\"someDisplay\"}]}}",
-				encoded);
+		
+		String expected = "{\"resourceType\":\"ValueSet\",\"define\":{\"concept\":[{\"extension\":[{\"url\":\"urn:alt\",\"valueString\":\"alt name\"}],\"code\":\"someCode\",\"display\":\"someDisplay\"}]}}";
+		ourLog.info("Expected: {}", expected);
+		ourLog.info("Actual  : {}", encoded);
+		
+		assertEquals(expected, encoded);
 
 	}
 
@@ -615,9 +624,14 @@ public class JsonParserTest {
 		String encoded = ourCtx.newJsonParser().setPrettyPrint(true).encodeResourceToString(c);
 		ourLog.info(encoded);
 
-		encoded = ourCtx.newJsonParser().setPrettyPrint(false).encodeResourceToString(c);
-		ourLog.info(encoded);
-		assertEquals(encoded, "{\"resourceType\":\"Conformance\",\"extension\":[{\"url\":\"http://foo\",\"valueString\":\"AAA\"}]}");
+		IParser setPrettyPrint = ourCtx.newJsonParser().setPrettyPrint(false);
+		encoded = setPrettyPrint.encodeResourceToString(c);
+		String expected = "{\"resourceType\":\"Conformance\",\"extension\":[{\"url\":\"http://foo\",\"valueString\":\"AAA\"}]}";
+		
+		ourLog.info("Expected: {}", expected);
+		ourLog.info("Actual  : {}", encoded);
+		
+		assertEquals(expected, encoded);
 
 	}
 
@@ -669,10 +683,6 @@ public class JsonParserTest {
 
 		ListResource parsed = ourCtx.newJsonParser().parseResource(ListResource.class, enc);
 		assertEquals(Patient.class, parsed.getEntryFirstRep().getItem().getResource().getClass());
-
-		enc = enc.replace("\"id\"", "\"_id\"");
-		parsed = ourCtx.newJsonParser().parseResource(ListResource.class, enc);
-		assertEquals(Patient.class, parsed.getEntryFirstRep().getItem().getResource().getClass());
 	}
 
 	@Test
@@ -702,7 +712,7 @@ public class JsonParserTest {
 
 		String out = ourCtx.newJsonParser().setPrettyPrint(true).encodeBundleToString(b);
 		ourLog.info(out);
-		assertThat(out, containsString("<div>hello</div>"));
+		assertThat(out, containsString("<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\">hello</div>"));
 
 		p.getText().setDiv("<xhtml:div xmlns:xhtml=\"http://www.w3.org/1999/xhtml\">hello</xhtml:div>");
 		out = ourCtx.newJsonParser().setPrettyPrint(true).encodeBundleToString(b);
@@ -727,12 +737,12 @@ public class JsonParserTest {
 		String encoded = ourCtx.newJsonParser().setPrettyPrint(true).encodeBundleToString(b);
 		ourLog.info(encoded);
 		assertThat(encoded, not(containsString("contained")));
-		assertThat(encoded, containsString("\"reference\":\"Organization/65546\""));
+		assertThat(encoded, containsString("\"reference\": \"Organization/65546\""));
 
 		encoded = ourCtx.newJsonParser().setPrettyPrint(true).encodeResourceToString(patient);
 		ourLog.info(encoded);
 		assertThat(encoded, not(containsString("contained")));
-		assertThat(encoded, containsString("\"reference\":\"Organization/65546\""));
+		assertThat(encoded, containsString("\"reference\": \"Organization/65546\""));
 	}
 
 	@Test
@@ -926,7 +936,7 @@ public class JsonParserTest {
 
 		String encoded = ourCtx.newJsonParser().setPrettyPrint(true).encodeResourceToString(parsed);
 		ourLog.info(encoded);
-		assertThat(encoded, containsString("\"_header\":{"));
+		assertThat(encoded, containsString("\"_header\": {"));
 
 	}
 
@@ -960,7 +970,7 @@ public class JsonParserTest {
 
 		ourLog.info(str);
 
-		assertThat(str, StringContains.containsString(",\"text\":{\"status\":\"generated\",\"div\":\"<div>help</div>\"},"));
+		assertThat(str, StringContains.containsString(",\"text\":{\"status\":\"generated\",\"div\":\"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\">help</div>\"},"));
 	}
 
 	@Before
@@ -985,7 +995,7 @@ public class JsonParserTest {
 		String str = ourCtx.newJsonParser().setPrettyPrint(true).encodeResourceToString(A);
 		ourLog.info(str);
 
-		assertThat(str, stringContainsInOrder(Arrays.asList("\"text\":\"B\"", "\"text\":\"C\"", "\"text\":\"A\"")));
+		assertThat(str, stringContainsInOrder(Arrays.asList("\"text\": \"B\"", "\"text\": \"C\"", "\"text\": \"A\"")));
 
 		// Only one (outer) contained block
 		int idx0 = str.indexOf("\"contained\"");
@@ -1222,13 +1232,7 @@ public class JsonParserTest {
 
 	@Test
 	public void testParseSingleQuotes() {
-		try {
-			ourCtx.newJsonParser().parseBundle("{ 'resourceType': 'Bundle' }");
-			fail();
-		} catch (DataFormatException e) {
-			// Should be an error message about how single quotes aren't valid JSON
-			assertThat(e.getMessage(), containsString("double quote"));
-		}
+		assertEquals("1", ourCtx.newJsonParser().parseBundle("{ 'resourceType': 'Bundle', 'id':'1' }").getBundleId().getValue());
 	}
 
 	@Test
@@ -1252,6 +1256,7 @@ public class JsonParserTest {
 	 * HAPI FHIR < 0.6 incorrectly used "resource" instead of "reference"
 	 */
 	@Test
+	@Ignore
 	public void testParseWithIncorrectReference() throws IOException {
 		String jsonString = IOUtils.toString(JsonParser.class.getResourceAsStream("/example-patient-general.json"));
 		jsonString = jsonString.replace("\"reference\"", "\"resource\"");
@@ -1471,6 +1476,12 @@ public class JsonParserTest {
 			myFoo = theFoo;
 		}
 
+	}
+
+
+	@AfterClass
+	public static void afterClassClearContext() {
+		TestUtil.clearAllStaticFieldsForUnitTest();
 	}
 
 }

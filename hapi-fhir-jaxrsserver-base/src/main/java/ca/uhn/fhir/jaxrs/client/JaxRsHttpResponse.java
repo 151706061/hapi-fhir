@@ -2,7 +2,7 @@ package ca.uhn.fhir.jaxrs.client;
 
 /*
  * #%L
- * HAPI FHIR - Core Library
+ * HAPI FHIR JAX-RS Server
  * %%
  * Copyright (C) 2014 - 2016 University Health Network
  * %%
@@ -59,6 +59,9 @@ public class JaxRsHttpResponse implements IHttpResponse {
 	@Override
 	public String getMimeType() {
 		MediaType mediaType = myResponse.getMediaType();
+		if (mediaType == null) {
+			return null;
+		}
 		//Keep only type and subtype and do not include the parameters such as charset
 		return new MediaType(mediaType.getType(), mediaType.getSubtype()).toString();
 	}

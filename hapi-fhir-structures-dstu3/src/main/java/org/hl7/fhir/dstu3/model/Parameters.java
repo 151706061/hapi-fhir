@@ -29,7 +29,7 @@ package org.hl7.fhir.dstu3.model;
   
 */
 
-// Generated on Sat, Jan 30, 2016 09:18-0500 for FHIR v1.3.0
+// Generated on Thu, Aug 25, 2016 23:04-0400 for FHIR v1.6.0
 
 import java.util.*;
 
@@ -37,11 +37,11 @@ import org.hl7.fhir.utilities.Utilities;
 import ca.uhn.fhir.model.api.annotation.ResourceDef;
 import ca.uhn.fhir.model.api.annotation.SearchParamDefinition;
 import ca.uhn.fhir.model.api.annotation.Child;
+import ca.uhn.fhir.model.api.annotation.ChildOrder;
 import ca.uhn.fhir.model.api.annotation.Description;
 import ca.uhn.fhir.model.api.annotation.Block;
-
-import org.hl7.fhir.dstu3.exceptions.FHIRException;
 import org.hl7.fhir.instance.model.api.*;
+import org.hl7.fhir.dstu3.exceptions.FHIRException;
 /**
  * This special resource type is used to represent an operation request and response (operations.html). It has no other use, and there is no RESTful endpoint associated with it.
  */
@@ -72,13 +72,13 @@ public class Parameters extends Resource implements IBaseParameters {
         protected Resource resource;
 
         /**
-         * A named part of a parameter. In many implementation context, a set of named parts is known as a "Tuple".
+         * A named part of a multi-part parameter.
          */
         @Child(name = "part", type = {ParametersParameterComponent.class}, order=4, min=0, max=Child.MAX_UNLIMITED, modifier=false, summary=false)
-        @Description(shortDefinition="Named part of a parameter (e.g. Tuple)", formalDefinition="A named part of a parameter. In many implementation context, a set of named parts is known as a \"Tuple\"." )
+        @Description(shortDefinition="Named part of a multi-part parameter", formalDefinition="A named part of a multi-part parameter." )
         protected List<ParametersParameterComponent> part;
 
-        private static final long serialVersionUID = -1484269842L;
+        private static final long serialVersionUID = -839605058L;
 
     /**
      * Constructor
@@ -179,12 +179,20 @@ public class Parameters extends Resource implements IBaseParameters {
         }
 
         /**
-         * @return {@link #part} (A named part of a parameter. In many implementation context, a set of named parts is known as a "Tuple".)
+         * @return {@link #part} (A named part of a multi-part parameter.)
          */
         public List<ParametersParameterComponent> getPart() { 
           if (this.part == null)
             this.part = new ArrayList<ParametersParameterComponent>();
           return this.part;
+        }
+
+        /**
+         * @return Returns a reference to <code>this</code> for easy method chaining
+         */
+        public ParametersParameterComponent setPart(List<ParametersParameterComponent> thePart) { 
+          this.part = thePart;
+          return this;
         }
 
         public boolean hasPart() { 
@@ -196,10 +204,6 @@ public class Parameters extends Resource implements IBaseParameters {
           return false;
         }
 
-        /**
-         * @return {@link #part} (A named part of a parameter. In many implementation context, a set of named parts is known as a "Tuple".)
-         */
-    // syntactic sugar
         public ParametersParameterComponent addPart() { //3
           ParametersParameterComponent t = new ParametersParameterComponent();
           if (this.part == null)
@@ -208,7 +212,6 @@ public class Parameters extends Resource implements IBaseParameters {
           return t;
         }
 
-    // syntactic sugar
         public ParametersParameterComponent addPart(ParametersParameterComponent t) { //3
           if (t == null)
             return this;
@@ -218,13 +221,55 @@ public class Parameters extends Resource implements IBaseParameters {
           return this;
         }
 
+        /**
+         * @return The first repetition of repeating field {@link #part}, creating it if it does not already exist
+         */
+        public ParametersParameterComponent getPartFirstRep() { 
+          if (getPart().isEmpty()) {
+            addPart();
+          }
+          return getPart().get(0);
+        }
+
         protected void listChildren(List<Property> childrenList) {
           super.listChildren(childrenList);
           childrenList.add(new Property("name", "string", "The name of the parameter (reference to the operation definition).", 0, java.lang.Integer.MAX_VALUE, name));
           childrenList.add(new Property("value[x]", "*", "If the parameter is a data type.", 0, java.lang.Integer.MAX_VALUE, value));
           childrenList.add(new Property("resource", "Resource", "If the parameter is a whole resource.", 0, java.lang.Integer.MAX_VALUE, resource));
-          childrenList.add(new Property("part", "@Parameters.parameter", "A named part of a parameter. In many implementation context, a set of named parts is known as a \"Tuple\".", 0, java.lang.Integer.MAX_VALUE, part));
+          childrenList.add(new Property("part", "@Parameters.parameter", "A named part of a multi-part parameter.", 0, java.lang.Integer.MAX_VALUE, part));
         }
+
+      @Override
+      public Base[] getProperty(int hash, String name, boolean checkValid) throws FHIRException {
+        switch (hash) {
+        case 3373707: /*name*/ return this.name == null ? new Base[0] : new Base[] {this.name}; // StringType
+        case 111972721: /*value*/ return this.value == null ? new Base[0] : new Base[] {this.value}; // org.hl7.fhir.dstu3.model.Type
+        case -341064690: /*resource*/ return this.resource == null ? new Base[0] : new Base[] {this.resource}; // Resource
+        case 3433459: /*part*/ return this.part == null ? new Base[0] : this.part.toArray(new Base[this.part.size()]); // ParametersParameterComponent
+        default: return super.getProperty(hash, name, checkValid);
+        }
+
+      }
+
+      @Override
+      public void setProperty(int hash, String name, Base value) throws FHIRException {
+        switch (hash) {
+        case 3373707: // name
+          this.name = castToString(value); // StringType
+          break;
+        case 111972721: // value
+          this.value = (org.hl7.fhir.dstu3.model.Type) value; // org.hl7.fhir.dstu3.model.Type
+          break;
+        case -341064690: // resource
+          this.resource = castToResource(value); // Resource
+          break;
+        case 3433459: // part
+          this.getPart().add((ParametersParameterComponent) value); // ParametersParameterComponent
+          break;
+        default: super.setProperty(hash, name, value);
+        }
+
+      }
 
       @Override
       public void setProperty(String name, Base value) throws FHIRException {
@@ -238,6 +283,18 @@ public class Parameters extends Resource implements IBaseParameters {
           this.getPart().add((ParametersParameterComponent) value);
         else
           super.setProperty(name, value);
+      }
+
+      @Override
+      public Base makeProperty(int hash, String name) throws FHIRException {
+        switch (hash) {
+        case 3373707: throw new FHIRException("Cannot make property name as it is not a complex type"); // StringType
+        case -1410166417:  return getValue(); // org.hl7.fhir.dstu3.model.Type
+        case -341064690: throw new FHIRException("Cannot make property resource as it is not a complex type"); // Resource
+        case 3433459:  return addPart(); // ParametersParameterComponent
+        default: return super.makeProperty(hash, name);
+        }
+
       }
 
       @Override
@@ -423,8 +480,8 @@ public class Parameters extends Resource implements IBaseParameters {
       }
 
       public boolean isEmpty() {
-        return super.isEmpty() && (name == null || name.isEmpty()) && (value == null || value.isEmpty())
-           && (resource == null || resource.isEmpty()) && (part == null || part.isEmpty());
+        return super.isEmpty() && ca.uhn.fhir.util.ElementUtil.isEmpty(name, value, resource, part
+          );
       }
 
   public String fhirType() {
@@ -459,6 +516,14 @@ public class Parameters extends Resource implements IBaseParameters {
       return this.parameter;
     }
 
+    /**
+     * @return Returns a reference to <code>this</code> for easy method chaining
+     */
+    public Parameters setParameter(List<ParametersParameterComponent> theParameter) { 
+      this.parameter = theParameter;
+      return this;
+    }
+
     public boolean hasParameter() { 
       if (this.parameter == null)
         return false;
@@ -468,10 +533,6 @@ public class Parameters extends Resource implements IBaseParameters {
       return false;
     }
 
-    /**
-     * @return {@link #parameter} (A parameter passed to or received from the operation.)
-     */
-    // syntactic sugar
     public ParametersParameterComponent addParameter() { //3
       ParametersParameterComponent t = new ParametersParameterComponent();
       if (this.parameter == null)
@@ -480,7 +541,6 @@ public class Parameters extends Resource implements IBaseParameters {
       return t;
     }
 
-    // syntactic sugar
     public Parameters addParameter(ParametersParameterComponent t) { //3
       if (t == null)
         return this;
@@ -490,9 +550,39 @@ public class Parameters extends Resource implements IBaseParameters {
       return this;
     }
 
+    /**
+     * @return The first repetition of repeating field {@link #parameter}, creating it if it does not already exist
+     */
+    public ParametersParameterComponent getParameterFirstRep() { 
+      if (getParameter().isEmpty()) {
+        addParameter();
+      }
+      return getParameter().get(0);
+    }
+
       protected void listChildren(List<Property> childrenList) {
         super.listChildren(childrenList);
         childrenList.add(new Property("parameter", "", "A parameter passed to or received from the operation.", 0, java.lang.Integer.MAX_VALUE, parameter));
+      }
+
+      @Override
+      public Base[] getProperty(int hash, String name, boolean checkValid) throws FHIRException {
+        switch (hash) {
+        case 1954460585: /*parameter*/ return this.parameter == null ? new Base[0] : this.parameter.toArray(new Base[this.parameter.size()]); // ParametersParameterComponent
+        default: return super.getProperty(hash, name, checkValid);
+        }
+
+      }
+
+      @Override
+      public void setProperty(int hash, String name, Base value) throws FHIRException {
+        switch (hash) {
+        case 1954460585: // parameter
+          this.getParameter().add((ParametersParameterComponent) value); // ParametersParameterComponent
+          break;
+        default: super.setProperty(hash, name, value);
+        }
+
       }
 
       @Override
@@ -501,6 +591,15 @@ public class Parameters extends Resource implements IBaseParameters {
           this.getParameter().add((ParametersParameterComponent) value);
         else
           super.setProperty(name, value);
+      }
+
+      @Override
+      public Base makeProperty(int hash, String name) throws FHIRException {
+        switch (hash) {
+        case 1954460585:  return addParameter(); // ParametersParameterComponent
+        default: return super.makeProperty(hash, name);
+        }
+
       }
 
       @Override
@@ -553,7 +652,7 @@ public class Parameters extends Resource implements IBaseParameters {
       }
 
       public boolean isEmpty() {
-        return super.isEmpty() && (parameter == null || parameter.isEmpty());
+        return super.isEmpty() && ca.uhn.fhir.util.ElementUtil.isEmpty(parameter);
       }
 
   @Override

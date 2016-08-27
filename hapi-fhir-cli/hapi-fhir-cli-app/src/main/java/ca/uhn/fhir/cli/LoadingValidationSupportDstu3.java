@@ -1,7 +1,11 @@
 package ca.uhn.fhir.cli;
 
+import java.util.Collections;
+import java.util.List;
+
 import org.hl7.fhir.dstu3.hapi.validation.IValidationSupport;
-import org.hl7.fhir.dstu3.model.ValueSet;
+import org.hl7.fhir.dstu3.model.CodeSystem;
+import org.hl7.fhir.dstu3.model.StructureDefinition;
 import org.hl7.fhir.dstu3.model.ValueSet.ConceptSetComponent;
 import org.hl7.fhir.dstu3.model.ValueSet.ValueSetExpansionComponent;
 import org.hl7.fhir.instance.model.api.IBaseResource;
@@ -13,7 +17,7 @@ import ca.uhn.fhir.rest.server.exceptions.BaseServerResponseException;
 
 public class LoadingValidationSupportDstu3 implements IValidationSupport {
 
-	private static FhirContext myCtx = FhirContext.forDstu3();
+	private FhirContext myCtx = FhirContext.forDstu3();
 
 	private static final org.slf4j.Logger ourLog = org.slf4j.LoggerFactory.getLogger(LoadingValidationSupportDstu3.class);
 
@@ -23,7 +27,7 @@ public class LoadingValidationSupportDstu3 implements IValidationSupport {
 	}
 
 	@Override
-	public ValueSet fetchCodeSystem(FhirContext theContext, String theSystem) {
+	public CodeSystem fetchCodeSystem(FhirContext theContext, String theSystem) {
 		return null;
 	}
 
@@ -46,6 +50,11 @@ public class LoadingValidationSupportDstu3 implements IValidationSupport {
 	}
 
 	@Override
+	public StructureDefinition fetchStructureDefinition(FhirContext theCtx, String theUrl) {
+		return null;
+	}
+
+	@Override
 	public boolean isCodeSystemSupported(FhirContext theContext, String theSystem) {
 		return false;
 	}
@@ -53,6 +62,11 @@ public class LoadingValidationSupportDstu3 implements IValidationSupport {
 	@Override
 	public CodeValidationResult validateCode(FhirContext theContext, String theCodeSystem, String theCode, String theDisplay) {
 		return null;
+	}
+
+	@Override
+	public List<StructureDefinition> fetchAllStructureDefinitions(FhirContext theContext) {
+		return Collections.emptyList();
 	}
 
 }

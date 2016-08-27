@@ -1255,6 +1255,22 @@
 			</p>
 			
 			<p>
+				In terms of actually implementing the method, unfortunately there is only so much help 
+				HAPI will give you. One might expect HAPI to automatically delegate the individual 
+				operations in the transaction to other methods on the server but at this point it 
+				does not do that. There is a lot that transaction needs to handle 
+				(making everything atomic, replacing placeholder IDs across multiple resources 
+				which may even be circular, handling operations in the right order) and 
+				so far we have not found a way for the framework to do this in a generic way.
+			</p>
+			<p>
+				What it comes down to is the fact that transaction is a tricky thing to implement.
+				For what it's worth, you could look at our JPA module's "transaction" method in
+				<a href="https://github.com/jamesagnew/hapi-fhir/blob/master/hapi-fhir-jpaserver-base/src/main/java/ca/uhn/fhir/jpa/dao/dstu3/FhirSystemDaoDstu3.java">our source repository</a> 
+				to see how we implemented transaction in the JPA server.
+			</p>
+			
+			<p>
 				Example URL to invoke this method:
 				<br />
 				<code>POST http://fhir.example.com/</code><br/>
@@ -1363,8 +1379,22 @@
 				</li>
 			</ul>
 			<p>
-				The following snippet shows how to define a history method on a server:
+				The following snippet shows how to define a history method on a server. Note that
+				the following parameters are both optional, but may be useful in
+				implementing the history operation:
 			</p>
+			<u>
+				<li>
+					The <code>@Since</code> method argument implements the <code>_since</code>
+					parameter and should be of type <code>DateTimeDt</code> or <code>DateTimeType</code> 
+				</li>
+				<li>
+					The <code>@At</code> method argument implements the <code>_at</code>
+					parameter and may be of type 
+					<code>DateRangeParam</code>,
+					<code>DateTimeDt</code> or <code>DateTimeType</code> 
+				</li>
+			</u>
 
 			<macro name="snippet">
 				<param name="id" value="history" />
@@ -1646,6 +1676,51 @@
 					<br />
 					<code>http://fhir.example.com/Patient/123/$everything</code>
 				</p>
+				
+			</subsection>
+
+			<subsection name="Using Search Parameter Types">
+			
+				<p>
+					FHIR allows operation parameters to be of a 
+					<a href="http://hl7.org/fhir/search.html#ptypes">Search parameter type</a>
+					(e.g. token) instead of a FHIR datatype (e.g. Coding).
+				</p>
+				<p>
+					To use a search parameter type, any of the search parameter 
+					types listed in 
+					<a href="./doc_rest_operations.html#Type_Level_-_Search">Search</a>
+					may be used. For example, the following is a simple operation method declaration
+					using search parameters:
+				</p>
+				<macro name="snippet">
+					<param name="id" value="searchParamBasic" />
+					<param name="file"
+						value="examples/src/main/java/example/ServerOperations.java" />
+				</macro>
+				
+				<p>
+					Example URL to invoke this operation (HTTP request body is Parameters resource):
+					<br />
+					<code>http://fhir.example.com/$find-matches?date=2011-01-02&amp;code=http://system|value</code>
+				</p>
+
+				<p>
+					It is also fine to use collection types for search parameter types
+					if you want to be able to accept multiple values. For example,
+					a <code>List&lt;TokenParam&gt;</code> could be used if you want
+					to allow multiple repetitions of a given token parameter (this is
+					analogous to the "AND" semantics in a search). 
+					A <code>TokenOrListParam</code> could be used if you want to allow
+					multiple values within a single repetition, separated by comma (this
+					is analogous to "OR" semantics in a search). 
+				</p>
+				<p>For example:</p>
+				<macro name="snippet">
+					<param name="id" value="searchParamAdvanced" />
+					<param name="file"
+						value="examples/src/main/java/example/ServerOperations.java" />
+				</macro>
 				
 			</subsection>
 

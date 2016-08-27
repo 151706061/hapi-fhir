@@ -55,7 +55,7 @@ public class ValidateCommand extends BaseCommand {
 		addFhirVersionOption(retVal);
 
 		OptionGroup source = new OptionGroup();
-		source.addOption(new Option("f", "file", true, "The name of the file to validate"));
+		source.addOption(new Option("n", "file", true, "The name of the file to validate"));
 		source.addOption(new Option("d", "data", true, "The text to validate"));
 		retVal.addOptionGroup(source);
 
@@ -72,13 +72,13 @@ public class ValidateCommand extends BaseCommand {
 
 	@Override
 	public void run(CommandLine theCommandLine) throws ParseException, Exception {
-		String fileName = theCommandLine.getOptionValue("f");
+		String fileName = theCommandLine.getOptionValue("n");
 		String contents = theCommandLine.getOptionValue("c");
 		if (isNotBlank(fileName) && isNotBlank(contents)) {
-			throw new ParseException("Can not supply both a file (-f) and data (-d)");
+			throw new ParseException("Can not supply both a file (-n) and data (-d)");
 		}
 		if (isBlank(fileName) && isBlank(contents)) {
-			throw new ParseException("Must supply either a file (-f) or data (-d)");
+			throw new ParseException("Must supply either a file (-n) or data (-d)");
 		}
 
 		if (isNotBlank(fileName)) {
@@ -119,7 +119,8 @@ public class ValidateCommand extends BaseCommand {
 				org.hl7.fhir.instance.hapi.validation.ValidationSupportChain validationSupport = new org.hl7.fhir.instance.hapi.validation.ValidationSupportChain(
 						new org.hl7.fhir.instance.hapi.validation.DefaultProfileValidationSupport());
 				if (localProfileResource != null) {
-					instanceValidator.setStructureDefintion((org.hl7.fhir.instance.model.StructureDefinition) localProfileResource);
+					org.hl7.fhir.instance.model.StructureDefinition convertedSd = FhirContext.forDstu2Hl7Org().newXmlParser().parseResource(org.hl7.fhir.instance.model.StructureDefinition.class, ctx.newXmlParser().encodeResourceToString(localProfileResource));
+					instanceValidator.setStructureDefintion(convertedSd);
 				}
 				if (theCommandLine.hasOption("r")) {
 					validationSupport.addValidationSupport(new LoadingValidationSupportDstu2());

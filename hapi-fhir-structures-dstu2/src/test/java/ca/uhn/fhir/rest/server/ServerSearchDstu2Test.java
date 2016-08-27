@@ -2,6 +2,7 @@ package ca.uhn.fhir.rest.server;
 
 import static org.junit.Assert.assertEquals;
 
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -25,8 +26,10 @@ import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.model.dstu2.resource.Patient;
 import ca.uhn.fhir.rest.annotation.RequiredParam;
 import ca.uhn.fhir.rest.annotation.Search;
+import ca.uhn.fhir.rest.param.ReferenceParam;
 import ca.uhn.fhir.rest.param.StringParam;
 import ca.uhn.fhir.util.PortUtil;
+import ca.uhn.fhir.util.TestUtil;
 
 public class ServerSearchDstu2Test {
 
@@ -34,6 +37,7 @@ public class ServerSearchDstu2Test {
 	private static FhirContext ourCtx = FhirContext.forDstu2();
 	private static String ourLastMethod;
 	private static StringParam ourLastRef;
+	private static ReferenceParam ourLastRef2;
 	private static final org.slf4j.Logger ourLog = org.slf4j.LoggerFactory.getLogger(ServerSearchDstu2Test.class);
 	private static int ourPort;
 	private static Server ourServer;
@@ -42,8 +46,31 @@ public class ServerSearchDstu2Test {
 	public void before() {
 		ourLastMethod = null;
 		ourLastRef = null;
+		ourLastRef2 = null;
 	}
-	
+
+	@Test
+	public void testReferenceParamMissingFalse() throws Exception {
+		HttpGet httpGet = new HttpGet("http://localhost:" + ourPort + "/?param3:missing=false");
+		HttpResponse status = ourClient.execute(httpGet);
+		String responseContent = IOUtils.toString(status.getEntity().getContent());
+		IOUtils.closeQuietly(status.getEntity().getContent());
+		ourLog.info(responseContent);
+		assertEquals("searchParam3", ourLastMethod);
+		assertEquals(Boolean.FALSE, ourLastRef2.getMissing());
+	}
+
+	@Test
+	public void testReferenceParamMissingTrue() throws Exception {
+		HttpGet httpGet = new HttpGet("http://localhost:" + ourPort + "/?param3:missing=true");
+		HttpResponse status = ourClient.execute(httpGet);
+		String responseContent = IOUtils.toString(status.getEntity().getContent());
+		IOUtils.closeQuietly(status.getEntity().getContent());
+		ourLog.info(responseContent);
+		assertEquals("searchParam3", ourLastMethod);
+		assertEquals(Boolean.TRUE, ourLastRef2.getMissing());
+	}
+
 	@Test
 	public void testSearchParam1() throws Exception {
 		HttpGet httpGet = new HttpGet("http://localhost:" + ourPort + "/?param1=param1value");
@@ -67,6 +94,28 @@ public class ServerSearchDstu2Test {
 	}
 
 	@Test
+	public void testSearchParamWithSpace() throws Exception {
+		HttpGet httpGet = new HttpGet("http://localhost:" + ourPort + "/?param2=param+value&foo=bar");
+		HttpResponse status = ourClient.execute(httpGet);
+		String responseContent = IOUtils.toString(status.getEntity().getContent());
+		IOUtils.closeQuietly(status.getEntity().getContent());
+		ourLog.info(responseContent);
+		assertEquals("searchParam2", ourLastMethod);
+		assertEquals("param value", ourLastRef.getValue());
+	}
+
+	@Test
+	public void testSearchWithEncodedValue() throws Exception {
+		HttpGet httpGet = new HttpGet("http://localhost:" + ourPort + "/?param1=" + URLEncoder.encode("Jernelöv", "UTF-8"));
+		HttpResponse status = ourClient.execute(httpGet);
+		String responseContent = IOUtils.toString(status.getEntity().getContent());
+		IOUtils.closeQuietly(status.getEntity().getContent());
+		ourLog.info(responseContent);
+		assertEquals("searchParam1", ourLastMethod);
+		assertEquals("Jernelöv", ourLastRef.getValue());
+	}
+
+	@Test
 	public void testUnknownSearchParam() throws Exception {
 		HttpGet httpGet = new HttpGet("http://localhost:" + ourPort + "/?foo=bar");
 		HttpResponse status = ourClient.execute(httpGet);
@@ -77,8 +126,9 @@ public class ServerSearchDstu2Test {
 	}
 
 	@AfterClass
-	public static void afterClass() throws Exception {
+	public static void afterClassClearContext() throws Exception {
 		ourServer.stop();
+		TestUtil.clearAllStaticFieldsForUnitTest();
 	}
 
 	@BeforeClass
@@ -105,7 +155,7 @@ public class ServerSearchDstu2Test {
 	}
 
 	public static class DummyPatientResourceProvider {
-		
+
 		//@formatter:off
 		@Search(allowUnknownParams=true)
 		public List<IBaseResource> searchParam1(
@@ -128,6 +178,22 @@ public class ServerSearchDstu2Test {
 				@RequiredParam(name = "param2") StringParam theParam) {
 			ourLastMethod = "searchParam2";
 			ourLastRef = theParam;
+			
+			List<IBaseResource> retVal = new ArrayList<IBaseResource>();
+			Patient patient = new Patient();
+			patient.setId("123");
+			patient.addName().addGiven("GIVEN");
+			retVal.add(patient);
+			return retVal;
+		}
+		//@formatter:on
+
+		//@formatter:off
+		@Search(allowUnknownParams=true)
+		public List<IBaseResource> searchParam3(
+				@RequiredParam(name = "param3") ReferenceParam theParam) {
+			ourLastMethod = "searchParam3";
+			ourLastRef2 = theParam;
 			
 			List<IBaseResource> retVal = new ArrayList<IBaseResource>();
 			Patient patient = new Patient();

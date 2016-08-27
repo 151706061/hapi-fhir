@@ -11,11 +11,11 @@
 		<!-- The body of the document contains a number of sections -->
 		<section name="Welcome">
 			<p style="float:right; text-align: center;">
-				<iframe src="http://ghbtns.com/github-btn.html?user=jamesagnew&amp;repo=hapi-fhir&amp;type=watch&amp;count=true&amp;v=2" frameborder="0" scrolling="0" width="100px" height="20px"></iframe>
+				<iframe src="https://ghbtns.com/github-btn.html?user=jamesagnew&amp;repo=hapi-fhir&amp;type=watch&amp;count=true&amp;v=2" frameborder="0" scrolling="0" width="100px" height="20px"></iframe>
 				<br/>
-				<iframe src="http://ghbtns.com/github-btn.html?user=jamesagnew&amp;repo=hapi-fhir&amp;type=star&amp;count=true" frameborder="0" scrolling="0" width="100px" height="20px"></iframe>
+				<iframe src="https://ghbtns.com/github-btn.html?user=jamesagnew&amp;repo=hapi-fhir&amp;type=star&amp;count=true" frameborder="0" scrolling="0" width="100px" height="20px"></iframe>
 				<br/>
-				<iframe src="http://ghbtns.com/github-btn.html?user=jamesagnew&amp;repo=hapi-fhir&amp;type=fork&amp;count=true&amp;v=2" frameborder="0" scrolling="0" width="100px" height="20px"></iframe>
+				<iframe src="https://ghbtns.com/github-btn.html?user=jamesagnew&amp;repo=hapi-fhir&amp;type=fork&amp;count=true&amp;v=2" frameborder="0" scrolling="0" width="100px" height="20px"></iframe>
 				<br/>
 				<a href="https://travis-ci.org/jamesagnew/hapi-fhir"><img src="https://travis-ci.org/jamesagnew/hapi-fhir.svg?branch=master" alt="Build Status"/></a>
 				<br/>
@@ -25,7 +25,7 @@
 				<br/>
 				<a href="https://www.versioneye.com/user/projects/55e1d0d9c6d8f2001c00043e"><img src="https://www.versioneye.com/user/projects/55e1d0d9c6d8f2001c00043e/badge.svg?style=flat" alt="VersionEye"/></a>
 				<br/>
-				<a href="http://jamesagnew.github.io/hapi-fhir/license.html"><img src="https://img.shields.io/badge/license-apache%202.0-ff69b4.svg" alt="Apache 2.0 Licensed"/></a>
+				<a href="http://jamesagnew.github.io/hapi-fhir/license.html"><img src="https://img.shields.io/badge/license-apache%202.0-60C060.svg" alt="Apache 2.0 Licensed"/></a>
 			</p>
 			
 			<p>
@@ -60,6 +60,104 @@
 		</section>
 
 		<section name="Announcements">
+			<p>
+				<b>July 7, 2016 - HAPI FHIR 1.6 Released</b> -
+				The next release of HAPI has now been uploaded to the Maven repos and 
+				GitHub's releases section.
+			</p>
+			<p>
+				This release brings a number of bugfixes and also quite a few enhancements.
+				As always, the <a href="./changes-report.html">changelog</a> has the full list
+				of changes in this version. Among the enhancements in this release are:
+			</p>
+			<ul>
+				<li>Significant enhancements to FhirContext startup performance (especially on Android)</li>
+				<li>Support for STU3 terminology services in the JPA module, including support for importing SNOMED CT and LOINC</li>
+				<li>Update of the STU3 resources and validator to the latest snapshot</li>
+				<li>Plenty of bug fixes</li>
+			</ul>
+			<p>
+				As always, thanks to everyone who contributed to this release, either though
+				pull requests, bug reports, suggestions, and helping us test new features. 
+			</p>
+			<p>
+				Also, a few quick community notes:
+			</p>
+			<p>
+				<b>On DSTU3 naming:</b> FMG has decided to rename the upcoming FHIR <code>DSTU3</code> (draft standard 
+				for trial use)	release to <code>STU3</code> (standard for trial use). In order to avoid breaking
+				existing software, we will <b>NOT</b> be renaming the <code>hapi-fhir-structures-dstu3</code> module
+				of HAPI. We will be updating documentation on the site to reflect the new name wherever it won't be
+				confusing, but be aware that this is a potential source of confusion. 
+			</p>
+			<p>
+				<b>On the HAPI FHIR website: </b> Regular visitors to our site will probably already have noticed
+				that we recently moved the site to a new URL ( <a href="http://hapifhir.io">http://hapifhir.io</a> ).
+				This was done mostly to help make HAPI's URL a bit easier to remember.
+			</p>
+			<p>
+				<b>On the future: </b> For the next release, we are planning on moving away from the
+				<code>javax.json</code> (JSR 353) library in favour of using Google GSON. JSR 353 seemed like
+				a good choice when we started HAPI, but it has basically been abandoned and no longer seems like
+				a good choice (especially given the headaches it causes on Android). This hopefully means that
+				the next release will be able to do away with the "special" Android shade-jar releases and all of
+				the Gradle file gymnastics that are required in order to use them.  
+			</p>
+			<p>
+				As always, we welcome new contributions and contributors! Please feel free to get 
+				in touch if you are interested in getting involved with HAPI but don't know
+				where to start.
+			</p>
+			<p>
+				- <a href="https://github.com/jamesagnew/">James Agnew</a>
+			</p>
+
+			<!--
+			<p>
+				<b>April 20, 2016 - HAPI FHIR 1.5 Released</b> -
+				The next release of HAPI has now been uploaded to the Maven repos and 
+				GitHub's releases section. This release corrects a security vulnerability
+				as described below. All users are recommended to upgrade.
+			</p>
+			<p>
+				This release brings a number of bugfixes and a few bigger things.
+				As always, the <a href="./changes-report.html">changelog</a> has the full list
+				of changes in this version. Some changes of note include:
+			</p>
+			<ul>
+				<li>
+					This release fixes a security vulnerability in the XML parser. See
+					GitHub <a href="https://github.com/jamesagnew/hapi-fhir/issues/339">Issue #339</a>
+					for information.
+				</li>
+				<li>
+					This release adds support for the current draft STU3 structure definitions,
+					known as FHIR 1.4.0 (or the Montreal Connectathon Snapshot). See the 
+					<a href="./downloads.html">downloads page</a> for information on the
+					various versions of FHIR supported by HAPI FHIR.
+				</li>
+				<li>
+					A new 
+					<a href="./doc_rest_client_alternate_provider.html">JAX-RS based client</a>
+					has been added.
+				</li>
+				<li>
+					A 
+					<a href="./doc_rest_server_security.html">Server Security Interceptor</a>
+					has been added.
+				</li>
+				<li>
+					The JPA server has been enhanced so that search results are now paged into
+					the database instead of simply to memory. This makes the server much more
+					scalable to supporting larger result sets, larger volumes of queries, and
+					operation across multiple nodes in a cluster.
+				</li>
+			</ul>
+			<p>
+				- <a href="https://github.com/jamesagnew/">James Agnew</a>
+			</p>
+ 			-->
+ 			<!-- 
 			<p>
 				<b>February 4, 2016 - HAPI FHIR 1.4 Released</b> -
 				The next release of HAPI has now been uploaded to the Maven repos and 
@@ -119,6 +217,7 @@
 				<a href="http://goo.gl/forms/R8Ifg2qvOY">HAPI FHIR Community Survey</a>, we
 				would really appreciate if you did so!
 			</p>
+			-->
 			<!-- 
 			<p>
 				<b>November 15, 2015 - HAPI FHIR 1.3 Released</b> -

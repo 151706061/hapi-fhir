@@ -29,40 +29,162 @@ package org.hl7.fhir.dstu3.model;
   
 */
 
-// Generated on Sat, Jan 30, 2016 09:18-0500 for FHIR v1.3.0
+// Generated on Thu, Aug 25, 2016 23:04-0400 for FHIR v1.6.0
 
 import java.util.*;
 
 import org.hl7.fhir.utilities.Utilities;
-
+import org.hl7.fhir.dstu3.model.Enumerations.*;
 import ca.uhn.fhir.model.api.annotation.ResourceDef;
 import ca.uhn.fhir.model.api.annotation.SearchParamDefinition;
 import ca.uhn.fhir.model.api.annotation.Child;
+import ca.uhn.fhir.model.api.annotation.ChildOrder;
 import ca.uhn.fhir.model.api.annotation.Description;
 import ca.uhn.fhir.model.api.annotation.Block;
-
-import org.hl7.fhir.dstu3.exceptions.FHIRException;
-import org.hl7.fhir.dstu3.model.Enumerations.*;
 import org.hl7.fhir.instance.model.api.*;
+import org.hl7.fhir.dstu3.exceptions.FHIRException;
 /**
  * This resource provides processing status, errors and notes from the processing of a resource.
  */
 @ResourceDef(name="ProcessResponse", profile="http://hl7.org/fhir/Profile/ProcessResponse")
 public class ProcessResponse extends DomainResource {
 
+    public enum ProcessResponseStatus {
+        /**
+         * The resource instance is currently in-force.
+         */
+        ACTIVE, 
+        /**
+         * The resource instance is withdrawn, rescinded or reversed.
+         */
+        CANCELLED, 
+        /**
+         * A new resource instance the contents of which is not complete.
+         */
+        DRAFT, 
+        /**
+         * The resource instance was entered in error.
+         */
+        ENTEREDINERROR, 
+        /**
+         * added to help the parsers with the generic types
+         */
+        NULL;
+        public static ProcessResponseStatus fromCode(String codeString) throws FHIRException {
+            if (codeString == null || "".equals(codeString))
+                return null;
+        if ("active".equals(codeString))
+          return ACTIVE;
+        if ("cancelled".equals(codeString))
+          return CANCELLED;
+        if ("draft".equals(codeString))
+          return DRAFT;
+        if ("entered-in-error".equals(codeString))
+          return ENTEREDINERROR;
+        if (Configuration.isAcceptInvalidEnums())
+          return null;
+        else
+          throw new FHIRException("Unknown ProcessResponseStatus code '"+codeString+"'");
+        }
+        public String toCode() {
+          switch (this) {
+            case ACTIVE: return "active";
+            case CANCELLED: return "cancelled";
+            case DRAFT: return "draft";
+            case ENTEREDINERROR: return "entered-in-error";
+            default: return "?";
+          }
+        }
+        public String getSystem() {
+          switch (this) {
+            case ACTIVE: return "http://hl7.org/fhir/processresponse-status";
+            case CANCELLED: return "http://hl7.org/fhir/processresponse-status";
+            case DRAFT: return "http://hl7.org/fhir/processresponse-status";
+            case ENTEREDINERROR: return "http://hl7.org/fhir/processresponse-status";
+            default: return "?";
+          }
+        }
+        public String getDefinition() {
+          switch (this) {
+            case ACTIVE: return "The resource instance is currently in-force.";
+            case CANCELLED: return "The resource instance is withdrawn, rescinded or reversed.";
+            case DRAFT: return "A new resource instance the contents of which is not complete.";
+            case ENTEREDINERROR: return "The resource instance was entered in error.";
+            default: return "?";
+          }
+        }
+        public String getDisplay() {
+          switch (this) {
+            case ACTIVE: return "Active";
+            case CANCELLED: return "Cancelled";
+            case DRAFT: return "Draft";
+            case ENTEREDINERROR: return "Entered In Error";
+            default: return "?";
+          }
+        }
+    }
+
+  public static class ProcessResponseStatusEnumFactory implements EnumFactory<ProcessResponseStatus> {
+    public ProcessResponseStatus fromCode(String codeString) throws IllegalArgumentException {
+      if (codeString == null || "".equals(codeString))
+            if (codeString == null || "".equals(codeString))
+                return null;
+        if ("active".equals(codeString))
+          return ProcessResponseStatus.ACTIVE;
+        if ("cancelled".equals(codeString))
+          return ProcessResponseStatus.CANCELLED;
+        if ("draft".equals(codeString))
+          return ProcessResponseStatus.DRAFT;
+        if ("entered-in-error".equals(codeString))
+          return ProcessResponseStatus.ENTEREDINERROR;
+        throw new IllegalArgumentException("Unknown ProcessResponseStatus code '"+codeString+"'");
+        }
+        public Enumeration<ProcessResponseStatus> fromType(Base code) throws FHIRException {
+          if (code == null || code.isEmpty())
+            return null;
+          String codeString = ((PrimitiveType) code).asStringValue();
+          if (codeString == null || "".equals(codeString))
+            return null;
+        if ("active".equals(codeString))
+          return new Enumeration<ProcessResponseStatus>(this, ProcessResponseStatus.ACTIVE);
+        if ("cancelled".equals(codeString))
+          return new Enumeration<ProcessResponseStatus>(this, ProcessResponseStatus.CANCELLED);
+        if ("draft".equals(codeString))
+          return new Enumeration<ProcessResponseStatus>(this, ProcessResponseStatus.DRAFT);
+        if ("entered-in-error".equals(codeString))
+          return new Enumeration<ProcessResponseStatus>(this, ProcessResponseStatus.ENTEREDINERROR);
+        throw new FHIRException("Unknown ProcessResponseStatus code '"+codeString+"'");
+        }
+    public String toCode(ProcessResponseStatus code) {
+      if (code == ProcessResponseStatus.ACTIVE)
+        return "active";
+      if (code == ProcessResponseStatus.CANCELLED)
+        return "cancelled";
+      if (code == ProcessResponseStatus.DRAFT)
+        return "draft";
+      if (code == ProcessResponseStatus.ENTEREDINERROR)
+        return "entered-in-error";
+      return "?";
+      }
+    public String toSystem(ProcessResponseStatus code) {
+      return code.getSystem();
+      }
+    }
+
     @Block()
     public static class ProcessResponseNotesComponent extends BackboneElement implements IBaseBackboneElement {
         /**
          * The note purpose: Print/Display.
          */
-        @Child(name = "type", type = {Coding.class}, order=1, min=0, max=1, modifier=false, summary=true)
+        @Child(name = "type", type = {Coding.class}, order=1, min=0, max=1, modifier=false, summary=false)
         @Description(shortDefinition="display | print | printoper", formalDefinition="The note purpose: Print/Display." )
+        @ca.uhn.fhir.model.api.annotation.Binding(valueSet="http://hl7.org/fhir/ValueSet/note-type")
         protected Coding type;
 
         /**
          * The note text.
          */
-        @Child(name = "text", type = {StringType.class}, order=2, min=0, max=1, modifier=false, summary=true)
+        @Child(name = "text", type = {StringType.class}, order=2, min=0, max=1, modifier=false, summary=false)
         @Description(shortDefinition="Notes text", formalDefinition="The note text." )
         protected StringType text;
 
@@ -155,6 +277,30 @@ public class ProcessResponse extends DomainResource {
         }
 
       @Override
+      public Base[] getProperty(int hash, String name, boolean checkValid) throws FHIRException {
+        switch (hash) {
+        case 3575610: /*type*/ return this.type == null ? new Base[0] : new Base[] {this.type}; // Coding
+        case 3556653: /*text*/ return this.text == null ? new Base[0] : new Base[] {this.text}; // StringType
+        default: return super.getProperty(hash, name, checkValid);
+        }
+
+      }
+
+      @Override
+      public void setProperty(int hash, String name, Base value) throws FHIRException {
+        switch (hash) {
+        case 3575610: // type
+          this.type = castToCoding(value); // Coding
+          break;
+        case 3556653: // text
+          this.text = castToString(value); // StringType
+          break;
+        default: super.setProperty(hash, name, value);
+        }
+
+      }
+
+      @Override
       public void setProperty(String name, Base value) throws FHIRException {
         if (name.equals("type"))
           this.type = castToCoding(value); // Coding
@@ -162,6 +308,16 @@ public class ProcessResponse extends DomainResource {
           this.text = castToString(value); // StringType
         else
           super.setProperty(name, value);
+      }
+
+      @Override
+      public Base makeProperty(int hash, String name) throws FHIRException {
+        switch (hash) {
+        case 3575610:  return getType(); // Coding
+        case 3556653: throw new FHIRException("Cannot make property text as it is not a complex type"); // StringType
+        default: return super.makeProperty(hash, name);
+        }
+
       }
 
       @Override
@@ -206,8 +362,7 @@ public class ProcessResponse extends DomainResource {
       }
 
       public boolean isEmpty() {
-        return super.isEmpty() && (type == null || type.isEmpty()) && (text == null || text.isEmpty())
-          ;
+        return super.isEmpty() && ca.uhn.fhir.util.ElementUtil.isEmpty(type, text);
       }
 
   public String fhirType() {
@@ -220,121 +375,122 @@ public class ProcessResponse extends DomainResource {
     /**
      * The Response business identifier.
      */
-    @Child(name = "identifier", type = {Identifier.class}, order=0, min=0, max=Child.MAX_UNLIMITED, modifier=false, summary=true)
+    @Child(name = "identifier", type = {Identifier.class}, order=0, min=0, max=Child.MAX_UNLIMITED, modifier=false, summary=false)
     @Description(shortDefinition="Business Identifier", formalDefinition="The Response business identifier." )
     protected List<Identifier> identifier;
 
     /**
-     * Original request resource reference.
+     * The status of the resource instance.
      */
-    @Child(name = "request", type = {}, order=1, min=0, max=1, modifier=false, summary=true)
-    @Description(shortDefinition="Request reference", formalDefinition="Original request resource reference." )
-    protected Reference request;
+    @Child(name = "status", type = {CodeType.class}, order=1, min=1, max=1, modifier=true, summary=true)
+    @Description(shortDefinition="active | cancelled | draft | entered-in-error", formalDefinition="The status of the resource instance." )
+    @ca.uhn.fhir.model.api.annotation.Binding(valueSet="http://hl7.org/fhir/ValueSet/processresponse-status")
+    protected Enumeration<ProcessResponseStatus> status;
 
     /**
-     * The actual object that is the target of the reference (Original request resource reference.)
+     * Original request resource reference.
      */
-    protected Resource requestTarget;
+    @Child(name = "request", type = {Identifier.class, Reference.class}, order=2, min=0, max=1, modifier=false, summary=false)
+    @Description(shortDefinition="Request reference", formalDefinition="Original request resource reference." )
+    protected Type request;
 
     /**
      * Transaction status: error, complete, held.
      */
-    @Child(name = "outcome", type = {Coding.class}, order=2, min=0, max=1, modifier=false, summary=true)
+    @Child(name = "outcome", type = {Coding.class}, order=3, min=0, max=1, modifier=false, summary=false)
     @Description(shortDefinition="Processing outcome", formalDefinition="Transaction status: error, complete, held." )
+    @ca.uhn.fhir.model.api.annotation.Binding(valueSet="http://hl7.org/fhir/ValueSet/process-outcome")
     protected Coding outcome;
 
     /**
      * A description of the status of the adjudication or processing.
      */
-    @Child(name = "disposition", type = {StringType.class}, order=3, min=0, max=1, modifier=false, summary=true)
+    @Child(name = "disposition", type = {StringType.class}, order=4, min=0, max=1, modifier=false, summary=false)
     @Description(shortDefinition="Disposition Message", formalDefinition="A description of the status of the adjudication or processing." )
     protected StringType disposition;
 
     /**
      * The version of the style of resource contents. This should be mapped to the allowable profiles for this and supporting resources.
      */
-    @Child(name = "ruleset", type = {Coding.class}, order=4, min=0, max=1, modifier=false, summary=true)
+    @Child(name = "ruleset", type = {Coding.class}, order=5, min=0, max=1, modifier=false, summary=false)
     @Description(shortDefinition="Resource version", formalDefinition="The version of the style of resource contents. This should be mapped to the allowable profiles for this and supporting resources." )
+    @ca.uhn.fhir.model.api.annotation.Binding(valueSet="http://hl7.org/fhir/ValueSet/ruleset")
     protected Coding ruleset;
 
     /**
      * The style (standard) and version of the original material which was converted into this resource.
      */
-    @Child(name = "originalRuleset", type = {Coding.class}, order=5, min=0, max=1, modifier=false, summary=true)
+    @Child(name = "originalRuleset", type = {Coding.class}, order=6, min=0, max=1, modifier=false, summary=false)
     @Description(shortDefinition="Original version", formalDefinition="The style (standard) and version of the original material which was converted into this resource." )
+    @ca.uhn.fhir.model.api.annotation.Binding(valueSet="http://hl7.org/fhir/ValueSet/ruleset")
     protected Coding originalRuleset;
 
     /**
      * The date when the enclosed suite of services were performed or completed.
      */
-    @Child(name = "created", type = {DateTimeType.class}, order=6, min=0, max=1, modifier=false, summary=true)
+    @Child(name = "created", type = {DateTimeType.class}, order=7, min=0, max=1, modifier=false, summary=false)
     @Description(shortDefinition="Creation date", formalDefinition="The date when the enclosed suite of services were performed or completed." )
     protected DateTimeType created;
 
     /**
      * The organization who produced this adjudicated response.
      */
-    @Child(name = "organization", type = {Organization.class}, order=7, min=0, max=1, modifier=false, summary=true)
+    @Child(name = "organization", type = {Identifier.class, Organization.class}, order=8, min=0, max=1, modifier=false, summary=false)
     @Description(shortDefinition="Authoring Organization", formalDefinition="The organization who produced this adjudicated response." )
-    protected Reference organization;
-
-    /**
-     * The actual object that is the target of the reference (The organization who produced this adjudicated response.)
-     */
-    protected Organization organizationTarget;
+    protected Type organization;
 
     /**
      * The practitioner who is responsible for the services rendered to the patient.
      */
-    @Child(name = "requestProvider", type = {Practitioner.class}, order=8, min=0, max=1, modifier=false, summary=true)
+    @Child(name = "requestProvider", type = {Identifier.class, Practitioner.class}, order=9, min=0, max=1, modifier=false, summary=false)
     @Description(shortDefinition="Responsible Practitioner", formalDefinition="The practitioner who is responsible for the services rendered to the patient." )
-    protected Reference requestProvider;
-
-    /**
-     * The actual object that is the target of the reference (The practitioner who is responsible for the services rendered to the patient.)
-     */
-    protected Practitioner requestProviderTarget;
+    protected Type requestProvider;
 
     /**
      * The organization which is responsible for the services rendered to the patient.
      */
-    @Child(name = "requestOrganization", type = {Organization.class}, order=9, min=0, max=1, modifier=false, summary=true)
+    @Child(name = "requestOrganization", type = {Identifier.class, Organization.class}, order=10, min=0, max=1, modifier=false, summary=false)
     @Description(shortDefinition="Responsible organization", formalDefinition="The organization which is responsible for the services rendered to the patient." )
-    protected Reference requestOrganization;
-
-    /**
-     * The actual object that is the target of the reference (The organization which is responsible for the services rendered to the patient.)
-     */
-    protected Organization requestOrganizationTarget;
+    protected Type requestOrganization;
 
     /**
      * The form to be used for printing the content.
      */
-    @Child(name = "form", type = {Coding.class}, order=10, min=0, max=1, modifier=false, summary=true)
+    @Child(name = "form", type = {Coding.class}, order=11, min=0, max=1, modifier=false, summary=false)
     @Description(shortDefinition="Printed Form Identifier", formalDefinition="The form to be used for printing the content." )
+    @ca.uhn.fhir.model.api.annotation.Binding(valueSet="http://hl7.org/fhir/ValueSet/forms")
     protected Coding form;
 
     /**
      * Suite of processing note or additional requirements is the processing has been held.
      */
-    @Child(name = "notes", type = {}, order=11, min=0, max=Child.MAX_UNLIMITED, modifier=false, summary=true)
+    @Child(name = "notes", type = {}, order=12, min=0, max=Child.MAX_UNLIMITED, modifier=false, summary=false)
     @Description(shortDefinition="Notes", formalDefinition="Suite of processing note or additional requirements is the processing has been held." )
     protected List<ProcessResponseNotesComponent> notes;
 
     /**
      * Processing errors.
      */
-    @Child(name = "error", type = {Coding.class}, order=12, min=0, max=Child.MAX_UNLIMITED, modifier=false, summary=true)
+    @Child(name = "error", type = {Coding.class}, order=13, min=0, max=Child.MAX_UNLIMITED, modifier=false, summary=false)
     @Description(shortDefinition="Error code", formalDefinition="Processing errors." )
+    @ca.uhn.fhir.model.api.annotation.Binding(valueSet="http://hl7.org/fhir/ValueSet/adjudication-error")
     protected List<Coding> error;
 
-    private static final long serialVersionUID = -1668062545L;
+    private static final long serialVersionUID = 283876814L;
 
   /**
    * Constructor
    */
     public ProcessResponse() {
       super();
+    }
+
+  /**
+   * Constructor
+   */
+    public ProcessResponse(Enumeration<ProcessResponseStatus> status) {
+      super();
+      this.status = status;
     }
 
     /**
@@ -346,6 +502,14 @@ public class ProcessResponse extends DomainResource {
       return this.identifier;
     }
 
+    /**
+     * @return Returns a reference to <code>this</code> for easy method chaining
+     */
+    public ProcessResponse setIdentifier(List<Identifier> theIdentifier) { 
+      this.identifier = theIdentifier;
+      return this;
+    }
+
     public boolean hasIdentifier() { 
       if (this.identifier == null)
         return false;
@@ -355,10 +519,6 @@ public class ProcessResponse extends DomainResource {
       return false;
     }
 
-    /**
-     * @return {@link #identifier} (The Response business identifier.)
-     */
-    // syntactic sugar
     public Identifier addIdentifier() { //3
       Identifier t = new Identifier();
       if (this.identifier == null)
@@ -367,7 +527,6 @@ public class ProcessResponse extends DomainResource {
       return t;
     }
 
-    // syntactic sugar
     public ProcessResponse addIdentifier(Identifier t) { //3
       if (t == null)
         return this;
@@ -378,15 +537,91 @@ public class ProcessResponse extends DomainResource {
     }
 
     /**
+     * @return The first repetition of repeating field {@link #identifier}, creating it if it does not already exist
+     */
+    public Identifier getIdentifierFirstRep() { 
+      if (getIdentifier().isEmpty()) {
+        addIdentifier();
+      }
+      return getIdentifier().get(0);
+    }
+
+    /**
+     * @return {@link #status} (The status of the resource instance.). This is the underlying object with id, value and extensions. The accessor "getStatus" gives direct access to the value
+     */
+    public Enumeration<ProcessResponseStatus> getStatusElement() { 
+      if (this.status == null)
+        if (Configuration.errorOnAutoCreate())
+          throw new Error("Attempt to auto-create ProcessResponse.status");
+        else if (Configuration.doAutoCreate())
+          this.status = new Enumeration<ProcessResponseStatus>(new ProcessResponseStatusEnumFactory()); // bb
+      return this.status;
+    }
+
+    public boolean hasStatusElement() { 
+      return this.status != null && !this.status.isEmpty();
+    }
+
+    public boolean hasStatus() { 
+      return this.status != null && !this.status.isEmpty();
+    }
+
+    /**
+     * @param value {@link #status} (The status of the resource instance.). This is the underlying object with id, value and extensions. The accessor "getStatus" gives direct access to the value
+     */
+    public ProcessResponse setStatusElement(Enumeration<ProcessResponseStatus> value) { 
+      this.status = value;
+      return this;
+    }
+
+    /**
+     * @return The status of the resource instance.
+     */
+    public ProcessResponseStatus getStatus() { 
+      return this.status == null ? null : this.status.getValue();
+    }
+
+    /**
+     * @param value The status of the resource instance.
+     */
+    public ProcessResponse setStatus(ProcessResponseStatus value) { 
+        if (this.status == null)
+          this.status = new Enumeration<ProcessResponseStatus>(new ProcessResponseStatusEnumFactory());
+        this.status.setValue(value);
+      return this;
+    }
+
+    /**
      * @return {@link #request} (Original request resource reference.)
      */
-    public Reference getRequest() { 
-      if (this.request == null)
-        if (Configuration.errorOnAutoCreate())
-          throw new Error("Attempt to auto-create ProcessResponse.request");
-        else if (Configuration.doAutoCreate())
-          this.request = new Reference(); // cc
+    public Type getRequest() { 
       return this.request;
+    }
+
+    /**
+     * @return {@link #request} (Original request resource reference.)
+     */
+    public Identifier getRequestIdentifier() throws FHIRException { 
+      if (!(this.request instanceof Identifier))
+        throw new FHIRException("Type mismatch: the type Identifier was expected, but "+this.request.getClass().getName()+" was encountered");
+      return (Identifier) this.request;
+    }
+
+    public boolean hasRequestIdentifier() { 
+      return this.request instanceof Identifier;
+    }
+
+    /**
+     * @return {@link #request} (Original request resource reference.)
+     */
+    public Reference getRequestReference() throws FHIRException { 
+      if (!(this.request instanceof Reference))
+        throw new FHIRException("Type mismatch: the type Reference was expected, but "+this.request.getClass().getName()+" was encountered");
+      return (Reference) this.request;
+    }
+
+    public boolean hasRequestReference() { 
+      return this.request instanceof Reference;
     }
 
     public boolean hasRequest() { 
@@ -396,23 +631,8 @@ public class ProcessResponse extends DomainResource {
     /**
      * @param value {@link #request} (Original request resource reference.)
      */
-    public ProcessResponse setRequest(Reference value) { 
+    public ProcessResponse setRequest(Type value) { 
       this.request = value;
-      return this;
-    }
-
-    /**
-     * @return {@link #request} The actual object that is the target of the reference. The reference library doesn't populate this, but you can use it to hold the resource if you resolve it. (Original request resource reference.)
-     */
-    public Resource getRequestTarget() { 
-      return this.requestTarget;
-    }
-
-    /**
-     * @param value {@link #request} The actual object that is the target of the reference. The reference library doesn't use these, but you can use it to hold the resource if you resolve it. (Original request resource reference.)
-     */
-    public ProcessResponse setRequestTarget(Resource value) { 
-      this.requestTarget = value;
       return this;
     }
 
@@ -589,13 +809,34 @@ public class ProcessResponse extends DomainResource {
     /**
      * @return {@link #organization} (The organization who produced this adjudicated response.)
      */
-    public Reference getOrganization() { 
-      if (this.organization == null)
-        if (Configuration.errorOnAutoCreate())
-          throw new Error("Attempt to auto-create ProcessResponse.organization");
-        else if (Configuration.doAutoCreate())
-          this.organization = new Reference(); // cc
+    public Type getOrganization() { 
       return this.organization;
+    }
+
+    /**
+     * @return {@link #organization} (The organization who produced this adjudicated response.)
+     */
+    public Identifier getOrganizationIdentifier() throws FHIRException { 
+      if (!(this.organization instanceof Identifier))
+        throw new FHIRException("Type mismatch: the type Identifier was expected, but "+this.organization.getClass().getName()+" was encountered");
+      return (Identifier) this.organization;
+    }
+
+    public boolean hasOrganizationIdentifier() { 
+      return this.organization instanceof Identifier;
+    }
+
+    /**
+     * @return {@link #organization} (The organization who produced this adjudicated response.)
+     */
+    public Reference getOrganizationReference() throws FHIRException { 
+      if (!(this.organization instanceof Reference))
+        throw new FHIRException("Type mismatch: the type Reference was expected, but "+this.organization.getClass().getName()+" was encountered");
+      return (Reference) this.organization;
+    }
+
+    public boolean hasOrganizationReference() { 
+      return this.organization instanceof Reference;
     }
 
     public boolean hasOrganization() { 
@@ -605,41 +846,42 @@ public class ProcessResponse extends DomainResource {
     /**
      * @param value {@link #organization} (The organization who produced this adjudicated response.)
      */
-    public ProcessResponse setOrganization(Reference value) { 
+    public ProcessResponse setOrganization(Type value) { 
       this.organization = value;
-      return this;
-    }
-
-    /**
-     * @return {@link #organization} The actual object that is the target of the reference. The reference library doesn't populate this, but you can use it to hold the resource if you resolve it. (The organization who produced this adjudicated response.)
-     */
-    public Organization getOrganizationTarget() { 
-      if (this.organizationTarget == null)
-        if (Configuration.errorOnAutoCreate())
-          throw new Error("Attempt to auto-create ProcessResponse.organization");
-        else if (Configuration.doAutoCreate())
-          this.organizationTarget = new Organization(); // aa
-      return this.organizationTarget;
-    }
-
-    /**
-     * @param value {@link #organization} The actual object that is the target of the reference. The reference library doesn't use these, but you can use it to hold the resource if you resolve it. (The organization who produced this adjudicated response.)
-     */
-    public ProcessResponse setOrganizationTarget(Organization value) { 
-      this.organizationTarget = value;
       return this;
     }
 
     /**
      * @return {@link #requestProvider} (The practitioner who is responsible for the services rendered to the patient.)
      */
-    public Reference getRequestProvider() { 
-      if (this.requestProvider == null)
-        if (Configuration.errorOnAutoCreate())
-          throw new Error("Attempt to auto-create ProcessResponse.requestProvider");
-        else if (Configuration.doAutoCreate())
-          this.requestProvider = new Reference(); // cc
+    public Type getRequestProvider() { 
       return this.requestProvider;
+    }
+
+    /**
+     * @return {@link #requestProvider} (The practitioner who is responsible for the services rendered to the patient.)
+     */
+    public Identifier getRequestProviderIdentifier() throws FHIRException { 
+      if (!(this.requestProvider instanceof Identifier))
+        throw new FHIRException("Type mismatch: the type Identifier was expected, but "+this.requestProvider.getClass().getName()+" was encountered");
+      return (Identifier) this.requestProvider;
+    }
+
+    public boolean hasRequestProviderIdentifier() { 
+      return this.requestProvider instanceof Identifier;
+    }
+
+    /**
+     * @return {@link #requestProvider} (The practitioner who is responsible for the services rendered to the patient.)
+     */
+    public Reference getRequestProviderReference() throws FHIRException { 
+      if (!(this.requestProvider instanceof Reference))
+        throw new FHIRException("Type mismatch: the type Reference was expected, but "+this.requestProvider.getClass().getName()+" was encountered");
+      return (Reference) this.requestProvider;
+    }
+
+    public boolean hasRequestProviderReference() { 
+      return this.requestProvider instanceof Reference;
     }
 
     public boolean hasRequestProvider() { 
@@ -649,41 +891,42 @@ public class ProcessResponse extends DomainResource {
     /**
      * @param value {@link #requestProvider} (The practitioner who is responsible for the services rendered to the patient.)
      */
-    public ProcessResponse setRequestProvider(Reference value) { 
+    public ProcessResponse setRequestProvider(Type value) { 
       this.requestProvider = value;
-      return this;
-    }
-
-    /**
-     * @return {@link #requestProvider} The actual object that is the target of the reference. The reference library doesn't populate this, but you can use it to hold the resource if you resolve it. (The practitioner who is responsible for the services rendered to the patient.)
-     */
-    public Practitioner getRequestProviderTarget() { 
-      if (this.requestProviderTarget == null)
-        if (Configuration.errorOnAutoCreate())
-          throw new Error("Attempt to auto-create ProcessResponse.requestProvider");
-        else if (Configuration.doAutoCreate())
-          this.requestProviderTarget = new Practitioner(); // aa
-      return this.requestProviderTarget;
-    }
-
-    /**
-     * @param value {@link #requestProvider} The actual object that is the target of the reference. The reference library doesn't use these, but you can use it to hold the resource if you resolve it. (The practitioner who is responsible for the services rendered to the patient.)
-     */
-    public ProcessResponse setRequestProviderTarget(Practitioner value) { 
-      this.requestProviderTarget = value;
       return this;
     }
 
     /**
      * @return {@link #requestOrganization} (The organization which is responsible for the services rendered to the patient.)
      */
-    public Reference getRequestOrganization() { 
-      if (this.requestOrganization == null)
-        if (Configuration.errorOnAutoCreate())
-          throw new Error("Attempt to auto-create ProcessResponse.requestOrganization");
-        else if (Configuration.doAutoCreate())
-          this.requestOrganization = new Reference(); // cc
+    public Type getRequestOrganization() { 
       return this.requestOrganization;
+    }
+
+    /**
+     * @return {@link #requestOrganization} (The organization which is responsible for the services rendered to the patient.)
+     */
+    public Identifier getRequestOrganizationIdentifier() throws FHIRException { 
+      if (!(this.requestOrganization instanceof Identifier))
+        throw new FHIRException("Type mismatch: the type Identifier was expected, but "+this.requestOrganization.getClass().getName()+" was encountered");
+      return (Identifier) this.requestOrganization;
+    }
+
+    public boolean hasRequestOrganizationIdentifier() { 
+      return this.requestOrganization instanceof Identifier;
+    }
+
+    /**
+     * @return {@link #requestOrganization} (The organization which is responsible for the services rendered to the patient.)
+     */
+    public Reference getRequestOrganizationReference() throws FHIRException { 
+      if (!(this.requestOrganization instanceof Reference))
+        throw new FHIRException("Type mismatch: the type Reference was expected, but "+this.requestOrganization.getClass().getName()+" was encountered");
+      return (Reference) this.requestOrganization;
+    }
+
+    public boolean hasRequestOrganizationReference() { 
+      return this.requestOrganization instanceof Reference;
     }
 
     public boolean hasRequestOrganization() { 
@@ -693,28 +936,8 @@ public class ProcessResponse extends DomainResource {
     /**
      * @param value {@link #requestOrganization} (The organization which is responsible for the services rendered to the patient.)
      */
-    public ProcessResponse setRequestOrganization(Reference value) { 
+    public ProcessResponse setRequestOrganization(Type value) { 
       this.requestOrganization = value;
-      return this;
-    }
-
-    /**
-     * @return {@link #requestOrganization} The actual object that is the target of the reference. The reference library doesn't populate this, but you can use it to hold the resource if you resolve it. (The organization which is responsible for the services rendered to the patient.)
-     */
-    public Organization getRequestOrganizationTarget() { 
-      if (this.requestOrganizationTarget == null)
-        if (Configuration.errorOnAutoCreate())
-          throw new Error("Attempt to auto-create ProcessResponse.requestOrganization");
-        else if (Configuration.doAutoCreate())
-          this.requestOrganizationTarget = new Organization(); // aa
-      return this.requestOrganizationTarget;
-    }
-
-    /**
-     * @param value {@link #requestOrganization} The actual object that is the target of the reference. The reference library doesn't use these, but you can use it to hold the resource if you resolve it. (The organization which is responsible for the services rendered to the patient.)
-     */
-    public ProcessResponse setRequestOrganizationTarget(Organization value) { 
-      this.requestOrganizationTarget = value;
       return this;
     }
 
@@ -751,6 +974,14 @@ public class ProcessResponse extends DomainResource {
       return this.notes;
     }
 
+    /**
+     * @return Returns a reference to <code>this</code> for easy method chaining
+     */
+    public ProcessResponse setNotes(List<ProcessResponseNotesComponent> theNotes) { 
+      this.notes = theNotes;
+      return this;
+    }
+
     public boolean hasNotes() { 
       if (this.notes == null)
         return false;
@@ -760,10 +991,6 @@ public class ProcessResponse extends DomainResource {
       return false;
     }
 
-    /**
-     * @return {@link #notes} (Suite of processing note or additional requirements is the processing has been held.)
-     */
-    // syntactic sugar
     public ProcessResponseNotesComponent addNotes() { //3
       ProcessResponseNotesComponent t = new ProcessResponseNotesComponent();
       if (this.notes == null)
@@ -772,7 +999,6 @@ public class ProcessResponse extends DomainResource {
       return t;
     }
 
-    // syntactic sugar
     public ProcessResponse addNotes(ProcessResponseNotesComponent t) { //3
       if (t == null)
         return this;
@@ -780,6 +1006,16 @@ public class ProcessResponse extends DomainResource {
         this.notes = new ArrayList<ProcessResponseNotesComponent>();
       this.notes.add(t);
       return this;
+    }
+
+    /**
+     * @return The first repetition of repeating field {@link #notes}, creating it if it does not already exist
+     */
+    public ProcessResponseNotesComponent getNotesFirstRep() { 
+      if (getNotes().isEmpty()) {
+        addNotes();
+      }
+      return getNotes().get(0);
     }
 
     /**
@@ -791,6 +1027,14 @@ public class ProcessResponse extends DomainResource {
       return this.error;
     }
 
+    /**
+     * @return Returns a reference to <code>this</code> for easy method chaining
+     */
+    public ProcessResponse setError(List<Coding> theError) { 
+      this.error = theError;
+      return this;
+    }
+
     public boolean hasError() { 
       if (this.error == null)
         return false;
@@ -800,10 +1044,6 @@ public class ProcessResponse extends DomainResource {
       return false;
     }
 
-    /**
-     * @return {@link #error} (Processing errors.)
-     */
-    // syntactic sugar
     public Coding addError() { //3
       Coding t = new Coding();
       if (this.error == null)
@@ -812,7 +1052,6 @@ public class ProcessResponse extends DomainResource {
       return t;
     }
 
-    // syntactic sugar
     public ProcessResponse addError(Coding t) { //3
       if (t == null)
         return this;
@@ -822,29 +1061,114 @@ public class ProcessResponse extends DomainResource {
       return this;
     }
 
+    /**
+     * @return The first repetition of repeating field {@link #error}, creating it if it does not already exist
+     */
+    public Coding getErrorFirstRep() { 
+      if (getError().isEmpty()) {
+        addError();
+      }
+      return getError().get(0);
+    }
+
       protected void listChildren(List<Property> childrenList) {
         super.listChildren(childrenList);
         childrenList.add(new Property("identifier", "Identifier", "The Response business identifier.", 0, java.lang.Integer.MAX_VALUE, identifier));
-        childrenList.add(new Property("request", "Reference(Any)", "Original request resource reference.", 0, java.lang.Integer.MAX_VALUE, request));
+        childrenList.add(new Property("status", "code", "The status of the resource instance.", 0, java.lang.Integer.MAX_VALUE, status));
+        childrenList.add(new Property("request[x]", "Identifier|Reference(Any)", "Original request resource reference.", 0, java.lang.Integer.MAX_VALUE, request));
         childrenList.add(new Property("outcome", "Coding", "Transaction status: error, complete, held.", 0, java.lang.Integer.MAX_VALUE, outcome));
         childrenList.add(new Property("disposition", "string", "A description of the status of the adjudication or processing.", 0, java.lang.Integer.MAX_VALUE, disposition));
         childrenList.add(new Property("ruleset", "Coding", "The version of the style of resource contents. This should be mapped to the allowable profiles for this and supporting resources.", 0, java.lang.Integer.MAX_VALUE, ruleset));
         childrenList.add(new Property("originalRuleset", "Coding", "The style (standard) and version of the original material which was converted into this resource.", 0, java.lang.Integer.MAX_VALUE, originalRuleset));
         childrenList.add(new Property("created", "dateTime", "The date when the enclosed suite of services were performed or completed.", 0, java.lang.Integer.MAX_VALUE, created));
-        childrenList.add(new Property("organization", "Reference(Organization)", "The organization who produced this adjudicated response.", 0, java.lang.Integer.MAX_VALUE, organization));
-        childrenList.add(new Property("requestProvider", "Reference(Practitioner)", "The practitioner who is responsible for the services rendered to the patient.", 0, java.lang.Integer.MAX_VALUE, requestProvider));
-        childrenList.add(new Property("requestOrganization", "Reference(Organization)", "The organization which is responsible for the services rendered to the patient.", 0, java.lang.Integer.MAX_VALUE, requestOrganization));
+        childrenList.add(new Property("organization[x]", "Identifier|Reference(Organization)", "The organization who produced this adjudicated response.", 0, java.lang.Integer.MAX_VALUE, organization));
+        childrenList.add(new Property("requestProvider[x]", "Identifier|Reference(Practitioner)", "The practitioner who is responsible for the services rendered to the patient.", 0, java.lang.Integer.MAX_VALUE, requestProvider));
+        childrenList.add(new Property("requestOrganization[x]", "Identifier|Reference(Organization)", "The organization which is responsible for the services rendered to the patient.", 0, java.lang.Integer.MAX_VALUE, requestOrganization));
         childrenList.add(new Property("form", "Coding", "The form to be used for printing the content.", 0, java.lang.Integer.MAX_VALUE, form));
         childrenList.add(new Property("notes", "", "Suite of processing note or additional requirements is the processing has been held.", 0, java.lang.Integer.MAX_VALUE, notes));
         childrenList.add(new Property("error", "Coding", "Processing errors.", 0, java.lang.Integer.MAX_VALUE, error));
       }
 
       @Override
+      public Base[] getProperty(int hash, String name, boolean checkValid) throws FHIRException {
+        switch (hash) {
+        case -1618432855: /*identifier*/ return this.identifier == null ? new Base[0] : this.identifier.toArray(new Base[this.identifier.size()]); // Identifier
+        case -892481550: /*status*/ return this.status == null ? new Base[0] : new Base[] {this.status}; // Enumeration<ProcessResponseStatus>
+        case 1095692943: /*request*/ return this.request == null ? new Base[0] : new Base[] {this.request}; // Type
+        case -1106507950: /*outcome*/ return this.outcome == null ? new Base[0] : new Base[] {this.outcome}; // Coding
+        case 583380919: /*disposition*/ return this.disposition == null ? new Base[0] : new Base[] {this.disposition}; // StringType
+        case 1548678118: /*ruleset*/ return this.ruleset == null ? new Base[0] : new Base[] {this.ruleset}; // Coding
+        case 1089373397: /*originalRuleset*/ return this.originalRuleset == null ? new Base[0] : new Base[] {this.originalRuleset}; // Coding
+        case 1028554472: /*created*/ return this.created == null ? new Base[0] : new Base[] {this.created}; // DateTimeType
+        case 1178922291: /*organization*/ return this.organization == null ? new Base[0] : new Base[] {this.organization}; // Type
+        case 1601527200: /*requestProvider*/ return this.requestProvider == null ? new Base[0] : new Base[] {this.requestProvider}; // Type
+        case 599053666: /*requestOrganization*/ return this.requestOrganization == null ? new Base[0] : new Base[] {this.requestOrganization}; // Type
+        case 3148996: /*form*/ return this.form == null ? new Base[0] : new Base[] {this.form}; // Coding
+        case 105008833: /*notes*/ return this.notes == null ? new Base[0] : this.notes.toArray(new Base[this.notes.size()]); // ProcessResponseNotesComponent
+        case 96784904: /*error*/ return this.error == null ? new Base[0] : this.error.toArray(new Base[this.error.size()]); // Coding
+        default: return super.getProperty(hash, name, checkValid);
+        }
+
+      }
+
+      @Override
+      public void setProperty(int hash, String name, Base value) throws FHIRException {
+        switch (hash) {
+        case -1618432855: // identifier
+          this.getIdentifier().add(castToIdentifier(value)); // Identifier
+          break;
+        case -892481550: // status
+          this.status = new ProcessResponseStatusEnumFactory().fromType(value); // Enumeration<ProcessResponseStatus>
+          break;
+        case 1095692943: // request
+          this.request = (Type) value; // Type
+          break;
+        case -1106507950: // outcome
+          this.outcome = castToCoding(value); // Coding
+          break;
+        case 583380919: // disposition
+          this.disposition = castToString(value); // StringType
+          break;
+        case 1548678118: // ruleset
+          this.ruleset = castToCoding(value); // Coding
+          break;
+        case 1089373397: // originalRuleset
+          this.originalRuleset = castToCoding(value); // Coding
+          break;
+        case 1028554472: // created
+          this.created = castToDateTime(value); // DateTimeType
+          break;
+        case 1178922291: // organization
+          this.organization = (Type) value; // Type
+          break;
+        case 1601527200: // requestProvider
+          this.requestProvider = (Type) value; // Type
+          break;
+        case 599053666: // requestOrganization
+          this.requestOrganization = (Type) value; // Type
+          break;
+        case 3148996: // form
+          this.form = castToCoding(value); // Coding
+          break;
+        case 105008833: // notes
+          this.getNotes().add((ProcessResponseNotesComponent) value); // ProcessResponseNotesComponent
+          break;
+        case 96784904: // error
+          this.getError().add(castToCoding(value)); // Coding
+          break;
+        default: super.setProperty(hash, name, value);
+        }
+
+      }
+
+      @Override
       public void setProperty(String name, Base value) throws FHIRException {
         if (name.equals("identifier"))
           this.getIdentifier().add(castToIdentifier(value));
-        else if (name.equals("request"))
-          this.request = castToReference(value); // Reference
+        else if (name.equals("status"))
+          this.status = new ProcessResponseStatusEnumFactory().fromType(value); // Enumeration<ProcessResponseStatus>
+        else if (name.equals("request[x]"))
+          this.request = (Type) value; // Type
         else if (name.equals("outcome"))
           this.outcome = castToCoding(value); // Coding
         else if (name.equals("disposition"))
@@ -855,12 +1179,12 @@ public class ProcessResponse extends DomainResource {
           this.originalRuleset = castToCoding(value); // Coding
         else if (name.equals("created"))
           this.created = castToDateTime(value); // DateTimeType
-        else if (name.equals("organization"))
-          this.organization = castToReference(value); // Reference
-        else if (name.equals("requestProvider"))
-          this.requestProvider = castToReference(value); // Reference
-        else if (name.equals("requestOrganization"))
-          this.requestOrganization = castToReference(value); // Reference
+        else if (name.equals("organization[x]"))
+          this.organization = (Type) value; // Type
+        else if (name.equals("requestProvider[x]"))
+          this.requestProvider = (Type) value; // Type
+        else if (name.equals("requestOrganization[x]"))
+          this.requestOrganization = (Type) value; // Type
         else if (name.equals("form"))
           this.form = castToCoding(value); // Coding
         else if (name.equals("notes"))
@@ -872,11 +1196,40 @@ public class ProcessResponse extends DomainResource {
       }
 
       @Override
+      public Base makeProperty(int hash, String name) throws FHIRException {
+        switch (hash) {
+        case -1618432855:  return addIdentifier(); // Identifier
+        case -892481550: throw new FHIRException("Cannot make property status as it is not a complex type"); // Enumeration<ProcessResponseStatus>
+        case 37106577:  return getRequest(); // Type
+        case -1106507950:  return getOutcome(); // Coding
+        case 583380919: throw new FHIRException("Cannot make property disposition as it is not a complex type"); // StringType
+        case 1548678118:  return getRuleset(); // Coding
+        case 1089373397:  return getOriginalRuleset(); // Coding
+        case 1028554472: throw new FHIRException("Cannot make property created as it is not a complex type"); // DateTimeType
+        case 1326483053:  return getOrganization(); // Type
+        case -1694784800:  return getRequestProvider(); // Type
+        case 818740190:  return getRequestOrganization(); // Type
+        case 3148996:  return getForm(); // Coding
+        case 105008833:  return addNotes(); // ProcessResponseNotesComponent
+        case 96784904:  return addError(); // Coding
+        default: return super.makeProperty(hash, name);
+        }
+
+      }
+
+      @Override
       public Base addChild(String name) throws FHIRException {
         if (name.equals("identifier")) {
           return addIdentifier();
         }
-        else if (name.equals("request")) {
+        else if (name.equals("status")) {
+          throw new FHIRException("Cannot call addChild on a primitive type ProcessResponse.status");
+        }
+        else if (name.equals("requestIdentifier")) {
+          this.request = new Identifier();
+          return this.request;
+        }
+        else if (name.equals("requestReference")) {
           this.request = new Reference();
           return this.request;
         }
@@ -898,15 +1251,27 @@ public class ProcessResponse extends DomainResource {
         else if (name.equals("created")) {
           throw new FHIRException("Cannot call addChild on a primitive type ProcessResponse.created");
         }
-        else if (name.equals("organization")) {
+        else if (name.equals("organizationIdentifier")) {
+          this.organization = new Identifier();
+          return this.organization;
+        }
+        else if (name.equals("organizationReference")) {
           this.organization = new Reference();
           return this.organization;
         }
-        else if (name.equals("requestProvider")) {
+        else if (name.equals("requestProviderIdentifier")) {
+          this.requestProvider = new Identifier();
+          return this.requestProvider;
+        }
+        else if (name.equals("requestProviderReference")) {
           this.requestProvider = new Reference();
           return this.requestProvider;
         }
-        else if (name.equals("requestOrganization")) {
+        else if (name.equals("requestOrganizationIdentifier")) {
+          this.requestOrganization = new Identifier();
+          return this.requestOrganization;
+        }
+        else if (name.equals("requestOrganizationReference")) {
           this.requestOrganization = new Reference();
           return this.requestOrganization;
         }
@@ -937,6 +1302,7 @@ public class ProcessResponse extends DomainResource {
           for (Identifier i : identifier)
             dst.identifier.add(i.copy());
         };
+        dst.status = status == null ? null : status.copy();
         dst.request = request == null ? null : request.copy();
         dst.outcome = outcome == null ? null : outcome.copy();
         dst.disposition = disposition == null ? null : disposition.copy();
@@ -971,9 +1337,10 @@ public class ProcessResponse extends DomainResource {
         if (!(other instanceof ProcessResponse))
           return false;
         ProcessResponse o = (ProcessResponse) other;
-        return compareDeep(identifier, o.identifier, true) && compareDeep(request, o.request, true) && compareDeep(outcome, o.outcome, true)
-           && compareDeep(disposition, o.disposition, true) && compareDeep(ruleset, o.ruleset, true) && compareDeep(originalRuleset, o.originalRuleset, true)
-           && compareDeep(created, o.created, true) && compareDeep(organization, o.organization, true) && compareDeep(requestProvider, o.requestProvider, true)
+        return compareDeep(identifier, o.identifier, true) && compareDeep(status, o.status, true) && compareDeep(request, o.request, true)
+           && compareDeep(outcome, o.outcome, true) && compareDeep(disposition, o.disposition, true) && compareDeep(ruleset, o.ruleset, true)
+           && compareDeep(originalRuleset, o.originalRuleset, true) && compareDeep(created, o.created, true)
+           && compareDeep(organization, o.organization, true) && compareDeep(requestProvider, o.requestProvider, true)
            && compareDeep(requestOrganization, o.requestOrganization, true) && compareDeep(form, o.form, true)
            && compareDeep(notes, o.notes, true) && compareDeep(error, o.error, true);
       }
@@ -985,17 +1352,14 @@ public class ProcessResponse extends DomainResource {
         if (!(other instanceof ProcessResponse))
           return false;
         ProcessResponse o = (ProcessResponse) other;
-        return compareValues(disposition, o.disposition, true) && compareValues(created, o.created, true);
+        return compareValues(status, o.status, true) && compareValues(disposition, o.disposition, true) && compareValues(created, o.created, true)
+          ;
       }
 
       public boolean isEmpty() {
-        return super.isEmpty() && (identifier == null || identifier.isEmpty()) && (request == null || request.isEmpty())
-           && (outcome == null || outcome.isEmpty()) && (disposition == null || disposition.isEmpty())
-           && (ruleset == null || ruleset.isEmpty()) && (originalRuleset == null || originalRuleset.isEmpty())
-           && (created == null || created.isEmpty()) && (organization == null || organization.isEmpty())
-           && (requestProvider == null || requestProvider.isEmpty()) && (requestOrganization == null || requestOrganization.isEmpty())
-           && (form == null || form.isEmpty()) && (notes == null || notes.isEmpty()) && (error == null || error.isEmpty())
-          ;
+        return super.isEmpty() && ca.uhn.fhir.util.ElementUtil.isEmpty(identifier, status, request
+          , outcome, disposition, ruleset, originalRuleset, created, organization, requestProvider
+          , requestOrganization, form, notes, error);
       }
 
   @Override
@@ -1024,108 +1388,188 @@ public class ProcessResponse extends DomainResource {
   public static final ca.uhn.fhir.rest.gclient.TokenClientParam IDENTIFIER = new ca.uhn.fhir.rest.gclient.TokenClientParam(SP_IDENTIFIER);
 
  /**
-   * Search parameter: <b>request</b>
+   * Search parameter: <b>request-reference</b>
    * <p>
    * Description: <b>The reference to the claim</b><br>
    * Type: <b>reference</b><br>
-   * Path: <b>ProcessResponse.request</b><br>
+   * Path: <b>ProcessResponse.requestReference</b><br>
    * </p>
    */
-  @SearchParamDefinition(name="request", path="ProcessResponse.request", description="The reference to the claim", type="reference" )
-  public static final String SP_REQUEST = "request";
+  @SearchParamDefinition(name="request-reference", path="ProcessResponse.request.as(Reference)", description="The reference to the claim", type="reference" )
+  public static final String SP_REQUEST_REFERENCE = "request-reference";
  /**
-   * <b>Fluent Client</b> search parameter constant for <b>request</b>
+   * <b>Fluent Client</b> search parameter constant for <b>request-reference</b>
    * <p>
    * Description: <b>The reference to the claim</b><br>
    * Type: <b>reference</b><br>
-   * Path: <b>ProcessResponse.request</b><br>
+   * Path: <b>ProcessResponse.requestReference</b><br>
    * </p>
    */
-  public static final ca.uhn.fhir.rest.gclient.ReferenceClientParam REQUEST = new ca.uhn.fhir.rest.gclient.ReferenceClientParam(SP_REQUEST);
+  public static final ca.uhn.fhir.rest.gclient.ReferenceClientParam REQUEST_REFERENCE = new ca.uhn.fhir.rest.gclient.ReferenceClientParam(SP_REQUEST_REFERENCE);
 
 /**
    * Constant for fluent queries to be used to add include statements. Specifies
-   * the path value of "<b>ProcessResponse:request</b>".
+   * the path value of "<b>ProcessResponse:request-reference</b>".
    */
-  public static final ca.uhn.fhir.model.api.Include INCLUDE_REQUEST = new ca.uhn.fhir.model.api.Include("ProcessResponse:request").toLocked();
+  public static final ca.uhn.fhir.model.api.Include INCLUDE_REQUEST_REFERENCE = new ca.uhn.fhir.model.api.Include("ProcessResponse:request-reference").toLocked();
 
  /**
-   * Search parameter: <b>organization</b>
-   * <p>
-   * Description: <b>The organization who generated this resource</b><br>
-   * Type: <b>reference</b><br>
-   * Path: <b>ProcessResponse.organization</b><br>
-   * </p>
-   */
-  @SearchParamDefinition(name="organization", path="ProcessResponse.organization", description="The organization who generated this resource", type="reference" )
-  public static final String SP_ORGANIZATION = "organization";
- /**
-   * <b>Fluent Client</b> search parameter constant for <b>organization</b>
-   * <p>
-   * Description: <b>The organization who generated this resource</b><br>
-   * Type: <b>reference</b><br>
-   * Path: <b>ProcessResponse.organization</b><br>
-   * </p>
-   */
-  public static final ca.uhn.fhir.rest.gclient.ReferenceClientParam ORGANIZATION = new ca.uhn.fhir.rest.gclient.ReferenceClientParam(SP_ORGANIZATION);
-
-/**
-   * Constant for fluent queries to be used to add include statements. Specifies
-   * the path value of "<b>ProcessResponse:organization</b>".
-   */
-  public static final ca.uhn.fhir.model.api.Include INCLUDE_ORGANIZATION = new ca.uhn.fhir.model.api.Include("ProcessResponse:organization").toLocked();
-
- /**
-   * Search parameter: <b>requestprovider</b>
-   * <p>
-   * Description: <b>The Provider who is responsible the request transaction</b><br>
-   * Type: <b>reference</b><br>
-   * Path: <b>ProcessResponse.requestProvider</b><br>
-   * </p>
-   */
-  @SearchParamDefinition(name="requestprovider", path="ProcessResponse.requestProvider", description="The Provider who is responsible the request transaction", type="reference" )
-  public static final String SP_REQUESTPROVIDER = "requestprovider";
- /**
-   * <b>Fluent Client</b> search parameter constant for <b>requestprovider</b>
-   * <p>
-   * Description: <b>The Provider who is responsible the request transaction</b><br>
-   * Type: <b>reference</b><br>
-   * Path: <b>ProcessResponse.requestProvider</b><br>
-   * </p>
-   */
-  public static final ca.uhn.fhir.rest.gclient.ReferenceClientParam REQUESTPROVIDER = new ca.uhn.fhir.rest.gclient.ReferenceClientParam(SP_REQUESTPROVIDER);
-
-/**
-   * Constant for fluent queries to be used to add include statements. Specifies
-   * the path value of "<b>ProcessResponse:requestprovider</b>".
-   */
-  public static final ca.uhn.fhir.model.api.Include INCLUDE_REQUESTPROVIDER = new ca.uhn.fhir.model.api.Include("ProcessResponse:requestprovider").toLocked();
-
- /**
-   * Search parameter: <b>requestorganization</b>
+   * Search parameter: <b>request-organization-reference</b>
    * <p>
    * Description: <b>The Organization who is responsible the request transaction</b><br>
    * Type: <b>reference</b><br>
-   * Path: <b>ProcessResponse.requestOrganization</b><br>
+   * Path: <b>ProcessResponse.requestOrganizationReference</b><br>
    * </p>
    */
-  @SearchParamDefinition(name="requestorganization", path="ProcessResponse.requestOrganization", description="The Organization who is responsible the request transaction", type="reference" )
-  public static final String SP_REQUESTORGANIZATION = "requestorganization";
+  @SearchParamDefinition(name="request-organization-reference", path="ProcessResponse.requestOrganization.as(Reference)", description="The Organization who is responsible the request transaction", type="reference", target={Organization.class } )
+  public static final String SP_REQUEST_ORGANIZATION_REFERENCE = "request-organization-reference";
  /**
-   * <b>Fluent Client</b> search parameter constant for <b>requestorganization</b>
+   * <b>Fluent Client</b> search parameter constant for <b>request-organization-reference</b>
    * <p>
    * Description: <b>The Organization who is responsible the request transaction</b><br>
    * Type: <b>reference</b><br>
-   * Path: <b>ProcessResponse.requestOrganization</b><br>
+   * Path: <b>ProcessResponse.requestOrganizationReference</b><br>
    * </p>
    */
-  public static final ca.uhn.fhir.rest.gclient.ReferenceClientParam REQUESTORGANIZATION = new ca.uhn.fhir.rest.gclient.ReferenceClientParam(SP_REQUESTORGANIZATION);
+  public static final ca.uhn.fhir.rest.gclient.ReferenceClientParam REQUEST_ORGANIZATION_REFERENCE = new ca.uhn.fhir.rest.gclient.ReferenceClientParam(SP_REQUEST_ORGANIZATION_REFERENCE);
 
 /**
    * Constant for fluent queries to be used to add include statements. Specifies
-   * the path value of "<b>ProcessResponse:requestorganization</b>".
+   * the path value of "<b>ProcessResponse:request-organization-reference</b>".
    */
-  public static final ca.uhn.fhir.model.api.Include INCLUDE_REQUESTORGANIZATION = new ca.uhn.fhir.model.api.Include("ProcessResponse:requestorganization").toLocked();
+  public static final ca.uhn.fhir.model.api.Include INCLUDE_REQUEST_ORGANIZATION_REFERENCE = new ca.uhn.fhir.model.api.Include("ProcessResponse:request-organization-reference").toLocked();
+
+ /**
+   * Search parameter: <b>organization-reference</b>
+   * <p>
+   * Description: <b>The organization who generated this resource</b><br>
+   * Type: <b>reference</b><br>
+   * Path: <b>ProcessResponse.organizationReference</b><br>
+   * </p>
+   */
+  @SearchParamDefinition(name="organization-reference", path="ProcessResponse.organization.as(Reference)", description="The organization who generated this resource", type="reference", target={Organization.class } )
+  public static final String SP_ORGANIZATION_REFERENCE = "organization-reference";
+ /**
+   * <b>Fluent Client</b> search parameter constant for <b>organization-reference</b>
+   * <p>
+   * Description: <b>The organization who generated this resource</b><br>
+   * Type: <b>reference</b><br>
+   * Path: <b>ProcessResponse.organizationReference</b><br>
+   * </p>
+   */
+  public static final ca.uhn.fhir.rest.gclient.ReferenceClientParam ORGANIZATION_REFERENCE = new ca.uhn.fhir.rest.gclient.ReferenceClientParam(SP_ORGANIZATION_REFERENCE);
+
+/**
+   * Constant for fluent queries to be used to add include statements. Specifies
+   * the path value of "<b>ProcessResponse:organization-reference</b>".
+   */
+  public static final ca.uhn.fhir.model.api.Include INCLUDE_ORGANIZATION_REFERENCE = new ca.uhn.fhir.model.api.Include("ProcessResponse:organization-reference").toLocked();
+
+ /**
+   * Search parameter: <b>organization-identifier</b>
+   * <p>
+   * Description: <b>The organization who generated this resource</b><br>
+   * Type: <b>token</b><br>
+   * Path: <b>ProcessResponse.organizationIdentifier</b><br>
+   * </p>
+   */
+  @SearchParamDefinition(name="organization-identifier", path="ProcessResponse.organization.as(Identifier)", description="The organization who generated this resource", type="token" )
+  public static final String SP_ORGANIZATION_IDENTIFIER = "organization-identifier";
+ /**
+   * <b>Fluent Client</b> search parameter constant for <b>organization-identifier</b>
+   * <p>
+   * Description: <b>The organization who generated this resource</b><br>
+   * Type: <b>token</b><br>
+   * Path: <b>ProcessResponse.organizationIdentifier</b><br>
+   * </p>
+   */
+  public static final ca.uhn.fhir.rest.gclient.TokenClientParam ORGANIZATION_IDENTIFIER = new ca.uhn.fhir.rest.gclient.TokenClientParam(SP_ORGANIZATION_IDENTIFIER);
+
+ /**
+   * Search parameter: <b>request-provide-ridentifier</b>
+   * <p>
+   * Description: <b>The Provider who is responsible the request transaction</b><br>
+   * Type: <b>token</b><br>
+   * Path: <b>ProcessResponse.requestProviderIdentifier</b><br>
+   * </p>
+   */
+  @SearchParamDefinition(name="request-provide-ridentifier", path="ProcessResponse.requestProvider.as(Identifier)", description="The Provider who is responsible the request transaction", type="token" )
+  public static final String SP_REQUEST_PROVIDE_RIDENTIFIER = "request-provide-ridentifier";
+ /**
+   * <b>Fluent Client</b> search parameter constant for <b>request-provide-ridentifier</b>
+   * <p>
+   * Description: <b>The Provider who is responsible the request transaction</b><br>
+   * Type: <b>token</b><br>
+   * Path: <b>ProcessResponse.requestProviderIdentifier</b><br>
+   * </p>
+   */
+  public static final ca.uhn.fhir.rest.gclient.TokenClientParam REQUEST_PROVIDE_RIDENTIFIER = new ca.uhn.fhir.rest.gclient.TokenClientParam(SP_REQUEST_PROVIDE_RIDENTIFIER);
+
+ /**
+   * Search parameter: <b>request-identifier</b>
+   * <p>
+   * Description: <b>The reference to the claim</b><br>
+   * Type: <b>token</b><br>
+   * Path: <b>ProcessResponse.requestIdentifier</b><br>
+   * </p>
+   */
+  @SearchParamDefinition(name="request-identifier", path="ProcessResponse.request.as(Identifier)", description="The reference to the claim", type="token" )
+  public static final String SP_REQUEST_IDENTIFIER = "request-identifier";
+ /**
+   * <b>Fluent Client</b> search parameter constant for <b>request-identifier</b>
+   * <p>
+   * Description: <b>The reference to the claim</b><br>
+   * Type: <b>token</b><br>
+   * Path: <b>ProcessResponse.requestIdentifier</b><br>
+   * </p>
+   */
+  public static final ca.uhn.fhir.rest.gclient.TokenClientParam REQUEST_IDENTIFIER = new ca.uhn.fhir.rest.gclient.TokenClientParam(SP_REQUEST_IDENTIFIER);
+
+ /**
+   * Search parameter: <b>request-organization-identifier</b>
+   * <p>
+   * Description: <b>The Organization who is responsible the request transaction</b><br>
+   * Type: <b>token</b><br>
+   * Path: <b>ProcessResponse.requestOrganizationIdentifier</b><br>
+   * </p>
+   */
+  @SearchParamDefinition(name="request-organization-identifier", path="ProcessResponse.requestOrganization.as(Identifier)", description="The Organization who is responsible the request transaction", type="token" )
+  public static final String SP_REQUEST_ORGANIZATION_IDENTIFIER = "request-organization-identifier";
+ /**
+   * <b>Fluent Client</b> search parameter constant for <b>request-organization-identifier</b>
+   * <p>
+   * Description: <b>The Organization who is responsible the request transaction</b><br>
+   * Type: <b>token</b><br>
+   * Path: <b>ProcessResponse.requestOrganizationIdentifier</b><br>
+   * </p>
+   */
+  public static final ca.uhn.fhir.rest.gclient.TokenClientParam REQUEST_ORGANIZATION_IDENTIFIER = new ca.uhn.fhir.rest.gclient.TokenClientParam(SP_REQUEST_ORGANIZATION_IDENTIFIER);
+
+ /**
+   * Search parameter: <b>request-provider-reference</b>
+   * <p>
+   * Description: <b>The Provider who is responsible the request transaction</b><br>
+   * Type: <b>reference</b><br>
+   * Path: <b>ProcessResponse.requestProviderReference</b><br>
+   * </p>
+   */
+  @SearchParamDefinition(name="request-provider-reference", path="ProcessResponse.requestProvider.as(Reference)", description="The Provider who is responsible the request transaction", type="reference", providesMembershipIn={ @ca.uhn.fhir.model.api.annotation.Compartment(name="Practitioner") }, target={Practitioner.class } )
+  public static final String SP_REQUEST_PROVIDER_REFERENCE = "request-provider-reference";
+ /**
+   * <b>Fluent Client</b> search parameter constant for <b>request-provider-reference</b>
+   * <p>
+   * Description: <b>The Provider who is responsible the request transaction</b><br>
+   * Type: <b>reference</b><br>
+   * Path: <b>ProcessResponse.requestProviderReference</b><br>
+   * </p>
+   */
+  public static final ca.uhn.fhir.rest.gclient.ReferenceClientParam REQUEST_PROVIDER_REFERENCE = new ca.uhn.fhir.rest.gclient.ReferenceClientParam(SP_REQUEST_PROVIDER_REFERENCE);
+
+/**
+   * Constant for fluent queries to be used to add include statements. Specifies
+   * the path value of "<b>ProcessResponse:request-provider-reference</b>".
+   */
+  public static final ca.uhn.fhir.model.api.Include INCLUDE_REQUEST_PROVIDER_REFERENCE = new ca.uhn.fhir.model.api.Include("ProcessResponse:request-provider-reference").toLocked();
 
 
 }

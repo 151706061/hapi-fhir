@@ -112,20 +112,24 @@ public class TokenParam extends BaseParam implements IQueryParameterType {
 		if (theQualifier != null) {
 			TokenParamModifier modifier = TokenParamModifier.forValue(theQualifier);
 			setModifier(modifier);
-			setSystem(null);
-			setValue(ParameterUtil.unescape(theParameter));
+			
+			if (modifier == TokenParamModifier.TEXT) {
+				setSystem(null);
+				setValue(ParameterUtil.unescape(theParameter));
+				return;
+			}
+		}
+
+		setSystem(null);
+		if (theParameter == null) {
+			setValue(null);
 		} else {
-			setSystem(null);
-			if (theParameter == null) {
-				setValue(null);
+			int barIndex = ParameterUtil.nonEscapedIndexOf(theParameter, '|');
+			if (barIndex != -1) {
+				setSystem(theParameter.substring(0, barIndex));
+				setValue(ParameterUtil.unescape(theParameter.substring(barIndex + 1)));
 			} else {
-				int barIndex = ParameterUtil.nonEscapedIndexOf(theParameter, '|');
-				if (barIndex != -1) {
-					setSystem(theParameter.substring(0, barIndex));
-					setValue(ParameterUtil.unescape(theParameter.substring(barIndex + 1)));
-				} else {
-					setValue(ParameterUtil.unescape(theParameter));
-				}
+				setValue(ParameterUtil.unescape(theParameter));
 			}
 		}
 	}
@@ -139,14 +143,23 @@ public class TokenParam extends BaseParam implements IQueryParameterType {
 
 	/**
 	 * Returns the system for this token. Note that if a {@link #getModifier()} is being used, the entire value of the
-	 * parameter will be placed in {@link #getValue() value} and this method will return <code>null</code>.
+	 * parameter will be placed in {@link #getValue() value} and this method will return <code>null</code>. 
+	 * <p
+	 * Also note that this value may be <code>null</code> or <code>""</code> (empty string) and that
+	 * each of these have a different meaning. When a token is passed on a URL and it has no
+	 * vertical bar (often meaning "return values that match the given code in any codesystem") 
+	 * this method will return <code>null</code>. When a token is passed on a URL and it has
+	 * a vetical bar but nothing before the bar (often meaning "return values that match the
+	 * given code but that have no codesystem) this method will return <code>""</code>
+	 * </p>
 	 */
 	public String getSystem() {
 		return mySystem;
 	}
 
 	/**
-	 * Returns the value for the token
+	 * Returns the value for the token (generally the value to the right of the
+	 * vertical bar on the URL) 
 	 */
 	public String getValue() {
 		return myValue;

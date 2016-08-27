@@ -29,20 +29,20 @@ package org.hl7.fhir.dstu3.model;
   
 */
 
-// Generated on Sat, Jan 30, 2016 09:18-0500 for FHIR v1.3.0
+// Generated on Thu, Aug 25, 2016 23:04-0400 for FHIR v1.6.0
 
 import java.util.*;
 
 import org.hl7.fhir.utilities.Utilities;
 import ca.uhn.fhir.model.api.annotation.Child;
+import ca.uhn.fhir.model.api.annotation.ChildOrder;
 import ca.uhn.fhir.model.api.annotation.Description;
 import ca.uhn.fhir.model.api.annotation.DatatypeDef;
 import ca.uhn.fhir.model.api.annotation.Block;
-
-import org.hl7.fhir.dstu3.exceptions.FHIRException;
 import org.hl7.fhir.instance.model.api.*;
+import org.hl7.fhir.dstu3.exceptions.FHIRException;
 /**
- * There is a variety of postal address formats defined around the world. This format defines a superset that is the basis for all addresses around the world.
+ * An address expressed using postal conventions (as opposed to GPS or other location definition formats).  This data type may be used to convey addresses for use in delivering mail as well as for visiting locations and which might not be valid for mail delivery.  There are a variety of postal address formats defined around the world.
  */
 @DatatypeDef(name="Address")
 public class Address extends Type implements ICompositeType {
@@ -65,7 +65,7 @@ public class Address extends Type implements ICompositeType {
          */
         OLD, 
         /**
-         * added to help the parsers
+         * added to help the parsers with the generic types
          */
         NULL;
         public static AddressUse fromCode(String codeString) throws FHIRException {
@@ -79,7 +79,10 @@ public class Address extends Type implements ICompositeType {
           return TEMP;
         if ("old".equals(codeString))
           return OLD;
-        throw new FHIRException("Unknown AddressUse code '"+codeString+"'");
+        if (Configuration.isAcceptInvalidEnums())
+          return null;
+        else
+          throw new FHIRException("Unknown AddressUse code '"+codeString+"'");
         }
         public String toCode() {
           switch (this) {
@@ -180,7 +183,7 @@ public class Address extends Type implements ICompositeType {
          */
         BOTH, 
         /**
-         * added to help the parsers
+         * added to help the parsers with the generic types
          */
         NULL;
         public static AddressType fromCode(String codeString) throws FHIRException {
@@ -192,7 +195,10 @@ public class Address extends Type implements ICompositeType {
           return PHYSICAL;
         if ("both".equals(codeString))
           return BOTH;
-        throw new FHIRException("Unknown AddressType code '"+codeString+"'");
+        if (Configuration.isAcceptInvalidEnums())
+          return null;
+        else
+          throw new FHIRException("Unknown AddressType code '"+codeString+"'");
         }
         public String toCode() {
           switch (this) {
@@ -274,6 +280,7 @@ public class Address extends Type implements ICompositeType {
      */
     @Child(name = "use", type = {CodeType.class}, order=0, min=0, max=1, modifier=true, summary=true)
     @Description(shortDefinition="home | work | temp | old - purpose of this address", formalDefinition="The purpose of this address." )
+    @ca.uhn.fhir.model.api.annotation.Binding(valueSet="http://hl7.org/fhir/ValueSet/address-use")
     protected Enumeration<AddressUse> use;
 
     /**
@@ -281,6 +288,7 @@ public class Address extends Type implements ICompositeType {
      */
     @Child(name = "type", type = {CodeType.class}, order=1, min=0, max=1, modifier=false, summary=true)
     @Description(shortDefinition="postal | physical | both", formalDefinition="Distinguishes between physical addresses (those you can visit) and mailing addresses (e.g. PO Boxes and care-of addresses). Most addresses are both." )
+    @ca.uhn.fhir.model.api.annotation.Binding(valueSet="http://hl7.org/fhir/ValueSet/address-type")
     protected Enumeration<AddressType> type;
 
     /**
@@ -504,6 +512,14 @@ public class Address extends Type implements ICompositeType {
       return this.line;
     }
 
+    /**
+     * @return Returns a reference to <code>this</code> for easy method chaining
+     */
+    public Address setLine(List<StringType> theLine) { 
+      this.line = theLine;
+      return this;
+    }
+
     public boolean hasLine() { 
       if (this.line == null)
         return false;
@@ -516,7 +532,6 @@ public class Address extends Type implements ICompositeType {
     /**
      * @return {@link #line} (This component contains the house number, apartment number, street name, street direction,  P.O. Box number, delivery hints, and similar address information.)
      */
-    // syntactic sugar
     public StringType addLineElement() {//2 
       StringType t = new StringType();
       if (this.line == null)
@@ -833,6 +848,62 @@ public class Address extends Type implements ICompositeType {
       }
 
       @Override
+      public Base[] getProperty(int hash, String name, boolean checkValid) throws FHIRException {
+        switch (hash) {
+        case 116103: /*use*/ return this.use == null ? new Base[0] : new Base[] {this.use}; // Enumeration<AddressUse>
+        case 3575610: /*type*/ return this.type == null ? new Base[0] : new Base[] {this.type}; // Enumeration<AddressType>
+        case 3556653: /*text*/ return this.text == null ? new Base[0] : new Base[] {this.text}; // StringType
+        case 3321844: /*line*/ return this.line == null ? new Base[0] : this.line.toArray(new Base[this.line.size()]); // StringType
+        case 3053931: /*city*/ return this.city == null ? new Base[0] : new Base[] {this.city}; // StringType
+        case 288961422: /*district*/ return this.district == null ? new Base[0] : new Base[] {this.district}; // StringType
+        case 109757585: /*state*/ return this.state == null ? new Base[0] : new Base[] {this.state}; // StringType
+        case 2011152728: /*postalCode*/ return this.postalCode == null ? new Base[0] : new Base[] {this.postalCode}; // StringType
+        case 957831062: /*country*/ return this.country == null ? new Base[0] : new Base[] {this.country}; // StringType
+        case -991726143: /*period*/ return this.period == null ? new Base[0] : new Base[] {this.period}; // Period
+        default: return super.getProperty(hash, name, checkValid);
+        }
+
+      }
+
+      @Override
+      public void setProperty(int hash, String name, Base value) throws FHIRException {
+        switch (hash) {
+        case 116103: // use
+          this.use = new AddressUseEnumFactory().fromType(value); // Enumeration<AddressUse>
+          break;
+        case 3575610: // type
+          this.type = new AddressTypeEnumFactory().fromType(value); // Enumeration<AddressType>
+          break;
+        case 3556653: // text
+          this.text = castToString(value); // StringType
+          break;
+        case 3321844: // line
+          this.getLine().add(castToString(value)); // StringType
+          break;
+        case 3053931: // city
+          this.city = castToString(value); // StringType
+          break;
+        case 288961422: // district
+          this.district = castToString(value); // StringType
+          break;
+        case 109757585: // state
+          this.state = castToString(value); // StringType
+          break;
+        case 2011152728: // postalCode
+          this.postalCode = castToString(value); // StringType
+          break;
+        case 957831062: // country
+          this.country = castToString(value); // StringType
+          break;
+        case -991726143: // period
+          this.period = castToPeriod(value); // Period
+          break;
+        default: super.setProperty(hash, name, value);
+        }
+
+      }
+
+      @Override
       public void setProperty(String name, Base value) throws FHIRException {
         if (name.equals("use"))
           this.use = new AddressUseEnumFactory().fromType(value); // Enumeration<AddressUse>
@@ -856,6 +927,24 @@ public class Address extends Type implements ICompositeType {
           this.period = castToPeriod(value); // Period
         else
           super.setProperty(name, value);
+      }
+
+      @Override
+      public Base makeProperty(int hash, String name) throws FHIRException {
+        switch (hash) {
+        case 116103: throw new FHIRException("Cannot make property use as it is not a complex type"); // Enumeration<AddressUse>
+        case 3575610: throw new FHIRException("Cannot make property type as it is not a complex type"); // Enumeration<AddressType>
+        case 3556653: throw new FHIRException("Cannot make property text as it is not a complex type"); // StringType
+        case 3321844: throw new FHIRException("Cannot make property line as it is not a complex type"); // StringType
+        case 3053931: throw new FHIRException("Cannot make property city as it is not a complex type"); // StringType
+        case 288961422: throw new FHIRException("Cannot make property district as it is not a complex type"); // StringType
+        case 109757585: throw new FHIRException("Cannot make property state as it is not a complex type"); // StringType
+        case 2011152728: throw new FHIRException("Cannot make property postalCode as it is not a complex type"); // StringType
+        case 957831062: throw new FHIRException("Cannot make property country as it is not a complex type"); // StringType
+        case -991726143:  return getPeriod(); // Period
+        default: return super.makeProperty(hash, name);
+        }
+
       }
 
       @Override
@@ -951,10 +1040,8 @@ public class Address extends Type implements ICompositeType {
       }
 
       public boolean isEmpty() {
-        return super.isEmpty() && (use == null || use.isEmpty()) && (type == null || type.isEmpty())
-           && (text == null || text.isEmpty()) && (line == null || line.isEmpty()) && (city == null || city.isEmpty())
-           && (district == null || district.isEmpty()) && (state == null || state.isEmpty()) && (postalCode == null || postalCode.isEmpty())
-           && (country == null || country.isEmpty()) && (period == null || period.isEmpty());
+        return super.isEmpty() && ca.uhn.fhir.util.ElementUtil.isEmpty(use, type, text, line
+          , city, district, state, postalCode, country, period);
       }
 
 

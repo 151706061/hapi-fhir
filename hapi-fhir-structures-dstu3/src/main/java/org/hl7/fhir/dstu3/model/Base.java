@@ -3,6 +3,7 @@ package org.hl7.fhir.dstu3.model;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -42,6 +43,11 @@ private Map<String, Object> userData;
     userData.put(name, value);
   }
 
+  public void clearUserData(String name) {
+    if (userData != null)
+      userData.remove(name);
+  }
+  
   public void setUserDataINN(String name, Object value) {
     if (value == null)
       return;
@@ -68,28 +74,29 @@ private Map<String, Object> userData;
     return (Integer) getUserData(name);
   }
 
-  @Override
   public boolean hasFormatComment() {
   	return (formatCommentsPre != null && !formatCommentsPre.isEmpty()) || (formatCommentsPost != null && !formatCommentsPost.isEmpty());
   }
   
-  @Override
   public List<String> getFormatCommentsPre() {
     if (formatCommentsPre == null)
       formatCommentsPre = new ArrayList<String>();
     return formatCommentsPre;
   }
-
-  @Override
+  
   public List<String> getFormatCommentsPost() {
     if (formatCommentsPost == null)
       formatCommentsPost = new ArrayList<String>();
     return formatCommentsPost;
   }  
   
-	// these 2 allow evaluation engines to get access to primitive values
+	// these 3 allow evaluation engines to get access to primitive values
 	public boolean isPrimitive() {
 		return false;
+	}
+	
+	public boolean hasPrimitiveValue() {
+		return isPrimitive();
 	}
 	
 	public String primitiveValue() {
@@ -101,7 +108,7 @@ private Map<String, Object> userData;
 	public boolean hasType(String... name) {
 		String t = fhirType();
 		for (String n : name)
-		  if (n.equals(t))
+		  if (n.equalsIgnoreCase(t))
 		  	return true;
 		return false;
 	}
@@ -141,13 +148,25 @@ private Map<String, Object> userData;
     return null;
   }  
   
-  public List<Base> listChildrenByName(String name) {
-    List<Property> children = new ArrayList<Property>();
-    listChildren(children);
-    for (Property c : children)
-      if (c.getName().equals(name) || (c.getName().endsWith("[x]") && name.startsWith(c.getName())))
-        return c.getValues();
-    return new ArrayList<Base>();
+  public List<Base> listChildrenByName(String name) throws FHIRException {
+    List<Base> result = new ArrayList<Base>();
+  	for (Base b : listChildrenByName(name, true))
+  		if (b != null)
+  		  result.add(b);
+    return result;
+  }
+
+  public Base[] listChildrenByName(String name, boolean checkValid) throws FHIRException {
+  	if (name.equals("*")) {
+  		List<Property> children = new ArrayList<Property>();
+  		listChildren(children);
+  		List<Base> result = new ArrayList<Base>();
+  		for (Property c : children)
+				result.addAll(c.getValues());
+  		return result.toArray(new Base[result.size()]);
+  	}
+  	else
+    	return getProperty(name.hashCode(), name, checkValid);
   }
 
 	public boolean isEmpty() {
@@ -181,8 +200,13 @@ private Map<String, Object> userData;
   }
 
 	public static boolean compareDeep(Base e1, Base e2, boolean allowNull) {
-		if (e1 == null && e2 == null && allowNull)
+		if (allowNull) {
+			boolean noLeft = e1 == null || e1.isEmpty();
+			boolean noRight = e2 == null || e2.isEmpty();
+			if (noLeft && noRight) {
 			return true;
+			}
+		}
 		if (e1 == null || e2 == null)
 			return false;
 		if (e2.isMetadataBased() && !e1.isMetadataBased()) // respect existing order for debugging consistency; outcome must be the same either way
@@ -215,9 +239,12 @@ private Map<String, Object> userData;
 	}
 
 	public static boolean compareValues(PrimitiveType e1, PrimitiveType e2, boolean allowNull) {
-		if (e1 == null && e2 == null && allowNull)
+		boolean noLeft = e1 == null || e1.isEmpty();
+		boolean noRight = e2 == null || e2.isEmpty();
+      if (noLeft && noRight && allowNull) {
 			return true;
-		if (e1 == null || e2 == null)
+      }
+		if (noLeft != noRight)
 			return false;
 		return e1.equalsShallow(e2);
   }
@@ -263,6 +290,8 @@ private Map<String, Object> userData;
 	public StringType castToString(Base b) throws FHIRException {
 		if (b instanceof StringType)
 			return (StringType) b;
+		else if (b.hasPrimitiveValue())
+			return new StringType(b.primitiveValue());
 		else
 			throw new FHIRException("Unable to convert a "+b.getClass().getName()+" to a String");
 	}
@@ -270,6 +299,8 @@ private Map<String, Object> userData;
 	public UriType castToUri(Base b) throws FHIRException {
 		if (b instanceof UriType)
 			return (UriType) b;
+		else if (b.hasPrimitiveValue())
+			return new UriType(b.primitiveValue());
 		else
 			throw new FHIRException("Unable to convert a "+b.getClass().getName()+" to a Uri");
 	}
@@ -277,6 +308,8 @@ private Map<String, Object> userData;
 	public DateType castToDate(Base b) throws FHIRException {
 		if (b instanceof DateType)
 			return (DateType) b;
+		else if (b.hasPrimitiveValue())
+			return new DateType(b.primitiveValue());
 		else
 			throw new FHIRException("Unable to convert a "+b.getClass().getName()+" to a Date");
 	}
@@ -284,6 +317,8 @@ private Map<String, Object> userData;
 	public DateTimeType castToDateTime(Base b) throws FHIRException {
 		if (b instanceof DateTimeType)
 			return (DateTimeType) b;
+		else if (b.fhirType().equals("dateTime"))
+			return new DateTimeType(b.primitiveValue());
 		else
 			throw new FHIRException("Unable to convert a "+b.getClass().getName()+" to a DateTime");
 	}
@@ -298,6 +333,8 @@ private Map<String, Object> userData;
 	public CodeType castToCode(Base b) throws FHIRException {
 		if (b instanceof CodeType)
 			return (CodeType) b;
+		else if (b.isPrimitive())
+			return new CodeType(b.primitiveValue());
 		else
 			throw new FHIRException("Unable to convert a "+b.getClass().getName()+" to a Code");
 	}
@@ -462,6 +499,34 @@ private Map<String, Object> userData;
 			throw new FHIRException("Unable to convert a "+b.getClass().getName()+" to a Address");
 	}
 	
+	public ContactDetail castToContactDetail(Base b) throws FHIRException {
+		if (b instanceof ContactDetail)
+			return (ContactDetail) b;
+		else
+			throw new FHIRException("Unable to convert a "+b.getClass().getName()+" to a ContactDetail");
+	}
+
+	public Contributor castToContributor(Base b) throws FHIRException {
+		if (b instanceof Contributor)
+			return (Contributor) b;
+		else
+			throw new FHIRException("Unable to convert a "+b.getClass().getName()+" to a Contributor");
+	}
+
+	public UsageContext castToUsageContext(Base b) throws FHIRException {
+		if (b instanceof UsageContext)
+			return (UsageContext) b;
+		else
+			throw new FHIRException("Unable to convert a "+b.getClass().getName()+" to a UsageContext");
+	}
+
+	public RelatedResource castToRelatedResource(Base b) throws FHIRException {
+		if (b instanceof RelatedResource)
+			return (RelatedResource) b;
+		else
+			throw new FHIRException("Unable to convert a "+b.getClass().getName()+" to a RelatedResource");
+	}
+
 	public ContactPoint castToContactPoint(Base b) throws FHIRException {
 		if (b instanceof ContactPoint)
 			return (ContactPoint) b;
@@ -489,7 +554,7 @@ private Map<String, Object> userData;
 		else
 			throw new FHIRException("Unable to convert a "+b.getClass().getName()+" to a Meta");
 	}
-	
+		
 	public Extension castToExtension(Base b) throws FHIRException {
 		if (b instanceof Extension)
 			return (Extension) b;
@@ -518,10 +583,58 @@ private Map<String, Object> userData;
 		else
 			throw new FHIRException("Unable to convert a "+b.getClass().getName()+" to a ElementDefinition");
 	}
-	
+
+	public DataRequirement castToDataRequirement(Base b) throws FHIRException {
+		if (b instanceof DataRequirement)
+			return (DataRequirement) b;
+		else
+			throw new FHIRException("Unable to convert a "+b.getClass().getName()+" to a DataRequirement");
+	}
+
+	public ParameterDefinition castToParameterDefinition(Base b) throws FHIRException {
+		if (b instanceof ParameterDefinition)
+			return (ParameterDefinition) b;
+		else
+			throw new FHIRException("Unable to convert a "+b.getClass().getName()+" to a ParameterDefinition");
+	}
+
+	public TriggerDefinition castToTriggerDefinition(Base b) throws FHIRException {
+		if (b instanceof TriggerDefinition)
+			return (TriggerDefinition) b;
+		else
+			throw new FHIRException("Unable to convert a "+b.getClass().getName()+" to a TriggerDefinition");
+	}
+
 	protected boolean isMetadataBased() {
   	return false;
 	}
+
+	public Base[] getProperty(int hash, String name, boolean checkValid) throws FHIRException {
+		if (checkValid)
+			throw new FHIRException("Attempt to read invalid property '"+name+"' on type "+fhirType());
+  	return null; 
+	}
+
+	public void setProperty(int hash, String name, Base value) throws FHIRException {
+		throw new FHIRException("Attempt to write to invalid property '"+name+"' on type "+fhirType());
+	}
+
+	public Base makeProperty(int hash, String name) throws FHIRException {
+		throw new FHIRException("Attempt to make an invalid property '"+name+"' on type "+fhirType());
+	}
+
+	public static boolean equals(String v1, String v2) {
+  	if (v1 == null && v2 == null)
+  		return true;
+  	else if (v1 == null || v2 == null)
+    	return false;
+  	else
+  		return v1.equals(v2);
+	}
+
+  public boolean isResource() {
+    return false;
+  }
 	
 
 }

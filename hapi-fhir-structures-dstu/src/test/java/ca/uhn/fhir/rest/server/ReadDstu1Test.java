@@ -31,14 +31,12 @@ import ca.uhn.fhir.model.primitive.IdDt;
 import ca.uhn.fhir.rest.annotation.IdParam;
 import ca.uhn.fhir.rest.annotation.Read;
 import ca.uhn.fhir.util.PortUtil;
+import ca.uhn.fhir.util.TestUtil;
 
-/**
- * Created by dsotnikov on 2/25/2014.
- */
 public class ReadDstu1Test {
 
 	private static CloseableHttpClient ourClient;
-	private static final FhirContext ourCtx = FhirContext.forDstu1();
+	private static FhirContext ourCtx = FhirContext.forDstu1();
 	private static final org.slf4j.Logger ourLog = org.slf4j.LoggerFactory.getLogger(ReadDstu1Test.class);
 	private static int ourPort;
 	private static Server ourServer;
@@ -130,7 +128,7 @@ public class ReadDstu1Test {
 
 	@Test
 	public void testReadWithEscapedCharsInId() throws Exception {
-		String id = "ABC!@#$%DEF";
+		String id = "ABC!@#$--DEF";
 		String idEscaped = URLEncoder.encode(id, "UTF-8");
 
 		String vid = "GHI:/:/JKL";
@@ -189,8 +187,9 @@ public class ReadDstu1Test {
 	}
 
 	@AfterClass
-	public static void afterClass() throws Exception {
+	public static void afterClassClearContext() throws Exception {
 		ourServer.stop();
+		TestUtil.clearAllStaticFieldsForUnitTest();
 	}
 
 	@BeforeClass
@@ -256,6 +255,7 @@ public class ReadDstu1Test {
 		}
 
 	}
+
 
 	/**
 	 * Created by dsotnikov on 2/25/2014.

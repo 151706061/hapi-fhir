@@ -29,7 +29,7 @@ package org.hl7.fhir.dstu3.model;
   
 */
 
-// Generated on Sat, Jan 30, 2016 09:18-0500 for FHIR v1.3.0
+// Generated on Thu, Aug 25, 2016 23:04-0400 for FHIR v1.6.0
 
 import java.util.*;
 
@@ -37,11 +37,11 @@ import org.hl7.fhir.utilities.Utilities;
 import ca.uhn.fhir.model.api.annotation.ResourceDef;
 import ca.uhn.fhir.model.api.annotation.SearchParamDefinition;
 import ca.uhn.fhir.model.api.annotation.Child;
+import ca.uhn.fhir.model.api.annotation.ChildOrder;
 import ca.uhn.fhir.model.api.annotation.Description;
 import ca.uhn.fhir.model.api.annotation.Block;
-
-import org.hl7.fhir.dstu3.exceptions.FHIRException;
 import org.hl7.fhir.instance.model.api.*;
+import org.hl7.fhir.dstu3.exceptions.FHIRException;
 /**
  * Describes the intention of how one or more practitioners intend to deliver care for a particular patient, group or community for a period of time, possibly limited to care for a specific condition or set of conditions.
  */
@@ -70,7 +70,7 @@ public class CarePlan extends DomainResource {
          */
         CANCELLED, 
         /**
-         * added to help the parsers
+         * added to help the parsers with the generic types
          */
         NULL;
         public static CarePlanStatus fromCode(String codeString) throws FHIRException {
@@ -86,7 +86,10 @@ public class CarePlan extends DomainResource {
           return COMPLETED;
         if ("cancelled".equals(codeString))
           return CANCELLED;
-        throw new FHIRException("Unknown CarePlanStatus code '"+codeString+"'");
+        if (Configuration.isAcceptInvalidEnums())
+          return null;
+        else
+          throw new FHIRException("Unknown CarePlanStatus code '"+codeString+"'");
         }
         public String toCode() {
           switch (this) {
@@ -197,7 +200,7 @@ public class CarePlan extends DomainResource {
          */
         FULFILLS, 
         /**
-         * added to help the parsers
+         * added to help the parsers with the generic types
          */
         NULL;
         public static CarePlanRelationship fromCode(String codeString) throws FHIRException {
@@ -209,7 +212,10 @@ public class CarePlan extends DomainResource {
           return REPLACES;
         if ("fulfills".equals(codeString))
           return FULFILLS;
-        throw new FHIRException("Unknown CarePlanRelationship code '"+codeString+"'");
+        if (Configuration.isAcceptInvalidEnums())
+          return null;
+        else
+          throw new FHIRException("Unknown CarePlanRelationship code '"+codeString+"'");
         }
         public String toCode() {
           switch (this) {
@@ -312,7 +318,7 @@ public class CarePlan extends DomainResource {
          */
         CANCELLED, 
         /**
-         * added to help the parsers
+         * added to help the parsers with the generic types
          */
         NULL;
         public static CarePlanActivityStatus fromCode(String codeString) throws FHIRException {
@@ -330,7 +336,10 @@ public class CarePlan extends DomainResource {
           return COMPLETED;
         if ("cancelled".equals(codeString))
           return CANCELLED;
-        throw new FHIRException("Unknown CarePlanActivityStatus code '"+codeString+"'");
+        if (Configuration.isAcceptInvalidEnums())
+          return null;
+        else
+          throw new FHIRException("Unknown CarePlanActivityStatus code '"+codeString+"'");
         }
         public String toCode() {
           switch (this) {
@@ -444,6 +453,7 @@ public class CarePlan extends DomainResource {
          */
         @Child(name = "code", type = {CodeType.class}, order=1, min=0, max=1, modifier=false, summary=false)
         @Description(shortDefinition="includes | replaces | fulfills", formalDefinition="Identifies the type of relationship this plan has to the target plan." )
+        @ca.uhn.fhir.model.api.annotation.Binding(valueSet="http://hl7.org/fhir/ValueSet/care-plan-relationship")
         protected Enumeration<CarePlanRelationship> code;
 
         /**
@@ -575,6 +585,30 @@ public class CarePlan extends DomainResource {
         }
 
       @Override
+      public Base[] getProperty(int hash, String name, boolean checkValid) throws FHIRException {
+        switch (hash) {
+        case 3059181: /*code*/ return this.code == null ? new Base[0] : new Base[] {this.code}; // Enumeration<CarePlanRelationship>
+        case 3443497: /*plan*/ return this.plan == null ? new Base[0] : new Base[] {this.plan}; // Reference
+        default: return super.getProperty(hash, name, checkValid);
+        }
+
+      }
+
+      @Override
+      public void setProperty(int hash, String name, Base value) throws FHIRException {
+        switch (hash) {
+        case 3059181: // code
+          this.code = new CarePlanRelationshipEnumFactory().fromType(value); // Enumeration<CarePlanRelationship>
+          break;
+        case 3443497: // plan
+          this.plan = castToReference(value); // Reference
+          break;
+        default: super.setProperty(hash, name, value);
+        }
+
+      }
+
+      @Override
       public void setProperty(String name, Base value) throws FHIRException {
         if (name.equals("code"))
           this.code = new CarePlanRelationshipEnumFactory().fromType(value); // Enumeration<CarePlanRelationship>
@@ -582,6 +616,16 @@ public class CarePlan extends DomainResource {
           this.plan = castToReference(value); // Reference
         else
           super.setProperty(name, value);
+      }
+
+      @Override
+      public Base makeProperty(int hash, String name) throws FHIRException {
+        switch (hash) {
+        case 3059181: throw new FHIRException("Cannot make property code as it is not a complex type"); // Enumeration<CarePlanRelationship>
+        case 3443497:  return getPlan(); // Reference
+        default: return super.makeProperty(hash, name);
+        }
+
       }
 
       @Override
@@ -626,8 +670,7 @@ public class CarePlan extends DomainResource {
       }
 
       public boolean isEmpty() {
-        return super.isEmpty() && (code == null || code.isEmpty()) && (plan == null || plan.isEmpty())
-          ;
+        return super.isEmpty() && ca.uhn.fhir.util.ElementUtil.isEmpty(code, plan);
       }
 
   public String fhirType() {
@@ -638,174 +681,11 @@ public class CarePlan extends DomainResource {
   }
 
     @Block()
-    public static class CarePlanParticipantComponent extends BackboneElement implements IBaseBackboneElement {
-        /**
-         * Indicates specific responsibility of an individual within the care plan; e.g. "Primary physician", "Team coordinator", "Caregiver", etc.
-         */
-        @Child(name = "role", type = {CodeableConcept.class}, order=1, min=0, max=1, modifier=false, summary=false)
-        @Description(shortDefinition="Type of involvement", formalDefinition="Indicates specific responsibility of an individual within the care plan; e.g. \"Primary physician\", \"Team coordinator\", \"Caregiver\", etc." )
-        protected CodeableConcept role;
-
-        /**
-         * The specific person or organization who is participating/expected to participate in the care plan.
-         */
-        @Child(name = "member", type = {Practitioner.class, RelatedPerson.class, Patient.class, Organization.class}, order=2, min=0, max=1, modifier=false, summary=false)
-        @Description(shortDefinition="Who is involved", formalDefinition="The specific person or organization who is participating/expected to participate in the care plan." )
-        protected Reference member;
-
-        /**
-         * The actual object that is the target of the reference (The specific person or organization who is participating/expected to participate in the care plan.)
-         */
-        protected Resource memberTarget;
-
-        private static final long serialVersionUID = -466811117L;
-
-    /**
-     * Constructor
-     */
-      public CarePlanParticipantComponent() {
-        super();
-      }
-
-        /**
-         * @return {@link #role} (Indicates specific responsibility of an individual within the care plan; e.g. "Primary physician", "Team coordinator", "Caregiver", etc.)
-         */
-        public CodeableConcept getRole() { 
-          if (this.role == null)
-            if (Configuration.errorOnAutoCreate())
-              throw new Error("Attempt to auto-create CarePlanParticipantComponent.role");
-            else if (Configuration.doAutoCreate())
-              this.role = new CodeableConcept(); // cc
-          return this.role;
-        }
-
-        public boolean hasRole() { 
-          return this.role != null && !this.role.isEmpty();
-        }
-
-        /**
-         * @param value {@link #role} (Indicates specific responsibility of an individual within the care plan; e.g. "Primary physician", "Team coordinator", "Caregiver", etc.)
-         */
-        public CarePlanParticipantComponent setRole(CodeableConcept value) { 
-          this.role = value;
-          return this;
-        }
-
-        /**
-         * @return {@link #member} (The specific person or organization who is participating/expected to participate in the care plan.)
-         */
-        public Reference getMember() { 
-          if (this.member == null)
-            if (Configuration.errorOnAutoCreate())
-              throw new Error("Attempt to auto-create CarePlanParticipantComponent.member");
-            else if (Configuration.doAutoCreate())
-              this.member = new Reference(); // cc
-          return this.member;
-        }
-
-        public boolean hasMember() { 
-          return this.member != null && !this.member.isEmpty();
-        }
-
-        /**
-         * @param value {@link #member} (The specific person or organization who is participating/expected to participate in the care plan.)
-         */
-        public CarePlanParticipantComponent setMember(Reference value) { 
-          this.member = value;
-          return this;
-        }
-
-        /**
-         * @return {@link #member} The actual object that is the target of the reference. The reference library doesn't populate this, but you can use it to hold the resource if you resolve it. (The specific person or organization who is participating/expected to participate in the care plan.)
-         */
-        public Resource getMemberTarget() { 
-          return this.memberTarget;
-        }
-
-        /**
-         * @param value {@link #member} The actual object that is the target of the reference. The reference library doesn't use these, but you can use it to hold the resource if you resolve it. (The specific person or organization who is participating/expected to participate in the care plan.)
-         */
-        public CarePlanParticipantComponent setMemberTarget(Resource value) { 
-          this.memberTarget = value;
-          return this;
-        }
-
-        protected void listChildren(List<Property> childrenList) {
-          super.listChildren(childrenList);
-          childrenList.add(new Property("role", "CodeableConcept", "Indicates specific responsibility of an individual within the care plan; e.g. \"Primary physician\", \"Team coordinator\", \"Caregiver\", etc.", 0, java.lang.Integer.MAX_VALUE, role));
-          childrenList.add(new Property("member", "Reference(Practitioner|RelatedPerson|Patient|Organization)", "The specific person or organization who is participating/expected to participate in the care plan.", 0, java.lang.Integer.MAX_VALUE, member));
-        }
-
-      @Override
-      public void setProperty(String name, Base value) throws FHIRException {
-        if (name.equals("role"))
-          this.role = castToCodeableConcept(value); // CodeableConcept
-        else if (name.equals("member"))
-          this.member = castToReference(value); // Reference
-        else
-          super.setProperty(name, value);
-      }
-
-      @Override
-      public Base addChild(String name) throws FHIRException {
-        if (name.equals("role")) {
-          this.role = new CodeableConcept();
-          return this.role;
-        }
-        else if (name.equals("member")) {
-          this.member = new Reference();
-          return this.member;
-        }
-        else
-          return super.addChild(name);
-      }
-
-      public CarePlanParticipantComponent copy() {
-        CarePlanParticipantComponent dst = new CarePlanParticipantComponent();
-        copyValues(dst);
-        dst.role = role == null ? null : role.copy();
-        dst.member = member == null ? null : member.copy();
-        return dst;
-      }
-
-      @Override
-      public boolean equalsDeep(Base other) {
-        if (!super.equalsDeep(other))
-          return false;
-        if (!(other instanceof CarePlanParticipantComponent))
-          return false;
-        CarePlanParticipantComponent o = (CarePlanParticipantComponent) other;
-        return compareDeep(role, o.role, true) && compareDeep(member, o.member, true);
-      }
-
-      @Override
-      public boolean equalsShallow(Base other) {
-        if (!super.equalsShallow(other))
-          return false;
-        if (!(other instanceof CarePlanParticipantComponent))
-          return false;
-        CarePlanParticipantComponent o = (CarePlanParticipantComponent) other;
-        return true;
-      }
-
-      public boolean isEmpty() {
-        return super.isEmpty() && (role == null || role.isEmpty()) && (member == null || member.isEmpty())
-          ;
-      }
-
-  public String fhirType() {
-    return "CarePlan.participant";
-
-  }
-
-  }
-
-    @Block()
     public static class CarePlanActivityComponent extends BackboneElement implements IBaseBackboneElement {
         /**
          * Resources that describe follow-on actions resulting from the plan, such as drug prescriptions, encounter records, appointments, etc.
          */
-        @Child(name = "actionResulting", type = {}, order=1, min=0, max=Child.MAX_UNLIMITED, modifier=false, summary=false)
+        @Child(name = "actionResulting", type = {Reference.class}, order=1, min=0, max=Child.MAX_UNLIMITED, modifier=false, summary=false)
         @Description(shortDefinition="Appointments, orders, etc.", formalDefinition="Resources that describe follow-on actions resulting from the plan, such as drug prescriptions, encounter records, appointments, etc." )
         protected List<Reference> actionResulting;
         /**
@@ -815,16 +695,23 @@ public class CarePlan extends DomainResource {
 
 
         /**
+         * Results of the careplan activity.
+         */
+        @Child(name = "outcome", type = {CodeableConcept.class}, order=2, min=0, max=1, modifier=false, summary=false)
+        @Description(shortDefinition="Results of the activity", formalDefinition="Results of the careplan activity." )
+        protected CodeableConcept outcome;
+
+        /**
          * Notes about the adherence/status/progress of the activity.
          */
-        @Child(name = "progress", type = {Annotation.class}, order=2, min=0, max=Child.MAX_UNLIMITED, modifier=false, summary=false)
+        @Child(name = "progress", type = {Annotation.class}, order=3, min=0, max=Child.MAX_UNLIMITED, modifier=false, summary=false)
         @Description(shortDefinition="Comments about the activity status/progress", formalDefinition="Notes about the adherence/status/progress of the activity." )
         protected List<Annotation> progress;
 
         /**
          * The details of the proposed activity represented in a specific resource.
          */
-        @Child(name = "reference", type = {Appointment.class, CommunicationRequest.class, DeviceUseRequest.class, DiagnosticOrder.class, MedicationOrder.class, NutritionOrder.class, Order.class, ProcedureRequest.class, ProcessRequest.class, ReferralRequest.class, SupplyRequest.class, VisionPrescription.class}, order=3, min=0, max=1, modifier=false, summary=false)
+        @Child(name = "reference", type = {Appointment.class, CommunicationRequest.class, DeviceUseRequest.class, DiagnosticRequest.class, MedicationOrder.class, NutritionRequest.class, ProcedureRequest.class, ProcessRequest.class, ReferralRequest.class, SupplyRequest.class, VisionPrescription.class}, order=4, min=0, max=1, modifier=false, summary=false)
         @Description(shortDefinition="Activity details defined in specific resource", formalDefinition="The details of the proposed activity represented in a specific resource." )
         protected Reference reference;
 
@@ -836,11 +723,11 @@ public class CarePlan extends DomainResource {
         /**
          * A simple summary of a planned activity suitable for a general care plan system (e.g. form driven) that doesn't know about specific resources such as procedure etc.
          */
-        @Child(name = "detail", type = {}, order=4, min=0, max=1, modifier=false, summary=false)
+        @Child(name = "detail", type = {}, order=5, min=0, max=1, modifier=false, summary=false)
         @Description(shortDefinition="In-line definition of activity", formalDefinition="A simple summary of a planned activity suitable for a general care plan system (e.g. form driven) that doesn't know about specific resources such as procedure etc." )
         protected CarePlanActivityDetailComponent detail;
 
-        private static final long serialVersionUID = 40181608L;
+        private static final long serialVersionUID = -961931681L;
 
     /**
      * Constructor
@@ -858,6 +745,14 @@ public class CarePlan extends DomainResource {
           return this.actionResulting;
         }
 
+        /**
+         * @return Returns a reference to <code>this</code> for easy method chaining
+         */
+        public CarePlanActivityComponent setActionResulting(List<Reference> theActionResulting) { 
+          this.actionResulting = theActionResulting;
+          return this;
+        }
+
         public boolean hasActionResulting() { 
           if (this.actionResulting == null)
             return false;
@@ -867,10 +762,6 @@ public class CarePlan extends DomainResource {
           return false;
         }
 
-        /**
-         * @return {@link #actionResulting} (Resources that describe follow-on actions resulting from the plan, such as drug prescriptions, encounter records, appointments, etc.)
-         */
-    // syntactic sugar
         public Reference addActionResulting() { //3
           Reference t = new Reference();
           if (this.actionResulting == null)
@@ -879,7 +770,6 @@ public class CarePlan extends DomainResource {
           return t;
         }
 
-    // syntactic sugar
         public CarePlanActivityComponent addActionResulting(Reference t) { //3
           if (t == null)
             return this;
@@ -890,12 +780,47 @@ public class CarePlan extends DomainResource {
         }
 
         /**
-         * @return {@link #actionResulting} (The actual objects that are the target of the reference. The reference library doesn't populate this, but you can use this to hold the resources if you resolvethemt. Resources that describe follow-on actions resulting from the plan, such as drug prescriptions, encounter records, appointments, etc.)
+         * @return The first repetition of repeating field {@link #actionResulting}, creating it if it does not already exist
          */
+        public Reference getActionResultingFirstRep() { 
+          if (getActionResulting().isEmpty()) {
+            addActionResulting();
+          }
+          return getActionResulting().get(0);
+        }
+
+        /**
+         * @deprecated Use Reference#setResource(IBaseResource) instead
+         */
+        @Deprecated
         public List<Resource> getActionResultingTarget() { 
           if (this.actionResultingTarget == null)
             this.actionResultingTarget = new ArrayList<Resource>();
           return this.actionResultingTarget;
+        }
+
+        /**
+         * @return {@link #outcome} (Results of the careplan activity.)
+         */
+        public CodeableConcept getOutcome() { 
+          if (this.outcome == null)
+            if (Configuration.errorOnAutoCreate())
+              throw new Error("Attempt to auto-create CarePlanActivityComponent.outcome");
+            else if (Configuration.doAutoCreate())
+              this.outcome = new CodeableConcept(); // cc
+          return this.outcome;
+        }
+
+        public boolean hasOutcome() { 
+          return this.outcome != null && !this.outcome.isEmpty();
+        }
+
+        /**
+         * @param value {@link #outcome} (Results of the careplan activity.)
+         */
+        public CarePlanActivityComponent setOutcome(CodeableConcept value) { 
+          this.outcome = value;
+          return this;
         }
 
         /**
@@ -907,6 +832,14 @@ public class CarePlan extends DomainResource {
           return this.progress;
         }
 
+        /**
+         * @return Returns a reference to <code>this</code> for easy method chaining
+         */
+        public CarePlanActivityComponent setProgress(List<Annotation> theProgress) { 
+          this.progress = theProgress;
+          return this;
+        }
+
         public boolean hasProgress() { 
           if (this.progress == null)
             return false;
@@ -916,10 +849,6 @@ public class CarePlan extends DomainResource {
           return false;
         }
 
-        /**
-         * @return {@link #progress} (Notes about the adherence/status/progress of the activity.)
-         */
-    // syntactic sugar
         public Annotation addProgress() { //3
           Annotation t = new Annotation();
           if (this.progress == null)
@@ -928,7 +857,6 @@ public class CarePlan extends DomainResource {
           return t;
         }
 
-    // syntactic sugar
         public CarePlanActivityComponent addProgress(Annotation t) { //3
           if (t == null)
             return this;
@@ -936,6 +864,16 @@ public class CarePlan extends DomainResource {
             this.progress = new ArrayList<Annotation>();
           this.progress.add(t);
           return this;
+        }
+
+        /**
+         * @return The first repetition of repeating field {@link #progress}, creating it if it does not already exist
+         */
+        public Annotation getProgressFirstRep() { 
+          if (getProgress().isEmpty()) {
+            addProgress();
+          }
+          return getProgress().get(0);
         }
 
         /**
@@ -1004,15 +942,54 @@ public class CarePlan extends DomainResource {
         protected void listChildren(List<Property> childrenList) {
           super.listChildren(childrenList);
           childrenList.add(new Property("actionResulting", "Reference(Any)", "Resources that describe follow-on actions resulting from the plan, such as drug prescriptions, encounter records, appointments, etc.", 0, java.lang.Integer.MAX_VALUE, actionResulting));
+          childrenList.add(new Property("outcome", "CodeableConcept", "Results of the careplan activity.", 0, java.lang.Integer.MAX_VALUE, outcome));
           childrenList.add(new Property("progress", "Annotation", "Notes about the adherence/status/progress of the activity.", 0, java.lang.Integer.MAX_VALUE, progress));
-          childrenList.add(new Property("reference", "Reference(Appointment|CommunicationRequest|DeviceUseRequest|DiagnosticOrder|MedicationOrder|NutritionOrder|Order|ProcedureRequest|ProcessRequest|ReferralRequest|SupplyRequest|VisionPrescription)", "The details of the proposed activity represented in a specific resource.", 0, java.lang.Integer.MAX_VALUE, reference));
+          childrenList.add(new Property("reference", "Reference(Appointment|CommunicationRequest|DeviceUseRequest|DiagnosticRequest|MedicationOrder|NutritionRequest|ProcedureRequest|ProcessRequest|ReferralRequest|SupplyRequest|VisionPrescription)", "The details of the proposed activity represented in a specific resource.", 0, java.lang.Integer.MAX_VALUE, reference));
           childrenList.add(new Property("detail", "", "A simple summary of a planned activity suitable for a general care plan system (e.g. form driven) that doesn't know about specific resources such as procedure etc.", 0, java.lang.Integer.MAX_VALUE, detail));
         }
+
+      @Override
+      public Base[] getProperty(int hash, String name, boolean checkValid) throws FHIRException {
+        switch (hash) {
+        case 836386063: /*actionResulting*/ return this.actionResulting == null ? new Base[0] : this.actionResulting.toArray(new Base[this.actionResulting.size()]); // Reference
+        case -1106507950: /*outcome*/ return this.outcome == null ? new Base[0] : new Base[] {this.outcome}; // CodeableConcept
+        case -1001078227: /*progress*/ return this.progress == null ? new Base[0] : this.progress.toArray(new Base[this.progress.size()]); // Annotation
+        case -925155509: /*reference*/ return this.reference == null ? new Base[0] : new Base[] {this.reference}; // Reference
+        case -1335224239: /*detail*/ return this.detail == null ? new Base[0] : new Base[] {this.detail}; // CarePlanActivityDetailComponent
+        default: return super.getProperty(hash, name, checkValid);
+        }
+
+      }
+
+      @Override
+      public void setProperty(int hash, String name, Base value) throws FHIRException {
+        switch (hash) {
+        case 836386063: // actionResulting
+          this.getActionResulting().add(castToReference(value)); // Reference
+          break;
+        case -1106507950: // outcome
+          this.outcome = castToCodeableConcept(value); // CodeableConcept
+          break;
+        case -1001078227: // progress
+          this.getProgress().add(castToAnnotation(value)); // Annotation
+          break;
+        case -925155509: // reference
+          this.reference = castToReference(value); // Reference
+          break;
+        case -1335224239: // detail
+          this.detail = (CarePlanActivityDetailComponent) value; // CarePlanActivityDetailComponent
+          break;
+        default: super.setProperty(hash, name, value);
+        }
+
+      }
 
       @Override
       public void setProperty(String name, Base value) throws FHIRException {
         if (name.equals("actionResulting"))
           this.getActionResulting().add(castToReference(value));
+        else if (name.equals("outcome"))
+          this.outcome = castToCodeableConcept(value); // CodeableConcept
         else if (name.equals("progress"))
           this.getProgress().add(castToAnnotation(value));
         else if (name.equals("reference"))
@@ -1024,9 +1001,26 @@ public class CarePlan extends DomainResource {
       }
 
       @Override
+      public Base makeProperty(int hash, String name) throws FHIRException {
+        switch (hash) {
+        case 836386063:  return addActionResulting(); // Reference
+        case -1106507950:  return getOutcome(); // CodeableConcept
+        case -1001078227:  return addProgress(); // Annotation
+        case -925155509:  return getReference(); // Reference
+        case -1335224239:  return getDetail(); // CarePlanActivityDetailComponent
+        default: return super.makeProperty(hash, name);
+        }
+
+      }
+
+      @Override
       public Base addChild(String name) throws FHIRException {
         if (name.equals("actionResulting")) {
           return addActionResulting();
+        }
+        else if (name.equals("outcome")) {
+          this.outcome = new CodeableConcept();
+          return this.outcome;
         }
         else if (name.equals("progress")) {
           return addProgress();
@@ -1051,6 +1045,7 @@ public class CarePlan extends DomainResource {
           for (Reference i : actionResulting)
             dst.actionResulting.add(i.copy());
         };
+        dst.outcome = outcome == null ? null : outcome.copy();
         if (progress != null) {
           dst.progress = new ArrayList<Annotation>();
           for (Annotation i : progress)
@@ -1068,8 +1063,9 @@ public class CarePlan extends DomainResource {
         if (!(other instanceof CarePlanActivityComponent))
           return false;
         CarePlanActivityComponent o = (CarePlanActivityComponent) other;
-        return compareDeep(actionResulting, o.actionResulting, true) && compareDeep(progress, o.progress, true)
-           && compareDeep(reference, o.reference, true) && compareDeep(detail, o.detail, true);
+        return compareDeep(actionResulting, o.actionResulting, true) && compareDeep(outcome, o.outcome, true)
+           && compareDeep(progress, o.progress, true) && compareDeep(reference, o.reference, true) && compareDeep(detail, o.detail, true)
+          ;
       }
 
       @Override
@@ -1083,8 +1079,8 @@ public class CarePlan extends DomainResource {
       }
 
       public boolean isEmpty() {
-        return super.isEmpty() && (actionResulting == null || actionResulting.isEmpty()) && (progress == null || progress.isEmpty())
-           && (reference == null || reference.isEmpty()) && (detail == null || detail.isEmpty());
+        return super.isEmpty() && ca.uhn.fhir.util.ElementUtil.isEmpty(actionResulting, outcome, progress
+          , reference, detail);
       }
 
   public String fhirType() {
@@ -1101,26 +1097,41 @@ public class CarePlan extends DomainResource {
          */
         @Child(name = "category", type = {CodeableConcept.class}, order=1, min=0, max=1, modifier=false, summary=false)
         @Description(shortDefinition="diet | drug | encounter | observation | procedure | supply | other", formalDefinition="High-level categorization of the type of activity in a care plan." )
+        @ca.uhn.fhir.model.api.annotation.Binding(valueSet="http://hl7.org/fhir/ValueSet/care-plan-activity-category")
         protected CodeableConcept category;
+
+        /**
+         * Identifies the protocol, questionnaire, guideline or other specification the planned activity should be conducted in accordance with.
+         */
+        @Child(name = "definition", type = {PlanDefinition.class, Questionnaire.class}, order=2, min=0, max=1, modifier=false, summary=false)
+        @Description(shortDefinition="Protocol or definition", formalDefinition="Identifies the protocol, questionnaire, guideline or other specification the planned activity should be conducted in accordance with." )
+        protected Reference definition;
+
+        /**
+         * The actual object that is the target of the reference (Identifies the protocol, questionnaire, guideline or other specification the planned activity should be conducted in accordance with.)
+         */
+        protected Resource definitionTarget;
 
         /**
          * Detailed description of the type of planned activity; e.g. What lab test, what procedure, what kind of encounter.
          */
-        @Child(name = "code", type = {CodeableConcept.class}, order=2, min=0, max=1, modifier=false, summary=false)
+        @Child(name = "code", type = {CodeableConcept.class}, order=3, min=0, max=1, modifier=false, summary=false)
         @Description(shortDefinition="Detail type of activity", formalDefinition="Detailed description of the type of planned activity; e.g. What lab test, what procedure, what kind of encounter." )
+        @ca.uhn.fhir.model.api.annotation.Binding(valueSet="http://hl7.org/fhir/ValueSet/care-plan-activity")
         protected CodeableConcept code;
 
         /**
          * Provides the rationale that drove the inclusion of this particular activity as part of the plan.
          */
-        @Child(name = "reasonCode", type = {CodeableConcept.class}, order=3, min=0, max=Child.MAX_UNLIMITED, modifier=false, summary=false)
+        @Child(name = "reasonCode", type = {CodeableConcept.class}, order=4, min=0, max=Child.MAX_UNLIMITED, modifier=false, summary=false)
         @Description(shortDefinition="Why activity should be done", formalDefinition="Provides the rationale that drove the inclusion of this particular activity as part of the plan." )
+        @ca.uhn.fhir.model.api.annotation.Binding(valueSet="http://hl7.org/fhir/ValueSet/activity-reason")
         protected List<CodeableConcept> reasonCode;
 
         /**
          * Provides the health condition(s) that drove the inclusion of this particular activity as part of the plan.
          */
-        @Child(name = "reasonReference", type = {Condition.class}, order=4, min=0, max=Child.MAX_UNLIMITED, modifier=false, summary=false)
+        @Child(name = "reasonReference", type = {Condition.class}, order=5, min=0, max=Child.MAX_UNLIMITED, modifier=false, summary=false)
         @Description(shortDefinition="Condition triggering need for activity", formalDefinition="Provides the health condition(s) that drove the inclusion of this particular activity as part of the plan." )
         protected List<Reference> reasonReference;
         /**
@@ -1132,7 +1143,7 @@ public class CarePlan extends DomainResource {
         /**
          * Internal reference that identifies the goals that this activity is intended to contribute towards meeting.
          */
-        @Child(name = "goal", type = {Goal.class}, order=5, min=0, max=Child.MAX_UNLIMITED, modifier=false, summary=false)
+        @Child(name = "goal", type = {Goal.class}, order=6, min=0, max=Child.MAX_UNLIMITED, modifier=false, summary=false)
         @Description(shortDefinition="Goals this activity relates to", formalDefinition="Internal reference that identifies the goals that this activity is intended to contribute towards meeting." )
         protected List<Reference> goal;
         /**
@@ -1144,35 +1155,37 @@ public class CarePlan extends DomainResource {
         /**
          * Identifies what progress is being made for the specific activity.
          */
-        @Child(name = "status", type = {CodeType.class}, order=6, min=0, max=1, modifier=true, summary=false)
+        @Child(name = "status", type = {CodeType.class}, order=7, min=0, max=1, modifier=true, summary=false)
         @Description(shortDefinition="not-started | scheduled | in-progress | on-hold | completed | cancelled", formalDefinition="Identifies what progress is being made for the specific activity." )
+        @ca.uhn.fhir.model.api.annotation.Binding(valueSet="http://hl7.org/fhir/ValueSet/care-plan-activity-status")
         protected Enumeration<CarePlanActivityStatus> status;
 
         /**
          * Provides reason why the activity isn't yet started, is on hold, was cancelled, etc.
          */
-        @Child(name = "statusReason", type = {CodeableConcept.class}, order=7, min=0, max=1, modifier=false, summary=false)
+        @Child(name = "statusReason", type = {CodeableConcept.class}, order=8, min=0, max=1, modifier=false, summary=false)
         @Description(shortDefinition="Reason for current status", formalDefinition="Provides reason why the activity isn't yet started, is on hold, was cancelled, etc." )
+        @ca.uhn.fhir.model.api.annotation.Binding(valueSet="http://hl7.org/fhir/ValueSet/goal-status-reason")
         protected CodeableConcept statusReason;
 
         /**
          * If true, indicates that the described activity is one that must NOT be engaged in when following the plan.
          */
-        @Child(name = "prohibited", type = {BooleanType.class}, order=8, min=1, max=1, modifier=true, summary=false)
+        @Child(name = "prohibited", type = {BooleanType.class}, order=9, min=1, max=1, modifier=true, summary=false)
         @Description(shortDefinition="Do NOT do", formalDefinition="If true, indicates that the described activity is one that must NOT be engaged in when following the plan." )
         protected BooleanType prohibited;
 
         /**
          * The period, timing or frequency upon which the described activity is to occur.
          */
-        @Child(name = "scheduled", type = {Timing.class, Period.class, StringType.class}, order=9, min=0, max=1, modifier=false, summary=false)
+        @Child(name = "scheduled", type = {Timing.class, Period.class, StringType.class}, order=10, min=0, max=1, modifier=false, summary=false)
         @Description(shortDefinition="When activity is to occur", formalDefinition="The period, timing or frequency upon which the described activity is to occur." )
         protected Type scheduled;
 
         /**
          * Identifies the facility where the activity will occur; e.g. home, hospital, specific clinic, etc.
          */
-        @Child(name = "location", type = {Location.class}, order=10, min=0, max=1, modifier=false, summary=false)
+        @Child(name = "location", type = {Location.class}, order=11, min=0, max=1, modifier=false, summary=false)
         @Description(shortDefinition="Where it should happen", formalDefinition="Identifies the facility where the activity will occur; e.g. home, hospital, specific clinic, etc." )
         protected Reference location;
 
@@ -1184,7 +1197,7 @@ public class CarePlan extends DomainResource {
         /**
          * Identifies who's expected to be involved in the activity.
          */
-        @Child(name = "performer", type = {Practitioner.class, Organization.class, RelatedPerson.class, Patient.class}, order=11, min=0, max=Child.MAX_UNLIMITED, modifier=false, summary=false)
+        @Child(name = "performer", type = {Practitioner.class, Organization.class, RelatedPerson.class, Patient.class}, order=12, min=0, max=Child.MAX_UNLIMITED, modifier=false, summary=false)
         @Description(shortDefinition="Who will be responsible?", formalDefinition="Identifies who's expected to be involved in the activity." )
         protected List<Reference> performer;
         /**
@@ -1196,32 +1209,33 @@ public class CarePlan extends DomainResource {
         /**
          * Identifies the food, drug or other product to be consumed or supplied in the activity.
          */
-        @Child(name = "product", type = {CodeableConcept.class, Medication.class, Substance.class}, order=12, min=0, max=1, modifier=false, summary=false)
+        @Child(name = "product", type = {CodeableConcept.class, Medication.class, Substance.class}, order=13, min=0, max=1, modifier=false, summary=false)
         @Description(shortDefinition="What is to be administered/supplied", formalDefinition="Identifies the food, drug or other product to be consumed or supplied in the activity." )
+        @ca.uhn.fhir.model.api.annotation.Binding(valueSet="http://hl7.org/fhir/ValueSet/medication-codes")
         protected Type product;
 
         /**
          * Identifies the quantity expected to be consumed in a given day.
          */
-        @Child(name = "dailyAmount", type = {SimpleQuantity.class}, order=13, min=0, max=1, modifier=false, summary=false)
+        @Child(name = "dailyAmount", type = {SimpleQuantity.class}, order=14, min=0, max=1, modifier=false, summary=false)
         @Description(shortDefinition="How to consume/day?", formalDefinition="Identifies the quantity expected to be consumed in a given day." )
         protected SimpleQuantity dailyAmount;
 
         /**
          * Identifies the quantity expected to be supplied, administered or consumed by the subject.
          */
-        @Child(name = "quantity", type = {SimpleQuantity.class}, order=14, min=0, max=1, modifier=false, summary=false)
+        @Child(name = "quantity", type = {SimpleQuantity.class}, order=15, min=0, max=1, modifier=false, summary=false)
         @Description(shortDefinition="How much to administer/supply/consume", formalDefinition="Identifies the quantity expected to be supplied, administered or consumed by the subject." )
         protected SimpleQuantity quantity;
 
         /**
          * This provides a textual description of constraints on the intended activity occurrence, including relation to other activities.  It may also include objectives, pre-conditions and end-conditions.  Finally, it may convey specifics about the activity such as body site, method, route, etc.
          */
-        @Child(name = "description", type = {StringType.class}, order=15, min=0, max=1, modifier=false, summary=false)
+        @Child(name = "description", type = {StringType.class}, order=16, min=0, max=1, modifier=false, summary=false)
         @Description(shortDefinition="Extra info describing activity to perform", formalDefinition="This provides a textual description of constraints on the intended activity occurrence, including relation to other activities.  It may also include objectives, pre-conditions and end-conditions.  Finally, it may convey specifics about the activity such as body site, method, route, etc." )
         protected StringType description;
 
-        private static final long serialVersionUID = -1763965702L;
+        private static final long serialVersionUID = 1475798298L;
 
     /**
      * Constructor
@@ -1263,6 +1277,45 @@ public class CarePlan extends DomainResource {
         }
 
         /**
+         * @return {@link #definition} (Identifies the protocol, questionnaire, guideline or other specification the planned activity should be conducted in accordance with.)
+         */
+        public Reference getDefinition() { 
+          if (this.definition == null)
+            if (Configuration.errorOnAutoCreate())
+              throw new Error("Attempt to auto-create CarePlanActivityDetailComponent.definition");
+            else if (Configuration.doAutoCreate())
+              this.definition = new Reference(); // cc
+          return this.definition;
+        }
+
+        public boolean hasDefinition() { 
+          return this.definition != null && !this.definition.isEmpty();
+        }
+
+        /**
+         * @param value {@link #definition} (Identifies the protocol, questionnaire, guideline or other specification the planned activity should be conducted in accordance with.)
+         */
+        public CarePlanActivityDetailComponent setDefinition(Reference value) { 
+          this.definition = value;
+          return this;
+        }
+
+        /**
+         * @return {@link #definition} The actual object that is the target of the reference. The reference library doesn't populate this, but you can use it to hold the resource if you resolve it. (Identifies the protocol, questionnaire, guideline or other specification the planned activity should be conducted in accordance with.)
+         */
+        public Resource getDefinitionTarget() { 
+          return this.definitionTarget;
+        }
+
+        /**
+         * @param value {@link #definition} The actual object that is the target of the reference. The reference library doesn't use these, but you can use it to hold the resource if you resolve it. (Identifies the protocol, questionnaire, guideline or other specification the planned activity should be conducted in accordance with.)
+         */
+        public CarePlanActivityDetailComponent setDefinitionTarget(Resource value) { 
+          this.definitionTarget = value;
+          return this;
+        }
+
+        /**
          * @return {@link #code} (Detailed description of the type of planned activity; e.g. What lab test, what procedure, what kind of encounter.)
          */
         public CodeableConcept getCode() { 
@@ -1295,6 +1348,14 @@ public class CarePlan extends DomainResource {
           return this.reasonCode;
         }
 
+        /**
+         * @return Returns a reference to <code>this</code> for easy method chaining
+         */
+        public CarePlanActivityDetailComponent setReasonCode(List<CodeableConcept> theReasonCode) { 
+          this.reasonCode = theReasonCode;
+          return this;
+        }
+
         public boolean hasReasonCode() { 
           if (this.reasonCode == null)
             return false;
@@ -1304,10 +1365,6 @@ public class CarePlan extends DomainResource {
           return false;
         }
 
-        /**
-         * @return {@link #reasonCode} (Provides the rationale that drove the inclusion of this particular activity as part of the plan.)
-         */
-    // syntactic sugar
         public CodeableConcept addReasonCode() { //3
           CodeableConcept t = new CodeableConcept();
           if (this.reasonCode == null)
@@ -1316,7 +1373,6 @@ public class CarePlan extends DomainResource {
           return t;
         }
 
-    // syntactic sugar
         public CarePlanActivityDetailComponent addReasonCode(CodeableConcept t) { //3
           if (t == null)
             return this;
@@ -1324,6 +1380,16 @@ public class CarePlan extends DomainResource {
             this.reasonCode = new ArrayList<CodeableConcept>();
           this.reasonCode.add(t);
           return this;
+        }
+
+        /**
+         * @return The first repetition of repeating field {@link #reasonCode}, creating it if it does not already exist
+         */
+        public CodeableConcept getReasonCodeFirstRep() { 
+          if (getReasonCode().isEmpty()) {
+            addReasonCode();
+          }
+          return getReasonCode().get(0);
         }
 
         /**
@@ -1335,6 +1401,14 @@ public class CarePlan extends DomainResource {
           return this.reasonReference;
         }
 
+        /**
+         * @return Returns a reference to <code>this</code> for easy method chaining
+         */
+        public CarePlanActivityDetailComponent setReasonReference(List<Reference> theReasonReference) { 
+          this.reasonReference = theReasonReference;
+          return this;
+        }
+
         public boolean hasReasonReference() { 
           if (this.reasonReference == null)
             return false;
@@ -1344,10 +1418,6 @@ public class CarePlan extends DomainResource {
           return false;
         }
 
-        /**
-         * @return {@link #reasonReference} (Provides the health condition(s) that drove the inclusion of this particular activity as part of the plan.)
-         */
-    // syntactic sugar
         public Reference addReasonReference() { //3
           Reference t = new Reference();
           if (this.reasonReference == null)
@@ -1356,7 +1426,6 @@ public class CarePlan extends DomainResource {
           return t;
         }
 
-    // syntactic sugar
         public CarePlanActivityDetailComponent addReasonReference(Reference t) { //3
           if (t == null)
             return this;
@@ -1367,18 +1436,29 @@ public class CarePlan extends DomainResource {
         }
 
         /**
-         * @return {@link #reasonReference} (The actual objects that are the target of the reference. The reference library doesn't populate this, but you can use this to hold the resources if you resolvethemt. Provides the health condition(s) that drove the inclusion of this particular activity as part of the plan.)
+         * @return The first repetition of repeating field {@link #reasonReference}, creating it if it does not already exist
          */
+        public Reference getReasonReferenceFirstRep() { 
+          if (getReasonReference().isEmpty()) {
+            addReasonReference();
+          }
+          return getReasonReference().get(0);
+        }
+
+        /**
+         * @deprecated Use Reference#setResource(IBaseResource) instead
+         */
+        @Deprecated
         public List<Condition> getReasonReferenceTarget() { 
           if (this.reasonReferenceTarget == null)
             this.reasonReferenceTarget = new ArrayList<Condition>();
           return this.reasonReferenceTarget;
         }
 
-    // syntactic sugar
         /**
-         * @return {@link #reasonReference} (Add an actual object that is the target of the reference. The reference library doesn't use these, but you can use this to hold the resources if you resolvethemt. Provides the health condition(s) that drove the inclusion of this particular activity as part of the plan.)
+         * @deprecated Use Reference#setResource(IBaseResource) instead
          */
+        @Deprecated
         public Condition addReasonReferenceTarget() { 
           Condition r = new Condition();
           if (this.reasonReferenceTarget == null)
@@ -1396,6 +1476,14 @@ public class CarePlan extends DomainResource {
           return this.goal;
         }
 
+        /**
+         * @return Returns a reference to <code>this</code> for easy method chaining
+         */
+        public CarePlanActivityDetailComponent setGoal(List<Reference> theGoal) { 
+          this.goal = theGoal;
+          return this;
+        }
+
         public boolean hasGoal() { 
           if (this.goal == null)
             return false;
@@ -1405,10 +1493,6 @@ public class CarePlan extends DomainResource {
           return false;
         }
 
-        /**
-         * @return {@link #goal} (Internal reference that identifies the goals that this activity is intended to contribute towards meeting.)
-         */
-    // syntactic sugar
         public Reference addGoal() { //3
           Reference t = new Reference();
           if (this.goal == null)
@@ -1417,7 +1501,6 @@ public class CarePlan extends DomainResource {
           return t;
         }
 
-    // syntactic sugar
         public CarePlanActivityDetailComponent addGoal(Reference t) { //3
           if (t == null)
             return this;
@@ -1428,18 +1511,29 @@ public class CarePlan extends DomainResource {
         }
 
         /**
-         * @return {@link #goal} (The actual objects that are the target of the reference. The reference library doesn't populate this, but you can use this to hold the resources if you resolvethemt. Internal reference that identifies the goals that this activity is intended to contribute towards meeting.)
+         * @return The first repetition of repeating field {@link #goal}, creating it if it does not already exist
          */
+        public Reference getGoalFirstRep() { 
+          if (getGoal().isEmpty()) {
+            addGoal();
+          }
+          return getGoal().get(0);
+        }
+
+        /**
+         * @deprecated Use Reference#setResource(IBaseResource) instead
+         */
+        @Deprecated
         public List<Goal> getGoalTarget() { 
           if (this.goalTarget == null)
             this.goalTarget = new ArrayList<Goal>();
           return this.goalTarget;
         }
 
-    // syntactic sugar
         /**
-         * @return {@link #goal} (Add an actual object that is the target of the reference. The reference library doesn't use these, but you can use this to hold the resources if you resolvethemt. Internal reference that identifies the goals that this activity is intended to contribute towards meeting.)
+         * @deprecated Use Reference#setResource(IBaseResource) instead
          */
+        @Deprecated
         public Goal addGoalTarget() { 
           Goal r = new Goal();
           if (this.goalTarget == null)
@@ -1677,6 +1771,14 @@ public class CarePlan extends DomainResource {
           return this.performer;
         }
 
+        /**
+         * @return Returns a reference to <code>this</code> for easy method chaining
+         */
+        public CarePlanActivityDetailComponent setPerformer(List<Reference> thePerformer) { 
+          this.performer = thePerformer;
+          return this;
+        }
+
         public boolean hasPerformer() { 
           if (this.performer == null)
             return false;
@@ -1686,10 +1788,6 @@ public class CarePlan extends DomainResource {
           return false;
         }
 
-        /**
-         * @return {@link #performer} (Identifies who's expected to be involved in the activity.)
-         */
-    // syntactic sugar
         public Reference addPerformer() { //3
           Reference t = new Reference();
           if (this.performer == null)
@@ -1698,7 +1796,6 @@ public class CarePlan extends DomainResource {
           return t;
         }
 
-    // syntactic sugar
         public CarePlanActivityDetailComponent addPerformer(Reference t) { //3
           if (t == null)
             return this;
@@ -1709,8 +1806,19 @@ public class CarePlan extends DomainResource {
         }
 
         /**
-         * @return {@link #performer} (The actual objects that are the target of the reference. The reference library doesn't populate this, but you can use this to hold the resources if you resolvethemt. Identifies who's expected to be involved in the activity.)
+         * @return The first repetition of repeating field {@link #performer}, creating it if it does not already exist
          */
+        public Reference getPerformerFirstRep() { 
+          if (getPerformer().isEmpty()) {
+            addPerformer();
+          }
+          return getPerformer().get(0);
+        }
+
+        /**
+         * @deprecated Use Reference#setResource(IBaseResource) instead
+         */
+        @Deprecated
         public List<Resource> getPerformerTarget() { 
           if (this.performerTarget == null)
             this.performerTarget = new ArrayList<Resource>();
@@ -1862,6 +1970,7 @@ public class CarePlan extends DomainResource {
         protected void listChildren(List<Property> childrenList) {
           super.listChildren(childrenList);
           childrenList.add(new Property("category", "CodeableConcept", "High-level categorization of the type of activity in a care plan.", 0, java.lang.Integer.MAX_VALUE, category));
+          childrenList.add(new Property("definition", "Reference(PlanDefinition|Questionnaire)", "Identifies the protocol, questionnaire, guideline or other specification the planned activity should be conducted in accordance with.", 0, java.lang.Integer.MAX_VALUE, definition));
           childrenList.add(new Property("code", "CodeableConcept", "Detailed description of the type of planned activity; e.g. What lab test, what procedure, what kind of encounter.", 0, java.lang.Integer.MAX_VALUE, code));
           childrenList.add(new Property("reasonCode", "CodeableConcept", "Provides the rationale that drove the inclusion of this particular activity as part of the plan.", 0, java.lang.Integer.MAX_VALUE, reasonCode));
           childrenList.add(new Property("reasonReference", "Reference(Condition)", "Provides the health condition(s) that drove the inclusion of this particular activity as part of the plan.", 0, java.lang.Integer.MAX_VALUE, reasonReference));
@@ -1879,9 +1988,91 @@ public class CarePlan extends DomainResource {
         }
 
       @Override
+      public Base[] getProperty(int hash, String name, boolean checkValid) throws FHIRException {
+        switch (hash) {
+        case 50511102: /*category*/ return this.category == null ? new Base[0] : new Base[] {this.category}; // CodeableConcept
+        case -1014418093: /*definition*/ return this.definition == null ? new Base[0] : new Base[] {this.definition}; // Reference
+        case 3059181: /*code*/ return this.code == null ? new Base[0] : new Base[] {this.code}; // CodeableConcept
+        case 722137681: /*reasonCode*/ return this.reasonCode == null ? new Base[0] : this.reasonCode.toArray(new Base[this.reasonCode.size()]); // CodeableConcept
+        case -1146218137: /*reasonReference*/ return this.reasonReference == null ? new Base[0] : this.reasonReference.toArray(new Base[this.reasonReference.size()]); // Reference
+        case 3178259: /*goal*/ return this.goal == null ? new Base[0] : this.goal.toArray(new Base[this.goal.size()]); // Reference
+        case -892481550: /*status*/ return this.status == null ? new Base[0] : new Base[] {this.status}; // Enumeration<CarePlanActivityStatus>
+        case 2051346646: /*statusReason*/ return this.statusReason == null ? new Base[0] : new Base[] {this.statusReason}; // CodeableConcept
+        case 663275198: /*prohibited*/ return this.prohibited == null ? new Base[0] : new Base[] {this.prohibited}; // BooleanType
+        case -160710483: /*scheduled*/ return this.scheduled == null ? new Base[0] : new Base[] {this.scheduled}; // Type
+        case 1901043637: /*location*/ return this.location == null ? new Base[0] : new Base[] {this.location}; // Reference
+        case 481140686: /*performer*/ return this.performer == null ? new Base[0] : this.performer.toArray(new Base[this.performer.size()]); // Reference
+        case -309474065: /*product*/ return this.product == null ? new Base[0] : new Base[] {this.product}; // Type
+        case -768908335: /*dailyAmount*/ return this.dailyAmount == null ? new Base[0] : new Base[] {this.dailyAmount}; // SimpleQuantity
+        case -1285004149: /*quantity*/ return this.quantity == null ? new Base[0] : new Base[] {this.quantity}; // SimpleQuantity
+        case -1724546052: /*description*/ return this.description == null ? new Base[0] : new Base[] {this.description}; // StringType
+        default: return super.getProperty(hash, name, checkValid);
+        }
+
+      }
+
+      @Override
+      public void setProperty(int hash, String name, Base value) throws FHIRException {
+        switch (hash) {
+        case 50511102: // category
+          this.category = castToCodeableConcept(value); // CodeableConcept
+          break;
+        case -1014418093: // definition
+          this.definition = castToReference(value); // Reference
+          break;
+        case 3059181: // code
+          this.code = castToCodeableConcept(value); // CodeableConcept
+          break;
+        case 722137681: // reasonCode
+          this.getReasonCode().add(castToCodeableConcept(value)); // CodeableConcept
+          break;
+        case -1146218137: // reasonReference
+          this.getReasonReference().add(castToReference(value)); // Reference
+          break;
+        case 3178259: // goal
+          this.getGoal().add(castToReference(value)); // Reference
+          break;
+        case -892481550: // status
+          this.status = new CarePlanActivityStatusEnumFactory().fromType(value); // Enumeration<CarePlanActivityStatus>
+          break;
+        case 2051346646: // statusReason
+          this.statusReason = castToCodeableConcept(value); // CodeableConcept
+          break;
+        case 663275198: // prohibited
+          this.prohibited = castToBoolean(value); // BooleanType
+          break;
+        case -160710483: // scheduled
+          this.scheduled = (Type) value; // Type
+          break;
+        case 1901043637: // location
+          this.location = castToReference(value); // Reference
+          break;
+        case 481140686: // performer
+          this.getPerformer().add(castToReference(value)); // Reference
+          break;
+        case -309474065: // product
+          this.product = (Type) value; // Type
+          break;
+        case -768908335: // dailyAmount
+          this.dailyAmount = castToSimpleQuantity(value); // SimpleQuantity
+          break;
+        case -1285004149: // quantity
+          this.quantity = castToSimpleQuantity(value); // SimpleQuantity
+          break;
+        case -1724546052: // description
+          this.description = castToString(value); // StringType
+          break;
+        default: super.setProperty(hash, name, value);
+        }
+
+      }
+
+      @Override
       public void setProperty(String name, Base value) throws FHIRException {
         if (name.equals("category"))
           this.category = castToCodeableConcept(value); // CodeableConcept
+        else if (name.equals("definition"))
+          this.definition = castToReference(value); // Reference
         else if (name.equals("code"))
           this.code = castToCodeableConcept(value); // CodeableConcept
         else if (name.equals("reasonCode"))
@@ -1915,10 +2106,38 @@ public class CarePlan extends DomainResource {
       }
 
       @Override
+      public Base makeProperty(int hash, String name) throws FHIRException {
+        switch (hash) {
+        case 50511102:  return getCategory(); // CodeableConcept
+        case -1014418093:  return getDefinition(); // Reference
+        case 3059181:  return getCode(); // CodeableConcept
+        case 722137681:  return addReasonCode(); // CodeableConcept
+        case -1146218137:  return addReasonReference(); // Reference
+        case 3178259:  return addGoal(); // Reference
+        case -892481550: throw new FHIRException("Cannot make property status as it is not a complex type"); // Enumeration<CarePlanActivityStatus>
+        case 2051346646:  return getStatusReason(); // CodeableConcept
+        case 663275198: throw new FHIRException("Cannot make property prohibited as it is not a complex type"); // BooleanType
+        case 1162627251:  return getScheduled(); // Type
+        case 1901043637:  return getLocation(); // Reference
+        case 481140686:  return addPerformer(); // Reference
+        case 1753005361:  return getProduct(); // Type
+        case -768908335:  return getDailyAmount(); // SimpleQuantity
+        case -1285004149:  return getQuantity(); // SimpleQuantity
+        case -1724546052: throw new FHIRException("Cannot make property description as it is not a complex type"); // StringType
+        default: return super.makeProperty(hash, name);
+        }
+
+      }
+
+      @Override
       public Base addChild(String name) throws FHIRException {
         if (name.equals("category")) {
           this.category = new CodeableConcept();
           return this.category;
+        }
+        else if (name.equals("definition")) {
+          this.definition = new Reference();
+          return this.definition;
         }
         else if (name.equals("code")) {
           this.code = new CodeableConcept();
@@ -1989,6 +2208,7 @@ public class CarePlan extends DomainResource {
         CarePlanActivityDetailComponent dst = new CarePlanActivityDetailComponent();
         copyValues(dst);
         dst.category = category == null ? null : category.copy();
+        dst.definition = definition == null ? null : definition.copy();
         dst.code = code == null ? null : code.copy();
         if (reasonCode != null) {
           dst.reasonCode = new ArrayList<CodeableConcept>();
@@ -2029,12 +2249,12 @@ public class CarePlan extends DomainResource {
         if (!(other instanceof CarePlanActivityDetailComponent))
           return false;
         CarePlanActivityDetailComponent o = (CarePlanActivityDetailComponent) other;
-        return compareDeep(category, o.category, true) && compareDeep(code, o.code, true) && compareDeep(reasonCode, o.reasonCode, true)
-           && compareDeep(reasonReference, o.reasonReference, true) && compareDeep(goal, o.goal, true) && compareDeep(status, o.status, true)
-           && compareDeep(statusReason, o.statusReason, true) && compareDeep(prohibited, o.prohibited, true)
-           && compareDeep(scheduled, o.scheduled, true) && compareDeep(location, o.location, true) && compareDeep(performer, o.performer, true)
-           && compareDeep(product, o.product, true) && compareDeep(dailyAmount, o.dailyAmount, true) && compareDeep(quantity, o.quantity, true)
-           && compareDeep(description, o.description, true);
+        return compareDeep(category, o.category, true) && compareDeep(definition, o.definition, true) && compareDeep(code, o.code, true)
+           && compareDeep(reasonCode, o.reasonCode, true) && compareDeep(reasonReference, o.reasonReference, true)
+           && compareDeep(goal, o.goal, true) && compareDeep(status, o.status, true) && compareDeep(statusReason, o.statusReason, true)
+           && compareDeep(prohibited, o.prohibited, true) && compareDeep(scheduled, o.scheduled, true) && compareDeep(location, o.location, true)
+           && compareDeep(performer, o.performer, true) && compareDeep(product, o.product, true) && compareDeep(dailyAmount, o.dailyAmount, true)
+           && compareDeep(quantity, o.quantity, true) && compareDeep(description, o.description, true);
       }
 
       @Override
@@ -2049,14 +2269,9 @@ public class CarePlan extends DomainResource {
       }
 
       public boolean isEmpty() {
-        return super.isEmpty() && (category == null || category.isEmpty()) && (code == null || code.isEmpty())
-           && (reasonCode == null || reasonCode.isEmpty()) && (reasonReference == null || reasonReference.isEmpty())
-           && (goal == null || goal.isEmpty()) && (status == null || status.isEmpty()) && (statusReason == null || statusReason.isEmpty())
-           && (prohibited == null || prohibited.isEmpty()) && (scheduled == null || scheduled.isEmpty())
-           && (location == null || location.isEmpty()) && (performer == null || performer.isEmpty())
-           && (product == null || product.isEmpty()) && (dailyAmount == null || dailyAmount.isEmpty())
-           && (quantity == null || quantity.isEmpty()) && (description == null || description.isEmpty())
-          ;
+        return super.isEmpty() && ca.uhn.fhir.util.ElementUtil.isEmpty(category, definition, code
+          , reasonCode, reasonReference, goal, status, statusReason, prohibited, scheduled
+          , location, performer, product, dailyAmount, quantity, description);
       }
 
   public String fhirType() {
@@ -2090,6 +2305,7 @@ public class CarePlan extends DomainResource {
      */
     @Child(name = "status", type = {CodeType.class}, order=2, min=1, max=1, modifier=true, summary=true)
     @Description(shortDefinition="proposed | draft | active | completed | cancelled", formalDefinition="Indicates whether the plan is currently being acted upon, represents future intentions or is now a historical record." )
+    @ca.uhn.fhir.model.api.annotation.Binding(valueSet="http://hl7.org/fhir/ValueSet/care-plan-status")
     protected Enumeration<CarePlanStatus> status;
 
     /**
@@ -2135,6 +2351,7 @@ public class CarePlan extends DomainResource {
      */
     @Child(name = "category", type = {CodeableConcept.class}, order=7, min=0, max=Child.MAX_UNLIMITED, modifier=false, summary=true)
     @Description(shortDefinition="Type of plan", formalDefinition="Identifies what \"kind\" of plan this is to support differentiation between multiple co-existing plans; e.g. \"Home health\", \"psychiatric\", \"asthma\", \"disease management\", \"wellness plan\", etc." )
+    @ca.uhn.fhir.model.api.annotation.Binding(valueSet="http://hl7.org/fhir/ValueSet/care-plan-category")
     protected List<CodeableConcept> category;
 
     /**
@@ -2159,7 +2376,7 @@ public class CarePlan extends DomainResource {
     /**
      * Identifies portions of the patient's record that specifically influenced the formation of the plan.  These might include co-morbidities, recent procedures, limitations, recent assessments, etc.
      */
-    @Child(name = "support", type = {}, order=10, min=0, max=Child.MAX_UNLIMITED, modifier=false, summary=false)
+    @Child(name = "support", type = {Reference.class}, order=10, min=0, max=Child.MAX_UNLIMITED, modifier=false, summary=false)
     @Description(shortDefinition="Information considered as part of plan", formalDefinition="Identifies portions of the patient's record that specifically influenced the formation of the plan.  These might include co-morbidities, recent procedures, limitations, recent assessments, etc." )
     protected List<Reference> support;
     /**
@@ -2178,9 +2395,14 @@ public class CarePlan extends DomainResource {
     /**
      * Identifies all people and organizations who are expected to be involved in the care envisioned by this plan.
      */
-    @Child(name = "participant", type = {}, order=12, min=0, max=Child.MAX_UNLIMITED, modifier=false, summary=false)
+    @Child(name = "careTeam", type = {CareTeam.class}, order=12, min=0, max=Child.MAX_UNLIMITED, modifier=false, summary=false)
     @Description(shortDefinition="Who's involved in plan?", formalDefinition="Identifies all people and organizations who are expected to be involved in the care envisioned by this plan." )
-    protected List<CarePlanParticipantComponent> participant;
+    protected List<Reference> careTeam;
+    /**
+     * The actual objects that are the target of the reference (Identifies all people and organizations who are expected to be involved in the care envisioned by this plan.)
+     */
+    protected List<CareTeam> careTeamTarget;
+
 
     /**
      * Describes the intended objective(s) of carrying out the care plan.
@@ -2208,7 +2430,7 @@ public class CarePlan extends DomainResource {
     @Description(shortDefinition="Comments about the plan", formalDefinition="General notes about the care plan not covered elsewhere." )
     protected Annotation note;
 
-    private static final long serialVersionUID = -307500543L;
+    private static final long serialVersionUID = -771228688L;
 
   /**
    * Constructor
@@ -2234,6 +2456,14 @@ public class CarePlan extends DomainResource {
       return this.identifier;
     }
 
+    /**
+     * @return Returns a reference to <code>this</code> for easy method chaining
+     */
+    public CarePlan setIdentifier(List<Identifier> theIdentifier) { 
+      this.identifier = theIdentifier;
+      return this;
+    }
+
     public boolean hasIdentifier() { 
       if (this.identifier == null)
         return false;
@@ -2243,10 +2473,6 @@ public class CarePlan extends DomainResource {
       return false;
     }
 
-    /**
-     * @return {@link #identifier} (This records identifiers associated with this care plan that are defined by business processes and/or used to refer to it when a direct URL reference to the resource itself is not appropriate (e.g. in CDA documents, or in written / printed documentation).)
-     */
-    // syntactic sugar
     public Identifier addIdentifier() { //3
       Identifier t = new Identifier();
       if (this.identifier == null)
@@ -2255,7 +2481,6 @@ public class CarePlan extends DomainResource {
       return t;
     }
 
-    // syntactic sugar
     public CarePlan addIdentifier(Identifier t) { //3
       if (t == null)
         return this;
@@ -2263,6 +2488,16 @@ public class CarePlan extends DomainResource {
         this.identifier = new ArrayList<Identifier>();
       this.identifier.add(t);
       return this;
+    }
+
+    /**
+     * @return The first repetition of repeating field {@link #identifier}, creating it if it does not already exist
+     */
+    public Identifier getIdentifierFirstRep() { 
+      if (getIdentifier().isEmpty()) {
+        addIdentifier();
+      }
+      return getIdentifier().get(0);
     }
 
     /**
@@ -2421,6 +2656,14 @@ public class CarePlan extends DomainResource {
       return this.author;
     }
 
+    /**
+     * @return Returns a reference to <code>this</code> for easy method chaining
+     */
+    public CarePlan setAuthor(List<Reference> theAuthor) { 
+      this.author = theAuthor;
+      return this;
+    }
+
     public boolean hasAuthor() { 
       if (this.author == null)
         return false;
@@ -2430,10 +2673,6 @@ public class CarePlan extends DomainResource {
       return false;
     }
 
-    /**
-     * @return {@link #author} (Identifies the individual(s) or ogranization who is responsible for the content of the care plan.)
-     */
-    // syntactic sugar
     public Reference addAuthor() { //3
       Reference t = new Reference();
       if (this.author == null)
@@ -2442,7 +2681,6 @@ public class CarePlan extends DomainResource {
       return t;
     }
 
-    // syntactic sugar
     public CarePlan addAuthor(Reference t) { //3
       if (t == null)
         return this;
@@ -2453,8 +2691,19 @@ public class CarePlan extends DomainResource {
     }
 
     /**
-     * @return {@link #author} (The actual objects that are the target of the reference. The reference library doesn't populate this, but you can use this to hold the resources if you resolvethemt. Identifies the individual(s) or ogranization who is responsible for the content of the care plan.)
+     * @return The first repetition of repeating field {@link #author}, creating it if it does not already exist
      */
+    public Reference getAuthorFirstRep() { 
+      if (getAuthor().isEmpty()) {
+        addAuthor();
+      }
+      return getAuthor().get(0);
+    }
+
+    /**
+     * @deprecated Use Reference#setResource(IBaseResource) instead
+     */
+    @Deprecated
     public List<Resource> getAuthorTarget() { 
       if (this.authorTarget == null)
         this.authorTarget = new ArrayList<Resource>();
@@ -2519,6 +2768,14 @@ public class CarePlan extends DomainResource {
       return this.category;
     }
 
+    /**
+     * @return Returns a reference to <code>this</code> for easy method chaining
+     */
+    public CarePlan setCategory(List<CodeableConcept> theCategory) { 
+      this.category = theCategory;
+      return this;
+    }
+
     public boolean hasCategory() { 
       if (this.category == null)
         return false;
@@ -2528,10 +2785,6 @@ public class CarePlan extends DomainResource {
       return false;
     }
 
-    /**
-     * @return {@link #category} (Identifies what "kind" of plan this is to support differentiation between multiple co-existing plans; e.g. "Home health", "psychiatric", "asthma", "disease management", "wellness plan", etc.)
-     */
-    // syntactic sugar
     public CodeableConcept addCategory() { //3
       CodeableConcept t = new CodeableConcept();
       if (this.category == null)
@@ -2540,7 +2793,6 @@ public class CarePlan extends DomainResource {
       return t;
     }
 
-    // syntactic sugar
     public CarePlan addCategory(CodeableConcept t) { //3
       if (t == null)
         return this;
@@ -2548,6 +2800,16 @@ public class CarePlan extends DomainResource {
         this.category = new ArrayList<CodeableConcept>();
       this.category.add(t);
       return this;
+    }
+
+    /**
+     * @return The first repetition of repeating field {@link #category}, creating it if it does not already exist
+     */
+    public CodeableConcept getCategoryFirstRep() { 
+      if (getCategory().isEmpty()) {
+        addCategory();
+      }
+      return getCategory().get(0);
     }
 
     /**
@@ -2608,6 +2870,14 @@ public class CarePlan extends DomainResource {
       return this.addresses;
     }
 
+    /**
+     * @return Returns a reference to <code>this</code> for easy method chaining
+     */
+    public CarePlan setAddresses(List<Reference> theAddresses) { 
+      this.addresses = theAddresses;
+      return this;
+    }
+
     public boolean hasAddresses() { 
       if (this.addresses == null)
         return false;
@@ -2617,10 +2887,6 @@ public class CarePlan extends DomainResource {
       return false;
     }
 
-    /**
-     * @return {@link #addresses} (Identifies the conditions/problems/concerns/diagnoses/etc. whose management and/or mitigation are handled by this plan.)
-     */
-    // syntactic sugar
     public Reference addAddresses() { //3
       Reference t = new Reference();
       if (this.addresses == null)
@@ -2629,7 +2895,6 @@ public class CarePlan extends DomainResource {
       return t;
     }
 
-    // syntactic sugar
     public CarePlan addAddresses(Reference t) { //3
       if (t == null)
         return this;
@@ -2640,18 +2905,29 @@ public class CarePlan extends DomainResource {
     }
 
     /**
-     * @return {@link #addresses} (The actual objects that are the target of the reference. The reference library doesn't populate this, but you can use this to hold the resources if you resolvethemt. Identifies the conditions/problems/concerns/diagnoses/etc. whose management and/or mitigation are handled by this plan.)
+     * @return The first repetition of repeating field {@link #addresses}, creating it if it does not already exist
      */
+    public Reference getAddressesFirstRep() { 
+      if (getAddresses().isEmpty()) {
+        addAddresses();
+      }
+      return getAddresses().get(0);
+    }
+
+    /**
+     * @deprecated Use Reference#setResource(IBaseResource) instead
+     */
+    @Deprecated
     public List<Condition> getAddressesTarget() { 
       if (this.addressesTarget == null)
         this.addressesTarget = new ArrayList<Condition>();
       return this.addressesTarget;
     }
 
-    // syntactic sugar
     /**
-     * @return {@link #addresses} (Add an actual object that is the target of the reference. The reference library doesn't use these, but you can use this to hold the resources if you resolvethemt. Identifies the conditions/problems/concerns/diagnoses/etc. whose management and/or mitigation are handled by this plan.)
+     * @deprecated Use Reference#setResource(IBaseResource) instead
      */
+    @Deprecated
     public Condition addAddressesTarget() { 
       Condition r = new Condition();
       if (this.addressesTarget == null)
@@ -2669,6 +2945,14 @@ public class CarePlan extends DomainResource {
       return this.support;
     }
 
+    /**
+     * @return Returns a reference to <code>this</code> for easy method chaining
+     */
+    public CarePlan setSupport(List<Reference> theSupport) { 
+      this.support = theSupport;
+      return this;
+    }
+
     public boolean hasSupport() { 
       if (this.support == null)
         return false;
@@ -2678,10 +2962,6 @@ public class CarePlan extends DomainResource {
       return false;
     }
 
-    /**
-     * @return {@link #support} (Identifies portions of the patient's record that specifically influenced the formation of the plan.  These might include co-morbidities, recent procedures, limitations, recent assessments, etc.)
-     */
-    // syntactic sugar
     public Reference addSupport() { //3
       Reference t = new Reference();
       if (this.support == null)
@@ -2690,7 +2970,6 @@ public class CarePlan extends DomainResource {
       return t;
     }
 
-    // syntactic sugar
     public CarePlan addSupport(Reference t) { //3
       if (t == null)
         return this;
@@ -2701,8 +2980,19 @@ public class CarePlan extends DomainResource {
     }
 
     /**
-     * @return {@link #support} (The actual objects that are the target of the reference. The reference library doesn't populate this, but you can use this to hold the resources if you resolvethemt. Identifies portions of the patient's record that specifically influenced the formation of the plan.  These might include co-morbidities, recent procedures, limitations, recent assessments, etc.)
+     * @return The first repetition of repeating field {@link #support}, creating it if it does not already exist
      */
+    public Reference getSupportFirstRep() { 
+      if (getSupport().isEmpty()) {
+        addSupport();
+      }
+      return getSupport().get(0);
+    }
+
+    /**
+     * @deprecated Use Reference#setResource(IBaseResource) instead
+     */
+    @Deprecated
     public List<Resource> getSupportTarget() { 
       if (this.supportTarget == null)
         this.supportTarget = new ArrayList<Resource>();
@@ -2718,6 +3008,14 @@ public class CarePlan extends DomainResource {
       return this.relatedPlan;
     }
 
+    /**
+     * @return Returns a reference to <code>this</code> for easy method chaining
+     */
+    public CarePlan setRelatedPlan(List<CarePlanRelatedPlanComponent> theRelatedPlan) { 
+      this.relatedPlan = theRelatedPlan;
+      return this;
+    }
+
     public boolean hasRelatedPlan() { 
       if (this.relatedPlan == null)
         return false;
@@ -2727,10 +3025,6 @@ public class CarePlan extends DomainResource {
       return false;
     }
 
-    /**
-     * @return {@link #relatedPlan} (Identifies CarePlans with some sort of formal relationship to the current plan.)
-     */
-    // syntactic sugar
     public CarePlanRelatedPlanComponent addRelatedPlan() { //3
       CarePlanRelatedPlanComponent t = new CarePlanRelatedPlanComponent();
       if (this.relatedPlan == null)
@@ -2739,7 +3033,6 @@ public class CarePlan extends DomainResource {
       return t;
     }
 
-    // syntactic sugar
     public CarePlan addRelatedPlan(CarePlanRelatedPlanComponent t) { //3
       if (t == null)
         return this;
@@ -2750,43 +3043,88 @@ public class CarePlan extends DomainResource {
     }
 
     /**
-     * @return {@link #participant} (Identifies all people and organizations who are expected to be involved in the care envisioned by this plan.)
+     * @return The first repetition of repeating field {@link #relatedPlan}, creating it if it does not already exist
      */
-    public List<CarePlanParticipantComponent> getParticipant() { 
-      if (this.participant == null)
-        this.participant = new ArrayList<CarePlanParticipantComponent>();
-      return this.participant;
+    public CarePlanRelatedPlanComponent getRelatedPlanFirstRep() { 
+      if (getRelatedPlan().isEmpty()) {
+        addRelatedPlan();
+      }
+      return getRelatedPlan().get(0);
     }
 
-    public boolean hasParticipant() { 
-      if (this.participant == null)
+    /**
+     * @return {@link #careTeam} (Identifies all people and organizations who are expected to be involved in the care envisioned by this plan.)
+     */
+    public List<Reference> getCareTeam() { 
+      if (this.careTeam == null)
+        this.careTeam = new ArrayList<Reference>();
+      return this.careTeam;
+    }
+
+    /**
+     * @return Returns a reference to <code>this</code> for easy method chaining
+     */
+    public CarePlan setCareTeam(List<Reference> theCareTeam) { 
+      this.careTeam = theCareTeam;
+      return this;
+    }
+
+    public boolean hasCareTeam() { 
+      if (this.careTeam == null)
         return false;
-      for (CarePlanParticipantComponent item : this.participant)
+      for (Reference item : this.careTeam)
         if (!item.isEmpty())
           return true;
       return false;
     }
 
-    /**
-     * @return {@link #participant} (Identifies all people and organizations who are expected to be involved in the care envisioned by this plan.)
-     */
-    // syntactic sugar
-    public CarePlanParticipantComponent addParticipant() { //3
-      CarePlanParticipantComponent t = new CarePlanParticipantComponent();
-      if (this.participant == null)
-        this.participant = new ArrayList<CarePlanParticipantComponent>();
-      this.participant.add(t);
+    public Reference addCareTeam() { //3
+      Reference t = new Reference();
+      if (this.careTeam == null)
+        this.careTeam = new ArrayList<Reference>();
+      this.careTeam.add(t);
       return t;
     }
 
-    // syntactic sugar
-    public CarePlan addParticipant(CarePlanParticipantComponent t) { //3
+    public CarePlan addCareTeam(Reference t) { //3
       if (t == null)
         return this;
-      if (this.participant == null)
-        this.participant = new ArrayList<CarePlanParticipantComponent>();
-      this.participant.add(t);
+      if (this.careTeam == null)
+        this.careTeam = new ArrayList<Reference>();
+      this.careTeam.add(t);
       return this;
+    }
+
+    /**
+     * @return The first repetition of repeating field {@link #careTeam}, creating it if it does not already exist
+     */
+    public Reference getCareTeamFirstRep() { 
+      if (getCareTeam().isEmpty()) {
+        addCareTeam();
+      }
+      return getCareTeam().get(0);
+    }
+
+    /**
+     * @deprecated Use Reference#setResource(IBaseResource) instead
+     */
+    @Deprecated
+    public List<CareTeam> getCareTeamTarget() { 
+      if (this.careTeamTarget == null)
+        this.careTeamTarget = new ArrayList<CareTeam>();
+      return this.careTeamTarget;
+    }
+
+    /**
+     * @deprecated Use Reference#setResource(IBaseResource) instead
+     */
+    @Deprecated
+    public CareTeam addCareTeamTarget() { 
+      CareTeam r = new CareTeam();
+      if (this.careTeamTarget == null)
+        this.careTeamTarget = new ArrayList<CareTeam>();
+      this.careTeamTarget.add(r);
+      return r;
     }
 
     /**
@@ -2798,6 +3136,14 @@ public class CarePlan extends DomainResource {
       return this.goal;
     }
 
+    /**
+     * @return Returns a reference to <code>this</code> for easy method chaining
+     */
+    public CarePlan setGoal(List<Reference> theGoal) { 
+      this.goal = theGoal;
+      return this;
+    }
+
     public boolean hasGoal() { 
       if (this.goal == null)
         return false;
@@ -2807,10 +3153,6 @@ public class CarePlan extends DomainResource {
       return false;
     }
 
-    /**
-     * @return {@link #goal} (Describes the intended objective(s) of carrying out the care plan.)
-     */
-    // syntactic sugar
     public Reference addGoal() { //3
       Reference t = new Reference();
       if (this.goal == null)
@@ -2819,7 +3161,6 @@ public class CarePlan extends DomainResource {
       return t;
     }
 
-    // syntactic sugar
     public CarePlan addGoal(Reference t) { //3
       if (t == null)
         return this;
@@ -2830,18 +3171,29 @@ public class CarePlan extends DomainResource {
     }
 
     /**
-     * @return {@link #goal} (The actual objects that are the target of the reference. The reference library doesn't populate this, but you can use this to hold the resources if you resolvethemt. Describes the intended objective(s) of carrying out the care plan.)
+     * @return The first repetition of repeating field {@link #goal}, creating it if it does not already exist
      */
+    public Reference getGoalFirstRep() { 
+      if (getGoal().isEmpty()) {
+        addGoal();
+      }
+      return getGoal().get(0);
+    }
+
+    /**
+     * @deprecated Use Reference#setResource(IBaseResource) instead
+     */
+    @Deprecated
     public List<Goal> getGoalTarget() { 
       if (this.goalTarget == null)
         this.goalTarget = new ArrayList<Goal>();
       return this.goalTarget;
     }
 
-    // syntactic sugar
     /**
-     * @return {@link #goal} (Add an actual object that is the target of the reference. The reference library doesn't use these, but you can use this to hold the resources if you resolvethemt. Describes the intended objective(s) of carrying out the care plan.)
+     * @deprecated Use Reference#setResource(IBaseResource) instead
      */
+    @Deprecated
     public Goal addGoalTarget() { 
       Goal r = new Goal();
       if (this.goalTarget == null)
@@ -2859,6 +3211,14 @@ public class CarePlan extends DomainResource {
       return this.activity;
     }
 
+    /**
+     * @return Returns a reference to <code>this</code> for easy method chaining
+     */
+    public CarePlan setActivity(List<CarePlanActivityComponent> theActivity) { 
+      this.activity = theActivity;
+      return this;
+    }
+
     public boolean hasActivity() { 
       if (this.activity == null)
         return false;
@@ -2868,10 +3228,6 @@ public class CarePlan extends DomainResource {
       return false;
     }
 
-    /**
-     * @return {@link #activity} (Identifies a planned action to occur as part of the plan.  For example, a medication to be used, lab tests to perform, self-monitoring, education, etc.)
-     */
-    // syntactic sugar
     public CarePlanActivityComponent addActivity() { //3
       CarePlanActivityComponent t = new CarePlanActivityComponent();
       if (this.activity == null)
@@ -2880,7 +3236,6 @@ public class CarePlan extends DomainResource {
       return t;
     }
 
-    // syntactic sugar
     public CarePlan addActivity(CarePlanActivityComponent t) { //3
       if (t == null)
         return this;
@@ -2888,6 +3243,16 @@ public class CarePlan extends DomainResource {
         this.activity = new ArrayList<CarePlanActivityComponent>();
       this.activity.add(t);
       return this;
+    }
+
+    /**
+     * @return The first repetition of repeating field {@link #activity}, creating it if it does not already exist
+     */
+    public CarePlanActivityComponent getActivityFirstRep() { 
+      if (getActivity().isEmpty()) {
+        addActivity();
+      }
+      return getActivity().get(0);
     }
 
     /**
@@ -2928,10 +3293,90 @@ public class CarePlan extends DomainResource {
         childrenList.add(new Property("addresses", "Reference(Condition)", "Identifies the conditions/problems/concerns/diagnoses/etc. whose management and/or mitigation are handled by this plan.", 0, java.lang.Integer.MAX_VALUE, addresses));
         childrenList.add(new Property("support", "Reference(Any)", "Identifies portions of the patient's record that specifically influenced the formation of the plan.  These might include co-morbidities, recent procedures, limitations, recent assessments, etc.", 0, java.lang.Integer.MAX_VALUE, support));
         childrenList.add(new Property("relatedPlan", "", "Identifies CarePlans with some sort of formal relationship to the current plan.", 0, java.lang.Integer.MAX_VALUE, relatedPlan));
-        childrenList.add(new Property("participant", "", "Identifies all people and organizations who are expected to be involved in the care envisioned by this plan.", 0, java.lang.Integer.MAX_VALUE, participant));
+        childrenList.add(new Property("careTeam", "Reference(CareTeam)", "Identifies all people and organizations who are expected to be involved in the care envisioned by this plan.", 0, java.lang.Integer.MAX_VALUE, careTeam));
         childrenList.add(new Property("goal", "Reference(Goal)", "Describes the intended objective(s) of carrying out the care plan.", 0, java.lang.Integer.MAX_VALUE, goal));
         childrenList.add(new Property("activity", "", "Identifies a planned action to occur as part of the plan.  For example, a medication to be used, lab tests to perform, self-monitoring, education, etc.", 0, java.lang.Integer.MAX_VALUE, activity));
         childrenList.add(new Property("note", "Annotation", "General notes about the care plan not covered elsewhere.", 0, java.lang.Integer.MAX_VALUE, note));
+      }
+
+      @Override
+      public Base[] getProperty(int hash, String name, boolean checkValid) throws FHIRException {
+        switch (hash) {
+        case -1618432855: /*identifier*/ return this.identifier == null ? new Base[0] : this.identifier.toArray(new Base[this.identifier.size()]); // Identifier
+        case -1867885268: /*subject*/ return this.subject == null ? new Base[0] : new Base[] {this.subject}; // Reference
+        case -892481550: /*status*/ return this.status == null ? new Base[0] : new Base[] {this.status}; // Enumeration<CarePlanStatus>
+        case 951530927: /*context*/ return this.context == null ? new Base[0] : new Base[] {this.context}; // Reference
+        case -991726143: /*period*/ return this.period == null ? new Base[0] : new Base[] {this.period}; // Period
+        case -1406328437: /*author*/ return this.author == null ? new Base[0] : this.author.toArray(new Base[this.author.size()]); // Reference
+        case -615513399: /*modified*/ return this.modified == null ? new Base[0] : new Base[] {this.modified}; // DateTimeType
+        case 50511102: /*category*/ return this.category == null ? new Base[0] : this.category.toArray(new Base[this.category.size()]); // CodeableConcept
+        case -1724546052: /*description*/ return this.description == null ? new Base[0] : new Base[] {this.description}; // StringType
+        case 874544034: /*addresses*/ return this.addresses == null ? new Base[0] : this.addresses.toArray(new Base[this.addresses.size()]); // Reference
+        case -1854767153: /*support*/ return this.support == null ? new Base[0] : this.support.toArray(new Base[this.support.size()]); // Reference
+        case 1112903156: /*relatedPlan*/ return this.relatedPlan == null ? new Base[0] : this.relatedPlan.toArray(new Base[this.relatedPlan.size()]); // CarePlanRelatedPlanComponent
+        case -7323378: /*careTeam*/ return this.careTeam == null ? new Base[0] : this.careTeam.toArray(new Base[this.careTeam.size()]); // Reference
+        case 3178259: /*goal*/ return this.goal == null ? new Base[0] : this.goal.toArray(new Base[this.goal.size()]); // Reference
+        case -1655966961: /*activity*/ return this.activity == null ? new Base[0] : this.activity.toArray(new Base[this.activity.size()]); // CarePlanActivityComponent
+        case 3387378: /*note*/ return this.note == null ? new Base[0] : new Base[] {this.note}; // Annotation
+        default: return super.getProperty(hash, name, checkValid);
+        }
+
+      }
+
+      @Override
+      public void setProperty(int hash, String name, Base value) throws FHIRException {
+        switch (hash) {
+        case -1618432855: // identifier
+          this.getIdentifier().add(castToIdentifier(value)); // Identifier
+          break;
+        case -1867885268: // subject
+          this.subject = castToReference(value); // Reference
+          break;
+        case -892481550: // status
+          this.status = new CarePlanStatusEnumFactory().fromType(value); // Enumeration<CarePlanStatus>
+          break;
+        case 951530927: // context
+          this.context = castToReference(value); // Reference
+          break;
+        case -991726143: // period
+          this.period = castToPeriod(value); // Period
+          break;
+        case -1406328437: // author
+          this.getAuthor().add(castToReference(value)); // Reference
+          break;
+        case -615513399: // modified
+          this.modified = castToDateTime(value); // DateTimeType
+          break;
+        case 50511102: // category
+          this.getCategory().add(castToCodeableConcept(value)); // CodeableConcept
+          break;
+        case -1724546052: // description
+          this.description = castToString(value); // StringType
+          break;
+        case 874544034: // addresses
+          this.getAddresses().add(castToReference(value)); // Reference
+          break;
+        case -1854767153: // support
+          this.getSupport().add(castToReference(value)); // Reference
+          break;
+        case 1112903156: // relatedPlan
+          this.getRelatedPlan().add((CarePlanRelatedPlanComponent) value); // CarePlanRelatedPlanComponent
+          break;
+        case -7323378: // careTeam
+          this.getCareTeam().add(castToReference(value)); // Reference
+          break;
+        case 3178259: // goal
+          this.getGoal().add(castToReference(value)); // Reference
+          break;
+        case -1655966961: // activity
+          this.getActivity().add((CarePlanActivityComponent) value); // CarePlanActivityComponent
+          break;
+        case 3387378: // note
+          this.note = castToAnnotation(value); // Annotation
+          break;
+        default: super.setProperty(hash, name, value);
+        }
+
       }
 
       @Override
@@ -2960,8 +3405,8 @@ public class CarePlan extends DomainResource {
           this.getSupport().add(castToReference(value));
         else if (name.equals("relatedPlan"))
           this.getRelatedPlan().add((CarePlanRelatedPlanComponent) value);
-        else if (name.equals("participant"))
-          this.getParticipant().add((CarePlanParticipantComponent) value);
+        else if (name.equals("careTeam"))
+          this.getCareTeam().add(castToReference(value));
         else if (name.equals("goal"))
           this.getGoal().add(castToReference(value));
         else if (name.equals("activity"))
@@ -2970,6 +3415,30 @@ public class CarePlan extends DomainResource {
           this.note = castToAnnotation(value); // Annotation
         else
           super.setProperty(name, value);
+      }
+
+      @Override
+      public Base makeProperty(int hash, String name) throws FHIRException {
+        switch (hash) {
+        case -1618432855:  return addIdentifier(); // Identifier
+        case -1867885268:  return getSubject(); // Reference
+        case -892481550: throw new FHIRException("Cannot make property status as it is not a complex type"); // Enumeration<CarePlanStatus>
+        case 951530927:  return getContext(); // Reference
+        case -991726143:  return getPeriod(); // Period
+        case -1406328437:  return addAuthor(); // Reference
+        case -615513399: throw new FHIRException("Cannot make property modified as it is not a complex type"); // DateTimeType
+        case 50511102:  return addCategory(); // CodeableConcept
+        case -1724546052: throw new FHIRException("Cannot make property description as it is not a complex type"); // StringType
+        case 874544034:  return addAddresses(); // Reference
+        case -1854767153:  return addSupport(); // Reference
+        case 1112903156:  return addRelatedPlan(); // CarePlanRelatedPlanComponent
+        case -7323378:  return addCareTeam(); // Reference
+        case 3178259:  return addGoal(); // Reference
+        case -1655966961:  return addActivity(); // CarePlanActivityComponent
+        case 3387378:  return getNote(); // Annotation
+        default: return super.makeProperty(hash, name);
+        }
+
       }
 
       @Override
@@ -3013,8 +3482,8 @@ public class CarePlan extends DomainResource {
         else if (name.equals("relatedPlan")) {
           return addRelatedPlan();
         }
-        else if (name.equals("participant")) {
-          return addParticipant();
+        else if (name.equals("careTeam")) {
+          return addCareTeam();
         }
         else if (name.equals("goal")) {
           return addGoal();
@@ -3074,10 +3543,10 @@ public class CarePlan extends DomainResource {
           for (CarePlanRelatedPlanComponent i : relatedPlan)
             dst.relatedPlan.add(i.copy());
         };
-        if (participant != null) {
-          dst.participant = new ArrayList<CarePlanParticipantComponent>();
-          for (CarePlanParticipantComponent i : participant)
-            dst.participant.add(i.copy());
+        if (careTeam != null) {
+          dst.careTeam = new ArrayList<Reference>();
+          for (Reference i : careTeam)
+            dst.careTeam.add(i.copy());
         };
         if (goal != null) {
           dst.goal = new ArrayList<Reference>();
@@ -3108,7 +3577,7 @@ public class CarePlan extends DomainResource {
            && compareDeep(context, o.context, true) && compareDeep(period, o.period, true) && compareDeep(author, o.author, true)
            && compareDeep(modified, o.modified, true) && compareDeep(category, o.category, true) && compareDeep(description, o.description, true)
            && compareDeep(addresses, o.addresses, true) && compareDeep(support, o.support, true) && compareDeep(relatedPlan, o.relatedPlan, true)
-           && compareDeep(participant, o.participant, true) && compareDeep(goal, o.goal, true) && compareDeep(activity, o.activity, true)
+           && compareDeep(careTeam, o.careTeam, true) && compareDeep(goal, o.goal, true) && compareDeep(activity, o.activity, true)
            && compareDeep(note, o.note, true);
       }
 
@@ -3124,13 +3593,9 @@ public class CarePlan extends DomainResource {
       }
 
       public boolean isEmpty() {
-        return super.isEmpty() && (identifier == null || identifier.isEmpty()) && (subject == null || subject.isEmpty())
-           && (status == null || status.isEmpty()) && (context == null || context.isEmpty()) && (period == null || period.isEmpty())
-           && (author == null || author.isEmpty()) && (modified == null || modified.isEmpty()) && (category == null || category.isEmpty())
-           && (description == null || description.isEmpty()) && (addresses == null || addresses.isEmpty())
-           && (support == null || support.isEmpty()) && (relatedPlan == null || relatedPlan.isEmpty())
-           && (participant == null || participant.isEmpty()) && (goal == null || goal.isEmpty()) && (activity == null || activity.isEmpty())
-           && (note == null || note.isEmpty());
+        return super.isEmpty() && ca.uhn.fhir.util.ElementUtil.isEmpty(identifier, subject, status
+          , context, period, author, modified, category, description, addresses, support
+          , relatedPlan, careTeam, goal, activity, note);
       }
 
   @Override
@@ -3186,7 +3651,7 @@ public class CarePlan extends DomainResource {
    * Path: <b>CarePlan.activity.detail.scheduled[x]</b><br>
    * </p>
    */
-  @SearchParamDefinition(name="activitydate", path="CarePlan.activity.detail.scheduled[x]", description="Specified date occurs within period specified by CarePlan.activity.timingSchedule", type="date" )
+  @SearchParamDefinition(name="activitydate", path="CarePlan.activity.detail.scheduled", description="Specified date occurs within period specified by CarePlan.activity.timingSchedule", type="date" )
   public static final String SP_ACTIVITYDATE = "activitydate";
  /**
    * <b>Fluent Client</b> search parameter constant for <b>activitydate</b>
@@ -3206,7 +3671,7 @@ public class CarePlan extends DomainResource {
    * Path: <b>CarePlan.activity.reference</b><br>
    * </p>
    */
-  @SearchParamDefinition(name="activityreference", path="CarePlan.activity.reference", description="Activity details defined in specific resource", type="reference" )
+  @SearchParamDefinition(name="activityreference", path="CarePlan.activity.reference", description="Activity details defined in specific resource", type="reference", target={Appointment.class, CommunicationRequest.class, DeviceUseRequest.class, DiagnosticRequest.class, MedicationOrder.class, NutritionRequest.class, ProcedureRequest.class, ProcessRequest.class, ReferralRequest.class, SupplyRequest.class, VisionPrescription.class } )
   public static final String SP_ACTIVITYREFERENCE = "activityreference";
  /**
    * <b>Fluent Client</b> search parameter constant for <b>activityreference</b>
@@ -3232,7 +3697,7 @@ public class CarePlan extends DomainResource {
    * Path: <b>CarePlan.activity.detail.performer</b><br>
    * </p>
    */
-  @SearchParamDefinition(name="performer", path="CarePlan.activity.detail.performer", description="Matches if the practitioner is listed as a performer in any of the \"simple\" activities.  (For performers of the detailed activities, chain through the activitydetail search parameter.)", type="reference" )
+  @SearchParamDefinition(name="performer", path="CarePlan.activity.detail.performer", description="Matches if the practitioner is listed as a performer in any of the \"simple\" activities.  (For performers of the detailed activities, chain through the activitydetail search parameter.)", type="reference", providesMembershipIn={ @ca.uhn.fhir.model.api.annotation.Compartment(name="Patient"), @ca.uhn.fhir.model.api.annotation.Compartment(name="Practitioner"), @ca.uhn.fhir.model.api.annotation.Compartment(name="RelatedPerson") }, target={Organization.class, Patient.class, Practitioner.class, RelatedPerson.class } )
   public static final String SP_PERFORMER = "performer";
  /**
    * <b>Fluent Client</b> search parameter constant for <b>performer</b>
@@ -3258,7 +3723,7 @@ public class CarePlan extends DomainResource {
    * Path: <b>CarePlan.goal</b><br>
    * </p>
    */
-  @SearchParamDefinition(name="goal", path="CarePlan.goal", description="Desired outcome of plan", type="reference" )
+  @SearchParamDefinition(name="goal", path="CarePlan.goal", description="Desired outcome of plan", type="reference", target={Goal.class } )
   public static final String SP_GOAL = "goal";
  /**
    * <b>Fluent Client</b> search parameter constant for <b>goal</b>
@@ -3284,7 +3749,7 @@ public class CarePlan extends DomainResource {
    * Path: <b>CarePlan.subject</b><br>
    * </p>
    */
-  @SearchParamDefinition(name="subject", path="CarePlan.subject", description="Who care plan is for", type="reference" )
+  @SearchParamDefinition(name="subject", path="CarePlan.subject", description="Who care plan is for", type="reference", target={Group.class, Patient.class } )
   public static final String SP_SUBJECT = "subject";
  /**
    * <b>Fluent Client</b> search parameter constant for <b>subject</b>
@@ -3323,30 +3788,30 @@ public class CarePlan extends DomainResource {
   public static final ca.uhn.fhir.rest.gclient.TokenClientParam RELATEDCODE = new ca.uhn.fhir.rest.gclient.TokenClientParam(SP_RELATEDCODE);
 
  /**
-   * Search parameter: <b>participant</b>
+   * Search parameter: <b>careteam</b>
    * <p>
-   * Description: <b>Who is involved</b><br>
+   * Description: <b>Who's involved in plan?</b><br>
    * Type: <b>reference</b><br>
-   * Path: <b>CarePlan.participant.member</b><br>
+   * Path: <b>CarePlan.careTeam</b><br>
    * </p>
    */
-  @SearchParamDefinition(name="participant", path="CarePlan.participant.member", description="Who is involved", type="reference" )
-  public static final String SP_PARTICIPANT = "participant";
+  @SearchParamDefinition(name="careteam", path="CarePlan.careTeam", description="Who's involved in plan?", type="reference", target={CareTeam.class } )
+  public static final String SP_CARETEAM = "careteam";
  /**
-   * <b>Fluent Client</b> search parameter constant for <b>participant</b>
+   * <b>Fluent Client</b> search parameter constant for <b>careteam</b>
    * <p>
-   * Description: <b>Who is involved</b><br>
+   * Description: <b>Who's involved in plan?</b><br>
    * Type: <b>reference</b><br>
-   * Path: <b>CarePlan.participant.member</b><br>
+   * Path: <b>CarePlan.careTeam</b><br>
    * </p>
    */
-  public static final ca.uhn.fhir.rest.gclient.ReferenceClientParam PARTICIPANT = new ca.uhn.fhir.rest.gclient.ReferenceClientParam(SP_PARTICIPANT);
+  public static final ca.uhn.fhir.rest.gclient.ReferenceClientParam CARETEAM = new ca.uhn.fhir.rest.gclient.ReferenceClientParam(SP_CARETEAM);
 
 /**
    * Constant for fluent queries to be used to add include statements. Specifies
-   * the path value of "<b>CarePlan:participant</b>".
+   * the path value of "<b>CarePlan:careteam</b>".
    */
-  public static final ca.uhn.fhir.model.api.Include INCLUDE_PARTICIPANT = new ca.uhn.fhir.model.api.Include("CarePlan:participant").toLocked();
+  public static final ca.uhn.fhir.model.api.Include INCLUDE_CARETEAM = new ca.uhn.fhir.model.api.Include("CarePlan:careteam").toLocked();
 
  /**
    * Search parameter: <b>relatedplan</b>
@@ -3356,7 +3821,7 @@ public class CarePlan extends DomainResource {
    * Path: <b>CarePlan.relatedPlan.plan</b><br>
    * </p>
    */
-  @SearchParamDefinition(name="relatedplan", path="CarePlan.relatedPlan.plan", description="Plan relationship exists with", type="reference" )
+  @SearchParamDefinition(name="relatedplan", path="CarePlan.relatedPlan.plan", description="Plan relationship exists with", type="reference", target={CarePlan.class } )
   public static final String SP_RELATEDPLAN = "relatedplan";
  /**
    * <b>Fluent Client</b> search parameter constant for <b>relatedplan</b>
@@ -3382,7 +3847,7 @@ public class CarePlan extends DomainResource {
    * Path: <b>CarePlan.addresses</b><br>
    * </p>
    */
-  @SearchParamDefinition(name="condition", path="CarePlan.addresses", description="Health issues this plan addresses", type="reference" )
+  @SearchParamDefinition(name="condition", path="CarePlan.addresses", description="Health issues this plan addresses", type="reference", target={Condition.class } )
   public static final String SP_CONDITION = "condition";
  /**
    * <b>Fluent Client</b> search parameter constant for <b>condition</b>
@@ -3428,7 +3893,7 @@ public class CarePlan extends DomainResource {
    * Path: <b>CarePlan.subject</b><br>
    * </p>
    */
-  @SearchParamDefinition(name="patient", path="CarePlan.subject", description="Who care plan is for", type="reference" )
+  @SearchParamDefinition(name="patient", path="CarePlan.subject", description="Who care plan is for", type="reference", providesMembershipIn={ @ca.uhn.fhir.model.api.annotation.Compartment(name="Patient") }, target={Patient.class } )
   public static final String SP_PATIENT = "patient";
  /**
    * <b>Fluent Client</b> search parameter constant for <b>patient</b>
@@ -3445,6 +3910,26 @@ public class CarePlan extends DomainResource {
    * the path value of "<b>CarePlan:patient</b>".
    */
   public static final ca.uhn.fhir.model.api.Include INCLUDE_PATIENT = new ca.uhn.fhir.model.api.Include("CarePlan:patient").toLocked();
+
+ /**
+   * Search parameter: <b>category</b>
+   * <p>
+   * Description: <b>Type of plan</b><br>
+   * Type: <b>token</b><br>
+   * Path: <b>CarePlan.category</b><br>
+   * </p>
+   */
+  @SearchParamDefinition(name="category", path="CarePlan.category", description="Type of plan", type="token" )
+  public static final String SP_CATEGORY = "category";
+ /**
+   * <b>Fluent Client</b> search parameter constant for <b>category</b>
+   * <p>
+   * Description: <b>Type of plan</b><br>
+   * Type: <b>token</b><br>
+   * Path: <b>CarePlan.category</b><br>
+   * </p>
+   */
+  public static final ca.uhn.fhir.rest.gclient.TokenClientParam CATEGORY = new ca.uhn.fhir.rest.gclient.TokenClientParam(SP_CATEGORY);
 
 
 }

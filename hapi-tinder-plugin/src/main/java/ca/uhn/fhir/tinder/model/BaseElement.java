@@ -32,6 +32,7 @@ public abstract class BaseElement {
 	private boolean mySummary;
 	private List<String> myType;
 	private String myV2Mapping;
+	private String myBindingUrl;
 
 	public void addChild(Child theElem) {
 		if (myChildren == null) {
@@ -191,31 +192,32 @@ public abstract class BaseElement {
 	}
 
 	public void setDeclaringClassNameComplete(String theDeclaringClassNameComplete) {
-		myDeclaringClassNameComplete = theDeclaringClassNameComplete;
+		myDeclaringClassNameComplete = theDeclaringClassNameComplete.trim();
 	}
 
 	public void setDefinition(String theDefinition) {
-		myDefinition = theDefinition;
+		myDefinition = theDefinition != null ? theDefinition.trim() : null;
 	}
 
 	public void setElementName(String theName) {
-		myElementName = theName;
+		myElementName = theName.trim();
 	}
 
 	public void setElementNameAndDeriveParentElementName(String theName) {
-		int lastDot = theName.lastIndexOf('.');
+		String name = theName.trim();
+		int lastDot = name.lastIndexOf('.');
 		if (lastDot == -1) {
-			setElementName(theName);
+			setElementName(name);
 		} else {
-			String elementName = theName.substring(lastDot + 1);
-			String elementParentName = theName.substring(0, lastDot);
+			String elementName = name.substring(lastDot + 1);
+			String elementParentName = name.substring(0, lastDot);
 			setElementName(elementName);
 			myElementParentName = (elementParentName);
 		}
 	}
 
 	public void setExtensionUrl(String theExtensionUrl) {
-		myExtensionUrl = theExtensionUrl;
+		myExtensionUrl = theExtensionUrl.trim();
 	}
 
 	public void setModifier(String theModifier) {
@@ -227,7 +229,7 @@ public abstract class BaseElement {
 	}
 
 	public void setName(String theName) {
-		myName = theName;
+		myName = theName.trim();
 	}
 
 	public void setRequirement(String theString) {
@@ -350,6 +352,18 @@ public abstract class BaseElement {
 			b.append(next);
 		}
 		return b.toString().trim();
+	}
+
+	public void setBindingUrl(String theBindingUrl) {
+		myBindingUrl = theBindingUrl;
+	}
+
+	public boolean isHasBindingUrl() {
+		return isNotBlank(myBindingUrl);
+	}
+
+	public String getBindingUrl() {
+		return myBindingUrl;
 	}
 
 }

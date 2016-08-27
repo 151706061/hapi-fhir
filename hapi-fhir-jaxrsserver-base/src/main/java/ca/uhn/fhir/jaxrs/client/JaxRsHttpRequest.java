@@ -2,7 +2,7 @@ package ca.uhn.fhir.jaxrs.client;
 
 /*
  * #%L
- * HAPI FHIR - Core Library
+ * HAPI FHIR JAX-RS Server
  * %%
  * Copyright (C) 2014 - 2016 University Health Network
  * %%
@@ -101,6 +101,16 @@ public class JaxRsHttpRequest implements IHttpRequest {
 	public String getRequestBodyFromStream() {
 		// not supported
 		return null;
+	}
+
+	@Override
+	public String getUri() {
+		return ""; // TODO: can we get this from somewhere?
+	}
+
+	@Override
+	public String getHttpVerbName() {
+		return myRequestType.name();
 	}
 
 }

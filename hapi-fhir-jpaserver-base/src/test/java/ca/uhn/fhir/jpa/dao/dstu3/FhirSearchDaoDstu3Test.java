@@ -8,6 +8,7 @@ import java.util.List;
 
 import org.hl7.fhir.dstu3.model.Organization;
 import org.hl7.fhir.dstu3.model.Patient;
+import org.junit.AfterClass;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -18,9 +19,16 @@ import ca.uhn.fhir.rest.param.StringOrListParam;
 import ca.uhn.fhir.rest.param.StringParam;
 import ca.uhn.fhir.rest.server.Constants;
 import ca.uhn.fhir.rest.server.servlet.ServletRequestDetails;
+import ca.uhn.fhir.util.TestUtil;
 
 public class FhirSearchDaoDstu3Test extends BaseJpaDstu3Test {
-	
+
+	@AfterClass
+	public static void afterClassClearContext() {
+		TestUtil.clearAllStaticFieldsForUnitTest();
+	}
+
+
 	@Autowired
 	private IFulltextSearchSvc mySearchDao;
 	
@@ -33,7 +41,7 @@ public class FhirSearchDaoDstu3Test extends BaseJpaDstu3Test {
 			patient.addName().addGiven("testSearchStringParamWithNonNormalized_h\u00F6ra");
 			patient.addName().addFamily("AAAS");
 			patient.addName().addFamily("CCC");
-			id1 = myPatientDao.create(patient, new ServletRequestDetails()).getId().toUnqualifiedVersionless().getIdPartAsLong();
+			id1 = myPatientDao.create(patient, mySrd).getId().toUnqualifiedVersionless().getIdPartAsLong();
 		}
 		Long id2;
 		{
@@ -42,13 +50,13 @@ public class FhirSearchDaoDstu3Test extends BaseJpaDstu3Test {
 			patient.addName().addGiven("testSearchStringParamWithNonNormalized_HORA");
 			patient.addName().addFamily("AAAB");
 			patient.addName().addFamily("CCC");
-			id2 = myPatientDao.create(patient, new ServletRequestDetails()).getId().toUnqualifiedVersionless().getIdPartAsLong();
+			id2 = myPatientDao.create(patient, mySrd).getId().toUnqualifiedVersionless().getIdPartAsLong();
 		}
 		Long id3;
 		{
 			Organization org = new Organization();
 			org.setName("DDD");
-			id3 = myOrganizationDao.create(org, new ServletRequestDetails()).getId().toUnqualifiedVersionless().getIdPartAsLong();
+			id3 = myOrganizationDao.create(org, mySrd).getId().toUnqualifiedVersionless().getIdPartAsLong();
 		}
 
 		SearchParameterMap map = new SearchParameterMap();
@@ -110,13 +118,18 @@ public class FhirSearchDaoDstu3Test extends BaseJpaDstu3Test {
 		{
 			Patient patient = new Patient();
 			patient.getText().setDivAsString("<div>AAAS<p>FOO</p> CCC    </div>");
-			id1 = myPatientDao.create(patient, new ServletRequestDetails()).getId().toUnqualifiedVersionless().getIdPartAsLong();
+			id1 = myPatientDao.create(patient, mySrd).getId().toUnqualifiedVersionless().getIdPartAsLong();
 		}
 		Long id2;
 		{
 			Patient patient = new Patient();
 			patient.getText().setDivAsString("<div>AAAB<p>FOO</p> CCC    </div>");
-			id2 = myPatientDao.create(patient, new ServletRequestDetails()).getId().toUnqualifiedVersionless().getIdPartAsLong();
+			id2 = myPatientDao.create(patient, mySrd).getId().toUnqualifiedVersionless().getIdPartAsLong();
+		}
+		{
+			Patient patient = new Patient();
+			patient.getText().setDivAsString("<div>ZZYZXY</div>");
+			myPatientDao.create(patient, mySrd).getId().toUnqualifiedVersionless().getIdPartAsLong();
 		}
 
 		SearchParameterMap map = new SearchParameterMap();

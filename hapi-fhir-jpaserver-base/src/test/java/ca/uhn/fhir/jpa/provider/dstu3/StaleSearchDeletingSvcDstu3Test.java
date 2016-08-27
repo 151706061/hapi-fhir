@@ -11,11 +11,14 @@ import org.apache.commons.lang3.time.DateUtils;
 import org.hl7.fhir.dstu3.model.Bundle;
 import org.hl7.fhir.dstu3.model.Bundle.BundleLinkComponent;
 import org.hl7.fhir.dstu3.model.Patient;
+import org.junit.AfterClass;
 import org.junit.Test;
 
+import ca.uhn.fhir.rest.gclient.IClientExecutable;
 import ca.uhn.fhir.rest.gclient.IQuery;
 import ca.uhn.fhir.rest.server.exceptions.ResourceGoneException;
 import ca.uhn.fhir.rest.server.servlet.ServletRequestDetails;
+import ca.uhn.fhir.util.TestUtil;
 
 public class StaleSearchDeletingSvcDstu3Test extends BaseResourceProviderDstu3Test {
 
@@ -28,17 +31,24 @@ public class StaleSearchDeletingSvcDstu3Test extends BaseResourceProviderDstu3Te
 		myDaoConfig.setExpireSearchResultsAfterMillis(DateUtils.MILLIS_PER_HOUR);
 	}
 
+	@AfterClass
+	public static void afterClassClearContext() {
+		TestUtil.clearAllStaticFieldsForUnitTest();
+	}
+
+
+
 	@Test
 	public void testEverythingInstanceWithContentFilter() throws Exception {
 
 		for (int i = 0; i < 20; i++) {
 			Patient pt1 = new Patient();
 			pt1.addName().addFamily("Everything").addGiven("Arthur");
-			myPatientDao.create(pt1, new ServletRequestDetails()).getId().toUnqualifiedVersionless();
+			myPatientDao.create(pt1, mySrd).getId().toUnqualifiedVersionless();
 		}
 
 		//@formatter:off
-		IQuery<Bundle> search = ourClient
+		IClientExecutable<IQuery<Bundle>, Bundle> search = ourClient
 			.search()
 			.forResource(Patient.class)
 			.where(Patient.NAME.matches().value("Everything"))

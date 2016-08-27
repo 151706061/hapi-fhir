@@ -10,6 +10,7 @@ import static org.mockito.Mockito.verify;
 import org.hl7.fhir.dstu3.model.IdType;
 import org.hl7.fhir.dstu3.model.Patient;
 import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
@@ -19,11 +20,19 @@ import ca.uhn.fhir.jpa.interceptor.IJpaServerInterceptor;
 import ca.uhn.fhir.jpa.interceptor.JpaServerInterceptorAdapter;
 import ca.uhn.fhir.rest.server.interceptor.IServerInterceptor.ActionRequestDetails;
 import ca.uhn.fhir.rest.server.servlet.ServletRequestDetails;
+import ca.uhn.fhir.util.TestUtil;
 
 public class FhirResourceDaoDstu3InterceptorTest extends BaseJpaDstu3Test {
 
 	private IJpaServerInterceptor myJpaInterceptor;
 	private JpaServerInterceptorAdapter myJpaInterceptorAdapter = new JpaServerInterceptorAdapter();
+
+
+	@AfterClass
+	public static void afterClassClearContext() {
+		TestUtil.clearAllStaticFieldsForUnitTest();
+	}
+
 
 	@After
 	public void after() {
@@ -49,7 +58,7 @@ public class FhirResourceDaoDstu3InterceptorTest extends BaseJpaDstu3Test {
 	public void testJpaCreate() {
 		Patient p = new Patient();
 		p.addName().addFamily("PATIENT");
-		Long id = myPatientDao.create(p, new ServletRequestDetails()).getId().getIdPartAsLong();
+		Long id = myPatientDao.create(p, mySrd).getId().getIdPartAsLong();
 		
 		ArgumentCaptor<ActionRequestDetails> detailsCapt;
 		ArgumentCaptor<ResourceTable> tableCapt;
@@ -69,7 +78,7 @@ public class FhirResourceDaoDstu3InterceptorTest extends BaseJpaDstu3Test {
 		 */
 		p = new Patient();
 		p.addName().addFamily("PATIENT1");
-		Long id2 = myPatientDao.create(p, "Patient?family=PATIENT", new ServletRequestDetails()).getId().getIdPartAsLong();
+		Long id2 = myPatientDao.create(p, "Patient?family=PATIENT", mySrd).getId().getIdPartAsLong();
 		assertEquals(id, id2);
 
 		detailsCapt = ArgumentCaptor.forClass(ActionRequestDetails.class);
@@ -83,9 +92,9 @@ public class FhirResourceDaoDstu3InterceptorTest extends BaseJpaDstu3Test {
 	public void testJpaDelete() {
 		Patient p = new Patient();
 		p.addName().addFamily("PATIENT");
-		Long id = myPatientDao.create(p, new ServletRequestDetails()).getId().getIdPartAsLong();
+		Long id = myPatientDao.create(p, mySrd).getId().getIdPartAsLong();
 
-		myPatientDao.delete(new IdType("Patient", id), new ServletRequestDetails());
+		myPatientDao.delete(new IdType("Patient", id), mySrd);
 		
 		ArgumentCaptor<ActionRequestDetails> detailsCapt;
 		ArgumentCaptor<ResourceTable> tableCapt;
@@ -103,12 +112,12 @@ public class FhirResourceDaoDstu3InterceptorTest extends BaseJpaDstu3Test {
 	public void testJpaUpdate() {
 		Patient p = new Patient();
 		p.addName().addFamily("PATIENT");
-		Long id = myPatientDao.create(p, new ServletRequestDetails()).getId().getIdPartAsLong();
+		Long id = myPatientDao.create(p, mySrd).getId().getIdPartAsLong();
 
 		p = new Patient();
 		p.setId(new IdType(id));
 		p.addName().addFamily("PATIENT1");
-		Long id2 = myPatientDao.update(p, new ServletRequestDetails()).getId().getIdPartAsLong();
+		Long id2 = myPatientDao.update(p, mySrd).getId().getIdPartAsLong();
 		assertEquals(id, id2);
 
 		ArgumentCaptor<ActionRequestDetails> detailsCapt;
@@ -127,7 +136,7 @@ public class FhirResourceDaoDstu3InterceptorTest extends BaseJpaDstu3Test {
 		p = new Patient();
 		p.setId(new IdType(id));
 		p.addName().addFamily("PATIENT2");
-		id2 = myPatientDao.update(p, "Patient?family=PATIENT1", new ServletRequestDetails()).getId().getIdPartAsLong();
+		id2 = myPatientDao.update(p, "Patient?family=PATIENT1", mySrd).getId().getIdPartAsLong();
 		assertEquals(id, id2);
 
 		detailsCapt = ArgumentCaptor.forClass(ActionRequestDetails.class);
@@ -142,7 +151,7 @@ public class FhirResourceDaoDstu3InterceptorTest extends BaseJpaDstu3Test {
 
 		p = new Patient();
 		p.addName().addFamily("PATIENT3");
-		id2 = myPatientDao.update(p, "Patient?family=ZZZ", new ServletRequestDetails()).getId().getIdPartAsLong();
+		id2 = myPatientDao.update(p, "Patient?family=ZZZ", mySrd).getId().getIdPartAsLong();
 		assertNotEquals(id, id2);
 
 		detailsCapt = ArgumentCaptor.forClass(ActionRequestDetails.class);

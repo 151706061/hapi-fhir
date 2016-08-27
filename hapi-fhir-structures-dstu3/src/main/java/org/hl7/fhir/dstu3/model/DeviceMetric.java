@@ -29,7 +29,7 @@ package org.hl7.fhir.dstu3.model;
   
 */
 
-// Generated on Sat, Jan 30, 2016 09:18-0500 for FHIR v1.3.0
+// Generated on Thu, Aug 25, 2016 23:04-0400 for FHIR v1.6.0
 
 import java.util.*;
 
@@ -37,11 +37,11 @@ import org.hl7.fhir.utilities.Utilities;
 import ca.uhn.fhir.model.api.annotation.ResourceDef;
 import ca.uhn.fhir.model.api.annotation.SearchParamDefinition;
 import ca.uhn.fhir.model.api.annotation.Child;
+import ca.uhn.fhir.model.api.annotation.ChildOrder;
 import ca.uhn.fhir.model.api.annotation.Description;
 import ca.uhn.fhir.model.api.annotation.Block;
-
-import org.hl7.fhir.dstu3.exceptions.FHIRException;
 import org.hl7.fhir.instance.model.api.*;
+import org.hl7.fhir.dstu3.exceptions.FHIRException;
 /**
  * Describes a measurement, calculation or setting capability of a medical device.
  */
@@ -62,7 +62,7 @@ public class DeviceMetric extends DomainResource {
          */
         STANDBY, 
         /**
-         * added to help the parsers
+         * added to help the parsers with the generic types
          */
         NULL;
         public static DeviceMetricOperationalStatus fromCode(String codeString) throws FHIRException {
@@ -74,7 +74,10 @@ public class DeviceMetric extends DomainResource {
           return OFF;
         if ("standby".equals(codeString))
           return STANDBY;
-        throw new FHIRException("Unknown DeviceMetricOperationalStatus code '"+codeString+"'");
+        if (Configuration.isAcceptInvalidEnums())
+          return null;
+        else
+          throw new FHIRException("Unknown DeviceMetricOperationalStatus code '"+codeString+"'");
         }
         public String toCode() {
           switch (this) {
@@ -185,7 +188,7 @@ public class DeviceMetric extends DomainResource {
          */
         WHITE, 
         /**
-         * added to help the parsers
+         * added to help the parsers with the generic types
          */
         NULL;
         public static DeviceMetricColor fromCode(String codeString) throws FHIRException {
@@ -207,7 +210,10 @@ public class DeviceMetric extends DomainResource {
           return CYAN;
         if ("white".equals(codeString))
           return WHITE;
-        throw new FHIRException("Unknown DeviceMetricColor code '"+codeString+"'");
+        if (Configuration.isAcceptInvalidEnums())
+          return null;
+        else
+          throw new FHIRException("Unknown DeviceMetricColor code '"+codeString+"'");
         }
         public String toCode() {
           switch (this) {
@@ -352,7 +358,7 @@ public class DeviceMetric extends DomainResource {
          */
         UNSPECIFIED, 
         /**
-         * added to help the parsers
+         * added to help the parsers with the generic types
          */
         NULL;
         public static DeviceMetricCategory fromCode(String codeString) throws FHIRException {
@@ -366,7 +372,10 @@ public class DeviceMetric extends DomainResource {
           return CALCULATION;
         if ("unspecified".equals(codeString))
           return UNSPECIFIED;
-        throw new FHIRException("Unknown DeviceMetricCategory code '"+codeString+"'");
+        if (Configuration.isAcceptInvalidEnums())
+          return null;
+        else
+          throw new FHIRException("Unknown DeviceMetricCategory code '"+codeString+"'");
         }
         public String toCode() {
           switch (this) {
@@ -471,7 +480,7 @@ public class DeviceMetric extends DomainResource {
          */
         TWOPOINT, 
         /**
-         * added to help the parsers
+         * added to help the parsers with the generic types
          */
         NULL;
         public static DeviceMetricCalibrationType fromCode(String codeString) throws FHIRException {
@@ -485,7 +494,10 @@ public class DeviceMetric extends DomainResource {
           return GAIN;
         if ("two-point".equals(codeString))
           return TWOPOINT;
-        throw new FHIRException("Unknown DeviceMetricCalibrationType code '"+codeString+"'");
+        if (Configuration.isAcceptInvalidEnums())
+          return null;
+        else
+          throw new FHIRException("Unknown DeviceMetricCalibrationType code '"+codeString+"'");
         }
         public String toCode() {
           switch (this) {
@@ -590,7 +602,7 @@ public class DeviceMetric extends DomainResource {
          */
         UNSPECIFIED, 
         /**
-         * added to help the parsers
+         * added to help the parsers with the generic types
          */
         NULL;
         public static DeviceMetricCalibrationState fromCode(String codeString) throws FHIRException {
@@ -604,7 +616,10 @@ public class DeviceMetric extends DomainResource {
           return CALIBRATED;
         if ("unspecified".equals(codeString))
           return UNSPECIFIED;
-        throw new FHIRException("Unknown DeviceMetricCalibrationState code '"+codeString+"'");
+        if (Configuration.isAcceptInvalidEnums())
+          return null;
+        else
+          throw new FHIRException("Unknown DeviceMetricCalibrationState code '"+codeString+"'");
         }
         public String toCode() {
           switch (this) {
@@ -698,6 +713,7 @@ public class DeviceMetric extends DomainResource {
          */
         @Child(name = "type", type = {CodeType.class}, order=1, min=0, max=1, modifier=false, summary=true)
         @Description(shortDefinition="unspecified | offset | gain | two-point", formalDefinition="Describes the type of the calibration method." )
+        @ca.uhn.fhir.model.api.annotation.Binding(valueSet="http://hl7.org/fhir/ValueSet/metric-calibration-type")
         protected Enumeration<DeviceMetricCalibrationType> type;
 
         /**
@@ -705,6 +721,7 @@ public class DeviceMetric extends DomainResource {
          */
         @Child(name = "state", type = {CodeType.class}, order=2, min=0, max=1, modifier=false, summary=true)
         @Description(shortDefinition="not-calibrated | calibration-required | calibrated | unspecified", formalDefinition="Describes the state of the calibration." )
+        @ca.uhn.fhir.model.api.annotation.Binding(valueSet="http://hl7.org/fhir/ValueSet/metric-calibration-state")
         protected Enumeration<DeviceMetricCalibrationState> state;
 
         /**
@@ -878,6 +895,34 @@ public class DeviceMetric extends DomainResource {
         }
 
       @Override
+      public Base[] getProperty(int hash, String name, boolean checkValid) throws FHIRException {
+        switch (hash) {
+        case 3575610: /*type*/ return this.type == null ? new Base[0] : new Base[] {this.type}; // Enumeration<DeviceMetricCalibrationType>
+        case 109757585: /*state*/ return this.state == null ? new Base[0] : new Base[] {this.state}; // Enumeration<DeviceMetricCalibrationState>
+        case 3560141: /*time*/ return this.time == null ? new Base[0] : new Base[] {this.time}; // InstantType
+        default: return super.getProperty(hash, name, checkValid);
+        }
+
+      }
+
+      @Override
+      public void setProperty(int hash, String name, Base value) throws FHIRException {
+        switch (hash) {
+        case 3575610: // type
+          this.type = new DeviceMetricCalibrationTypeEnumFactory().fromType(value); // Enumeration<DeviceMetricCalibrationType>
+          break;
+        case 109757585: // state
+          this.state = new DeviceMetricCalibrationStateEnumFactory().fromType(value); // Enumeration<DeviceMetricCalibrationState>
+          break;
+        case 3560141: // time
+          this.time = castToInstant(value); // InstantType
+          break;
+        default: super.setProperty(hash, name, value);
+        }
+
+      }
+
+      @Override
       public void setProperty(String name, Base value) throws FHIRException {
         if (name.equals("type"))
           this.type = new DeviceMetricCalibrationTypeEnumFactory().fromType(value); // Enumeration<DeviceMetricCalibrationType>
@@ -887,6 +932,17 @@ public class DeviceMetric extends DomainResource {
           this.time = castToInstant(value); // InstantType
         else
           super.setProperty(name, value);
+      }
+
+      @Override
+      public Base makeProperty(int hash, String name) throws FHIRException {
+        switch (hash) {
+        case 3575610: throw new FHIRException("Cannot make property type as it is not a complex type"); // Enumeration<DeviceMetricCalibrationType>
+        case 109757585: throw new FHIRException("Cannot make property state as it is not a complex type"); // Enumeration<DeviceMetricCalibrationState>
+        case 3560141: throw new FHIRException("Cannot make property time as it is not a complex type"); // InstantType
+        default: return super.makeProperty(hash, name);
+        }
+
       }
 
       @Override
@@ -936,8 +992,7 @@ public class DeviceMetric extends DomainResource {
       }
 
       public boolean isEmpty() {
-        return super.isEmpty() && (type == null || type.isEmpty()) && (state == null || state.isEmpty())
-           && (time == null || time.isEmpty());
+        return super.isEmpty() && ca.uhn.fhir.util.ElementUtil.isEmpty(type, state, time);
       }
 
   public String fhirType() {
@@ -997,6 +1052,7 @@ public class DeviceMetric extends DomainResource {
      */
     @Child(name = "operationalStatus", type = {CodeType.class}, order=5, min=0, max=1, modifier=false, summary=true)
     @Description(shortDefinition="on | off | standby", formalDefinition="Indicates current operational state of the device. For example: On, Off, Standby, etc." )
+    @ca.uhn.fhir.model.api.annotation.Binding(valueSet="http://hl7.org/fhir/ValueSet/metric-operational-status")
     protected Enumeration<DeviceMetricOperationalStatus> operationalStatus;
 
     /**
@@ -1004,6 +1060,7 @@ public class DeviceMetric extends DomainResource {
      */
     @Child(name = "color", type = {CodeType.class}, order=6, min=0, max=1, modifier=false, summary=true)
     @Description(shortDefinition="black | red | green | yellow | blue | magenta | cyan | white", formalDefinition="Describes the color representation for the metric. This is often used to aid clinicians to track and identify parameter types by color. In practice, consider a Patient Monitor that has ECG/HR and Pleth for example; the parameters are displayed in different characteristic colors, such as HR-blue, BP-green, and PR and SpO2- magenta." )
+    @ca.uhn.fhir.model.api.annotation.Binding(valueSet="http://hl7.org/fhir/ValueSet/metric-color")
     protected Enumeration<DeviceMetricColor> color;
 
     /**
@@ -1011,6 +1068,7 @@ public class DeviceMetric extends DomainResource {
      */
     @Child(name = "category", type = {CodeType.class}, order=7, min=1, max=1, modifier=false, summary=true)
     @Description(shortDefinition="measurement | setting | calculation | unspecified", formalDefinition="Indicates the category of the observation generation process. A DeviceMetric can be for example a setting, measurement, or calculation." )
+    @ca.uhn.fhir.model.api.annotation.Binding(valueSet="http://hl7.org/fhir/ValueSet/metric-category")
     protected Enumeration<DeviceMetricCategory> category;
 
     /**
@@ -1382,6 +1440,14 @@ public class DeviceMetric extends DomainResource {
       return this.calibration;
     }
 
+    /**
+     * @return Returns a reference to <code>this</code> for easy method chaining
+     */
+    public DeviceMetric setCalibration(List<DeviceMetricCalibrationComponent> theCalibration) { 
+      this.calibration = theCalibration;
+      return this;
+    }
+
     public boolean hasCalibration() { 
       if (this.calibration == null)
         return false;
@@ -1391,10 +1457,6 @@ public class DeviceMetric extends DomainResource {
       return false;
     }
 
-    /**
-     * @return {@link #calibration} (Describes the calibrations that have been performed or that are required to be performed.)
-     */
-    // syntactic sugar
     public DeviceMetricCalibrationComponent addCalibration() { //3
       DeviceMetricCalibrationComponent t = new DeviceMetricCalibrationComponent();
       if (this.calibration == null)
@@ -1403,7 +1465,6 @@ public class DeviceMetric extends DomainResource {
       return t;
     }
 
-    // syntactic sugar
     public DeviceMetric addCalibration(DeviceMetricCalibrationComponent t) { //3
       if (t == null)
         return this;
@@ -1411,6 +1472,16 @@ public class DeviceMetric extends DomainResource {
         this.calibration = new ArrayList<DeviceMetricCalibrationComponent>();
       this.calibration.add(t);
       return this;
+    }
+
+    /**
+     * @return The first repetition of repeating field {@link #calibration}, creating it if it does not already exist
+     */
+    public DeviceMetricCalibrationComponent getCalibrationFirstRep() { 
+      if (getCalibration().isEmpty()) {
+        addCalibration();
+      }
+      return getCalibration().get(0);
     }
 
       protected void listChildren(List<Property> childrenList) {
@@ -1425,6 +1496,62 @@ public class DeviceMetric extends DomainResource {
         childrenList.add(new Property("category", "code", "Indicates the category of the observation generation process. A DeviceMetric can be for example a setting, measurement, or calculation.", 0, java.lang.Integer.MAX_VALUE, category));
         childrenList.add(new Property("measurementPeriod", "Timing", "Describes the measurement repetition time. This is not necessarily the same as the update period. The measurement repetition time can range from milliseconds up to hours. An example for a measurement repetition time in the range of milliseconds is the sampling rate of an ECG. An example for a measurement repetition time in the range of hours is a NIBP that is triggered automatically every hour. The update period may be different than the measurement repetition time, if the device does not update the published observed value with the same frequency as it was measured.", 0, java.lang.Integer.MAX_VALUE, measurementPeriod));
         childrenList.add(new Property("calibration", "", "Describes the calibrations that have been performed or that are required to be performed.", 0, java.lang.Integer.MAX_VALUE, calibration));
+      }
+
+      @Override
+      public Base[] getProperty(int hash, String name, boolean checkValid) throws FHIRException {
+        switch (hash) {
+        case 3575610: /*type*/ return this.type == null ? new Base[0] : new Base[] {this.type}; // CodeableConcept
+        case -1618432855: /*identifier*/ return this.identifier == null ? new Base[0] : new Base[] {this.identifier}; // Identifier
+        case 3594628: /*unit*/ return this.unit == null ? new Base[0] : new Base[] {this.unit}; // CodeableConcept
+        case -896505829: /*source*/ return this.source == null ? new Base[0] : new Base[] {this.source}; // Reference
+        case -995424086: /*parent*/ return this.parent == null ? new Base[0] : new Base[] {this.parent}; // Reference
+        case -2103166364: /*operationalStatus*/ return this.operationalStatus == null ? new Base[0] : new Base[] {this.operationalStatus}; // Enumeration<DeviceMetricOperationalStatus>
+        case 94842723: /*color*/ return this.color == null ? new Base[0] : new Base[] {this.color}; // Enumeration<DeviceMetricColor>
+        case 50511102: /*category*/ return this.category == null ? new Base[0] : new Base[] {this.category}; // Enumeration<DeviceMetricCategory>
+        case -1300332387: /*measurementPeriod*/ return this.measurementPeriod == null ? new Base[0] : new Base[] {this.measurementPeriod}; // Timing
+        case 1421318634: /*calibration*/ return this.calibration == null ? new Base[0] : this.calibration.toArray(new Base[this.calibration.size()]); // DeviceMetricCalibrationComponent
+        default: return super.getProperty(hash, name, checkValid);
+        }
+
+      }
+
+      @Override
+      public void setProperty(int hash, String name, Base value) throws FHIRException {
+        switch (hash) {
+        case 3575610: // type
+          this.type = castToCodeableConcept(value); // CodeableConcept
+          break;
+        case -1618432855: // identifier
+          this.identifier = castToIdentifier(value); // Identifier
+          break;
+        case 3594628: // unit
+          this.unit = castToCodeableConcept(value); // CodeableConcept
+          break;
+        case -896505829: // source
+          this.source = castToReference(value); // Reference
+          break;
+        case -995424086: // parent
+          this.parent = castToReference(value); // Reference
+          break;
+        case -2103166364: // operationalStatus
+          this.operationalStatus = new DeviceMetricOperationalStatusEnumFactory().fromType(value); // Enumeration<DeviceMetricOperationalStatus>
+          break;
+        case 94842723: // color
+          this.color = new DeviceMetricColorEnumFactory().fromType(value); // Enumeration<DeviceMetricColor>
+          break;
+        case 50511102: // category
+          this.category = new DeviceMetricCategoryEnumFactory().fromType(value); // Enumeration<DeviceMetricCategory>
+          break;
+        case -1300332387: // measurementPeriod
+          this.measurementPeriod = castToTiming(value); // Timing
+          break;
+        case 1421318634: // calibration
+          this.getCalibration().add((DeviceMetricCalibrationComponent) value); // DeviceMetricCalibrationComponent
+          break;
+        default: super.setProperty(hash, name, value);
+        }
+
       }
 
       @Override
@@ -1451,6 +1578,24 @@ public class DeviceMetric extends DomainResource {
           this.getCalibration().add((DeviceMetricCalibrationComponent) value);
         else
           super.setProperty(name, value);
+      }
+
+      @Override
+      public Base makeProperty(int hash, String name) throws FHIRException {
+        switch (hash) {
+        case 3575610:  return getType(); // CodeableConcept
+        case -1618432855:  return getIdentifier(); // Identifier
+        case 3594628:  return getUnit(); // CodeableConcept
+        case -896505829:  return getSource(); // Reference
+        case -995424086:  return getParent(); // Reference
+        case -2103166364: throw new FHIRException("Cannot make property operationalStatus as it is not a complex type"); // Enumeration<DeviceMetricOperationalStatus>
+        case 94842723: throw new FHIRException("Cannot make property color as it is not a complex type"); // Enumeration<DeviceMetricColor>
+        case 50511102: throw new FHIRException("Cannot make property category as it is not a complex type"); // Enumeration<DeviceMetricCategory>
+        case -1300332387:  return getMeasurementPeriod(); // Timing
+        case 1421318634:  return addCalibration(); // DeviceMetricCalibrationComponent
+        default: return super.makeProperty(hash, name);
+        }
+
       }
 
       @Override
@@ -1549,11 +1694,8 @@ public class DeviceMetric extends DomainResource {
       }
 
       public boolean isEmpty() {
-        return super.isEmpty() && (type == null || type.isEmpty()) && (identifier == null || identifier.isEmpty())
-           && (unit == null || unit.isEmpty()) && (source == null || source.isEmpty()) && (parent == null || parent.isEmpty())
-           && (operationalStatus == null || operationalStatus.isEmpty()) && (color == null || color.isEmpty())
-           && (category == null || category.isEmpty()) && (measurementPeriod == null || measurementPeriod.isEmpty())
-           && (calibration == null || calibration.isEmpty());
+        return super.isEmpty() && ca.uhn.fhir.util.ElementUtil.isEmpty(type, identifier, unit, source
+          , parent, operationalStatus, color, category, measurementPeriod, calibration);
       }
 
   @Override
@@ -1569,7 +1711,7 @@ public class DeviceMetric extends DomainResource {
    * Path: <b>DeviceMetric.parent</b><br>
    * </p>
    */
-  @SearchParamDefinition(name="parent", path="DeviceMetric.parent", description="The parent DeviceMetric resource", type="reference" )
+  @SearchParamDefinition(name="parent", path="DeviceMetric.parent", description="The parent DeviceMetric resource", type="reference", target={DeviceComponent.class } )
   public static final String SP_PARENT = "parent";
  /**
    * <b>Fluent Client</b> search parameter constant for <b>parent</b>
@@ -1615,7 +1757,7 @@ public class DeviceMetric extends DomainResource {
    * Path: <b>DeviceMetric.source</b><br>
    * </p>
    */
-  @SearchParamDefinition(name="source", path="DeviceMetric.source", description="The device resource", type="reference" )
+  @SearchParamDefinition(name="source", path="DeviceMetric.source", description="The device resource", type="reference", providesMembershipIn={ @ca.uhn.fhir.model.api.annotation.Compartment(name="Device") }, target={Device.class } )
   public static final String SP_SOURCE = "source";
  /**
    * <b>Fluent Client</b> search parameter constant for <b>source</b>

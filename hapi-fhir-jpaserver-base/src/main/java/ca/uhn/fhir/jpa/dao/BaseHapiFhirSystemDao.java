@@ -1,5 +1,7 @@
 package ca.uhn.fhir.jpa.dao;
 
+import static org.apache.commons.lang3.StringUtils.isBlank;
+
 /*
  * #%L
  * HAPI FHIR JPA Server
@@ -42,6 +44,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.TransactionCallback;
 import org.springframework.transaction.support.TransactionTemplate;
 
+import ca.uhn.fhir.jpa.dao.data.IForcedIdDao;
+import ca.uhn.fhir.jpa.dao.data.ITermConceptDao;
+import ca.uhn.fhir.jpa.entity.ForcedId;
 import ca.uhn.fhir.jpa.entity.ResourceTable;
 import ca.uhn.fhir.jpa.util.ReindexFailureException;
 import ca.uhn.fhir.jpa.util.StopWatch;
@@ -61,19 +66,30 @@ public abstract class BaseHapiFhirSystemDao<T, MT> extends BaseHapiFhirDao<IBase
 	@Autowired
 	private PlatformTransactionManager myTxManager;
 
+	@Autowired
+	private IForcedIdDao myForcedIdDao;
+
+	@Autowired
+	private ITermConceptDao myTermConceptDao;
+
 	@Transactional(propagation = Propagation.REQUIRED)
 	@Override
 	public void deleteAllTagsOnServer(RequestDetails theRequestDetails) {
 		// Notify interceptors
-		ActionRequestDetails requestDetails = new ActionRequestDetails(null, null, getContext(), theRequestDetails);
+		ActionRequestDetails requestDetails = new ActionRequestDetails(theRequestDetails);
 		notifyInterceptors(RestOperationTypeEnum.DELETE_TAGS, requestDetails);
 
 		myEntityManager.createQuery("DELETE from ResourceTag t").executeUpdate();
 	}
 
-	private int doPerformReindexingPass(final Integer theCount, final RequestDetails theRequestDetails) {
+	private int doPerformReindexingPass(final Integer theCount) {
 		TransactionTemplate txTemplate = new TransactionTemplate(myTxManager);
 		txTemplate.setPropagationBehavior(TransactionTemplate.PROPAGATION_REQUIRED);
+		int retVal = doPerformReindexingPassForResources(theCount, txTemplate);
+		return retVal;
+	}
+
+	private int doPerformReindexingPassForResources(final Integer theCount, TransactionTemplate txTemplate) {
 		return txTemplate.execute(new TransactionCallback<Integer>() {
 			@SuppressWarnings("unchecked")
 			@Override
@@ -98,12 +114,24 @@ public abstract class BaseHapiFhirSystemDao<T, MT> extends BaseHapiFhirDao<IBase
 
 				for (ResourceTable resourceTable : resources) {
 					try {
+						/*
+						 * This part is because from HAPI 1.5 - 1.6 we changed the format of forced ID to be "type/id" instead of just "id"
+						 */
+						ForcedId forcedId = resourceTable.getForcedId();
+						if (forcedId != null) {
+							if (isBlank(forcedId.getResourceType())) {
+								ourLog.info("Updating resource {} forcedId type to {}", forcedId.getForcedId(), resourceTable.getResourceType());
+								forcedId.setResourceType(resourceTable.getResourceType());
+								myForcedIdDao.save(forcedId);
+							}
+						}
+
 						final IBaseResource resource = toResource(resourceTable, false);
 
 						@SuppressWarnings("rawtypes")
 						final IFhirResourceDao dao = getDao(resource.getClass());
 
-						dao.reindex(resource, resourceTable, theRequestDetails);
+						dao.reindex(resource, resourceTable);
 					} catch (Exception e) {
 						ourLog.error("Failed to index resource {}: {}", new Object[] { resourceTable.getIdDt(), e.toString(), e });
 						throw new ReindexFailureException(resourceTable.getId());
@@ -123,7 +151,7 @@ public abstract class BaseHapiFhirSystemDao<T, MT> extends BaseHapiFhirDao<IBase
 	@Override
 	public TagList getAllTags(RequestDetails theRequestDetails) {
 		// Notify interceptors
-		ActionRequestDetails requestDetails = new ActionRequestDetails(null, null, getContext(), theRequestDetails);
+		ActionRequestDetails requestDetails = new ActionRequestDetails(theRequestDetails);
 		notifyInterceptors(RestOperationTypeEnum.GET_TAGS, requestDetails);
 
 		StopWatch w = new StopWatch();
@@ -156,13 +184,13 @@ public abstract class BaseHapiFhirSystemDao<T, MT> extends BaseHapiFhirDao<IBase
 	}
 
 	@Override
-	public IBundleProvider history(Date theSince, RequestDetails theRequestDetails) {
+	public IBundleProvider history(Date theSince, Date theUntil, RequestDetails theRequestDetails) {
 		// Notify interceptors
-		ActionRequestDetails requestDetails = new ActionRequestDetails(null, null, getContext(), theRequestDetails);
+		ActionRequestDetails requestDetails = new ActionRequestDetails(theRequestDetails);
 		notifyInterceptors(RestOperationTypeEnum.HISTORY_SYSTEM, requestDetails);
 
 		StopWatch w = new StopWatch();
-		IBundleProvider retVal = super.history(null, null, theSince);
+		IBundleProvider retVal = super.history(null, null, theSince, theUntil);
 		ourLog.info("Processed global history in {}ms", w.getMillisAndRestart());
 		return retVal;
 	}
@@ -174,7 +202,9 @@ public abstract class BaseHapiFhirSystemDao<T, MT> extends BaseHapiFhirDao<IBase
 	@Transactional()
 	@Override
 	public int markAllResourcesForReindexing() {
-		return myEntityManager.createQuery("UPDATE " + ResourceTable.class.getSimpleName() + " t SET t.myIndexStatus = null").executeUpdate();
+		int retVal = myEntityManager.createQuery("UPDATE " + ResourceTable.class.getSimpleName() + " t SET t.myIndexStatus = null").executeUpdate();
+		retVal += myTermConceptDao.markAllForReindexing();
+		return retVal;
 	}
 
 	private void markResourceAsIndexingFailed(final long theId) {
@@ -188,6 +218,47 @@ public abstract class BaseHapiFhirSystemDao<T, MT> extends BaseHapiFhirDao<IBase
 				q.setParameter("status", INDEX_STATUS_INDEXING_FAILED);
 				q.setParameter("id", theId);
 				q.executeUpdate();
+				
+				q = myEntityManager.createQuery("DELETE FROM ResourceTag t WHERE t.myResourceId = :id");
+				q.setParameter("id", theId);
+				q.executeUpdate();
+
+				q = myEntityManager.createQuery("DELETE FROM ResourceIndexedSearchParamCoords t WHERE t.myResourcePid = :id");
+				q.setParameter("id", theId);
+				q.executeUpdate();
+
+				q = myEntityManager.createQuery("DELETE FROM ResourceIndexedSearchParamDate t WHERE t.myResourcePid = :id");
+				q.setParameter("id", theId);
+				q.executeUpdate();
+
+				q = myEntityManager.createQuery("DELETE FROM ResourceIndexedSearchParamNumber t WHERE t.myResourcePid = :id");
+				q.setParameter("id", theId);
+				q.executeUpdate();
+
+				q = myEntityManager.createQuery("DELETE FROM ResourceIndexedSearchParamQuantity t WHERE t.myResourcePid = :id");
+				q.setParameter("id", theId);
+				q.executeUpdate();
+
+				q = myEntityManager.createQuery("DELETE FROM ResourceIndexedSearchParamString t WHERE t.myResourcePid = :id");
+				q.setParameter("id", theId);
+				q.executeUpdate();
+
+				q = myEntityManager.createQuery("DELETE FROM ResourceIndexedSearchParamToken t WHERE t.myResourcePid = :id");
+				q.setParameter("id", theId);
+				q.executeUpdate();
+
+				q = myEntityManager.createQuery("DELETE FROM ResourceIndexedSearchParamUri t WHERE t.myResourcePid = :id");
+				q.setParameter("id", theId);
+				q.executeUpdate();
+
+				q = myEntityManager.createQuery("DELETE FROM ResourceLink t WHERE t.mySourceResourcePid = :id");
+				q.setParameter("id", theId);
+				q.executeUpdate();
+
+				q = myEntityManager.createQuery("DELETE FROM ResourceLink t WHERE t.myTargetResourcePid = :id");
+				q.setParameter("id", theId);
+				q.executeUpdate();
+
 				return null;
 			}
 		});
@@ -195,9 +266,9 @@ public abstract class BaseHapiFhirSystemDao<T, MT> extends BaseHapiFhirDao<IBase
 
 	@Override
 	@Transactional(propagation = Propagation.NOT_SUPPORTED)
-	public int performReindexingPass(final Integer theCount, RequestDetails theRequestDetails) {
+	public int performReindexingPass(final Integer theCount) {
 		try {
-			return doPerformReindexingPass(theCount, theRequestDetails);
+			return doPerformReindexingPass(theCount);
 		} catch (ReindexFailureException e) {
 			ourLog.warn("Reindexing failed for resource {}", e.getResourceId());
 			markResourceAsIndexingFailed(e.getResourceId());
@@ -212,7 +283,7 @@ public abstract class BaseHapiFhirSystemDao<T, MT> extends BaseHapiFhirDao<IBase
 	protected ResourceTable tryToLoadEntity(IdDt nextId) {
 		ResourceTable entity;
 		try {
-			Long pid = translateForcedIdToPid(nextId);
+			Long pid = translateForcedIdToPid(nextId.getResourceType(), nextId.getIdPart());
 			entity = myEntityManager.find(ResourceTable.class, pid);
 		} catch (ResourceNotFoundException e) {
 			entity = null;

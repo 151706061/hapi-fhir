@@ -29,7 +29,40 @@ import java.lang.reflect.WildcardType;
 import java.util.LinkedHashSet;
 import java.util.List;
 
+import ca.uhn.fhir.context.ConfigurationException;
+import javassist.Modifier;
+
 public class ReflectionUtil {
+
+	private static final org.slf4j.Logger ourLog = org.slf4j.LoggerFactory.getLogger(ReflectionUtil.class);
+
+	public static LinkedHashSet<Method> getDeclaredMethods(Class<?> theClazz) {
+		LinkedHashSet<Method> retVal = new LinkedHashSet<Method>();
+		for (Method next : theClazz.getDeclaredMethods()) {
+			try {
+				Method method = theClazz.getMethod(next.getName(), next.getParameterTypes());
+				retVal.add(method);
+			} catch (NoSuchMethodException e) {
+				retVal.add(next);
+			} catch (SecurityException e) {
+				retVal.add(next);
+			}
+		}
+		return retVal;
+	}
+
+	public static Class<?> getGenericCollectionTypeOfField(Field next) {
+		Class<?> type;
+		ParameterizedType collectionType = (ParameterizedType) next.getGenericType();
+		Type firstArg = collectionType.getActualTypeArguments()[0];
+		if (ParameterizedType.class.isAssignableFrom(firstArg.getClass())) {
+			ParameterizedType pt = ((ParameterizedType) firstArg);
+			type = (Class<?>) pt.getRawType();
+		} else {
+			type = (Class<?>) firstArg;
+		}
+		return type;
+	}
 
 	/**
 	 * For a field of type List<Enumeration<Foo>>, returns Foo
@@ -46,19 +79,6 @@ public class ReflectionUtil {
 			ParameterizedType pt = ((ParameterizedType) firstArg);
 			Type pt2 = pt.getActualTypeArguments()[0];
 			return (Class<?>) pt2;
-		} else {
-			type = (Class<?>) firstArg;
-		}
-		return type;
-	}
-
-	public static Class<?> getGenericCollectionTypeOfField(Field next) {
-		Class<?> type;
-		ParameterizedType collectionType = (ParameterizedType) next.getGenericType();
-		Type firstArg = collectionType.getActualTypeArguments()[0];
-		if (ParameterizedType.class.isAssignableFrom(firstArg.getClass())) {
-			ParameterizedType pt = ((ParameterizedType) firstArg);
-			type = (Class<?>) pt.getRawType();
 		} else {
 			type = (Class<?>) firstArg;
 		}
@@ -106,19 +126,36 @@ public class ReflectionUtil {
 		return type;
 	}
 
-	public static LinkedHashSet<Method> getDeclaredMethods(Class<?> theClazz) {
-		LinkedHashSet<Method> retVal = new LinkedHashSet<Method>();
-		for (Method next : theClazz.getDeclaredMethods()) {
-			try {
-				Method method = theClazz.getMethod(next.getName(), next.getParameterTypes());
-				retVal.add(method);
-			} catch (NoSuchMethodException e) {
-				retVal.add(next);
-			} catch (SecurityException e) {
-				retVal.add(next);
-			}
+	/**
+	 * Instantiate a class by no-arg constructor, throw {@link ConfigurationException} if we fail to do so
+	 */
+	@CoverageIgnore
+	public static <T> T newInstance(Class<T> theType) {
+		try {
+			return theType.newInstance();
+		} catch (Exception e) {
+			throw new ConfigurationException("Failed to instantiate " + theType.getName(), e);
 		}
-		return retVal;
+	}
+
+	@SuppressWarnings("unchecked")
+	public static <T> T newInstanceOrReturnNull(String theClassName, Class<T> theType) {
+		try {
+			Class<?> clazz = Class.forName(theClassName);
+			if (!theType.isAssignableFrom(clazz)) {
+				throw new ConfigurationException(theClassName + " is not assignable to " + theType);
+			}
+			return (T) clazz.newInstance();
+		} catch (ConfigurationException e) {
+			throw e;
+		} catch (Exception e) {
+			ourLog.info("Failed to instantiate {}: {}", theClassName, e.toString());
+			return null;
+		}
+	}
+
+	public static boolean isInstantiable(Class<?> theType) {
+		return !theType.isInterface() && !Modifier.isAbstract(theType.getModifiers());
 	}
 
 }

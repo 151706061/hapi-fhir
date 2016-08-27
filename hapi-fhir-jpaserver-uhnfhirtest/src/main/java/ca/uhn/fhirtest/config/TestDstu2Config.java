@@ -23,16 +23,20 @@ import ca.uhn.fhir.jpa.config.BaseJavaConfigDstu2;
 import ca.uhn.fhir.jpa.dao.DaoConfig;
 import ca.uhn.fhir.jpa.util.SubscriptionsRequireManualActivationInterceptorDstu2;
 import ca.uhn.fhir.rest.server.interceptor.IServerInterceptor;
+import ca.uhn.fhirtest.interceptor.PublicSecurityInterceptor;
 
 @Configuration
 @Import(CommonConfig.class)
 @EnableTransactionManagement()
 public class TestDstu2Config extends BaseJavaConfigDstu2 {
 
-	@Value("${fhir.db.location.dstu2}")
+	public static final String FHIR_LUCENE_LOCATION_DSTU2 = "${fhir.lucene.location.dstu2}";
+	public static final String FHIR_DB_LOCATION_DSTU2 = "${fhir.db.location.dstu2}";
+
+	@Value(FHIR_DB_LOCATION_DSTU2)
 	private String myFhirDbLocation;
 
-	@Value("${fhir.lucene.location.dstu2}")
+	@Value(FHIR_LUCENE_LOCATION_DSTU2)
 	private String myFhirLuceneLocation;
 
 	/**
@@ -43,6 +47,11 @@ public class TestDstu2Config extends BaseJavaConfigDstu2 {
 		return new PropertySourcesPlaceholderConfigurer();
 	}
 
+	@Bean 
+	public IServerInterceptor securityInterceptor() {
+		return new PublicSecurityInterceptor();
+	}
+
 	@Bean()
 	public DaoConfig daoConfig() {
 		DaoConfig retVal = new DaoConfig();
@@ -51,6 +60,9 @@ public class TestDstu2Config extends BaseJavaConfigDstu2 {
 		retVal.setSubscriptionPurgeInactiveAfterMillis(DateUtils.MILLIS_PER_HOUR);
 		retVal.setAllowMultipleDelete(true);
 		retVal.setAllowInlineMatchUrlReferences(true);
+		retVal.setAllowExternalReferences(true);
+		retVal.getTreatBaseUrlsAsLocal().add("http://fhirtest.uhn.ca/baseDstu2");
+		retVal.getTreatBaseUrlsAsLocal().add("https://fhirtest.uhn.ca/baseDstu2");
 		return retVal;
 	}
 

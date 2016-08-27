@@ -29,7 +29,7 @@ package org.hl7.fhir.dstu3.model;
   
 */
 
-// Generated on Sat, Jan 30, 2016 09:18-0500 for FHIR v1.3.0
+// Generated on Thu, Aug 25, 2016 23:04-0400 for FHIR v1.6.0
 
 import java.util.*;
 
@@ -37,11 +37,11 @@ import org.hl7.fhir.utilities.Utilities;
 import ca.uhn.fhir.model.api.annotation.ResourceDef;
 import ca.uhn.fhir.model.api.annotation.SearchParamDefinition;
 import ca.uhn.fhir.model.api.annotation.Child;
+import ca.uhn.fhir.model.api.annotation.ChildOrder;
 import ca.uhn.fhir.model.api.annotation.Description;
 import ca.uhn.fhir.model.api.annotation.Block;
-
-import org.hl7.fhir.dstu3.exceptions.FHIRException;
 import org.hl7.fhir.instance.model.api.*;
+import org.hl7.fhir.dstu3.exceptions.FHIRException;
 /**
  * A booking of a healthcare event among patient(s), practitioner(s), related person(s) and/or device(s) for a specific date/time. This may result in one or more Encounter(s).
  */
@@ -78,7 +78,11 @@ public class Appointment extends DomainResource {
          */
         NOSHOW, 
         /**
-         * added to help the parsers
+         * This instance should not have been part of this patient's medical record.
+         */
+        ENTEREDINERROR, 
+        /**
+         * added to help the parsers with the generic types
          */
         NULL;
         public static AppointmentStatus fromCode(String codeString) throws FHIRException {
@@ -98,7 +102,12 @@ public class Appointment extends DomainResource {
           return CANCELLED;
         if ("noshow".equals(codeString))
           return NOSHOW;
-        throw new FHIRException("Unknown AppointmentStatus code '"+codeString+"'");
+        if ("entered-in-error".equals(codeString))
+          return ENTEREDINERROR;
+        if (Configuration.isAcceptInvalidEnums())
+          return null;
+        else
+          throw new FHIRException("Unknown AppointmentStatus code '"+codeString+"'");
         }
         public String toCode() {
           switch (this) {
@@ -109,6 +118,7 @@ public class Appointment extends DomainResource {
             case FULFILLED: return "fulfilled";
             case CANCELLED: return "cancelled";
             case NOSHOW: return "noshow";
+            case ENTEREDINERROR: return "entered-in-error";
             default: return "?";
           }
         }
@@ -121,6 +131,7 @@ public class Appointment extends DomainResource {
             case FULFILLED: return "http://hl7.org/fhir/appointmentstatus";
             case CANCELLED: return "http://hl7.org/fhir/appointmentstatus";
             case NOSHOW: return "http://hl7.org/fhir/appointmentstatus";
+            case ENTEREDINERROR: return "http://hl7.org/fhir/appointmentstatus";
             default: return "?";
           }
         }
@@ -133,6 +144,7 @@ public class Appointment extends DomainResource {
             case FULFILLED: return "This appointment has completed and may have resulted in an encounter.";
             case CANCELLED: return "The appointment has been cancelled.";
             case NOSHOW: return "Some or all of the participant(s) have not/did not appear for the appointment (usually the patient).";
+            case ENTEREDINERROR: return "This instance should not have been part of this patient's medical record.";
             default: return "?";
           }
         }
@@ -145,6 +157,7 @@ public class Appointment extends DomainResource {
             case FULFILLED: return "Fulfilled";
             case CANCELLED: return "Cancelled";
             case NOSHOW: return "No Show";
+            case ENTEREDINERROR: return "Entered in error";
             default: return "?";
           }
         }
@@ -169,6 +182,8 @@ public class Appointment extends DomainResource {
           return AppointmentStatus.CANCELLED;
         if ("noshow".equals(codeString))
           return AppointmentStatus.NOSHOW;
+        if ("entered-in-error".equals(codeString))
+          return AppointmentStatus.ENTEREDINERROR;
         throw new IllegalArgumentException("Unknown AppointmentStatus code '"+codeString+"'");
         }
         public Enumeration<AppointmentStatus> fromType(Base code) throws FHIRException {
@@ -191,6 +206,8 @@ public class Appointment extends DomainResource {
           return new Enumeration<AppointmentStatus>(this, AppointmentStatus.CANCELLED);
         if ("noshow".equals(codeString))
           return new Enumeration<AppointmentStatus>(this, AppointmentStatus.NOSHOW);
+        if ("entered-in-error".equals(codeString))
+          return new Enumeration<AppointmentStatus>(this, AppointmentStatus.ENTEREDINERROR);
         throw new FHIRException("Unknown AppointmentStatus code '"+codeString+"'");
         }
     public String toCode(AppointmentStatus code) {
@@ -208,6 +225,8 @@ public class Appointment extends DomainResource {
         return "cancelled";
       if (code == AppointmentStatus.NOSHOW)
         return "noshow";
+      if (code == AppointmentStatus.ENTEREDINERROR)
+        return "entered-in-error";
       return "?";
       }
     public String toSystem(AppointmentStatus code) {
@@ -229,7 +248,7 @@ public class Appointment extends DomainResource {
          */
         INFORMATIONONLY, 
         /**
-         * added to help the parsers
+         * added to help the parsers with the generic types
          */
         NULL;
         public static ParticipantRequired fromCode(String codeString) throws FHIRException {
@@ -241,7 +260,10 @@ public class Appointment extends DomainResource {
           return OPTIONAL;
         if ("information-only".equals(codeString))
           return INFORMATIONONLY;
-        throw new FHIRException("Unknown ParticipantRequired code '"+codeString+"'");
+        if (Configuration.isAcceptInvalidEnums())
+          return null;
+        else
+          throw new FHIRException("Unknown ParticipantRequired code '"+codeString+"'");
         }
         public String toCode() {
           switch (this) {
@@ -336,7 +358,7 @@ public class Appointment extends DomainResource {
          */
         NEEDSACTION, 
         /**
-         * added to help the parsers
+         * added to help the parsers with the generic types
          */
         NULL;
         public static ParticipationStatus fromCode(String codeString) throws FHIRException {
@@ -350,7 +372,10 @@ public class Appointment extends DomainResource {
           return TENTATIVE;
         if ("needs-action".equals(codeString))
           return NEEDSACTION;
-        throw new FHIRException("Unknown ParticipationStatus code '"+codeString+"'");
+        if (Configuration.isAcceptInvalidEnums())
+          return null;
+        else
+          throw new FHIRException("Unknown ParticipationStatus code '"+codeString+"'");
         }
         public String toCode() {
           switch (this) {
@@ -444,6 +469,7 @@ public class Appointment extends DomainResource {
          */
         @Child(name = "type", type = {CodeableConcept.class}, order=1, min=0, max=Child.MAX_UNLIMITED, modifier=false, summary=true)
         @Description(shortDefinition="Role of participant in the appointment", formalDefinition="Role of participant in the appointment." )
+        @ca.uhn.fhir.model.api.annotation.Binding(valueSet="http://hl7.org/fhir/ValueSet/encounter-participant-type")
         protected List<CodeableConcept> type;
 
         /**
@@ -463,6 +489,7 @@ public class Appointment extends DomainResource {
          */
         @Child(name = "required", type = {CodeType.class}, order=3, min=0, max=1, modifier=false, summary=true)
         @Description(shortDefinition="required | optional | information-only", formalDefinition="Is this participant required to be present at the meeting. This covers a use-case where 2 doctors need to meet to discuss the results for a specific patient, and the patient is not required to be present." )
+        @ca.uhn.fhir.model.api.annotation.Binding(valueSet="http://hl7.org/fhir/ValueSet/participantrequired")
         protected Enumeration<ParticipantRequired> required;
 
         /**
@@ -470,6 +497,7 @@ public class Appointment extends DomainResource {
          */
         @Child(name = "status", type = {CodeType.class}, order=4, min=1, max=1, modifier=false, summary=false)
         @Description(shortDefinition="accepted | declined | tentative | needs-action", formalDefinition="Participation status of the Patient." )
+        @ca.uhn.fhir.model.api.annotation.Binding(valueSet="http://hl7.org/fhir/ValueSet/participationstatus")
         protected Enumeration<ParticipationStatus> status;
 
         private static final long serialVersionUID = -1620552507L;
@@ -498,6 +526,14 @@ public class Appointment extends DomainResource {
           return this.type;
         }
 
+        /**
+         * @return Returns a reference to <code>this</code> for easy method chaining
+         */
+        public AppointmentParticipantComponent setType(List<CodeableConcept> theType) { 
+          this.type = theType;
+          return this;
+        }
+
         public boolean hasType() { 
           if (this.type == null)
             return false;
@@ -507,10 +543,6 @@ public class Appointment extends DomainResource {
           return false;
         }
 
-        /**
-         * @return {@link #type} (Role of participant in the appointment.)
-         */
-    // syntactic sugar
         public CodeableConcept addType() { //3
           CodeableConcept t = new CodeableConcept();
           if (this.type == null)
@@ -519,7 +551,6 @@ public class Appointment extends DomainResource {
           return t;
         }
 
-    // syntactic sugar
         public AppointmentParticipantComponent addType(CodeableConcept t) { //3
           if (t == null)
             return this;
@@ -527,6 +558,16 @@ public class Appointment extends DomainResource {
             this.type = new ArrayList<CodeableConcept>();
           this.type.add(t);
           return this;
+        }
+
+        /**
+         * @return The first repetition of repeating field {@link #type}, creating it if it does not already exist
+         */
+        public CodeableConcept getTypeFirstRep() { 
+          if (getType().isEmpty()) {
+            addType();
+          }
+          return getType().get(0);
         }
 
         /**
@@ -671,6 +712,38 @@ public class Appointment extends DomainResource {
         }
 
       @Override
+      public Base[] getProperty(int hash, String name, boolean checkValid) throws FHIRException {
+        switch (hash) {
+        case 3575610: /*type*/ return this.type == null ? new Base[0] : this.type.toArray(new Base[this.type.size()]); // CodeableConcept
+        case 92645877: /*actor*/ return this.actor == null ? new Base[0] : new Base[] {this.actor}; // Reference
+        case -393139297: /*required*/ return this.required == null ? new Base[0] : new Base[] {this.required}; // Enumeration<ParticipantRequired>
+        case -892481550: /*status*/ return this.status == null ? new Base[0] : new Base[] {this.status}; // Enumeration<ParticipationStatus>
+        default: return super.getProperty(hash, name, checkValid);
+        }
+
+      }
+
+      @Override
+      public void setProperty(int hash, String name, Base value) throws FHIRException {
+        switch (hash) {
+        case 3575610: // type
+          this.getType().add(castToCodeableConcept(value)); // CodeableConcept
+          break;
+        case 92645877: // actor
+          this.actor = castToReference(value); // Reference
+          break;
+        case -393139297: // required
+          this.required = new ParticipantRequiredEnumFactory().fromType(value); // Enumeration<ParticipantRequired>
+          break;
+        case -892481550: // status
+          this.status = new ParticipationStatusEnumFactory().fromType(value); // Enumeration<ParticipationStatus>
+          break;
+        default: super.setProperty(hash, name, value);
+        }
+
+      }
+
+      @Override
       public void setProperty(String name, Base value) throws FHIRException {
         if (name.equals("type"))
           this.getType().add(castToCodeableConcept(value));
@@ -682,6 +755,18 @@ public class Appointment extends DomainResource {
           this.status = new ParticipationStatusEnumFactory().fromType(value); // Enumeration<ParticipationStatus>
         else
           super.setProperty(name, value);
+      }
+
+      @Override
+      public Base makeProperty(int hash, String name) throws FHIRException {
+        switch (hash) {
+        case 3575610:  return addType(); // CodeableConcept
+        case 92645877:  return getActor(); // Reference
+        case -393139297: throw new FHIRException("Cannot make property required as it is not a complex type"); // Enumeration<ParticipantRequired>
+        case -892481550: throw new FHIRException("Cannot make property status as it is not a complex type"); // Enumeration<ParticipationStatus>
+        default: return super.makeProperty(hash, name);
+        }
+
       }
 
       @Override
@@ -739,8 +824,8 @@ public class Appointment extends DomainResource {
       }
 
       public boolean isEmpty() {
-        return super.isEmpty() && (type == null || type.isEmpty()) && (actor == null || actor.isEmpty())
-           && (required == null || required.isEmpty()) && (status == null || status.isEmpty());
+        return super.isEmpty() && ca.uhn.fhir.util.ElementUtil.isEmpty(type, actor, required, status
+          );
       }
 
   public String fhirType() {
@@ -761,62 +846,89 @@ public class Appointment extends DomainResource {
      * The overall status of the Appointment. Each of the participants has their own participation status which indicates their involvement in the process, however this status indicates the shared status.
      */
     @Child(name = "status", type = {CodeType.class}, order=1, min=1, max=1, modifier=true, summary=true)
-    @Description(shortDefinition="proposed | pending | booked | arrived | fulfilled | cancelled | noshow", formalDefinition="The overall status of the Appointment. Each of the participants has their own participation status which indicates their involvement in the process, however this status indicates the shared status." )
+    @Description(shortDefinition="proposed | pending | booked | arrived | fulfilled | cancelled | noshow | entered-in-error", formalDefinition="The overall status of the Appointment. Each of the participants has their own participation status which indicates their involvement in the process, however this status indicates the shared status." )
+    @ca.uhn.fhir.model.api.annotation.Binding(valueSet="http://hl7.org/fhir/ValueSet/appointmentstatus")
     protected Enumeration<AppointmentStatus> status;
 
     /**
-     * The type of appointment that is being booked (This may also be associated with participants for location, and/or a HealthcareService).
+     * A broad categorisation of the service that is to be performed during this appointment.
      */
-    @Child(name = "type", type = {CodeableConcept.class}, order=2, min=0, max=1, modifier=false, summary=true)
-    @Description(shortDefinition="The type of appointment that is being booked", formalDefinition="The type of appointment that is being booked (This may also be associated with participants for location, and/or a HealthcareService)." )
-    protected CodeableConcept type;
+    @Child(name = "serviceCategory", type = {CodeableConcept.class}, order=2, min=0, max=1, modifier=false, summary=true)
+    @Description(shortDefinition="A broad categorisation of the service that is to be performed during this appointment", formalDefinition="A broad categorisation of the service that is to be performed during this appointment." )
+    @ca.uhn.fhir.model.api.annotation.Binding(valueSet="http://hl7.org/fhir/ValueSet/service-category")
+    protected CodeableConcept serviceCategory;
+
+    /**
+     * The specific service that is to be performed during this appointment.
+     */
+    @Child(name = "serviceType", type = {CodeableConcept.class}, order=3, min=0, max=Child.MAX_UNLIMITED, modifier=false, summary=true)
+    @Description(shortDefinition="The specific service that is to be performed during this appointment", formalDefinition="The specific service that is to be performed during this appointment." )
+    @ca.uhn.fhir.model.api.annotation.Binding(valueSet="http://hl7.org/fhir/ValueSet/service-type")
+    protected List<CodeableConcept> serviceType;
+
+    /**
+     * The specialty of a practitioner that would be required to perform the service requested in this appointment.
+     */
+    @Child(name = "specialty", type = {CodeableConcept.class}, order=4, min=0, max=Child.MAX_UNLIMITED, modifier=false, summary=true)
+    @Description(shortDefinition="The specialty of a practitioner that would be required to perform the service requested in this appointment", formalDefinition="The specialty of a practitioner that would be required to perform the service requested in this appointment." )
+    @ca.uhn.fhir.model.api.annotation.Binding(valueSet="http://hl7.org/fhir/ValueSet/c80-practice-codes")
+    protected List<CodeableConcept> specialty;
+
+    /**
+     * The style of appointment or patient that has been booked in the slot (not service type).
+     */
+    @Child(name = "appointmentType", type = {CodeableConcept.class}, order=5, min=0, max=1, modifier=false, summary=true)
+    @Description(shortDefinition="The style of appointment or patient that has been booked in the slot (not service type)", formalDefinition="The style of appointment or patient that has been booked in the slot (not service type)." )
+    @ca.uhn.fhir.model.api.annotation.Binding(valueSet="http://hl7.org/fhir/ValueSet/v2-0276")
+    protected CodeableConcept appointmentType;
 
     /**
      * The reason that this appointment is being scheduled. This is more clinical than administrative.
      */
-    @Child(name = "reason", type = {CodeableConcept.class}, order=3, min=0, max=1, modifier=false, summary=true)
+    @Child(name = "reason", type = {CodeableConcept.class}, order=6, min=0, max=1, modifier=false, summary=true)
     @Description(shortDefinition="Reason this appointment is scheduled", formalDefinition="The reason that this appointment is being scheduled. This is more clinical than administrative." )
+    @ca.uhn.fhir.model.api.annotation.Binding(valueSet="http://hl7.org/fhir/ValueSet/encounter-reason")
     protected CodeableConcept reason;
 
     /**
      * The priority of the appointment. Can be used to make informed decisions if needing to re-prioritize appointments. (The iCal Standard specifies 0 as undefined, 1 as highest, 9 as lowest priority).
      */
-    @Child(name = "priority", type = {UnsignedIntType.class}, order=4, min=0, max=1, modifier=false, summary=false)
+    @Child(name = "priority", type = {UnsignedIntType.class}, order=7, min=0, max=1, modifier=false, summary=false)
     @Description(shortDefinition="Used to make informed decisions if needing to re-prioritize", formalDefinition="The priority of the appointment. Can be used to make informed decisions if needing to re-prioritize appointments. (The iCal Standard specifies 0 as undefined, 1 as highest, 9 as lowest priority)." )
     protected UnsignedIntType priority;
 
     /**
      * The brief description of the appointment as would be shown on a subject line in a meeting request, or appointment list. Detailed or expanded information should be put in the comment field.
      */
-    @Child(name = "description", type = {StringType.class}, order=5, min=0, max=1, modifier=false, summary=false)
+    @Child(name = "description", type = {StringType.class}, order=8, min=0, max=1, modifier=false, summary=false)
     @Description(shortDefinition="Shown on a subject line in a meeting request, or appointment list", formalDefinition="The brief description of the appointment as would be shown on a subject line in a meeting request, or appointment list. Detailed or expanded information should be put in the comment field." )
     protected StringType description;
 
     /**
      * Date/Time that the appointment is to take place.
      */
-    @Child(name = "start", type = {InstantType.class}, order=6, min=0, max=1, modifier=false, summary=true)
+    @Child(name = "start", type = {InstantType.class}, order=9, min=0, max=1, modifier=false, summary=true)
     @Description(shortDefinition="When appointment is to take place", formalDefinition="Date/Time that the appointment is to take place." )
     protected InstantType start;
 
     /**
      * Date/Time that the appointment is to conclude.
      */
-    @Child(name = "end", type = {InstantType.class}, order=7, min=0, max=1, modifier=false, summary=true)
+    @Child(name = "end", type = {InstantType.class}, order=10, min=0, max=1, modifier=false, summary=true)
     @Description(shortDefinition="When appointment is to conclude", formalDefinition="Date/Time that the appointment is to conclude." )
     protected InstantType end;
 
     /**
      * Number of minutes that the appointment is to take. This can be less than the duration between the start and end times (where actual time of appointment is only an estimate or is a planned appointment request).
      */
-    @Child(name = "minutesDuration", type = {PositiveIntType.class}, order=8, min=0, max=1, modifier=false, summary=false)
+    @Child(name = "minutesDuration", type = {PositiveIntType.class}, order=11, min=0, max=1, modifier=false, summary=false)
     @Description(shortDefinition="Can be less than start/end (e.g. estimate)", formalDefinition="Number of minutes that the appointment is to take. This can be less than the duration between the start and end times (where actual time of appointment is only an estimate or is a planned appointment request)." )
     protected PositiveIntType minutesDuration;
 
     /**
      * The slot that this appointment is filling. If provided then the schedule will not be provided as slots are not recursive, and the start/end values MUST be the same as from the slot.
      */
-    @Child(name = "slot", type = {Slot.class}, order=9, min=0, max=Child.MAX_UNLIMITED, modifier=false, summary=false)
+    @Child(name = "slot", type = {Slot.class}, order=12, min=0, max=Child.MAX_UNLIMITED, modifier=false, summary=false)
     @Description(shortDefinition="If provided, then no schedule and start/end values MUST match slot", formalDefinition="The slot that this appointment is filling. If provided then the schedule will not be provided as slots are not recursive, and the start/end values MUST be the same as from the slot." )
     protected List<Reference> slot;
     /**
@@ -826,20 +938,27 @@ public class Appointment extends DomainResource {
 
 
     /**
+     * The date that this appointment was initially created. This could be different to the meta.lastModified value on the initial entry, as this could have been before the resource was created on the FHIR server, and should remain unchanged over the lifespan of the appointment.
+     */
+    @Child(name = "created", type = {DateTimeType.class}, order=13, min=0, max=1, modifier=false, summary=false)
+    @Description(shortDefinition="The date that this appointment was initially created", formalDefinition="The date that this appointment was initially created. This could be different to the meta.lastModified value on the initial entry, as this could have been before the resource was created on the FHIR server, and should remain unchanged over the lifespan of the appointment." )
+    protected DateTimeType created;
+
+    /**
      * Additional comments about the appointment.
      */
-    @Child(name = "comment", type = {StringType.class}, order=10, min=0, max=1, modifier=false, summary=false)
+    @Child(name = "comment", type = {StringType.class}, order=14, min=0, max=1, modifier=false, summary=false)
     @Description(shortDefinition="Additional comments", formalDefinition="Additional comments about the appointment." )
     protected StringType comment;
 
     /**
      * List of participants involved in the appointment.
      */
-    @Child(name = "participant", type = {}, order=11, min=1, max=Child.MAX_UNLIMITED, modifier=false, summary=false)
+    @Child(name = "participant", type = {}, order=15, min=1, max=Child.MAX_UNLIMITED, modifier=false, summary=false)
     @Description(shortDefinition="Participants involved in appointment", formalDefinition="List of participants involved in the appointment." )
     protected List<AppointmentParticipantComponent> participant;
 
-    private static final long serialVersionUID = -1403944125L;
+    private static final long serialVersionUID = 552749730L;
 
   /**
    * Constructor
@@ -865,6 +984,14 @@ public class Appointment extends DomainResource {
       return this.identifier;
     }
 
+    /**
+     * @return Returns a reference to <code>this</code> for easy method chaining
+     */
+    public Appointment setIdentifier(List<Identifier> theIdentifier) { 
+      this.identifier = theIdentifier;
+      return this;
+    }
+
     public boolean hasIdentifier() { 
       if (this.identifier == null)
         return false;
@@ -874,10 +1001,6 @@ public class Appointment extends DomainResource {
       return false;
     }
 
-    /**
-     * @return {@link #identifier} (This records identifiers associated with this appointment concern that are defined by business processes and/or used to refer to it when a direct URL reference to the resource itself is not appropriate (e.g. in CDA documents, or in written / printed documentation).)
-     */
-    // syntactic sugar
     public Identifier addIdentifier() { //3
       Identifier t = new Identifier();
       if (this.identifier == null)
@@ -886,7 +1009,6 @@ public class Appointment extends DomainResource {
       return t;
     }
 
-    // syntactic sugar
     public Appointment addIdentifier(Identifier t) { //3
       if (t == null)
         return this;
@@ -894,6 +1016,16 @@ public class Appointment extends DomainResource {
         this.identifier = new ArrayList<Identifier>();
       this.identifier.add(t);
       return this;
+    }
+
+    /**
+     * @return The first repetition of repeating field {@link #identifier}, creating it if it does not already exist
+     */
+    public Identifier getIdentifierFirstRep() { 
+      if (getIdentifier().isEmpty()) {
+        addIdentifier();
+      }
+      return getIdentifier().get(0);
     }
 
     /**
@@ -942,26 +1074,156 @@ public class Appointment extends DomainResource {
     }
 
     /**
-     * @return {@link #type} (The type of appointment that is being booked (This may also be associated with participants for location, and/or a HealthcareService).)
+     * @return {@link #serviceCategory} (A broad categorisation of the service that is to be performed during this appointment.)
      */
-    public CodeableConcept getType() { 
-      if (this.type == null)
+    public CodeableConcept getServiceCategory() { 
+      if (this.serviceCategory == null)
         if (Configuration.errorOnAutoCreate())
-          throw new Error("Attempt to auto-create Appointment.type");
+          throw new Error("Attempt to auto-create Appointment.serviceCategory");
         else if (Configuration.doAutoCreate())
-          this.type = new CodeableConcept(); // cc
-      return this.type;
+          this.serviceCategory = new CodeableConcept(); // cc
+      return this.serviceCategory;
     }
 
-    public boolean hasType() { 
-      return this.type != null && !this.type.isEmpty();
+    public boolean hasServiceCategory() { 
+      return this.serviceCategory != null && !this.serviceCategory.isEmpty();
     }
 
     /**
-     * @param value {@link #type} (The type of appointment that is being booked (This may also be associated with participants for location, and/or a HealthcareService).)
+     * @param value {@link #serviceCategory} (A broad categorisation of the service that is to be performed during this appointment.)
      */
-    public Appointment setType(CodeableConcept value) { 
-      this.type = value;
+    public Appointment setServiceCategory(CodeableConcept value) { 
+      this.serviceCategory = value;
+      return this;
+    }
+
+    /**
+     * @return {@link #serviceType} (The specific service that is to be performed during this appointment.)
+     */
+    public List<CodeableConcept> getServiceType() { 
+      if (this.serviceType == null)
+        this.serviceType = new ArrayList<CodeableConcept>();
+      return this.serviceType;
+    }
+
+    /**
+     * @return Returns a reference to <code>this</code> for easy method chaining
+     */
+    public Appointment setServiceType(List<CodeableConcept> theServiceType) { 
+      this.serviceType = theServiceType;
+      return this;
+    }
+
+    public boolean hasServiceType() { 
+      if (this.serviceType == null)
+        return false;
+      for (CodeableConcept item : this.serviceType)
+        if (!item.isEmpty())
+          return true;
+      return false;
+    }
+
+    public CodeableConcept addServiceType() { //3
+      CodeableConcept t = new CodeableConcept();
+      if (this.serviceType == null)
+        this.serviceType = new ArrayList<CodeableConcept>();
+      this.serviceType.add(t);
+      return t;
+    }
+
+    public Appointment addServiceType(CodeableConcept t) { //3
+      if (t == null)
+        return this;
+      if (this.serviceType == null)
+        this.serviceType = new ArrayList<CodeableConcept>();
+      this.serviceType.add(t);
+      return this;
+    }
+
+    /**
+     * @return The first repetition of repeating field {@link #serviceType}, creating it if it does not already exist
+     */
+    public CodeableConcept getServiceTypeFirstRep() { 
+      if (getServiceType().isEmpty()) {
+        addServiceType();
+      }
+      return getServiceType().get(0);
+    }
+
+    /**
+     * @return {@link #specialty} (The specialty of a practitioner that would be required to perform the service requested in this appointment.)
+     */
+    public List<CodeableConcept> getSpecialty() { 
+      if (this.specialty == null)
+        this.specialty = new ArrayList<CodeableConcept>();
+      return this.specialty;
+    }
+
+    /**
+     * @return Returns a reference to <code>this</code> for easy method chaining
+     */
+    public Appointment setSpecialty(List<CodeableConcept> theSpecialty) { 
+      this.specialty = theSpecialty;
+      return this;
+    }
+
+    public boolean hasSpecialty() { 
+      if (this.specialty == null)
+        return false;
+      for (CodeableConcept item : this.specialty)
+        if (!item.isEmpty())
+          return true;
+      return false;
+    }
+
+    public CodeableConcept addSpecialty() { //3
+      CodeableConcept t = new CodeableConcept();
+      if (this.specialty == null)
+        this.specialty = new ArrayList<CodeableConcept>();
+      this.specialty.add(t);
+      return t;
+    }
+
+    public Appointment addSpecialty(CodeableConcept t) { //3
+      if (t == null)
+        return this;
+      if (this.specialty == null)
+        this.specialty = new ArrayList<CodeableConcept>();
+      this.specialty.add(t);
+      return this;
+    }
+
+    /**
+     * @return The first repetition of repeating field {@link #specialty}, creating it if it does not already exist
+     */
+    public CodeableConcept getSpecialtyFirstRep() { 
+      if (getSpecialty().isEmpty()) {
+        addSpecialty();
+      }
+      return getSpecialty().get(0);
+    }
+
+    /**
+     * @return {@link #appointmentType} (The style of appointment or patient that has been booked in the slot (not service type).)
+     */
+    public CodeableConcept getAppointmentType() { 
+      if (this.appointmentType == null)
+        if (Configuration.errorOnAutoCreate())
+          throw new Error("Attempt to auto-create Appointment.appointmentType");
+        else if (Configuration.doAutoCreate())
+          this.appointmentType = new CodeableConcept(); // cc
+      return this.appointmentType;
+    }
+
+    public boolean hasAppointmentType() { 
+      return this.appointmentType != null && !this.appointmentType.isEmpty();
+    }
+
+    /**
+     * @param value {@link #appointmentType} (The style of appointment or patient that has been booked in the slot (not service type).)
+     */
+    public Appointment setAppointmentType(CodeableConcept value) { 
+      this.appointmentType = value;
       return this;
     }
 
@@ -1235,6 +1497,14 @@ public class Appointment extends DomainResource {
       return this.slot;
     }
 
+    /**
+     * @return Returns a reference to <code>this</code> for easy method chaining
+     */
+    public Appointment setSlot(List<Reference> theSlot) { 
+      this.slot = theSlot;
+      return this;
+    }
+
     public boolean hasSlot() { 
       if (this.slot == null)
         return false;
@@ -1244,10 +1514,6 @@ public class Appointment extends DomainResource {
       return false;
     }
 
-    /**
-     * @return {@link #slot} (The slot that this appointment is filling. If provided then the schedule will not be provided as slots are not recursive, and the start/end values MUST be the same as from the slot.)
-     */
-    // syntactic sugar
     public Reference addSlot() { //3
       Reference t = new Reference();
       if (this.slot == null)
@@ -1256,7 +1522,6 @@ public class Appointment extends DomainResource {
       return t;
     }
 
-    // syntactic sugar
     public Appointment addSlot(Reference t) { //3
       if (t == null)
         return this;
@@ -1267,24 +1532,84 @@ public class Appointment extends DomainResource {
     }
 
     /**
-     * @return {@link #slot} (The actual objects that are the target of the reference. The reference library doesn't populate this, but you can use this to hold the resources if you resolvethemt. The slot that this appointment is filling. If provided then the schedule will not be provided as slots are not recursive, and the start/end values MUST be the same as from the slot.)
+     * @return The first repetition of repeating field {@link #slot}, creating it if it does not already exist
      */
+    public Reference getSlotFirstRep() { 
+      if (getSlot().isEmpty()) {
+        addSlot();
+      }
+      return getSlot().get(0);
+    }
+
+    /**
+     * @deprecated Use Reference#setResource(IBaseResource) instead
+     */
+    @Deprecated
     public List<Slot> getSlotTarget() { 
       if (this.slotTarget == null)
         this.slotTarget = new ArrayList<Slot>();
       return this.slotTarget;
     }
 
-    // syntactic sugar
     /**
-     * @return {@link #slot} (Add an actual object that is the target of the reference. The reference library doesn't use these, but you can use this to hold the resources if you resolvethemt. The slot that this appointment is filling. If provided then the schedule will not be provided as slots are not recursive, and the start/end values MUST be the same as from the slot.)
+     * @deprecated Use Reference#setResource(IBaseResource) instead
      */
+    @Deprecated
     public Slot addSlotTarget() { 
       Slot r = new Slot();
       if (this.slotTarget == null)
         this.slotTarget = new ArrayList<Slot>();
       this.slotTarget.add(r);
       return r;
+    }
+
+    /**
+     * @return {@link #created} (The date that this appointment was initially created. This could be different to the meta.lastModified value on the initial entry, as this could have been before the resource was created on the FHIR server, and should remain unchanged over the lifespan of the appointment.). This is the underlying object with id, value and extensions. The accessor "getCreated" gives direct access to the value
+     */
+    public DateTimeType getCreatedElement() { 
+      if (this.created == null)
+        if (Configuration.errorOnAutoCreate())
+          throw new Error("Attempt to auto-create Appointment.created");
+        else if (Configuration.doAutoCreate())
+          this.created = new DateTimeType(); // bb
+      return this.created;
+    }
+
+    public boolean hasCreatedElement() { 
+      return this.created != null && !this.created.isEmpty();
+    }
+
+    public boolean hasCreated() { 
+      return this.created != null && !this.created.isEmpty();
+    }
+
+    /**
+     * @param value {@link #created} (The date that this appointment was initially created. This could be different to the meta.lastModified value on the initial entry, as this could have been before the resource was created on the FHIR server, and should remain unchanged over the lifespan of the appointment.). This is the underlying object with id, value and extensions. The accessor "getCreated" gives direct access to the value
+     */
+    public Appointment setCreatedElement(DateTimeType value) { 
+      this.created = value;
+      return this;
+    }
+
+    /**
+     * @return The date that this appointment was initially created. This could be different to the meta.lastModified value on the initial entry, as this could have been before the resource was created on the FHIR server, and should remain unchanged over the lifespan of the appointment.
+     */
+    public Date getCreated() { 
+      return this.created == null ? null : this.created.getValue();
+    }
+
+    /**
+     * @param value The date that this appointment was initially created. This could be different to the meta.lastModified value on the initial entry, as this could have been before the resource was created on the FHIR server, and should remain unchanged over the lifespan of the appointment.
+     */
+    public Appointment setCreated(Date value) { 
+      if (value == null)
+        this.created = null;
+      else {
+        if (this.created == null)
+          this.created = new DateTimeType();
+        this.created.setValue(value);
+      }
+      return this;
     }
 
     /**
@@ -1345,6 +1670,14 @@ public class Appointment extends DomainResource {
       return this.participant;
     }
 
+    /**
+     * @return Returns a reference to <code>this</code> for easy method chaining
+     */
+    public Appointment setParticipant(List<AppointmentParticipantComponent> theParticipant) { 
+      this.participant = theParticipant;
+      return this;
+    }
+
     public boolean hasParticipant() { 
       if (this.participant == null)
         return false;
@@ -1354,10 +1687,6 @@ public class Appointment extends DomainResource {
       return false;
     }
 
-    /**
-     * @return {@link #participant} (List of participants involved in the appointment.)
-     */
-    // syntactic sugar
     public AppointmentParticipantComponent addParticipant() { //3
       AppointmentParticipantComponent t = new AppointmentParticipantComponent();
       if (this.participant == null)
@@ -1366,7 +1695,6 @@ public class Appointment extends DomainResource {
       return t;
     }
 
-    // syntactic sugar
     public Appointment addParticipant(AppointmentParticipantComponent t) { //3
       if (t == null)
         return this;
@@ -1376,11 +1704,24 @@ public class Appointment extends DomainResource {
       return this;
     }
 
+    /**
+     * @return The first repetition of repeating field {@link #participant}, creating it if it does not already exist
+     */
+    public AppointmentParticipantComponent getParticipantFirstRep() { 
+      if (getParticipant().isEmpty()) {
+        addParticipant();
+      }
+      return getParticipant().get(0);
+    }
+
       protected void listChildren(List<Property> childrenList) {
         super.listChildren(childrenList);
         childrenList.add(new Property("identifier", "Identifier", "This records identifiers associated with this appointment concern that are defined by business processes and/or used to refer to it when a direct URL reference to the resource itself is not appropriate (e.g. in CDA documents, or in written / printed documentation).", 0, java.lang.Integer.MAX_VALUE, identifier));
         childrenList.add(new Property("status", "code", "The overall status of the Appointment. Each of the participants has their own participation status which indicates their involvement in the process, however this status indicates the shared status.", 0, java.lang.Integer.MAX_VALUE, status));
-        childrenList.add(new Property("type", "CodeableConcept", "The type of appointment that is being booked (This may also be associated with participants for location, and/or a HealthcareService).", 0, java.lang.Integer.MAX_VALUE, type));
+        childrenList.add(new Property("serviceCategory", "CodeableConcept", "A broad categorisation of the service that is to be performed during this appointment.", 0, java.lang.Integer.MAX_VALUE, serviceCategory));
+        childrenList.add(new Property("serviceType", "CodeableConcept", "The specific service that is to be performed during this appointment.", 0, java.lang.Integer.MAX_VALUE, serviceType));
+        childrenList.add(new Property("specialty", "CodeableConcept", "The specialty of a practitioner that would be required to perform the service requested in this appointment.", 0, java.lang.Integer.MAX_VALUE, specialty));
+        childrenList.add(new Property("appointmentType", "CodeableConcept", "The style of appointment or patient that has been booked in the slot (not service type).", 0, java.lang.Integer.MAX_VALUE, appointmentType));
         childrenList.add(new Property("reason", "CodeableConcept", "The reason that this appointment is being scheduled. This is more clinical than administrative.", 0, java.lang.Integer.MAX_VALUE, reason));
         childrenList.add(new Property("priority", "unsignedInt", "The priority of the appointment. Can be used to make informed decisions if needing to re-prioritize appointments. (The iCal Standard specifies 0 as undefined, 1 as highest, 9 as lowest priority).", 0, java.lang.Integer.MAX_VALUE, priority));
         childrenList.add(new Property("description", "string", "The brief description of the appointment as would be shown on a subject line in a meeting request, or appointment list. Detailed or expanded information should be put in the comment field.", 0, java.lang.Integer.MAX_VALUE, description));
@@ -1388,8 +1729,89 @@ public class Appointment extends DomainResource {
         childrenList.add(new Property("end", "instant", "Date/Time that the appointment is to conclude.", 0, java.lang.Integer.MAX_VALUE, end));
         childrenList.add(new Property("minutesDuration", "positiveInt", "Number of minutes that the appointment is to take. This can be less than the duration between the start and end times (where actual time of appointment is only an estimate or is a planned appointment request).", 0, java.lang.Integer.MAX_VALUE, minutesDuration));
         childrenList.add(new Property("slot", "Reference(Slot)", "The slot that this appointment is filling. If provided then the schedule will not be provided as slots are not recursive, and the start/end values MUST be the same as from the slot.", 0, java.lang.Integer.MAX_VALUE, slot));
+        childrenList.add(new Property("created", "dateTime", "The date that this appointment was initially created. This could be different to the meta.lastModified value on the initial entry, as this could have been before the resource was created on the FHIR server, and should remain unchanged over the lifespan of the appointment.", 0, java.lang.Integer.MAX_VALUE, created));
         childrenList.add(new Property("comment", "string", "Additional comments about the appointment.", 0, java.lang.Integer.MAX_VALUE, comment));
         childrenList.add(new Property("participant", "", "List of participants involved in the appointment.", 0, java.lang.Integer.MAX_VALUE, participant));
+      }
+
+      @Override
+      public Base[] getProperty(int hash, String name, boolean checkValid) throws FHIRException {
+        switch (hash) {
+        case -1618432855: /*identifier*/ return this.identifier == null ? new Base[0] : this.identifier.toArray(new Base[this.identifier.size()]); // Identifier
+        case -892481550: /*status*/ return this.status == null ? new Base[0] : new Base[] {this.status}; // Enumeration<AppointmentStatus>
+        case 1281188563: /*serviceCategory*/ return this.serviceCategory == null ? new Base[0] : new Base[] {this.serviceCategory}; // CodeableConcept
+        case -1928370289: /*serviceType*/ return this.serviceType == null ? new Base[0] : this.serviceType.toArray(new Base[this.serviceType.size()]); // CodeableConcept
+        case -1694759682: /*specialty*/ return this.specialty == null ? new Base[0] : this.specialty.toArray(new Base[this.specialty.size()]); // CodeableConcept
+        case -1596426375: /*appointmentType*/ return this.appointmentType == null ? new Base[0] : new Base[] {this.appointmentType}; // CodeableConcept
+        case -934964668: /*reason*/ return this.reason == null ? new Base[0] : new Base[] {this.reason}; // CodeableConcept
+        case -1165461084: /*priority*/ return this.priority == null ? new Base[0] : new Base[] {this.priority}; // UnsignedIntType
+        case -1724546052: /*description*/ return this.description == null ? new Base[0] : new Base[] {this.description}; // StringType
+        case 109757538: /*start*/ return this.start == null ? new Base[0] : new Base[] {this.start}; // InstantType
+        case 100571: /*end*/ return this.end == null ? new Base[0] : new Base[] {this.end}; // InstantType
+        case -413630573: /*minutesDuration*/ return this.minutesDuration == null ? new Base[0] : new Base[] {this.minutesDuration}; // PositiveIntType
+        case 3533310: /*slot*/ return this.slot == null ? new Base[0] : this.slot.toArray(new Base[this.slot.size()]); // Reference
+        case 1028554472: /*created*/ return this.created == null ? new Base[0] : new Base[] {this.created}; // DateTimeType
+        case 950398559: /*comment*/ return this.comment == null ? new Base[0] : new Base[] {this.comment}; // StringType
+        case 767422259: /*participant*/ return this.participant == null ? new Base[0] : this.participant.toArray(new Base[this.participant.size()]); // AppointmentParticipantComponent
+        default: return super.getProperty(hash, name, checkValid);
+        }
+
+      }
+
+      @Override
+      public void setProperty(int hash, String name, Base value) throws FHIRException {
+        switch (hash) {
+        case -1618432855: // identifier
+          this.getIdentifier().add(castToIdentifier(value)); // Identifier
+          break;
+        case -892481550: // status
+          this.status = new AppointmentStatusEnumFactory().fromType(value); // Enumeration<AppointmentStatus>
+          break;
+        case 1281188563: // serviceCategory
+          this.serviceCategory = castToCodeableConcept(value); // CodeableConcept
+          break;
+        case -1928370289: // serviceType
+          this.getServiceType().add(castToCodeableConcept(value)); // CodeableConcept
+          break;
+        case -1694759682: // specialty
+          this.getSpecialty().add(castToCodeableConcept(value)); // CodeableConcept
+          break;
+        case -1596426375: // appointmentType
+          this.appointmentType = castToCodeableConcept(value); // CodeableConcept
+          break;
+        case -934964668: // reason
+          this.reason = castToCodeableConcept(value); // CodeableConcept
+          break;
+        case -1165461084: // priority
+          this.priority = castToUnsignedInt(value); // UnsignedIntType
+          break;
+        case -1724546052: // description
+          this.description = castToString(value); // StringType
+          break;
+        case 109757538: // start
+          this.start = castToInstant(value); // InstantType
+          break;
+        case 100571: // end
+          this.end = castToInstant(value); // InstantType
+          break;
+        case -413630573: // minutesDuration
+          this.minutesDuration = castToPositiveInt(value); // PositiveIntType
+          break;
+        case 3533310: // slot
+          this.getSlot().add(castToReference(value)); // Reference
+          break;
+        case 1028554472: // created
+          this.created = castToDateTime(value); // DateTimeType
+          break;
+        case 950398559: // comment
+          this.comment = castToString(value); // StringType
+          break;
+        case 767422259: // participant
+          this.getParticipant().add((AppointmentParticipantComponent) value); // AppointmentParticipantComponent
+          break;
+        default: super.setProperty(hash, name, value);
+        }
+
       }
 
       @Override
@@ -1398,8 +1820,14 @@ public class Appointment extends DomainResource {
           this.getIdentifier().add(castToIdentifier(value));
         else if (name.equals("status"))
           this.status = new AppointmentStatusEnumFactory().fromType(value); // Enumeration<AppointmentStatus>
-        else if (name.equals("type"))
-          this.type = castToCodeableConcept(value); // CodeableConcept
+        else if (name.equals("serviceCategory"))
+          this.serviceCategory = castToCodeableConcept(value); // CodeableConcept
+        else if (name.equals("serviceType"))
+          this.getServiceType().add(castToCodeableConcept(value));
+        else if (name.equals("specialty"))
+          this.getSpecialty().add(castToCodeableConcept(value));
+        else if (name.equals("appointmentType"))
+          this.appointmentType = castToCodeableConcept(value); // CodeableConcept
         else if (name.equals("reason"))
           this.reason = castToCodeableConcept(value); // CodeableConcept
         else if (name.equals("priority"))
@@ -1414,12 +1842,38 @@ public class Appointment extends DomainResource {
           this.minutesDuration = castToPositiveInt(value); // PositiveIntType
         else if (name.equals("slot"))
           this.getSlot().add(castToReference(value));
+        else if (name.equals("created"))
+          this.created = castToDateTime(value); // DateTimeType
         else if (name.equals("comment"))
           this.comment = castToString(value); // StringType
         else if (name.equals("participant"))
           this.getParticipant().add((AppointmentParticipantComponent) value);
         else
           super.setProperty(name, value);
+      }
+
+      @Override
+      public Base makeProperty(int hash, String name) throws FHIRException {
+        switch (hash) {
+        case -1618432855:  return addIdentifier(); // Identifier
+        case -892481550: throw new FHIRException("Cannot make property status as it is not a complex type"); // Enumeration<AppointmentStatus>
+        case 1281188563:  return getServiceCategory(); // CodeableConcept
+        case -1928370289:  return addServiceType(); // CodeableConcept
+        case -1694759682:  return addSpecialty(); // CodeableConcept
+        case -1596426375:  return getAppointmentType(); // CodeableConcept
+        case -934964668:  return getReason(); // CodeableConcept
+        case -1165461084: throw new FHIRException("Cannot make property priority as it is not a complex type"); // UnsignedIntType
+        case -1724546052: throw new FHIRException("Cannot make property description as it is not a complex type"); // StringType
+        case 109757538: throw new FHIRException("Cannot make property start as it is not a complex type"); // InstantType
+        case 100571: throw new FHIRException("Cannot make property end as it is not a complex type"); // InstantType
+        case -413630573: throw new FHIRException("Cannot make property minutesDuration as it is not a complex type"); // PositiveIntType
+        case 3533310:  return addSlot(); // Reference
+        case 1028554472: throw new FHIRException("Cannot make property created as it is not a complex type"); // DateTimeType
+        case 950398559: throw new FHIRException("Cannot make property comment as it is not a complex type"); // StringType
+        case 767422259:  return addParticipant(); // AppointmentParticipantComponent
+        default: return super.makeProperty(hash, name);
+        }
+
       }
 
       @Override
@@ -1430,9 +1884,19 @@ public class Appointment extends DomainResource {
         else if (name.equals("status")) {
           throw new FHIRException("Cannot call addChild on a primitive type Appointment.status");
         }
-        else if (name.equals("type")) {
-          this.type = new CodeableConcept();
-          return this.type;
+        else if (name.equals("serviceCategory")) {
+          this.serviceCategory = new CodeableConcept();
+          return this.serviceCategory;
+        }
+        else if (name.equals("serviceType")) {
+          return addServiceType();
+        }
+        else if (name.equals("specialty")) {
+          return addSpecialty();
+        }
+        else if (name.equals("appointmentType")) {
+          this.appointmentType = new CodeableConcept();
+          return this.appointmentType;
         }
         else if (name.equals("reason")) {
           this.reason = new CodeableConcept();
@@ -1455,6 +1919,9 @@ public class Appointment extends DomainResource {
         }
         else if (name.equals("slot")) {
           return addSlot();
+        }
+        else if (name.equals("created")) {
+          throw new FHIRException("Cannot call addChild on a primitive type Appointment.created");
         }
         else if (name.equals("comment")) {
           throw new FHIRException("Cannot call addChild on a primitive type Appointment.comment");
@@ -1480,7 +1947,18 @@ public class Appointment extends DomainResource {
             dst.identifier.add(i.copy());
         };
         dst.status = status == null ? null : status.copy();
-        dst.type = type == null ? null : type.copy();
+        dst.serviceCategory = serviceCategory == null ? null : serviceCategory.copy();
+        if (serviceType != null) {
+          dst.serviceType = new ArrayList<CodeableConcept>();
+          for (CodeableConcept i : serviceType)
+            dst.serviceType.add(i.copy());
+        };
+        if (specialty != null) {
+          dst.specialty = new ArrayList<CodeableConcept>();
+          for (CodeableConcept i : specialty)
+            dst.specialty.add(i.copy());
+        };
+        dst.appointmentType = appointmentType == null ? null : appointmentType.copy();
         dst.reason = reason == null ? null : reason.copy();
         dst.priority = priority == null ? null : priority.copy();
         dst.description = description == null ? null : description.copy();
@@ -1492,6 +1970,7 @@ public class Appointment extends DomainResource {
           for (Reference i : slot)
             dst.slot.add(i.copy());
         };
+        dst.created = created == null ? null : created.copy();
         dst.comment = comment == null ? null : comment.copy();
         if (participant != null) {
           dst.participant = new ArrayList<AppointmentParticipantComponent>();
@@ -1512,11 +1991,12 @@ public class Appointment extends DomainResource {
         if (!(other instanceof Appointment))
           return false;
         Appointment o = (Appointment) other;
-        return compareDeep(identifier, o.identifier, true) && compareDeep(status, o.status, true) && compareDeep(type, o.type, true)
+        return compareDeep(identifier, o.identifier, true) && compareDeep(status, o.status, true) && compareDeep(serviceCategory, o.serviceCategory, true)
+           && compareDeep(serviceType, o.serviceType, true) && compareDeep(specialty, o.specialty, true) && compareDeep(appointmentType, o.appointmentType, true)
            && compareDeep(reason, o.reason, true) && compareDeep(priority, o.priority, true) && compareDeep(description, o.description, true)
            && compareDeep(start, o.start, true) && compareDeep(end, o.end, true) && compareDeep(minutesDuration, o.minutesDuration, true)
-           && compareDeep(slot, o.slot, true) && compareDeep(comment, o.comment, true) && compareDeep(participant, o.participant, true)
-          ;
+           && compareDeep(slot, o.slot, true) && compareDeep(created, o.created, true) && compareDeep(comment, o.comment, true)
+           && compareDeep(participant, o.participant, true);
       }
 
       @Override
@@ -1528,16 +2008,13 @@ public class Appointment extends DomainResource {
         Appointment o = (Appointment) other;
         return compareValues(status, o.status, true) && compareValues(priority, o.priority, true) && compareValues(description, o.description, true)
            && compareValues(start, o.start, true) && compareValues(end, o.end, true) && compareValues(minutesDuration, o.minutesDuration, true)
-           && compareValues(comment, o.comment, true);
+           && compareValues(created, o.created, true) && compareValues(comment, o.comment, true);
       }
 
       public boolean isEmpty() {
-        return super.isEmpty() && (identifier == null || identifier.isEmpty()) && (status == null || status.isEmpty())
-           && (type == null || type.isEmpty()) && (reason == null || reason.isEmpty()) && (priority == null || priority.isEmpty())
-           && (description == null || description.isEmpty()) && (start == null || start.isEmpty()) && (end == null || end.isEmpty())
-           && (minutesDuration == null || minutesDuration.isEmpty()) && (slot == null || slot.isEmpty())
-           && (comment == null || comment.isEmpty()) && (participant == null || participant.isEmpty())
-          ;
+        return super.isEmpty() && ca.uhn.fhir.util.ElementUtil.isEmpty(identifier, status, serviceCategory
+          , serviceType, specialty, appointmentType, reason, priority, description, start
+          , end, minutesDuration, slot, created, comment, participant);
       }
 
   @Override
@@ -1573,7 +2050,7 @@ public class Appointment extends DomainResource {
    * Path: <b>Appointment.participant.actor</b><br>
    * </p>
    */
-  @SearchParamDefinition(name="actor", path="Appointment.participant.actor", description="Any one of the individuals participating in the appointment", type="reference" )
+  @SearchParamDefinition(name="actor", path="Appointment.participant.actor", description="Any one of the individuals participating in the appointment", type="reference", providesMembershipIn={ @ca.uhn.fhir.model.api.annotation.Compartment(name="Device"), @ca.uhn.fhir.model.api.annotation.Compartment(name="Patient"), @ca.uhn.fhir.model.api.annotation.Compartment(name="Practitioner"), @ca.uhn.fhir.model.api.annotation.Compartment(name="RelatedPerson") }, target={Device.class, HealthcareService.class, Location.class, Patient.class, Practitioner.class, RelatedPerson.class } )
   public static final String SP_ACTOR = "actor";
  /**
    * <b>Fluent Client</b> search parameter constant for <b>actor</b>
@@ -1619,7 +2096,7 @@ public class Appointment extends DomainResource {
    * Path: <b>Appointment.participant.actor</b><br>
    * </p>
    */
-  @SearchParamDefinition(name="practitioner", path="Appointment.participant.actor", description="One of the individuals of the appointment is this practitioner", type="reference" )
+  @SearchParamDefinition(name="practitioner", path="Appointment.participant.actor", description="One of the individuals of the appointment is this practitioner", type="reference", target={Practitioner.class } )
   public static final String SP_PRACTITIONER = "practitioner";
  /**
    * <b>Fluent Client</b> search parameter constant for <b>practitioner</b>
@@ -1665,7 +2142,7 @@ public class Appointment extends DomainResource {
    * Path: <b>Appointment.participant.actor</b><br>
    * </p>
    */
-  @SearchParamDefinition(name="patient", path="Appointment.participant.actor", description="One of the individuals of the appointment is this patient", type="reference" )
+  @SearchParamDefinition(name="patient", path="Appointment.participant.actor", description="One of the individuals of the appointment is this patient", type="reference", target={Patient.class } )
   public static final String SP_PATIENT = "patient";
  /**
    * <b>Fluent Client</b> search parameter constant for <b>patient</b>
@@ -1684,6 +2161,46 @@ public class Appointment extends DomainResource {
   public static final ca.uhn.fhir.model.api.Include INCLUDE_PATIENT = new ca.uhn.fhir.model.api.Include("Appointment:patient").toLocked();
 
  /**
+   * Search parameter: <b>appointment-type</b>
+   * <p>
+   * Description: <b>The style of appointment or patient that has been booked in the slot (not service type)</b><br>
+   * Type: <b>token</b><br>
+   * Path: <b>Appointment.appointmentType</b><br>
+   * </p>
+   */
+  @SearchParamDefinition(name="appointment-type", path="Appointment.appointmentType", description="The style of appointment or patient that has been booked in the slot (not service type)", type="token" )
+  public static final String SP_APPOINTMENT_TYPE = "appointment-type";
+ /**
+   * <b>Fluent Client</b> search parameter constant for <b>appointment-type</b>
+   * <p>
+   * Description: <b>The style of appointment or patient that has been booked in the slot (not service type)</b><br>
+   * Type: <b>token</b><br>
+   * Path: <b>Appointment.appointmentType</b><br>
+   * </p>
+   */
+  public static final ca.uhn.fhir.rest.gclient.TokenClientParam APPOINTMENT_TYPE = new ca.uhn.fhir.rest.gclient.TokenClientParam(SP_APPOINTMENT_TYPE);
+
+ /**
+   * Search parameter: <b>service-type</b>
+   * <p>
+   * Description: <b>The specific service that is to be performed during this appointment</b><br>
+   * Type: <b>token</b><br>
+   * Path: <b>Appointment.serviceType</b><br>
+   * </p>
+   */
+  @SearchParamDefinition(name="service-type", path="Appointment.serviceType", description="The specific service that is to be performed during this appointment", type="token" )
+  public static final String SP_SERVICE_TYPE = "service-type";
+ /**
+   * <b>Fluent Client</b> search parameter constant for <b>service-type</b>
+   * <p>
+   * Description: <b>The specific service that is to be performed during this appointment</b><br>
+   * Type: <b>token</b><br>
+   * Path: <b>Appointment.serviceType</b><br>
+   * </p>
+   */
+  public static final ca.uhn.fhir.rest.gclient.TokenClientParam SERVICE_TYPE = new ca.uhn.fhir.rest.gclient.TokenClientParam(SP_SERVICE_TYPE);
+
+ /**
    * Search parameter: <b>location</b>
    * <p>
    * Description: <b>This location is listed in the participants of the appointment</b><br>
@@ -1691,7 +2208,7 @@ public class Appointment extends DomainResource {
    * Path: <b>Appointment.participant.actor</b><br>
    * </p>
    */
-  @SearchParamDefinition(name="location", path="Appointment.participant.actor", description="This location is listed in the participants of the appointment", type="reference" )
+  @SearchParamDefinition(name="location", path="Appointment.participant.actor", description="This location is listed in the participants of the appointment", type="reference", target={Location.class } )
   public static final String SP_LOCATION = "location";
  /**
    * <b>Fluent Client</b> search parameter constant for <b>location</b>

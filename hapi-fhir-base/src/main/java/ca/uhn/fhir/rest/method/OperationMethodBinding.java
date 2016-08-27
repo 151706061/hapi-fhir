@@ -112,7 +112,7 @@ public class OperationMethodBinding extends BaseResourceReturningMethodBinding {
 		myName = theOperationName;
 
 		if (theContext.getVersion().getVersion().isEquivalentTo(FhirVersionEnum.DSTU1)) {
-			throw new ConfigurationException("@" + Operation.class.getSimpleName() + " methods are not supported on servers for FHIR version " + theContext.getVersion().getVersion().name());
+			throw new ConfigurationException("@" + Operation.class.getSimpleName() + " methods are not supported on servers for FHIR version " + theContext.getVersion().getVersion().name() + " - Found one on class " + theMethod.getDeclaringClass().getName());
 		}
 
 		if (theReturnTypeFromRp != null) {
@@ -150,6 +150,9 @@ public class OperationMethodBinding extends BaseResourceReturningMethodBinding {
 				type.setName(next.name());
 				type.setMin(next.min());
 				type.setMax(next.max());
+				if (type.getMax() == OperationParam.MAX_DEFAULT) {
+					type.setMax(1);
+				}
 				if (!next.type().equals(IBase.class)) {
 					if (next.type().isInterface() || Modifier.isAbstract(next.type().getModifiers())) {
 						throw new ConfigurationException("Invalid value for @OperationParam.type(): " + next.type().getName());

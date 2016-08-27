@@ -1,7 +1,6 @@
 package ca.uhn.fhir.jpa.dao.dstu3;
 
 import org.hl7.fhir.dstu3.model.Bundle;
-import org.hl7.fhir.dstu3.model.Bundle.BundleEntryComponent;
 import org.hl7.fhir.dstu3.model.Bundle.BundleType;
 
 /*
@@ -32,14 +31,11 @@ public class FhirResourceDaoBundleDstu3 extends FhirResourceDaoDstu3<Bundle> {
 	protected void preProcessResourceForStorage(Bundle theResource) {
 		super.preProcessResourceForStorage(theResource);
 
-		if (theResource.getType() != BundleType.DOCUMENT) {
-			String message = "Unable to store a Bundle resource on this server with a Bundle.type value other than '" + BundleType.DOCUMENT.toCode() + "' - Value was: " + (theResource.getType() != null ? theResource.getType().toCode() : "(missing)");
+		if (theResource.getType() != BundleType.DOCUMENT && theResource.getType() != BundleType.COLLECTION) {
+			String message = "Unable to store a Bundle resource on this server with a Bundle.type value of: " + (theResource.getType() != null ? theResource.getType().toCode() : "(missing)");
 			throw new UnprocessableEntityException(message);
 		}
 
-		for (BundleEntryComponent next : theResource.getEntry()) {
-			next.setFullUrl((String)null);
-		}
 	}
 
 

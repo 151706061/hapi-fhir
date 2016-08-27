@@ -29,17 +29,17 @@ package org.hl7.fhir.dstu3.model;
   
 */
 
-// Generated on Sat, Jan 30, 2016 09:18-0500 for FHIR v1.3.0
+// Generated on Thu, Aug 25, 2016 23:04-0400 for FHIR v1.6.0
 
 import java.util.*;
 
 import ca.uhn.fhir.model.api.annotation.Child;
+import ca.uhn.fhir.model.api.annotation.ChildOrder;
 import ca.uhn.fhir.model.api.annotation.Description;
 import ca.uhn.fhir.model.api.annotation.DatatypeDef;
 import ca.uhn.fhir.model.api.annotation.Block;
-
-import org.hl7.fhir.dstu3.exceptions.FHIRException;
 import org.hl7.fhir.instance.model.api.*;
+import org.hl7.fhir.dstu3.exceptions.FHIRException;
 /**
  * Base definition for all elements that are defined inside a resource - but not those in a data type.
  */
@@ -71,6 +71,14 @@ public abstract class BackboneElement extends Element implements IBaseBackboneEl
       return this.modifierExtension;
     }
 
+    /**
+     * @return Returns a reference to <code>this</code> for easy method chaining
+     */
+    public BackboneElement setModifierExtension(List<Extension> theModifierExtension) { 
+      this.modifierExtension = theModifierExtension;
+      return this;
+    }
+
     public boolean hasModifierExtension() { 
       if (this.modifierExtension == null)
         return false;
@@ -80,10 +88,6 @@ public abstract class BackboneElement extends Element implements IBaseBackboneEl
       return false;
     }
 
-    /**
-     * @return {@link #modifierExtension} (May be used to represent additional information that is not part of the basic definition of the element, and that modifies the understanding of the element that contains it. Usually modifier elements provide negation or qualification. In order to make the use of extensions safe and manageable, there is a strict set of governance applied to the definition and use of extensions. Though any implementer is allowed to define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension. Applications processing a resource are required to check for modifier extensions.)
-     */
-    // syntactic sugar
     public Extension addModifierExtension() { //3
       Extension t = new Extension();
       if (this.modifierExtension == null)
@@ -92,7 +96,6 @@ public abstract class BackboneElement extends Element implements IBaseBackboneEl
       return t;
     }
 
-    // syntactic sugar
     public BackboneElement addModifierExtension(Extension t) { //3
       if (t == null)
         return this;
@@ -102,8 +105,38 @@ public abstract class BackboneElement extends Element implements IBaseBackboneEl
       return this;
     }
 
+    /**
+     * @return The first repetition of repeating field {@link #modifierExtension}, creating it if it does not already exist
+     */
+    public Extension getModifierExtensionFirstRep() { 
+      if (getModifierExtension().isEmpty()) {
+        addModifierExtension();
+      }
+      return getModifierExtension().get(0);
+    }
+
       protected void listChildren(List<Property> childrenList) {
         childrenList.add(new Property("modifierExtension", "Extension", "May be used to represent additional information that is not part of the basic definition of the element, and that modifies the understanding of the element that contains it. Usually modifier elements provide negation or qualification. In order to make the use of extensions safe and manageable, there is a strict set of governance applied to the definition and use of extensions. Though any implementer is allowed to define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension. Applications processing a resource are required to check for modifier extensions.", 0, java.lang.Integer.MAX_VALUE, modifierExtension));
+      }
+
+      @Override
+      public Base[] getProperty(int hash, String name, boolean checkValid) throws FHIRException {
+        switch (hash) {
+        case -298878168: /*modifierExtension*/ return this.modifierExtension == null ? new Base[0] : this.modifierExtension.toArray(new Base[this.modifierExtension.size()]); // Extension
+        default: return super.getProperty(hash, name, checkValid);
+        }
+
+      }
+
+      @Override
+      public void setProperty(int hash, String name, Base value) throws FHIRException {
+        switch (hash) {
+        case -298878168: // modifierExtension
+          this.getModifierExtension().add(castToExtension(value)); // Extension
+          break;
+        default: super.setProperty(hash, name, value);
+        }
+
       }
 
       @Override
@@ -112,6 +145,15 @@ public abstract class BackboneElement extends Element implements IBaseBackboneEl
           this.getModifierExtension().add(castToExtension(value));
         else
           super.setProperty(name, value);
+      }
+
+      @Override
+      public Base makeProperty(int hash, String name) throws FHIRException {
+        switch (hash) {
+        case -298878168:  return addModifierExtension(); // Extension
+        default: return super.makeProperty(hash, name);
+        }
+
       }
 
       @Override
@@ -159,7 +201,7 @@ public abstract class BackboneElement extends Element implements IBaseBackboneEl
       }
 
       public boolean isEmpty() {
-        return super.isEmpty() && (modifierExtension == null || modifierExtension.isEmpty());
+        return super.isEmpty() && ca.uhn.fhir.util.ElementUtil.isEmpty(modifierExtension);
       }
 
 

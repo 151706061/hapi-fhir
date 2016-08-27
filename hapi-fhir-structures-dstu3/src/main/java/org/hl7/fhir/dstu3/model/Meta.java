@@ -29,20 +29,19 @@ package org.hl7.fhir.dstu3.model;
   
 */
 
-// Generated on Sat, Jan 30, 2016 09:18-0500 for FHIR v1.3.0
+// Generated on Thu, Aug 25, 2016 23:04-0400 for FHIR v1.6.0
 
 import java.util.*;
 
 import org.hl7.fhir.utilities.Utilities;
-
+import org.hl7.fhir.dstu3.model.Enumerations.*;
 import ca.uhn.fhir.model.api.annotation.Child;
+import ca.uhn.fhir.model.api.annotation.ChildOrder;
 import ca.uhn.fhir.model.api.annotation.Description;
 import ca.uhn.fhir.model.api.annotation.DatatypeDef;
 import ca.uhn.fhir.model.api.annotation.Block;
-
-import org.hl7.fhir.dstu3.exceptions.FHIRException;
-import org.hl7.fhir.dstu3.model.Enumerations.*;
 import org.hl7.fhir.instance.model.api.*;
+import org.hl7.fhir.dstu3.exceptions.FHIRException;
 /**
  * The metadata about a resource. This is content in the resource that is maintained by the infrastructure. Changes to the content may not always be associated with version changes to the resource.
  */
@@ -75,6 +74,7 @@ public class Meta extends Type implements IBaseMetaType {
      */
     @Child(name = "security", type = {Coding.class}, order=3, min=0, max=Child.MAX_UNLIMITED, modifier=false, summary=true)
     @Description(shortDefinition="Security Labels applied to this resource", formalDefinition="Security labels applied to this resource. These tags connect specific resources to the overall security policy and infrastructure." )
+    @ca.uhn.fhir.model.api.annotation.Binding(valueSet="http://hl7.org/fhir/ValueSet/security-labels")
     protected List<Coding> security;
 
     /**
@@ -82,6 +82,7 @@ public class Meta extends Type implements IBaseMetaType {
      */
     @Child(name = "tag", type = {Coding.class}, order=4, min=0, max=Child.MAX_UNLIMITED, modifier=false, summary=true)
     @Description(shortDefinition="Tags applied to this resource", formalDefinition="Tags applied to this resource. Tags are intended to be used to identify and relate resources to process and workflow, and applications are not required to consider the tags when interpreting the meaning of a resource." )
+    @ca.uhn.fhir.model.api.annotation.Binding(valueSet="http://hl7.org/fhir/ValueSet/common-tags")
     protected List<Coding> tag;
 
     private static final long serialVersionUID = 867134915L;
@@ -200,6 +201,14 @@ public class Meta extends Type implements IBaseMetaType {
       return this.profile;
     }
 
+    /**
+     * @return Returns a reference to <code>this</code> for easy method chaining
+     */
+    public Meta setProfile(List<UriType> theProfile) { 
+      this.profile = theProfile;
+      return this;
+    }
+
     public boolean hasProfile() { 
       if (this.profile == null)
         return false;
@@ -212,7 +221,6 @@ public class Meta extends Type implements IBaseMetaType {
     /**
      * @return {@link #profile} (A list of profiles [[[StructureDefinition]]]s that this resource claims to conform to. The URL is a reference to [[[StructureDefinition.url]]].)
      */
-    // syntactic sugar
     public UriType addProfileElement() {//2 
       UriType t = new UriType();
       if (this.profile == null)
@@ -254,6 +262,14 @@ public class Meta extends Type implements IBaseMetaType {
       return this.security;
     }
 
+    /**
+     * @return Returns a reference to <code>this</code> for easy method chaining
+     */
+    public Meta setSecurity(List<Coding> theSecurity) { 
+      this.security = theSecurity;
+      return this;
+    }
+
     public boolean hasSecurity() { 
       if (this.security == null)
         return false;
@@ -263,10 +279,6 @@ public class Meta extends Type implements IBaseMetaType {
       return false;
     }
 
-    /**
-     * @return {@link #security} (Security labels applied to this resource. These tags connect specific resources to the overall security policy and infrastructure.)
-     */
-    // syntactic sugar
     public Coding addSecurity() { //3
       Coding t = new Coding();
       if (this.security == null)
@@ -275,7 +287,6 @@ public class Meta extends Type implements IBaseMetaType {
       return t;
     }
 
-    // syntactic sugar
     public Meta addSecurity(Coding t) { //3
       if (t == null)
         return this;
@@ -283,6 +294,16 @@ public class Meta extends Type implements IBaseMetaType {
         this.security = new ArrayList<Coding>();
       this.security.add(t);
       return this;
+    }
+
+    /**
+     * @return The first repetition of repeating field {@link #security}, creating it if it does not already exist
+     */
+    public Coding getSecurityFirstRep() { 
+      if (getSecurity().isEmpty()) {
+        addSecurity();
+      }
+      return getSecurity().get(0);
     }
 
     /**
@@ -294,6 +315,14 @@ public class Meta extends Type implements IBaseMetaType {
       return this.tag;
     }
 
+    /**
+     * @return Returns a reference to <code>this</code> for easy method chaining
+     */
+    public Meta setTag(List<Coding> theTag) { 
+      this.tag = theTag;
+      return this;
+    }
+
     public boolean hasTag() { 
       if (this.tag == null)
         return false;
@@ -303,10 +332,6 @@ public class Meta extends Type implements IBaseMetaType {
       return false;
     }
 
-    /**
-     * @return {@link #tag} (Tags applied to this resource. Tags are intended to be used to identify and relate resources to process and workflow, and applications are not required to consider the tags when interpreting the meaning of a resource.)
-     */
-    // syntactic sugar
     public Coding addTag() { //3
       Coding t = new Coding();
       if (this.tag == null)
@@ -315,7 +340,6 @@ public class Meta extends Type implements IBaseMetaType {
       return t;
     }
 
-    // syntactic sugar
     public Meta addTag(Coding t) { //3
       if (t == null)
         return this;
@@ -323,6 +347,16 @@ public class Meta extends Type implements IBaseMetaType {
         this.tag = new ArrayList<Coding>();
       this.tag.add(t);
       return this;
+    }
+
+    /**
+     * @return The first repetition of repeating field {@link #tag}, creating it if it does not already exist
+     */
+    public Coding getTagFirstRep() { 
+      if (getTag().isEmpty()) {
+        addTag();
+      }
+      return getTag().get(0);
     }
 
     /**
@@ -384,6 +418,42 @@ public class Meta extends Type implements IBaseMetaType {
       }
 
       @Override
+      public Base[] getProperty(int hash, String name, boolean checkValid) throws FHIRException {
+        switch (hash) {
+        case -1407102957: /*versionId*/ return this.versionId == null ? new Base[0] : new Base[] {this.versionId}; // IdType
+        case 1649733957: /*lastUpdated*/ return this.lastUpdated == null ? new Base[0] : new Base[] {this.lastUpdated}; // InstantType
+        case -309425751: /*profile*/ return this.profile == null ? new Base[0] : this.profile.toArray(new Base[this.profile.size()]); // UriType
+        case 949122880: /*security*/ return this.security == null ? new Base[0] : this.security.toArray(new Base[this.security.size()]); // Coding
+        case 114586: /*tag*/ return this.tag == null ? new Base[0] : this.tag.toArray(new Base[this.tag.size()]); // Coding
+        default: return super.getProperty(hash, name, checkValid);
+        }
+
+      }
+
+      @Override
+      public void setProperty(int hash, String name, Base value) throws FHIRException {
+        switch (hash) {
+        case -1407102957: // versionId
+          this.versionId = castToId(value); // IdType
+          break;
+        case 1649733957: // lastUpdated
+          this.lastUpdated = castToInstant(value); // InstantType
+          break;
+        case -309425751: // profile
+          this.getProfile().add(castToUri(value)); // UriType
+          break;
+        case 949122880: // security
+          this.getSecurity().add(castToCoding(value)); // Coding
+          break;
+        case 114586: // tag
+          this.getTag().add(castToCoding(value)); // Coding
+          break;
+        default: super.setProperty(hash, name, value);
+        }
+
+      }
+
+      @Override
       public void setProperty(String name, Base value) throws FHIRException {
         if (name.equals("versionId"))
           this.versionId = castToId(value); // IdType
@@ -397,6 +467,19 @@ public class Meta extends Type implements IBaseMetaType {
           this.getTag().add(castToCoding(value));
         else
           super.setProperty(name, value);
+      }
+
+      @Override
+      public Base makeProperty(int hash, String name) throws FHIRException {
+        switch (hash) {
+        case -1407102957: throw new FHIRException("Cannot make property versionId as it is not a complex type"); // IdType
+        case 1649733957: throw new FHIRException("Cannot make property lastUpdated as it is not a complex type"); // InstantType
+        case -309425751: throw new FHIRException("Cannot make property profile as it is not a complex type"); // UriType
+        case 949122880:  return addSecurity(); // Coding
+        case 114586:  return addTag(); // Coding
+        default: return super.makeProperty(hash, name);
+        }
+
       }
 
       @Override
@@ -476,9 +559,8 @@ public class Meta extends Type implements IBaseMetaType {
       }
 
       public boolean isEmpty() {
-        return super.isEmpty() && (versionId == null || versionId.isEmpty()) && (lastUpdated == null || lastUpdated.isEmpty())
-           && (profile == null || profile.isEmpty()) && (security == null || security.isEmpty()) && (tag == null || tag.isEmpty())
-          ;
+        return super.isEmpty() && ca.uhn.fhir.util.ElementUtil.isEmpty(versionId, lastUpdated, profile
+          , security, tag);
       }
 
 

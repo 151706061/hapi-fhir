@@ -3,6 +3,7 @@ package ca.uhn.fhir.rest.gclient;
 import static org.apache.commons.lang3.StringUtils.defaultString;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 import ca.uhn.fhir.model.base.composite.BaseIdentifierDt;
@@ -35,17 +36,37 @@ public class TokenClientParam extends BaseClientParam  implements IParam {
 
 	private String myParamName;
 
-	@Override
-	public String getParamName() {
-		return myParamName;
-	}
-
 	public TokenClientParam(String theParamName) {
 		myParamName = theParamName;
 	}
 
 	public IMatches exactly() {
 		return new IMatches() {
+			@Override
+			public ICriterion<TokenClientParam> code(String theCode) {
+				return new TokenCriterion(getParamName(), null, theCode);
+			}
+
+			@Override
+			public ICriterion<TokenClientParam> identifier(BaseIdentifierDt theIdentifier) {
+				return new TokenCriterion(getParamName(), theIdentifier.getSystemElement().getValueAsString(), theIdentifier.getValueElement().getValue());
+			}
+
+			@Override
+			public ICriterion<TokenClientParam> identifier(String theIdentifier) {
+				return new TokenCriterion(getParamName(), null, theIdentifier);
+			}
+
+			@Override
+			public ICriterion<TokenClientParam> identifiers(BaseIdentifierDt... theIdentifiers) {
+				return new TokenCriterion(getParamName(), Arrays.asList(theIdentifiers));
+			}
+
+			@Override
+			public ICriterion<TokenClientParam> identifiers(List<BaseIdentifierDt> theIdentifiers) {
+				return new TokenCriterion(getParamName(), theIdentifiers);
+			}
+
 			@Override
 			public ICriterion<TokenClientParam> systemAndCode(String theSystem, String theCode) {
 				return new TokenCriterion(getParamName(), defaultString(theSystem), theCode);
@@ -57,64 +78,30 @@ public class TokenClientParam extends BaseClientParam  implements IParam {
 			}
 
 			@Override
-			public ICriterion<TokenClientParam> code(String theCode) {
-				return new TokenCriterion(getParamName(), null, theCode);
-			}
-
-			@Override
-			public ICriterion<TokenClientParam> identifier(String theIdentifier) {
-				return new TokenCriterion(getParamName(), null, theIdentifier);
-			}
-
-			@Override
-			public ICriterion<TokenClientParam> identifier(BaseIdentifierDt theIdentifier) {
-				return new TokenCriterion(getParamName(), theIdentifier.getSystemElement().getValueAsString(), theIdentifier.getValueElement().getValue());
-			}
-
-			@Override
-			public ICriterion<TokenClientParam> identifiers(List<BaseIdentifierDt> theIdentifiers) {
-				return new TokenCriterion(getParamName(), theIdentifiers);
-			}
-
-			@Override
-			public ICriterion<TokenClientParam> identifiers(BaseIdentifierDt... theIdentifiers) {
-				return new TokenCriterion(getParamName(), Arrays.asList(theIdentifiers));
+			public ICriterion<?> systemAndValues(String theSystem, Collection<String> theValues) {
+				return new TokenCriterion(getParamName(), defaultString(theSystem), theValues);
 			}
 };
 	}
 
+	@Override
+	public String getParamName() {
+		return myParamName;
+	}
+
+	/**
+	 * Create a search criterion that matches against the given system
+	 * value but does not specify a code. This means that any code/identifier with
+	 * the given system should match.
+	 * <p>
+	 * Use {@link #exactly()} if you want to specify a code.
+	 * </p>
+	 */
+	public ICriterion<TokenClientParam> hasSystemWithAnyCode(String theSystem) {
+		return new TokenCriterion(getParamName(), theSystem, (String)null);
+	}
+
 	public interface IMatches {
-		/**
-		 * Creates a search criterion that matches against the given code system and code
-		 * 
-		 * @param theSystem
-		 *            The code system (should be a URI)
-		 * @param theCode
-		 *            The code
-		 * @return A criterion
-		 */
-		ICriterion<TokenClientParam> systemAndCode(String theSystem, String theCode);
-
-		/**
-		 * Creates a search criterion that matches against the given system and identifier
-		 * 
-		 * @param theSystem
-		 *            The code system (should be a URI)
-		 * @param theIdentifier
-		 *            The identifier
-		 * @return A criterion
-		 */
-		ICriterion<TokenClientParam> systemAndIdentifier(String theSystem, String theIdentifier);
-
-		/**
-		 * Creates a search criterion that matches against the given identifier, with no system specified
-		 * 
-		 * @param theIdentifier
-		 *            The identifier
-		 * @return A criterion
-		 */
-		ICriterion<TokenClientParam> identifier(String theIdentifier);
-
 		/**
 		 * Creates a search criterion that matches against the given code, with no code system specified
 		 * 
@@ -132,16 +119,15 @@ public class TokenClientParam extends BaseClientParam  implements IParam {
 		 * @return A criterion
 		 */
 		ICriterion<TokenClientParam> identifier(BaseIdentifierDt theIdentifier);
-		
+
 		/**
-		 * Creates a search criterion that matches against the given collection of identifiers (system and code if both are present, or whatever is present).
-		 * In the query URL that is generated, identifiers will be joined with a ',' to create an OR query.
+		 * Creates a search criterion that matches against the given identifier, with no system specified
 		 * 
-		 * @param theIdentifiers
+		 * @param theIdentifier
 		 *            The identifier
 		 * @return A criterion
 		 */
-		ICriterion<TokenClientParam> identifiers(List<BaseIdentifierDt> theIdentifiers);
+		ICriterion<TokenClientParam> identifier(String theIdentifier);
 
 		/**
 		 * Creates a search criterion that matches against the given collection of identifiers (system and code if both are present, or whatever is present).
@@ -152,6 +138,47 @@ public class TokenClientParam extends BaseClientParam  implements IParam {
 		 * @return A criterion
 		 */
 		ICriterion<TokenClientParam> identifiers(BaseIdentifierDt... theIdentifiers);
+
+		/**
+		 * Creates a search criterion that matches against the given collection of identifiers (system and code if both are present, or whatever is present).
+		 * In the query URL that is generated, identifiers will be joined with a ',' to create an OR query.
+		 * 
+		 * @param theIdentifiers
+		 *            The identifier
+		 * @return A criterion
+		 */
+		ICriterion<TokenClientParam> identifiers(List<BaseIdentifierDt> theIdentifiers);
+		
+		/**
+		 * Creates a search criterion that matches against the given code system and code
+		 * 
+		 * @param theSystem
+		 *            The code system (should be a URI)
+		 * @param theCode
+		 *            The code
+		 * @return A criterion
+		 */
+		ICriterion<TokenClientParam> systemAndCode(String theSystem, String theCode);
+
+		/**
+		 * Creates a search criterion that matches a given system with a collection of possible 
+		 * values (this will be used to form a comma-separated OR query)
+		 * 
+		 * @param theSystem The system, which will be used with each value
+		 * @param theValues The values
+		 */
+		public ICriterion<?> systemAndValues(String theSystem, Collection<String> theValues);
+
+		/**
+		 * Creates a search criterion that matches against the given system and identifier
+		 * 
+		 * @param theSystem
+		 *            The code system (should be a URI)
+		 * @param theIdentifier
+		 *            The identifier
+		 * @return A criterion
+		 */
+		ICriterion<TokenClientParam> systemAndIdentifier(String theSystem, String theIdentifier);
 
 	}
 

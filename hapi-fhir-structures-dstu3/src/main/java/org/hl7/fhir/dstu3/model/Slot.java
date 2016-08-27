@@ -29,7 +29,7 @@ package org.hl7.fhir.dstu3.model;
   
 */
 
-// Generated on Sat, Jan 30, 2016 09:18-0500 for FHIR v1.3.0
+// Generated on Thu, Aug 25, 2016 23:04-0400 for FHIR v1.6.0
 
 import java.util.*;
 
@@ -37,11 +37,11 @@ import org.hl7.fhir.utilities.Utilities;
 import ca.uhn.fhir.model.api.annotation.ResourceDef;
 import ca.uhn.fhir.model.api.annotation.SearchParamDefinition;
 import ca.uhn.fhir.model.api.annotation.Child;
+import ca.uhn.fhir.model.api.annotation.ChildOrder;
 import ca.uhn.fhir.model.api.annotation.Description;
 import ca.uhn.fhir.model.api.annotation.Block;
-
-import org.hl7.fhir.dstu3.exceptions.FHIRException;
 import org.hl7.fhir.instance.model.api.*;
+import org.hl7.fhir.dstu3.exceptions.FHIRException;
 /**
  * A slot of time on a schedule that may be available for booking appointments.
  */
@@ -66,7 +66,11 @@ public class Slot extends DomainResource {
          */
         BUSYTENTATIVE, 
         /**
-         * added to help the parsers
+         * This instance should not have been part of this patient's medical record.
+         */
+        ENTEREDINERROR, 
+        /**
+         * added to help the parsers with the generic types
          */
         NULL;
         public static SlotStatus fromCode(String codeString) throws FHIRException {
@@ -80,7 +84,12 @@ public class Slot extends DomainResource {
           return BUSYUNAVAILABLE;
         if ("busy-tentative".equals(codeString))
           return BUSYTENTATIVE;
-        throw new FHIRException("Unknown SlotStatus code '"+codeString+"'");
+        if ("entered-in-error".equals(codeString))
+          return ENTEREDINERROR;
+        if (Configuration.isAcceptInvalidEnums())
+          return null;
+        else
+          throw new FHIRException("Unknown SlotStatus code '"+codeString+"'");
         }
         public String toCode() {
           switch (this) {
@@ -88,6 +97,7 @@ public class Slot extends DomainResource {
             case FREE: return "free";
             case BUSYUNAVAILABLE: return "busy-unavailable";
             case BUSYTENTATIVE: return "busy-tentative";
+            case ENTEREDINERROR: return "entered-in-error";
             default: return "?";
           }
         }
@@ -97,6 +107,7 @@ public class Slot extends DomainResource {
             case FREE: return "http://hl7.org/fhir/slotstatus";
             case BUSYUNAVAILABLE: return "http://hl7.org/fhir/slotstatus";
             case BUSYTENTATIVE: return "http://hl7.org/fhir/slotstatus";
+            case ENTEREDINERROR: return "http://hl7.org/fhir/slotstatus";
             default: return "?";
           }
         }
@@ -106,6 +117,7 @@ public class Slot extends DomainResource {
             case FREE: return "Indicates that the time interval is free for scheduling.";
             case BUSYUNAVAILABLE: return "Indicates that the time interval is busy and that the interval can not be scheduled.";
             case BUSYTENTATIVE: return "Indicates that the time interval is busy because one or more events have been tentatively scheduled for that interval.";
+            case ENTEREDINERROR: return "This instance should not have been part of this patient's medical record.";
             default: return "?";
           }
         }
@@ -115,6 +127,7 @@ public class Slot extends DomainResource {
             case FREE: return "Free";
             case BUSYUNAVAILABLE: return "Busy (Unavailable)";
             case BUSYTENTATIVE: return "Busy (Tentative)";
+            case ENTEREDINERROR: return "Entered in error";
             default: return "?";
           }
         }
@@ -133,6 +146,8 @@ public class Slot extends DomainResource {
           return SlotStatus.BUSYUNAVAILABLE;
         if ("busy-tentative".equals(codeString))
           return SlotStatus.BUSYTENTATIVE;
+        if ("entered-in-error".equals(codeString))
+          return SlotStatus.ENTEREDINERROR;
         throw new IllegalArgumentException("Unknown SlotStatus code '"+codeString+"'");
         }
         public Enumeration<SlotStatus> fromType(Base code) throws FHIRException {
@@ -149,6 +164,8 @@ public class Slot extends DomainResource {
           return new Enumeration<SlotStatus>(this, SlotStatus.BUSYUNAVAILABLE);
         if ("busy-tentative".equals(codeString))
           return new Enumeration<SlotStatus>(this, SlotStatus.BUSYTENTATIVE);
+        if ("entered-in-error".equals(codeString))
+          return new Enumeration<SlotStatus>(this, SlotStatus.ENTEREDINERROR);
         throw new FHIRException("Unknown SlotStatus code '"+codeString+"'");
         }
     public String toCode(SlotStatus code) {
@@ -160,6 +177,8 @@ public class Slot extends DomainResource {
         return "busy-unavailable";
       if (code == SlotStatus.BUSYTENTATIVE)
         return "busy-tentative";
+      if (code == SlotStatus.ENTEREDINERROR)
+        return "entered-in-error";
       return "?";
       }
     public String toSystem(SlotStatus code) {
@@ -175,16 +194,41 @@ public class Slot extends DomainResource {
     protected List<Identifier> identifier;
 
     /**
+     * A broad categorisation of the service that is to be performed during this appointment.
+     */
+    @Child(name = "serviceCategory", type = {CodeableConcept.class}, order=1, min=0, max=1, modifier=false, summary=true)
+    @Description(shortDefinition="A broad categorisation of the service that is to be performed during this appointment", formalDefinition="A broad categorisation of the service that is to be performed during this appointment." )
+    @ca.uhn.fhir.model.api.annotation.Binding(valueSet="http://hl7.org/fhir/ValueSet/service-category")
+    protected CodeableConcept serviceCategory;
+
+    /**
      * The type of appointments that can be booked into this slot (ideally this would be an identifiable service - which is at a location, rather than the location itself). If provided then this overrides the value provided on the availability resource.
      */
-    @Child(name = "type", type = {CodeableConcept.class}, order=1, min=0, max=1, modifier=false, summary=false)
+    @Child(name = "serviceType", type = {CodeableConcept.class}, order=2, min=0, max=Child.MAX_UNLIMITED, modifier=false, summary=true)
     @Description(shortDefinition="The type of appointments that can be booked into this slot (ideally this would be an identifiable service - which is at a location, rather than the location itself). If provided then this overrides the value provided on the availability resource", formalDefinition="The type of appointments that can be booked into this slot (ideally this would be an identifiable service - which is at a location, rather than the location itself). If provided then this overrides the value provided on the availability resource." )
-    protected CodeableConcept type;
+    @ca.uhn.fhir.model.api.annotation.Binding(valueSet="http://hl7.org/fhir/ValueSet/service-type")
+    protected List<CodeableConcept> serviceType;
+
+    /**
+     * The specialty of a practitioner that would be required to perform the service requested in this appointment.
+     */
+    @Child(name = "specialty", type = {CodeableConcept.class}, order=3, min=0, max=Child.MAX_UNLIMITED, modifier=false, summary=true)
+    @Description(shortDefinition="The specialty of a practitioner that would be required to perform the service requested in this appointment", formalDefinition="The specialty of a practitioner that would be required to perform the service requested in this appointment." )
+    @ca.uhn.fhir.model.api.annotation.Binding(valueSet="http://hl7.org/fhir/ValueSet/c80-practice-codes")
+    protected List<CodeableConcept> specialty;
+
+    /**
+     * The style of appointment or patient that has been booked in the slot (not service type).
+     */
+    @Child(name = "appointmentType", type = {CodeableConcept.class}, order=4, min=0, max=1, modifier=false, summary=true)
+    @Description(shortDefinition="The style of appointment or patient that has been booked in the slot (not service type)", formalDefinition="The style of appointment or patient that has been booked in the slot (not service type)." )
+    @ca.uhn.fhir.model.api.annotation.Binding(valueSet="http://hl7.org/fhir/ValueSet/v2-0276")
+    protected CodeableConcept appointmentType;
 
     /**
      * The schedule resource that this slot defines an interval of status information.
      */
-    @Child(name = "schedule", type = {Schedule.class}, order=2, min=1, max=1, modifier=false, summary=true)
+    @Child(name = "schedule", type = {Schedule.class}, order=5, min=1, max=1, modifier=false, summary=true)
     @Description(shortDefinition="The schedule resource that this slot defines an interval of status information", formalDefinition="The schedule resource that this slot defines an interval of status information." )
     protected Reference schedule;
 
@@ -194,41 +238,42 @@ public class Slot extends DomainResource {
     protected Schedule scheduleTarget;
 
     /**
-     * busy | free | busy-unavailable | busy-tentative.
+     * busy | free | busy-unavailable | busy-tentative | entered-in-error.
      */
-    @Child(name = "freeBusyType", type = {CodeType.class}, order=3, min=1, max=1, modifier=false, summary=true)
-    @Description(shortDefinition="busy | free | busy-unavailable | busy-tentative", formalDefinition="busy | free | busy-unavailable | busy-tentative." )
-    protected Enumeration<SlotStatus> freeBusyType;
+    @Child(name = "status", type = {CodeType.class}, order=6, min=1, max=1, modifier=false, summary=true)
+    @Description(shortDefinition="busy | free | busy-unavailable | busy-tentative | entered-in-error", formalDefinition="busy | free | busy-unavailable | busy-tentative | entered-in-error." )
+    @ca.uhn.fhir.model.api.annotation.Binding(valueSet="http://hl7.org/fhir/ValueSet/slotstatus")
+    protected Enumeration<SlotStatus> status;
 
     /**
      * Date/Time that the slot is to begin.
      */
-    @Child(name = "start", type = {InstantType.class}, order=4, min=1, max=1, modifier=false, summary=true)
+    @Child(name = "start", type = {InstantType.class}, order=7, min=1, max=1, modifier=false, summary=true)
     @Description(shortDefinition="Date/Time that the slot is to begin", formalDefinition="Date/Time that the slot is to begin." )
     protected InstantType start;
 
     /**
      * Date/Time that the slot is to conclude.
      */
-    @Child(name = "end", type = {InstantType.class}, order=5, min=1, max=1, modifier=false, summary=true)
+    @Child(name = "end", type = {InstantType.class}, order=8, min=1, max=1, modifier=false, summary=true)
     @Description(shortDefinition="Date/Time that the slot is to conclude", formalDefinition="Date/Time that the slot is to conclude." )
     protected InstantType end;
 
     /**
      * This slot has already been overbooked, appointments are unlikely to be accepted for this time.
      */
-    @Child(name = "overbooked", type = {BooleanType.class}, order=6, min=0, max=1, modifier=false, summary=false)
+    @Child(name = "overbooked", type = {BooleanType.class}, order=9, min=0, max=1, modifier=false, summary=false)
     @Description(shortDefinition="This slot has already been overbooked, appointments are unlikely to be accepted for this time", formalDefinition="This slot has already been overbooked, appointments are unlikely to be accepted for this time." )
     protected BooleanType overbooked;
 
     /**
      * Comments on the slot to describe any extended information. Such as custom constraints on the slot.
      */
-    @Child(name = "comment", type = {StringType.class}, order=7, min=0, max=1, modifier=false, summary=false)
+    @Child(name = "comment", type = {StringType.class}, order=10, min=0, max=1, modifier=false, summary=false)
     @Description(shortDefinition="Comments on the slot to describe any extended information. Such as custom constraints on the slot", formalDefinition="Comments on the slot to describe any extended information. Such as custom constraints on the slot." )
     protected StringType comment;
 
-    private static final long serialVersionUID = 1984269299L;
+    private static final long serialVersionUID = 2085594970L;
 
   /**
    * Constructor
@@ -240,10 +285,10 @@ public class Slot extends DomainResource {
   /**
    * Constructor
    */
-    public Slot(Reference schedule, Enumeration<SlotStatus> freeBusyType, InstantType start, InstantType end) {
+    public Slot(Reference schedule, Enumeration<SlotStatus> status, InstantType start, InstantType end) {
       super();
       this.schedule = schedule;
-      this.freeBusyType = freeBusyType;
+      this.status = status;
       this.start = start;
       this.end = end;
     }
@@ -257,6 +302,14 @@ public class Slot extends DomainResource {
       return this.identifier;
     }
 
+    /**
+     * @return Returns a reference to <code>this</code> for easy method chaining
+     */
+    public Slot setIdentifier(List<Identifier> theIdentifier) { 
+      this.identifier = theIdentifier;
+      return this;
+    }
+
     public boolean hasIdentifier() { 
       if (this.identifier == null)
         return false;
@@ -266,10 +319,6 @@ public class Slot extends DomainResource {
       return false;
     }
 
-    /**
-     * @return {@link #identifier} (External Ids for this item.)
-     */
-    // syntactic sugar
     public Identifier addIdentifier() { //3
       Identifier t = new Identifier();
       if (this.identifier == null)
@@ -278,7 +327,6 @@ public class Slot extends DomainResource {
       return t;
     }
 
-    // syntactic sugar
     public Slot addIdentifier(Identifier t) { //3
       if (t == null)
         return this;
@@ -289,26 +337,166 @@ public class Slot extends DomainResource {
     }
 
     /**
-     * @return {@link #type} (The type of appointments that can be booked into this slot (ideally this would be an identifiable service - which is at a location, rather than the location itself). If provided then this overrides the value provided on the availability resource.)
+     * @return The first repetition of repeating field {@link #identifier}, creating it if it does not already exist
      */
-    public CodeableConcept getType() { 
-      if (this.type == null)
-        if (Configuration.errorOnAutoCreate())
-          throw new Error("Attempt to auto-create Slot.type");
-        else if (Configuration.doAutoCreate())
-          this.type = new CodeableConcept(); // cc
-      return this.type;
-    }
-
-    public boolean hasType() { 
-      return this.type != null && !this.type.isEmpty();
+    public Identifier getIdentifierFirstRep() { 
+      if (getIdentifier().isEmpty()) {
+        addIdentifier();
+      }
+      return getIdentifier().get(0);
     }
 
     /**
-     * @param value {@link #type} (The type of appointments that can be booked into this slot (ideally this would be an identifiable service - which is at a location, rather than the location itself). If provided then this overrides the value provided on the availability resource.)
+     * @return {@link #serviceCategory} (A broad categorisation of the service that is to be performed during this appointment.)
      */
-    public Slot setType(CodeableConcept value) { 
-      this.type = value;
+    public CodeableConcept getServiceCategory() { 
+      if (this.serviceCategory == null)
+        if (Configuration.errorOnAutoCreate())
+          throw new Error("Attempt to auto-create Slot.serviceCategory");
+        else if (Configuration.doAutoCreate())
+          this.serviceCategory = new CodeableConcept(); // cc
+      return this.serviceCategory;
+    }
+
+    public boolean hasServiceCategory() { 
+      return this.serviceCategory != null && !this.serviceCategory.isEmpty();
+    }
+
+    /**
+     * @param value {@link #serviceCategory} (A broad categorisation of the service that is to be performed during this appointment.)
+     */
+    public Slot setServiceCategory(CodeableConcept value) { 
+      this.serviceCategory = value;
+      return this;
+    }
+
+    /**
+     * @return {@link #serviceType} (The type of appointments that can be booked into this slot (ideally this would be an identifiable service - which is at a location, rather than the location itself). If provided then this overrides the value provided on the availability resource.)
+     */
+    public List<CodeableConcept> getServiceType() { 
+      if (this.serviceType == null)
+        this.serviceType = new ArrayList<CodeableConcept>();
+      return this.serviceType;
+    }
+
+    /**
+     * @return Returns a reference to <code>this</code> for easy method chaining
+     */
+    public Slot setServiceType(List<CodeableConcept> theServiceType) { 
+      this.serviceType = theServiceType;
+      return this;
+    }
+
+    public boolean hasServiceType() { 
+      if (this.serviceType == null)
+        return false;
+      for (CodeableConcept item : this.serviceType)
+        if (!item.isEmpty())
+          return true;
+      return false;
+    }
+
+    public CodeableConcept addServiceType() { //3
+      CodeableConcept t = new CodeableConcept();
+      if (this.serviceType == null)
+        this.serviceType = new ArrayList<CodeableConcept>();
+      this.serviceType.add(t);
+      return t;
+    }
+
+    public Slot addServiceType(CodeableConcept t) { //3
+      if (t == null)
+        return this;
+      if (this.serviceType == null)
+        this.serviceType = new ArrayList<CodeableConcept>();
+      this.serviceType.add(t);
+      return this;
+    }
+
+    /**
+     * @return The first repetition of repeating field {@link #serviceType}, creating it if it does not already exist
+     */
+    public CodeableConcept getServiceTypeFirstRep() { 
+      if (getServiceType().isEmpty()) {
+        addServiceType();
+      }
+      return getServiceType().get(0);
+    }
+
+    /**
+     * @return {@link #specialty} (The specialty of a practitioner that would be required to perform the service requested in this appointment.)
+     */
+    public List<CodeableConcept> getSpecialty() { 
+      if (this.specialty == null)
+        this.specialty = new ArrayList<CodeableConcept>();
+      return this.specialty;
+    }
+
+    /**
+     * @return Returns a reference to <code>this</code> for easy method chaining
+     */
+    public Slot setSpecialty(List<CodeableConcept> theSpecialty) { 
+      this.specialty = theSpecialty;
+      return this;
+    }
+
+    public boolean hasSpecialty() { 
+      if (this.specialty == null)
+        return false;
+      for (CodeableConcept item : this.specialty)
+        if (!item.isEmpty())
+          return true;
+      return false;
+    }
+
+    public CodeableConcept addSpecialty() { //3
+      CodeableConcept t = new CodeableConcept();
+      if (this.specialty == null)
+        this.specialty = new ArrayList<CodeableConcept>();
+      this.specialty.add(t);
+      return t;
+    }
+
+    public Slot addSpecialty(CodeableConcept t) { //3
+      if (t == null)
+        return this;
+      if (this.specialty == null)
+        this.specialty = new ArrayList<CodeableConcept>();
+      this.specialty.add(t);
+      return this;
+    }
+
+    /**
+     * @return The first repetition of repeating field {@link #specialty}, creating it if it does not already exist
+     */
+    public CodeableConcept getSpecialtyFirstRep() { 
+      if (getSpecialty().isEmpty()) {
+        addSpecialty();
+      }
+      return getSpecialty().get(0);
+    }
+
+    /**
+     * @return {@link #appointmentType} (The style of appointment or patient that has been booked in the slot (not service type).)
+     */
+    public CodeableConcept getAppointmentType() { 
+      if (this.appointmentType == null)
+        if (Configuration.errorOnAutoCreate())
+          throw new Error("Attempt to auto-create Slot.appointmentType");
+        else if (Configuration.doAutoCreate())
+          this.appointmentType = new CodeableConcept(); // cc
+      return this.appointmentType;
+    }
+
+    public boolean hasAppointmentType() { 
+      return this.appointmentType != null && !this.appointmentType.isEmpty();
+    }
+
+    /**
+     * @param value {@link #appointmentType} (The style of appointment or patient that has been booked in the slot (not service type).)
+     */
+    public Slot setAppointmentType(CodeableConcept value) { 
+      this.appointmentType = value;
       return this;
     }
 
@@ -357,47 +545,47 @@ public class Slot extends DomainResource {
     }
 
     /**
-     * @return {@link #freeBusyType} (busy | free | busy-unavailable | busy-tentative.). This is the underlying object with id, value and extensions. The accessor "getFreeBusyType" gives direct access to the value
+     * @return {@link #status} (busy | free | busy-unavailable | busy-tentative | entered-in-error.). This is the underlying object with id, value and extensions. The accessor "getStatus" gives direct access to the value
      */
-    public Enumeration<SlotStatus> getFreeBusyTypeElement() { 
-      if (this.freeBusyType == null)
+    public Enumeration<SlotStatus> getStatusElement() { 
+      if (this.status == null)
         if (Configuration.errorOnAutoCreate())
-          throw new Error("Attempt to auto-create Slot.freeBusyType");
+          throw new Error("Attempt to auto-create Slot.status");
         else if (Configuration.doAutoCreate())
-          this.freeBusyType = new Enumeration<SlotStatus>(new SlotStatusEnumFactory()); // bb
-      return this.freeBusyType;
+          this.status = new Enumeration<SlotStatus>(new SlotStatusEnumFactory()); // bb
+      return this.status;
     }
 
-    public boolean hasFreeBusyTypeElement() { 
-      return this.freeBusyType != null && !this.freeBusyType.isEmpty();
+    public boolean hasStatusElement() { 
+      return this.status != null && !this.status.isEmpty();
     }
 
-    public boolean hasFreeBusyType() { 
-      return this.freeBusyType != null && !this.freeBusyType.isEmpty();
+    public boolean hasStatus() { 
+      return this.status != null && !this.status.isEmpty();
     }
 
     /**
-     * @param value {@link #freeBusyType} (busy | free | busy-unavailable | busy-tentative.). This is the underlying object with id, value and extensions. The accessor "getFreeBusyType" gives direct access to the value
+     * @param value {@link #status} (busy | free | busy-unavailable | busy-tentative | entered-in-error.). This is the underlying object with id, value and extensions. The accessor "getStatus" gives direct access to the value
      */
-    public Slot setFreeBusyTypeElement(Enumeration<SlotStatus> value) { 
-      this.freeBusyType = value;
+    public Slot setStatusElement(Enumeration<SlotStatus> value) { 
+      this.status = value;
       return this;
     }
 
     /**
-     * @return busy | free | busy-unavailable | busy-tentative.
+     * @return busy | free | busy-unavailable | busy-tentative | entered-in-error.
      */
-    public SlotStatus getFreeBusyType() { 
-      return this.freeBusyType == null ? null : this.freeBusyType.getValue();
+    public SlotStatus getStatus() { 
+      return this.status == null ? null : this.status.getValue();
     }
 
     /**
-     * @param value busy | free | busy-unavailable | busy-tentative.
+     * @param value busy | free | busy-unavailable | busy-tentative | entered-in-error.
      */
-    public Slot setFreeBusyType(SlotStatus value) { 
-        if (this.freeBusyType == null)
-          this.freeBusyType = new Enumeration<SlotStatus>(new SlotStatusEnumFactory());
-        this.freeBusyType.setValue(value);
+    public Slot setStatus(SlotStatus value) { 
+        if (this.status == null)
+          this.status = new Enumeration<SlotStatus>(new SlotStatusEnumFactory());
+        this.status.setValue(value);
       return this;
     }
 
@@ -588,9 +776,12 @@ public class Slot extends DomainResource {
       protected void listChildren(List<Property> childrenList) {
         super.listChildren(childrenList);
         childrenList.add(new Property("identifier", "Identifier", "External Ids for this item.", 0, java.lang.Integer.MAX_VALUE, identifier));
-        childrenList.add(new Property("type", "CodeableConcept", "The type of appointments that can be booked into this slot (ideally this would be an identifiable service - which is at a location, rather than the location itself). If provided then this overrides the value provided on the availability resource.", 0, java.lang.Integer.MAX_VALUE, type));
+        childrenList.add(new Property("serviceCategory", "CodeableConcept", "A broad categorisation of the service that is to be performed during this appointment.", 0, java.lang.Integer.MAX_VALUE, serviceCategory));
+        childrenList.add(new Property("serviceType", "CodeableConcept", "The type of appointments that can be booked into this slot (ideally this would be an identifiable service - which is at a location, rather than the location itself). If provided then this overrides the value provided on the availability resource.", 0, java.lang.Integer.MAX_VALUE, serviceType));
+        childrenList.add(new Property("specialty", "CodeableConcept", "The specialty of a practitioner that would be required to perform the service requested in this appointment.", 0, java.lang.Integer.MAX_VALUE, specialty));
+        childrenList.add(new Property("appointmentType", "CodeableConcept", "The style of appointment or patient that has been booked in the slot (not service type).", 0, java.lang.Integer.MAX_VALUE, appointmentType));
         childrenList.add(new Property("schedule", "Reference(Schedule)", "The schedule resource that this slot defines an interval of status information.", 0, java.lang.Integer.MAX_VALUE, schedule));
-        childrenList.add(new Property("freeBusyType", "code", "busy | free | busy-unavailable | busy-tentative.", 0, java.lang.Integer.MAX_VALUE, freeBusyType));
+        childrenList.add(new Property("status", "code", "busy | free | busy-unavailable | busy-tentative | entered-in-error.", 0, java.lang.Integer.MAX_VALUE, status));
         childrenList.add(new Property("start", "instant", "Date/Time that the slot is to begin.", 0, java.lang.Integer.MAX_VALUE, start));
         childrenList.add(new Property("end", "instant", "Date/Time that the slot is to conclude.", 0, java.lang.Integer.MAX_VALUE, end));
         childrenList.add(new Property("overbooked", "boolean", "This slot has already been overbooked, appointments are unlikely to be accepted for this time.", 0, java.lang.Integer.MAX_VALUE, overbooked));
@@ -598,15 +789,81 @@ public class Slot extends DomainResource {
       }
 
       @Override
+      public Base[] getProperty(int hash, String name, boolean checkValid) throws FHIRException {
+        switch (hash) {
+        case -1618432855: /*identifier*/ return this.identifier == null ? new Base[0] : this.identifier.toArray(new Base[this.identifier.size()]); // Identifier
+        case 1281188563: /*serviceCategory*/ return this.serviceCategory == null ? new Base[0] : new Base[] {this.serviceCategory}; // CodeableConcept
+        case -1928370289: /*serviceType*/ return this.serviceType == null ? new Base[0] : this.serviceType.toArray(new Base[this.serviceType.size()]); // CodeableConcept
+        case -1694759682: /*specialty*/ return this.specialty == null ? new Base[0] : this.specialty.toArray(new Base[this.specialty.size()]); // CodeableConcept
+        case -1596426375: /*appointmentType*/ return this.appointmentType == null ? new Base[0] : new Base[] {this.appointmentType}; // CodeableConcept
+        case -697920873: /*schedule*/ return this.schedule == null ? new Base[0] : new Base[] {this.schedule}; // Reference
+        case -892481550: /*status*/ return this.status == null ? new Base[0] : new Base[] {this.status}; // Enumeration<SlotStatus>
+        case 109757538: /*start*/ return this.start == null ? new Base[0] : new Base[] {this.start}; // InstantType
+        case 100571: /*end*/ return this.end == null ? new Base[0] : new Base[] {this.end}; // InstantType
+        case 2068545308: /*overbooked*/ return this.overbooked == null ? new Base[0] : new Base[] {this.overbooked}; // BooleanType
+        case 950398559: /*comment*/ return this.comment == null ? new Base[0] : new Base[] {this.comment}; // StringType
+        default: return super.getProperty(hash, name, checkValid);
+        }
+
+      }
+
+      @Override
+      public void setProperty(int hash, String name, Base value) throws FHIRException {
+        switch (hash) {
+        case -1618432855: // identifier
+          this.getIdentifier().add(castToIdentifier(value)); // Identifier
+          break;
+        case 1281188563: // serviceCategory
+          this.serviceCategory = castToCodeableConcept(value); // CodeableConcept
+          break;
+        case -1928370289: // serviceType
+          this.getServiceType().add(castToCodeableConcept(value)); // CodeableConcept
+          break;
+        case -1694759682: // specialty
+          this.getSpecialty().add(castToCodeableConcept(value)); // CodeableConcept
+          break;
+        case -1596426375: // appointmentType
+          this.appointmentType = castToCodeableConcept(value); // CodeableConcept
+          break;
+        case -697920873: // schedule
+          this.schedule = castToReference(value); // Reference
+          break;
+        case -892481550: // status
+          this.status = new SlotStatusEnumFactory().fromType(value); // Enumeration<SlotStatus>
+          break;
+        case 109757538: // start
+          this.start = castToInstant(value); // InstantType
+          break;
+        case 100571: // end
+          this.end = castToInstant(value); // InstantType
+          break;
+        case 2068545308: // overbooked
+          this.overbooked = castToBoolean(value); // BooleanType
+          break;
+        case 950398559: // comment
+          this.comment = castToString(value); // StringType
+          break;
+        default: super.setProperty(hash, name, value);
+        }
+
+      }
+
+      @Override
       public void setProperty(String name, Base value) throws FHIRException {
         if (name.equals("identifier"))
           this.getIdentifier().add(castToIdentifier(value));
-        else if (name.equals("type"))
-          this.type = castToCodeableConcept(value); // CodeableConcept
+        else if (name.equals("serviceCategory"))
+          this.serviceCategory = castToCodeableConcept(value); // CodeableConcept
+        else if (name.equals("serviceType"))
+          this.getServiceType().add(castToCodeableConcept(value));
+        else if (name.equals("specialty"))
+          this.getSpecialty().add(castToCodeableConcept(value));
+        else if (name.equals("appointmentType"))
+          this.appointmentType = castToCodeableConcept(value); // CodeableConcept
         else if (name.equals("schedule"))
           this.schedule = castToReference(value); // Reference
-        else if (name.equals("freeBusyType"))
-          this.freeBusyType = new SlotStatusEnumFactory().fromType(value); // Enumeration<SlotStatus>
+        else if (name.equals("status"))
+          this.status = new SlotStatusEnumFactory().fromType(value); // Enumeration<SlotStatus>
         else if (name.equals("start"))
           this.start = castToInstant(value); // InstantType
         else if (name.equals("end"))
@@ -620,20 +877,49 @@ public class Slot extends DomainResource {
       }
 
       @Override
+      public Base makeProperty(int hash, String name) throws FHIRException {
+        switch (hash) {
+        case -1618432855:  return addIdentifier(); // Identifier
+        case 1281188563:  return getServiceCategory(); // CodeableConcept
+        case -1928370289:  return addServiceType(); // CodeableConcept
+        case -1694759682:  return addSpecialty(); // CodeableConcept
+        case -1596426375:  return getAppointmentType(); // CodeableConcept
+        case -697920873:  return getSchedule(); // Reference
+        case -892481550: throw new FHIRException("Cannot make property status as it is not a complex type"); // Enumeration<SlotStatus>
+        case 109757538: throw new FHIRException("Cannot make property start as it is not a complex type"); // InstantType
+        case 100571: throw new FHIRException("Cannot make property end as it is not a complex type"); // InstantType
+        case 2068545308: throw new FHIRException("Cannot make property overbooked as it is not a complex type"); // BooleanType
+        case 950398559: throw new FHIRException("Cannot make property comment as it is not a complex type"); // StringType
+        default: return super.makeProperty(hash, name);
+        }
+
+      }
+
+      @Override
       public Base addChild(String name) throws FHIRException {
         if (name.equals("identifier")) {
           return addIdentifier();
         }
-        else if (name.equals("type")) {
-          this.type = new CodeableConcept();
-          return this.type;
+        else if (name.equals("serviceCategory")) {
+          this.serviceCategory = new CodeableConcept();
+          return this.serviceCategory;
+        }
+        else if (name.equals("serviceType")) {
+          return addServiceType();
+        }
+        else if (name.equals("specialty")) {
+          return addSpecialty();
+        }
+        else if (name.equals("appointmentType")) {
+          this.appointmentType = new CodeableConcept();
+          return this.appointmentType;
         }
         else if (name.equals("schedule")) {
           this.schedule = new Reference();
           return this.schedule;
         }
-        else if (name.equals("freeBusyType")) {
-          throw new FHIRException("Cannot call addChild on a primitive type Slot.freeBusyType");
+        else if (name.equals("status")) {
+          throw new FHIRException("Cannot call addChild on a primitive type Slot.status");
         }
         else if (name.equals("start")) {
           throw new FHIRException("Cannot call addChild on a primitive type Slot.start");
@@ -664,9 +950,20 @@ public class Slot extends DomainResource {
           for (Identifier i : identifier)
             dst.identifier.add(i.copy());
         };
-        dst.type = type == null ? null : type.copy();
+        dst.serviceCategory = serviceCategory == null ? null : serviceCategory.copy();
+        if (serviceType != null) {
+          dst.serviceType = new ArrayList<CodeableConcept>();
+          for (CodeableConcept i : serviceType)
+            dst.serviceType.add(i.copy());
+        };
+        if (specialty != null) {
+          dst.specialty = new ArrayList<CodeableConcept>();
+          for (CodeableConcept i : specialty)
+            dst.specialty.add(i.copy());
+        };
+        dst.appointmentType = appointmentType == null ? null : appointmentType.copy();
         dst.schedule = schedule == null ? null : schedule.copy();
-        dst.freeBusyType = freeBusyType == null ? null : freeBusyType.copy();
+        dst.status = status == null ? null : status.copy();
         dst.start = start == null ? null : start.copy();
         dst.end = end == null ? null : end.copy();
         dst.overbooked = overbooked == null ? null : overbooked.copy();
@@ -685,9 +982,11 @@ public class Slot extends DomainResource {
         if (!(other instanceof Slot))
           return false;
         Slot o = (Slot) other;
-        return compareDeep(identifier, o.identifier, true) && compareDeep(type, o.type, true) && compareDeep(schedule, o.schedule, true)
-           && compareDeep(freeBusyType, o.freeBusyType, true) && compareDeep(start, o.start, true) && compareDeep(end, o.end, true)
-           && compareDeep(overbooked, o.overbooked, true) && compareDeep(comment, o.comment, true);
+        return compareDeep(identifier, o.identifier, true) && compareDeep(serviceCategory, o.serviceCategory, true)
+           && compareDeep(serviceType, o.serviceType, true) && compareDeep(specialty, o.specialty, true) && compareDeep(appointmentType, o.appointmentType, true)
+           && compareDeep(schedule, o.schedule, true) && compareDeep(status, o.status, true) && compareDeep(start, o.start, true)
+           && compareDeep(end, o.end, true) && compareDeep(overbooked, o.overbooked, true) && compareDeep(comment, o.comment, true)
+          ;
       }
 
       @Override
@@ -697,15 +996,14 @@ public class Slot extends DomainResource {
         if (!(other instanceof Slot))
           return false;
         Slot o = (Slot) other;
-        return compareValues(freeBusyType, o.freeBusyType, true) && compareValues(start, o.start, true) && compareValues(end, o.end, true)
+        return compareValues(status, o.status, true) && compareValues(start, o.start, true) && compareValues(end, o.end, true)
            && compareValues(overbooked, o.overbooked, true) && compareValues(comment, o.comment, true);
       }
 
       public boolean isEmpty() {
-        return super.isEmpty() && (identifier == null || identifier.isEmpty()) && (type == null || type.isEmpty())
-           && (schedule == null || schedule.isEmpty()) && (freeBusyType == null || freeBusyType.isEmpty())
-           && (start == null || start.isEmpty()) && (end == null || end.isEmpty()) && (overbooked == null || overbooked.isEmpty())
-           && (comment == null || comment.isEmpty());
+        return super.isEmpty() && ca.uhn.fhir.util.ElementUtil.isEmpty(identifier, serviceCategory
+          , serviceType, specialty, appointmentType, schedule, status, start, end, overbooked
+          , comment);
       }
 
   @Override
@@ -721,7 +1019,7 @@ public class Slot extends DomainResource {
    * Path: <b>Slot.schedule</b><br>
    * </p>
    */
-  @SearchParamDefinition(name="schedule", path="Slot.schedule", description="The Schedule Resource that we are seeking a slot within", type="reference" )
+  @SearchParamDefinition(name="schedule", path="Slot.schedule", description="The Schedule Resource that we are seeking a slot within", type="reference", target={Schedule.class } )
   public static final String SP_SCHEDULE = "schedule";
  /**
    * <b>Fluent Client</b> search parameter constant for <b>schedule</b>
@@ -784,40 +1082,40 @@ public class Slot extends DomainResource {
    * <p>
    * Description: <b>The type of appointments that can be booked into the slot</b><br>
    * Type: <b>token</b><br>
-   * Path: <b>Slot.type</b><br>
+   * Path: <b>Slot.serviceType</b><br>
    * </p>
    */
-  @SearchParamDefinition(name="slot-type", path="Slot.type", description="The type of appointments that can be booked into the slot", type="token" )
+  @SearchParamDefinition(name="slot-type", path="Slot.serviceType", description="The type of appointments that can be booked into the slot", type="token" )
   public static final String SP_SLOT_TYPE = "slot-type";
  /**
    * <b>Fluent Client</b> search parameter constant for <b>slot-type</b>
    * <p>
    * Description: <b>The type of appointments that can be booked into the slot</b><br>
    * Type: <b>token</b><br>
-   * Path: <b>Slot.type</b><br>
+   * Path: <b>Slot.serviceType</b><br>
    * </p>
    */
   public static final ca.uhn.fhir.rest.gclient.TokenClientParam SLOT_TYPE = new ca.uhn.fhir.rest.gclient.TokenClientParam(SP_SLOT_TYPE);
 
  /**
-   * Search parameter: <b>fb-type</b>
+   * Search parameter: <b>status</b>
    * <p>
    * Description: <b>The free/busy status of the appointment</b><br>
    * Type: <b>token</b><br>
-   * Path: <b>Slot.freeBusyType</b><br>
+   * Path: <b>Slot.status</b><br>
    * </p>
    */
-  @SearchParamDefinition(name="fb-type", path="Slot.freeBusyType", description="The free/busy status of the appointment", type="token" )
-  public static final String SP_FB_TYPE = "fb-type";
+  @SearchParamDefinition(name="status", path="Slot.status", description="The free/busy status of the appointment", type="token" )
+  public static final String SP_STATUS = "status";
  /**
-   * <b>Fluent Client</b> search parameter constant for <b>fb-type</b>
+   * <b>Fluent Client</b> search parameter constant for <b>status</b>
    * <p>
    * Description: <b>The free/busy status of the appointment</b><br>
    * Type: <b>token</b><br>
-   * Path: <b>Slot.freeBusyType</b><br>
+   * Path: <b>Slot.status</b><br>
    * </p>
    */
-  public static final ca.uhn.fhir.rest.gclient.TokenClientParam FB_TYPE = new ca.uhn.fhir.rest.gclient.TokenClientParam(SP_FB_TYPE);
+  public static final ca.uhn.fhir.rest.gclient.TokenClientParam STATUS = new ca.uhn.fhir.rest.gclient.TokenClientParam(SP_STATUS);
 
 
 }

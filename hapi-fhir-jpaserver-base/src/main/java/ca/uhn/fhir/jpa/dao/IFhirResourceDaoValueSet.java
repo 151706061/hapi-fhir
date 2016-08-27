@@ -28,81 +28,15 @@ import ca.uhn.fhir.rest.method.RequestDetails;
 
 public interface IFhirResourceDaoValueSet<T extends IBaseResource, CD, CC> extends IFhirResourceDao<T> {
 
-	T expand(IIdType theId, String theFilter);
+	T expand(IIdType theId, String theFilter, RequestDetails theRequestDetails);
 
 	T expand(T theSource, String theFilter);
 
 	T expandByIdentifier(String theUri, String theFilter);
 
-	LookupCodeResult lookupCode(IPrimitiveType<String> theCode, IPrimitiveType<String> theSystem, CD theCoding, RequestDetails theRequestDetails);
+	void purgeCaches();
 
-	ValidateCodeResult validateCode(IPrimitiveType<String> theValueSetIdentifier, IIdType theId, IPrimitiveType<String> theCode, IPrimitiveType<String> theSystem, IPrimitiveType<String> theDisplay, CD theCoding, CC theCodeableConcept);
-
-	public class LookupCodeResult {
-		private String myCodeDisplay;
-		private boolean myCodeIsAbstract;
-		private String myCodeSystemDisplayName;
-		private String myCodeSystemVersion;
-		private boolean myFound;
-		private String mySearchedForCode;
-		private String mySearchedForSystem;
-
-		public String getCodeDisplay() {
-			return myCodeDisplay;
-		}
-
-		public String getCodeSystemDisplayName() {
-			return myCodeSystemDisplayName;
-		}
-
-		public String getCodeSystemVersion() {
-			return myCodeSystemVersion;
-		}
-
-		public String getSearchedForCode() {
-			return mySearchedForCode;
-		}
-
-		public String getSearchedForSystem() {
-			return mySearchedForSystem;
-		}
-
-		public boolean isCodeIsAbstract() {
-			return myCodeIsAbstract;
-		}
-
-		public boolean isFound() {
-			return myFound;
-		}
-
-		public void setCodeDisplay(String theCodeDisplay) {
-			myCodeDisplay = theCodeDisplay;
-		}
-
-		public void setCodeIsAbstract(boolean theCodeIsAbstract) {
-			myCodeIsAbstract = theCodeIsAbstract;
-		}
-
-		public void setCodeSystemDisplayName(String theCodeSystemDisplayName) {
-			myCodeSystemDisplayName = theCodeSystemDisplayName;
-		}
-
-		public void setCodeSystemVersion(String theCodeSystemVersion) {
-			myCodeSystemVersion = theCodeSystemVersion;
-		}
-
-		public void setFound(boolean theFound) {
-			myFound = theFound;
-		}
-
-		public void setSearchedForCode(String theSearchedForCode) {
-			mySearchedForCode = theSearchedForCode;
-		}
-
-		public void setSearchedForSystem(String theSearchedForSystem) {
-			mySearchedForSystem = theSearchedForSystem;
-		}
-	}
+	ValidateCodeResult validateCode(IPrimitiveType<String> theValueSetIdentifier, IIdType theId, IPrimitiveType<String> theCode, IPrimitiveType<String> theSystem, IPrimitiveType<String> theDisplay, CD theCoding, CC theCodeableConcept, RequestDetails theRequestDetails);
 
 	public class ValidateCodeResult {
 		private String myDisplay;

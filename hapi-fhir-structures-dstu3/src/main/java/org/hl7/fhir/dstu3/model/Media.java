@@ -29,7 +29,7 @@ package org.hl7.fhir.dstu3.model;
   
 */
 
-// Generated on Sat, Jan 30, 2016 09:18-0500 for FHIR v1.3.0
+// Generated on Thu, Aug 25, 2016 23:04-0400 for FHIR v1.6.0
 
 import java.util.*;
 
@@ -37,11 +37,11 @@ import org.hl7.fhir.utilities.Utilities;
 import ca.uhn.fhir.model.api.annotation.ResourceDef;
 import ca.uhn.fhir.model.api.annotation.SearchParamDefinition;
 import ca.uhn.fhir.model.api.annotation.Child;
+import ca.uhn.fhir.model.api.annotation.ChildOrder;
 import ca.uhn.fhir.model.api.annotation.Description;
 import ca.uhn.fhir.model.api.annotation.Block;
-
-import org.hl7.fhir.dstu3.exceptions.FHIRException;
 import org.hl7.fhir.instance.model.api.*;
+import org.hl7.fhir.dstu3.exceptions.FHIRException;
 /**
  * A photo, video, or audio recording acquired or used in healthcare. The actual content may be inline or provided by direct reference.
  */
@@ -62,7 +62,7 @@ public class Media extends DomainResource {
          */
         AUDIO, 
         /**
-         * added to help the parsers
+         * added to help the parsers with the generic types
          */
         NULL;
         public static DigitalMediaType fromCode(String codeString) throws FHIRException {
@@ -74,7 +74,10 @@ public class Media extends DomainResource {
           return VIDEO;
         if ("audio".equals(codeString))
           return AUDIO;
-        throw new FHIRException("Unknown DigitalMediaType code '"+codeString+"'");
+        if (Configuration.isAcceptInvalidEnums())
+          return null;
+        else
+          throw new FHIRException("Unknown DigitalMediaType code '"+codeString+"'");
         }
         public String toCode() {
           switch (this) {
@@ -163,6 +166,7 @@ public class Media extends DomainResource {
      */
     @Child(name = "type", type = {CodeType.class}, order=1, min=1, max=1, modifier=false, summary=true)
     @Description(shortDefinition="photo | video | audio", formalDefinition="Whether the media is a photo (still image), an audio recording, or a video recording." )
+    @ca.uhn.fhir.model.api.annotation.Binding(valueSet="http://hl7.org/fhir/ValueSet/digital-media-type")
     protected Enumeration<DigitalMediaType> type;
 
     /**
@@ -170,6 +174,7 @@ public class Media extends DomainResource {
      */
     @Child(name = "subtype", type = {CodeableConcept.class}, order=2, min=0, max=1, modifier=false, summary=true)
     @Description(shortDefinition="The type of acquisition equipment/process", formalDefinition="Details of the type of the media - usually, how it was acquired (what type of device). If images sourced from a DICOM system, are wrapped in a Media resource, then this is the modality." )
+    @ca.uhn.fhir.model.api.annotation.Binding(valueSet="http://hl7.org/fhir/ValueSet/digital-media-subtype")
     protected CodeableConcept subtype;
 
     /**
@@ -177,6 +182,7 @@ public class Media extends DomainResource {
      */
     @Child(name = "view", type = {CodeableConcept.class}, order=3, min=0, max=1, modifier=false, summary=true)
     @Description(shortDefinition="Imaging view, e.g. Lateral or Antero-posterior", formalDefinition="The name of the imaging view e.g. Lateral or Antero-posterior (AP)." )
+    @ca.uhn.fhir.model.api.annotation.Binding(valueSet="http://hl7.org/fhir/ValueSet/media-view")
     protected CodeableConcept view;
 
     /**
@@ -272,6 +278,14 @@ public class Media extends DomainResource {
       return this.identifier;
     }
 
+    /**
+     * @return Returns a reference to <code>this</code> for easy method chaining
+     */
+    public Media setIdentifier(List<Identifier> theIdentifier) { 
+      this.identifier = theIdentifier;
+      return this;
+    }
+
     public boolean hasIdentifier() { 
       if (this.identifier == null)
         return false;
@@ -281,10 +295,6 @@ public class Media extends DomainResource {
       return false;
     }
 
-    /**
-     * @return {@link #identifier} (Identifiers associated with the image - these may include identifiers for the image itself, identifiers for the context of its collection (e.g. series ids) and context ids such as accession numbers or other workflow identifiers.)
-     */
-    // syntactic sugar
     public Identifier addIdentifier() { //3
       Identifier t = new Identifier();
       if (this.identifier == null)
@@ -293,7 +303,6 @@ public class Media extends DomainResource {
       return t;
     }
 
-    // syntactic sugar
     public Media addIdentifier(Identifier t) { //3
       if (t == null)
         return this;
@@ -301,6 +310,16 @@ public class Media extends DomainResource {
         this.identifier = new ArrayList<Identifier>();
       this.identifier.add(t);
       return this;
+    }
+
+    /**
+     * @return The first repetition of repeating field {@link #identifier}, creating it if it does not already exist
+     */
+    public Identifier getIdentifierFirstRep() { 
+      if (getIdentifier().isEmpty()) {
+        addIdentifier();
+      }
+      return getIdentifier().get(0);
     }
 
     /**
@@ -749,6 +768,70 @@ public class Media extends DomainResource {
       }
 
       @Override
+      public Base[] getProperty(int hash, String name, boolean checkValid) throws FHIRException {
+        switch (hash) {
+        case -1618432855: /*identifier*/ return this.identifier == null ? new Base[0] : this.identifier.toArray(new Base[this.identifier.size()]); // Identifier
+        case 3575610: /*type*/ return this.type == null ? new Base[0] : new Base[] {this.type}; // Enumeration<DigitalMediaType>
+        case -1867567750: /*subtype*/ return this.subtype == null ? new Base[0] : new Base[] {this.subtype}; // CodeableConcept
+        case 3619493: /*view*/ return this.view == null ? new Base[0] : new Base[] {this.view}; // CodeableConcept
+        case -1867885268: /*subject*/ return this.subject == null ? new Base[0] : new Base[] {this.subject}; // Reference
+        case -500553564: /*operator*/ return this.operator == null ? new Base[0] : new Base[] {this.operator}; // Reference
+        case 780988929: /*deviceName*/ return this.deviceName == null ? new Base[0] : new Base[] {this.deviceName}; // StringType
+        case -1221029593: /*height*/ return this.height == null ? new Base[0] : new Base[] {this.height}; // PositiveIntType
+        case 113126854: /*width*/ return this.width == null ? new Base[0] : new Base[] {this.width}; // PositiveIntType
+        case -1266514778: /*frames*/ return this.frames == null ? new Base[0] : new Base[] {this.frames}; // PositiveIntType
+        case -1992012396: /*duration*/ return this.duration == null ? new Base[0] : new Base[] {this.duration}; // UnsignedIntType
+        case 951530617: /*content*/ return this.content == null ? new Base[0] : new Base[] {this.content}; // Attachment
+        default: return super.getProperty(hash, name, checkValid);
+        }
+
+      }
+
+      @Override
+      public void setProperty(int hash, String name, Base value) throws FHIRException {
+        switch (hash) {
+        case -1618432855: // identifier
+          this.getIdentifier().add(castToIdentifier(value)); // Identifier
+          break;
+        case 3575610: // type
+          this.type = new DigitalMediaTypeEnumFactory().fromType(value); // Enumeration<DigitalMediaType>
+          break;
+        case -1867567750: // subtype
+          this.subtype = castToCodeableConcept(value); // CodeableConcept
+          break;
+        case 3619493: // view
+          this.view = castToCodeableConcept(value); // CodeableConcept
+          break;
+        case -1867885268: // subject
+          this.subject = castToReference(value); // Reference
+          break;
+        case -500553564: // operator
+          this.operator = castToReference(value); // Reference
+          break;
+        case 780988929: // deviceName
+          this.deviceName = castToString(value); // StringType
+          break;
+        case -1221029593: // height
+          this.height = castToPositiveInt(value); // PositiveIntType
+          break;
+        case 113126854: // width
+          this.width = castToPositiveInt(value); // PositiveIntType
+          break;
+        case -1266514778: // frames
+          this.frames = castToPositiveInt(value); // PositiveIntType
+          break;
+        case -1992012396: // duration
+          this.duration = castToUnsignedInt(value); // UnsignedIntType
+          break;
+        case 951530617: // content
+          this.content = castToAttachment(value); // Attachment
+          break;
+        default: super.setProperty(hash, name, value);
+        }
+
+      }
+
+      @Override
       public void setProperty(String name, Base value) throws FHIRException {
         if (name.equals("identifier"))
           this.getIdentifier().add(castToIdentifier(value));
@@ -776,6 +859,26 @@ public class Media extends DomainResource {
           this.content = castToAttachment(value); // Attachment
         else
           super.setProperty(name, value);
+      }
+
+      @Override
+      public Base makeProperty(int hash, String name) throws FHIRException {
+        switch (hash) {
+        case -1618432855:  return addIdentifier(); // Identifier
+        case 3575610: throw new FHIRException("Cannot make property type as it is not a complex type"); // Enumeration<DigitalMediaType>
+        case -1867567750:  return getSubtype(); // CodeableConcept
+        case 3619493:  return getView(); // CodeableConcept
+        case -1867885268:  return getSubject(); // Reference
+        case -500553564:  return getOperator(); // Reference
+        case 780988929: throw new FHIRException("Cannot make property deviceName as it is not a complex type"); // StringType
+        case -1221029593: throw new FHIRException("Cannot make property height as it is not a complex type"); // PositiveIntType
+        case 113126854: throw new FHIRException("Cannot make property width as it is not a complex type"); // PositiveIntType
+        case -1266514778: throw new FHIRException("Cannot make property frames as it is not a complex type"); // PositiveIntType
+        case -1992012396: throw new FHIRException("Cannot make property duration as it is not a complex type"); // UnsignedIntType
+        case 951530617:  return getContent(); // Attachment
+        default: return super.makeProperty(hash, name);
+        }
+
       }
 
       @Override
@@ -883,11 +986,9 @@ public class Media extends DomainResource {
       }
 
       public boolean isEmpty() {
-        return super.isEmpty() && (identifier == null || identifier.isEmpty()) && (type == null || type.isEmpty())
-           && (subtype == null || subtype.isEmpty()) && (view == null || view.isEmpty()) && (subject == null || subject.isEmpty())
-           && (operator == null || operator.isEmpty()) && (deviceName == null || deviceName.isEmpty())
-           && (height == null || height.isEmpty()) && (width == null || width.isEmpty()) && (frames == null || frames.isEmpty())
-           && (duration == null || duration.isEmpty()) && (content == null || content.isEmpty());
+        return super.isEmpty() && ca.uhn.fhir.util.ElementUtil.isEmpty(identifier, type, subtype
+          , view, subject, operator, deviceName, height, width, frames, duration, content
+          );
       }
 
   @Override
@@ -983,7 +1084,7 @@ public class Media extends DomainResource {
    * Path: <b>Media.subject</b><br>
    * </p>
    */
-  @SearchParamDefinition(name="subject", path="Media.subject", description="Who/What this Media is a record of", type="reference" )
+  @SearchParamDefinition(name="subject", path="Media.subject", description="Who/What this Media is a record of", type="reference", providesMembershipIn={ @ca.uhn.fhir.model.api.annotation.Compartment(name="Device"), @ca.uhn.fhir.model.api.annotation.Compartment(name="Patient"), @ca.uhn.fhir.model.api.annotation.Compartment(name="Practitioner") }, target={Device.class, Group.class, Patient.class, Practitioner.class, Specimen.class } )
   public static final String SP_SUBJECT = "subject";
  /**
    * <b>Fluent Client</b> search parameter constant for <b>subject</b>
@@ -1009,7 +1110,7 @@ public class Media extends DomainResource {
    * Path: <b>Media.subject</b><br>
    * </p>
    */
-  @SearchParamDefinition(name="patient", path="Media.subject", description="Who/What this Media is a record of", type="reference" )
+  @SearchParamDefinition(name="patient", path="Media.subject", description="Who/What this Media is a record of", type="reference", target={Patient.class } )
   public static final String SP_PATIENT = "patient";
  /**
    * <b>Fluent Client</b> search parameter constant for <b>patient</b>
@@ -1055,7 +1156,7 @@ public class Media extends DomainResource {
    * Path: <b>Media.operator</b><br>
    * </p>
    */
-  @SearchParamDefinition(name="operator", path="Media.operator", description="The person who generated the image", type="reference" )
+  @SearchParamDefinition(name="operator", path="Media.operator", description="The person who generated the image", type="reference", providesMembershipIn={ @ca.uhn.fhir.model.api.annotation.Compartment(name="Practitioner") }, target={Practitioner.class } )
   public static final String SP_OPERATOR = "operator";
  /**
    * <b>Fluent Client</b> search parameter constant for <b>operator</b>

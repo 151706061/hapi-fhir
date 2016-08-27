@@ -34,14 +34,16 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.scheduling.TaskScheduler;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.SchedulingConfigurer;
-import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
+import org.springframework.scheduling.concurrent.ConcurrentTaskScheduler;
+import org.springframework.scheduling.concurrent.ScheduledExecutorFactoryBean;
 import org.springframework.scheduling.config.ScheduledTaskRegistrar;
 
 import ca.uhn.fhir.context.FhirContext;
+import ca.uhn.fhir.context.ParserOptions;
 import ca.uhn.fhir.jpa.search.DatabaseBackedPagingProvider;
 import ca.uhn.fhir.jpa.search.StaleSearchDeletingSvc;
-import ca.uhn.fhir.jpa.term.ITerminologySvc;
-import ca.uhn.fhir.jpa.term.TerminologySvcImpl;
+import ca.uhn.fhir.jpa.term.BaseHapiTerminologySvc;
+import ca.uhn.fhir.jpa.term.IHapiTerminologySvc;
 
 @Configuration
 @EnableScheduling
@@ -101,6 +103,10 @@ public class BaseConfig implements SchedulingConfigurer {
 	public FhirContext fhirContextDstu3() {
 		if (ourFhirContextDstu3 == null) {
 			ourFhirContextDstu3 = FhirContext.forDstu3();
+			
+			// Don't strip versions in some places
+			ParserOptions parserOptions = ourFhirContextDstu3.getParserOptions();
+			parserOptions.setDontStripVersionsFromReferencesAtPaths("AuditEvent.entity.reference");
 		}
 		return ourFhirContextDstu3;
 	}
@@ -110,16 +116,22 @@ public class BaseConfig implements SchedulingConfigurer {
 		return new StaleSearchDeletingSvc();
 	}
 
+	@Bean()
+	public ScheduledExecutorFactoryBean scheduledExecutorService() {
+		ScheduledExecutorFactoryBean b = new ScheduledExecutorFactoryBean();
+		b.setPoolSize(5);
+		return b;
+	}
+	
 	@Bean
 	public TaskScheduler taskScheduler() {
-		ThreadPoolTaskScheduler retVal = new ThreadPoolTaskScheduler();
-		retVal.setPoolSize(5);
+		ConcurrentTaskScheduler retVal = new ConcurrentTaskScheduler();
+		retVal.setConcurrentExecutor(scheduledExecutorService().getObject());
+		retVal.setScheduledExecutor(scheduledExecutorService().getObject());
 		return retVal;
-	}
-
-	@Bean(autowire = Autowire.BY_TYPE)
-	public ITerminologySvc terminologyService() {
-		return new TerminologySvcImpl();
+//		ThreadPoolTaskScheduler retVal = new ThreadPoolTaskScheduler();
+//		retVal.setPoolSize(5);
+//		return retVal;
 	}
 	
 	// @PostConstruct

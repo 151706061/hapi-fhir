@@ -29,7 +29,7 @@ package org.hl7.fhir.dstu3.model;
   
 */
 
-// Generated on Sat, Jan 30, 2016 09:18-0500 for FHIR v1.3.0
+// Generated on Thu, Aug 25, 2016 23:04-0400 for FHIR v1.6.0
 
 import java.util.*;
 
@@ -37,16 +37,154 @@ import org.hl7.fhir.utilities.Utilities;
 import ca.uhn.fhir.model.api.annotation.ResourceDef;
 import ca.uhn.fhir.model.api.annotation.SearchParamDefinition;
 import ca.uhn.fhir.model.api.annotation.Child;
+import ca.uhn.fhir.model.api.annotation.ChildOrder;
 import ca.uhn.fhir.model.api.annotation.Description;
 import ca.uhn.fhir.model.api.annotation.Block;
-
-import org.hl7.fhir.dstu3.exceptions.FHIRException;
 import org.hl7.fhir.instance.model.api.*;
+import org.hl7.fhir.dstu3.exceptions.FHIRException;
 /**
  * Describes the event of a patient being administered a vaccination or a record of a vaccination as reported by a patient, a clinician or another party and may include vaccine reaction information and what vaccination protocol was followed.
  */
 @ResourceDef(name="Immunization", profile="http://hl7.org/fhir/Profile/Immunization")
 public class Immunization extends DomainResource {
+
+    public enum ImmunizationStatus {
+        /**
+         * The administration has started but has not yet completed.
+         */
+        INPROGRESS, 
+        /**
+         * Actions implied by the administration have been temporarily halted, but are expected to continue later. May also be called "suspended".
+         */
+        ONHOLD, 
+        /**
+         * All actions that are implied by the administration have occurred.
+         */
+        COMPLETED, 
+        /**
+         * The administration was entered in error and therefore nullified.
+         */
+        ENTEREDINERROR, 
+        /**
+         * Actions implied by the administration have been permanently halted, before all of them occurred.
+         */
+        STOPPED, 
+        /**
+         * added to help the parsers with the generic types
+         */
+        NULL;
+        public static ImmunizationStatus fromCode(String codeString) throws FHIRException {
+            if (codeString == null || "".equals(codeString))
+                return null;
+        if ("in-progress".equals(codeString))
+          return INPROGRESS;
+        if ("on-hold".equals(codeString))
+          return ONHOLD;
+        if ("completed".equals(codeString))
+          return COMPLETED;
+        if ("entered-in-error".equals(codeString))
+          return ENTEREDINERROR;
+        if ("stopped".equals(codeString))
+          return STOPPED;
+        if (Configuration.isAcceptInvalidEnums())
+          return null;
+        else
+          throw new FHIRException("Unknown ImmunizationStatus code '"+codeString+"'");
+        }
+        public String toCode() {
+          switch (this) {
+            case INPROGRESS: return "in-progress";
+            case ONHOLD: return "on-hold";
+            case COMPLETED: return "completed";
+            case ENTEREDINERROR: return "entered-in-error";
+            case STOPPED: return "stopped";
+            default: return "?";
+          }
+        }
+        public String getSystem() {
+          switch (this) {
+            case INPROGRESS: return "http://hl7.org/fhir/medication-admin-status";
+            case ONHOLD: return "http://hl7.org/fhir/medication-admin-status";
+            case COMPLETED: return "http://hl7.org/fhir/medication-admin-status";
+            case ENTEREDINERROR: return "http://hl7.org/fhir/medication-admin-status";
+            case STOPPED: return "http://hl7.org/fhir/medication-admin-status";
+            default: return "?";
+          }
+        }
+        public String getDefinition() {
+          switch (this) {
+            case INPROGRESS: return "The administration has started but has not yet completed.";
+            case ONHOLD: return "Actions implied by the administration have been temporarily halted, but are expected to continue later. May also be called \"suspended\".";
+            case COMPLETED: return "All actions that are implied by the administration have occurred.";
+            case ENTEREDINERROR: return "The administration was entered in error and therefore nullified.";
+            case STOPPED: return "Actions implied by the administration have been permanently halted, before all of them occurred.";
+            default: return "?";
+          }
+        }
+        public String getDisplay() {
+          switch (this) {
+            case INPROGRESS: return "In Progress";
+            case ONHOLD: return "On Hold";
+            case COMPLETED: return "Completed";
+            case ENTEREDINERROR: return "Entered in Error";
+            case STOPPED: return "Stopped";
+            default: return "?";
+          }
+        }
+    }
+
+  public static class ImmunizationStatusEnumFactory implements EnumFactory<ImmunizationStatus> {
+    public ImmunizationStatus fromCode(String codeString) throws IllegalArgumentException {
+      if (codeString == null || "".equals(codeString))
+            if (codeString == null || "".equals(codeString))
+                return null;
+        if ("in-progress".equals(codeString))
+          return ImmunizationStatus.INPROGRESS;
+        if ("on-hold".equals(codeString))
+          return ImmunizationStatus.ONHOLD;
+        if ("completed".equals(codeString))
+          return ImmunizationStatus.COMPLETED;
+        if ("entered-in-error".equals(codeString))
+          return ImmunizationStatus.ENTEREDINERROR;
+        if ("stopped".equals(codeString))
+          return ImmunizationStatus.STOPPED;
+        throw new IllegalArgumentException("Unknown ImmunizationStatus code '"+codeString+"'");
+        }
+        public Enumeration<ImmunizationStatus> fromType(Base code) throws FHIRException {
+          if (code == null || code.isEmpty())
+            return null;
+          String codeString = ((PrimitiveType) code).asStringValue();
+          if (codeString == null || "".equals(codeString))
+            return null;
+        if ("in-progress".equals(codeString))
+          return new Enumeration<ImmunizationStatus>(this, ImmunizationStatus.INPROGRESS);
+        if ("on-hold".equals(codeString))
+          return new Enumeration<ImmunizationStatus>(this, ImmunizationStatus.ONHOLD);
+        if ("completed".equals(codeString))
+          return new Enumeration<ImmunizationStatus>(this, ImmunizationStatus.COMPLETED);
+        if ("entered-in-error".equals(codeString))
+          return new Enumeration<ImmunizationStatus>(this, ImmunizationStatus.ENTEREDINERROR);
+        if ("stopped".equals(codeString))
+          return new Enumeration<ImmunizationStatus>(this, ImmunizationStatus.STOPPED);
+        throw new FHIRException("Unknown ImmunizationStatus code '"+codeString+"'");
+        }
+    public String toCode(ImmunizationStatus code) {
+      if (code == ImmunizationStatus.INPROGRESS)
+        return "in-progress";
+      if (code == ImmunizationStatus.ONHOLD)
+        return "on-hold";
+      if (code == ImmunizationStatus.COMPLETED)
+        return "completed";
+      if (code == ImmunizationStatus.ENTEREDINERROR)
+        return "entered-in-error";
+      if (code == ImmunizationStatus.STOPPED)
+        return "stopped";
+      return "?";
+      }
+    public String toSystem(ImmunizationStatus code) {
+      return code.getSystem();
+      }
+    }
 
     @Block()
     public static class ImmunizationExplanationComponent extends BackboneElement implements IBaseBackboneElement {
@@ -55,6 +193,7 @@ public class Immunization extends DomainResource {
          */
         @Child(name = "reason", type = {CodeableConcept.class}, order=1, min=0, max=Child.MAX_UNLIMITED, modifier=false, summary=false)
         @Description(shortDefinition="Why immunization occurred", formalDefinition="Reasons why a vaccine was administered." )
+        @ca.uhn.fhir.model.api.annotation.Binding(valueSet="http://hl7.org/fhir/ValueSet/immunization-reason")
         protected List<CodeableConcept> reason;
 
         /**
@@ -62,6 +201,7 @@ public class Immunization extends DomainResource {
          */
         @Child(name = "reasonNotGiven", type = {CodeableConcept.class}, order=2, min=0, max=Child.MAX_UNLIMITED, modifier=false, summary=false)
         @Description(shortDefinition="Why immunization did not occur", formalDefinition="Reason why a vaccine was not administered." )
+        @ca.uhn.fhir.model.api.annotation.Binding(valueSet="http://hl7.org/fhir/ValueSet/no-immunization-reason")
         protected List<CodeableConcept> reasonNotGiven;
 
         private static final long serialVersionUID = -539821866L;
@@ -82,6 +222,14 @@ public class Immunization extends DomainResource {
           return this.reason;
         }
 
+        /**
+         * @return Returns a reference to <code>this</code> for easy method chaining
+         */
+        public ImmunizationExplanationComponent setReason(List<CodeableConcept> theReason) { 
+          this.reason = theReason;
+          return this;
+        }
+
         public boolean hasReason() { 
           if (this.reason == null)
             return false;
@@ -91,10 +239,6 @@ public class Immunization extends DomainResource {
           return false;
         }
 
-        /**
-         * @return {@link #reason} (Reasons why a vaccine was administered.)
-         */
-    // syntactic sugar
         public CodeableConcept addReason() { //3
           CodeableConcept t = new CodeableConcept();
           if (this.reason == null)
@@ -103,7 +247,6 @@ public class Immunization extends DomainResource {
           return t;
         }
 
-    // syntactic sugar
         public ImmunizationExplanationComponent addReason(CodeableConcept t) { //3
           if (t == null)
             return this;
@@ -111,6 +254,16 @@ public class Immunization extends DomainResource {
             this.reason = new ArrayList<CodeableConcept>();
           this.reason.add(t);
           return this;
+        }
+
+        /**
+         * @return The first repetition of repeating field {@link #reason}, creating it if it does not already exist
+         */
+        public CodeableConcept getReasonFirstRep() { 
+          if (getReason().isEmpty()) {
+            addReason();
+          }
+          return getReason().get(0);
         }
 
         /**
@@ -122,6 +275,14 @@ public class Immunization extends DomainResource {
           return this.reasonNotGiven;
         }
 
+        /**
+         * @return Returns a reference to <code>this</code> for easy method chaining
+         */
+        public ImmunizationExplanationComponent setReasonNotGiven(List<CodeableConcept> theReasonNotGiven) { 
+          this.reasonNotGiven = theReasonNotGiven;
+          return this;
+        }
+
         public boolean hasReasonNotGiven() { 
           if (this.reasonNotGiven == null)
             return false;
@@ -131,10 +292,6 @@ public class Immunization extends DomainResource {
           return false;
         }
 
-        /**
-         * @return {@link #reasonNotGiven} (Reason why a vaccine was not administered.)
-         */
-    // syntactic sugar
         public CodeableConcept addReasonNotGiven() { //3
           CodeableConcept t = new CodeableConcept();
           if (this.reasonNotGiven == null)
@@ -143,7 +300,6 @@ public class Immunization extends DomainResource {
           return t;
         }
 
-    // syntactic sugar
         public ImmunizationExplanationComponent addReasonNotGiven(CodeableConcept t) { //3
           if (t == null)
             return this;
@@ -153,11 +309,45 @@ public class Immunization extends DomainResource {
           return this;
         }
 
+        /**
+         * @return The first repetition of repeating field {@link #reasonNotGiven}, creating it if it does not already exist
+         */
+        public CodeableConcept getReasonNotGivenFirstRep() { 
+          if (getReasonNotGiven().isEmpty()) {
+            addReasonNotGiven();
+          }
+          return getReasonNotGiven().get(0);
+        }
+
         protected void listChildren(List<Property> childrenList) {
           super.listChildren(childrenList);
           childrenList.add(new Property("reason", "CodeableConcept", "Reasons why a vaccine was administered.", 0, java.lang.Integer.MAX_VALUE, reason));
           childrenList.add(new Property("reasonNotGiven", "CodeableConcept", "Reason why a vaccine was not administered.", 0, java.lang.Integer.MAX_VALUE, reasonNotGiven));
         }
+
+      @Override
+      public Base[] getProperty(int hash, String name, boolean checkValid) throws FHIRException {
+        switch (hash) {
+        case -934964668: /*reason*/ return this.reason == null ? new Base[0] : this.reason.toArray(new Base[this.reason.size()]); // CodeableConcept
+        case 2101123790: /*reasonNotGiven*/ return this.reasonNotGiven == null ? new Base[0] : this.reasonNotGiven.toArray(new Base[this.reasonNotGiven.size()]); // CodeableConcept
+        default: return super.getProperty(hash, name, checkValid);
+        }
+
+      }
+
+      @Override
+      public void setProperty(int hash, String name, Base value) throws FHIRException {
+        switch (hash) {
+        case -934964668: // reason
+          this.getReason().add(castToCodeableConcept(value)); // CodeableConcept
+          break;
+        case 2101123790: // reasonNotGiven
+          this.getReasonNotGiven().add(castToCodeableConcept(value)); // CodeableConcept
+          break;
+        default: super.setProperty(hash, name, value);
+        }
+
+      }
 
       @Override
       public void setProperty(String name, Base value) throws FHIRException {
@@ -167,6 +357,16 @@ public class Immunization extends DomainResource {
           this.getReasonNotGiven().add(castToCodeableConcept(value));
         else
           super.setProperty(name, value);
+      }
+
+      @Override
+      public Base makeProperty(int hash, String name) throws FHIRException {
+        switch (hash) {
+        case -934964668:  return addReason(); // CodeableConcept
+        case 2101123790:  return addReasonNotGiven(); // CodeableConcept
+        default: return super.makeProperty(hash, name);
+        }
+
       }
 
       @Override
@@ -219,8 +419,7 @@ public class Immunization extends DomainResource {
       }
 
       public boolean isEmpty() {
-        return super.isEmpty() && (reason == null || reason.isEmpty()) && (reasonNotGiven == null || reasonNotGiven.isEmpty())
-          ;
+        return super.isEmpty() && ca.uhn.fhir.util.ElementUtil.isEmpty(reason, reasonNotGiven);
       }
 
   public String fhirType() {
@@ -413,6 +612,34 @@ public class Immunization extends DomainResource {
         }
 
       @Override
+      public Base[] getProperty(int hash, String name, boolean checkValid) throws FHIRException {
+        switch (hash) {
+        case 3076014: /*date*/ return this.date == null ? new Base[0] : new Base[] {this.date}; // DateTimeType
+        case -1335224239: /*detail*/ return this.detail == null ? new Base[0] : new Base[] {this.detail}; // Reference
+        case -427039533: /*reported*/ return this.reported == null ? new Base[0] : new Base[] {this.reported}; // BooleanType
+        default: return super.getProperty(hash, name, checkValid);
+        }
+
+      }
+
+      @Override
+      public void setProperty(int hash, String name, Base value) throws FHIRException {
+        switch (hash) {
+        case 3076014: // date
+          this.date = castToDateTime(value); // DateTimeType
+          break;
+        case -1335224239: // detail
+          this.detail = castToReference(value); // Reference
+          break;
+        case -427039533: // reported
+          this.reported = castToBoolean(value); // BooleanType
+          break;
+        default: super.setProperty(hash, name, value);
+        }
+
+      }
+
+      @Override
       public void setProperty(String name, Base value) throws FHIRException {
         if (name.equals("date"))
           this.date = castToDateTime(value); // DateTimeType
@@ -422,6 +649,17 @@ public class Immunization extends DomainResource {
           this.reported = castToBoolean(value); // BooleanType
         else
           super.setProperty(name, value);
+      }
+
+      @Override
+      public Base makeProperty(int hash, String name) throws FHIRException {
+        switch (hash) {
+        case 3076014: throw new FHIRException("Cannot make property date as it is not a complex type"); // DateTimeType
+        case -1335224239:  return getDetail(); // Reference
+        case -427039533: throw new FHIRException("Cannot make property reported as it is not a complex type"); // BooleanType
+        default: return super.makeProperty(hash, name);
+        }
+
       }
 
       @Override
@@ -471,8 +709,7 @@ public class Immunization extends DomainResource {
       }
 
       public boolean isEmpty() {
-        return super.isEmpty() && (date == null || date.isEmpty()) && (detail == null || detail.isEmpty())
-           && (reported == null || reported.isEmpty());
+        return super.isEmpty() && ca.uhn.fhir.util.ElementUtil.isEmpty(date, detail, reported);
       }
 
   public String fhirType() {
@@ -487,7 +724,7 @@ public class Immunization extends DomainResource {
         /**
          * Nominal position in a series.
          */
-        @Child(name = "doseSequence", type = {PositiveIntType.class}, order=1, min=1, max=1, modifier=false, summary=false)
+        @Child(name = "doseSequence", type = {PositiveIntType.class}, order=1, min=0, max=1, modifier=false, summary=false)
         @Description(shortDefinition="Dose number within series", formalDefinition="Nominal position in a series." )
         protected PositiveIntType doseSequence;
 
@@ -529,6 +766,7 @@ public class Immunization extends DomainResource {
          */
         @Child(name = "targetDisease", type = {CodeableConcept.class}, order=6, min=1, max=Child.MAX_UNLIMITED, modifier=false, summary=false)
         @Description(shortDefinition="Disease immunized against", formalDefinition="The targeted disease." )
+        @ca.uhn.fhir.model.api.annotation.Binding(valueSet="http://hl7.org/fhir/ValueSet/vaccination-protocol-dose-target")
         protected List<CodeableConcept> targetDisease;
 
         /**
@@ -536,6 +774,7 @@ public class Immunization extends DomainResource {
          */
         @Child(name = "doseStatus", type = {CodeableConcept.class}, order=7, min=1, max=1, modifier=false, summary=false)
         @Description(shortDefinition="Indicates if dose counts towards immunity", formalDefinition="Indicates if the immunization event should \"count\" against  the protocol." )
+        @ca.uhn.fhir.model.api.annotation.Binding(valueSet="http://hl7.org/fhir/ValueSet/vaccination-protocol-dose-status")
         protected CodeableConcept doseStatus;
 
         /**
@@ -543,6 +782,7 @@ public class Immunization extends DomainResource {
          */
         @Child(name = "doseStatusReason", type = {CodeableConcept.class}, order=8, min=0, max=1, modifier=false, summary=false)
         @Description(shortDefinition="Why dose does (not) count", formalDefinition="Provides an explanation as to why an immunization event should or should not count against the protocol." )
+        @ca.uhn.fhir.model.api.annotation.Binding(valueSet="http://hl7.org/fhir/ValueSet/vaccination-protocol-dose-status-reason")
         protected CodeableConcept doseStatusReason;
 
         private static final long serialVersionUID = 386814037L;
@@ -557,9 +797,8 @@ public class Immunization extends DomainResource {
     /**
      * Constructor
      */
-      public ImmunizationVaccinationProtocolComponent(PositiveIntType doseSequence, CodeableConcept doseStatus) {
+      public ImmunizationVaccinationProtocolComponent(CodeableConcept doseStatus) {
         super();
-        this.doseSequence = doseSequence;
         this.doseStatus = doseStatus;
       }
 
@@ -804,6 +1043,14 @@ public class Immunization extends DomainResource {
           return this.targetDisease;
         }
 
+        /**
+         * @return Returns a reference to <code>this</code> for easy method chaining
+         */
+        public ImmunizationVaccinationProtocolComponent setTargetDisease(List<CodeableConcept> theTargetDisease) { 
+          this.targetDisease = theTargetDisease;
+          return this;
+        }
+
         public boolean hasTargetDisease() { 
           if (this.targetDisease == null)
             return false;
@@ -813,10 +1060,6 @@ public class Immunization extends DomainResource {
           return false;
         }
 
-        /**
-         * @return {@link #targetDisease} (The targeted disease.)
-         */
-    // syntactic sugar
         public CodeableConcept addTargetDisease() { //3
           CodeableConcept t = new CodeableConcept();
           if (this.targetDisease == null)
@@ -825,7 +1068,6 @@ public class Immunization extends DomainResource {
           return t;
         }
 
-    // syntactic sugar
         public ImmunizationVaccinationProtocolComponent addTargetDisease(CodeableConcept t) { //3
           if (t == null)
             return this;
@@ -833,6 +1075,16 @@ public class Immunization extends DomainResource {
             this.targetDisease = new ArrayList<CodeableConcept>();
           this.targetDisease.add(t);
           return this;
+        }
+
+        /**
+         * @return The first repetition of repeating field {@link #targetDisease}, creating it if it does not already exist
+         */
+        public CodeableConcept getTargetDiseaseFirstRep() { 
+          if (getTargetDisease().isEmpty()) {
+            addTargetDisease();
+          }
+          return getTargetDisease().get(0);
         }
 
         /**
@@ -896,6 +1148,54 @@ public class Immunization extends DomainResource {
         }
 
       @Override
+      public Base[] getProperty(int hash, String name, boolean checkValid) throws FHIRException {
+        switch (hash) {
+        case 550933246: /*doseSequence*/ return this.doseSequence == null ? new Base[0] : new Base[] {this.doseSequence}; // PositiveIntType
+        case -1724546052: /*description*/ return this.description == null ? new Base[0] : new Base[] {this.description}; // StringType
+        case 1475610435: /*authority*/ return this.authority == null ? new Base[0] : new Base[] {this.authority}; // Reference
+        case -905838985: /*series*/ return this.series == null ? new Base[0] : new Base[] {this.series}; // StringType
+        case -1936727105: /*seriesDoses*/ return this.seriesDoses == null ? new Base[0] : new Base[] {this.seriesDoses}; // PositiveIntType
+        case -319593813: /*targetDisease*/ return this.targetDisease == null ? new Base[0] : this.targetDisease.toArray(new Base[this.targetDisease.size()]); // CodeableConcept
+        case -745826705: /*doseStatus*/ return this.doseStatus == null ? new Base[0] : new Base[] {this.doseStatus}; // CodeableConcept
+        case 662783379: /*doseStatusReason*/ return this.doseStatusReason == null ? new Base[0] : new Base[] {this.doseStatusReason}; // CodeableConcept
+        default: return super.getProperty(hash, name, checkValid);
+        }
+
+      }
+
+      @Override
+      public void setProperty(int hash, String name, Base value) throws FHIRException {
+        switch (hash) {
+        case 550933246: // doseSequence
+          this.doseSequence = castToPositiveInt(value); // PositiveIntType
+          break;
+        case -1724546052: // description
+          this.description = castToString(value); // StringType
+          break;
+        case 1475610435: // authority
+          this.authority = castToReference(value); // Reference
+          break;
+        case -905838985: // series
+          this.series = castToString(value); // StringType
+          break;
+        case -1936727105: // seriesDoses
+          this.seriesDoses = castToPositiveInt(value); // PositiveIntType
+          break;
+        case -319593813: // targetDisease
+          this.getTargetDisease().add(castToCodeableConcept(value)); // CodeableConcept
+          break;
+        case -745826705: // doseStatus
+          this.doseStatus = castToCodeableConcept(value); // CodeableConcept
+          break;
+        case 662783379: // doseStatusReason
+          this.doseStatusReason = castToCodeableConcept(value); // CodeableConcept
+          break;
+        default: super.setProperty(hash, name, value);
+        }
+
+      }
+
+      @Override
       public void setProperty(String name, Base value) throws FHIRException {
         if (name.equals("doseSequence"))
           this.doseSequence = castToPositiveInt(value); // PositiveIntType
@@ -915,6 +1215,22 @@ public class Immunization extends DomainResource {
           this.doseStatusReason = castToCodeableConcept(value); // CodeableConcept
         else
           super.setProperty(name, value);
+      }
+
+      @Override
+      public Base makeProperty(int hash, String name) throws FHIRException {
+        switch (hash) {
+        case 550933246: throw new FHIRException("Cannot make property doseSequence as it is not a complex type"); // PositiveIntType
+        case -1724546052: throw new FHIRException("Cannot make property description as it is not a complex type"); // StringType
+        case 1475610435:  return getAuthority(); // Reference
+        case -905838985: throw new FHIRException("Cannot make property series as it is not a complex type"); // StringType
+        case -1936727105: throw new FHIRException("Cannot make property seriesDoses as it is not a complex type"); // PositiveIntType
+        case -319593813:  return addTargetDisease(); // CodeableConcept
+        case -745826705:  return getDoseStatus(); // CodeableConcept
+        case 662783379:  return getDoseStatusReason(); // CodeableConcept
+        default: return super.makeProperty(hash, name);
+        }
+
       }
 
       @Override
@@ -993,10 +1309,8 @@ public class Immunization extends DomainResource {
       }
 
       public boolean isEmpty() {
-        return super.isEmpty() && (doseSequence == null || doseSequence.isEmpty()) && (description == null || description.isEmpty())
-           && (authority == null || authority.isEmpty()) && (series == null || series.isEmpty()) && (seriesDoses == null || seriesDoses.isEmpty())
-           && (targetDisease == null || targetDisease.isEmpty()) && (doseStatus == null || doseStatus.isEmpty())
-           && (doseStatusReason == null || doseStatusReason.isEmpty());
+        return super.isEmpty() && ca.uhn.fhir.util.ElementUtil.isEmpty(doseSequence, description
+          , authority, series, seriesDoses, targetDisease, doseStatus, doseStatusReason);
       }
 
   public String fhirType() {
@@ -1018,7 +1332,8 @@ public class Immunization extends DomainResource {
      */
     @Child(name = "status", type = {CodeType.class}, order=1, min=1, max=1, modifier=true, summary=true)
     @Description(shortDefinition="in-progress | on-hold | completed | entered-in-error | stopped", formalDefinition="Indicates the current status of the vaccination event." )
-    protected CodeType status;
+    @ca.uhn.fhir.model.api.annotation.Binding(valueSet="http://hl7.org/fhir/ValueSet/medication-admin-status")
+    protected Enumeration<ImmunizationStatus> status;
 
     /**
      * Date vaccine administered or was to be administered.
@@ -1032,6 +1347,7 @@ public class Immunization extends DomainResource {
      */
     @Child(name = "vaccineCode", type = {CodeableConcept.class}, order=3, min=1, max=1, modifier=false, summary=false)
     @Description(shortDefinition="Vaccine product administered", formalDefinition="Vaccine that was administered or was to be administered." )
+    @ca.uhn.fhir.model.api.annotation.Binding(valueSet="http://hl7.org/fhir/ValueSet/vaccine-code")
     protected CodeableConcept vaccineCode;
 
     /**
@@ -1049,7 +1365,7 @@ public class Immunization extends DomainResource {
     /**
      * Indicates if the vaccination was or was not given.
      */
-    @Child(name = "wasNotGiven", type = {BooleanType.class}, order=5, min=1, max=1, modifier=true, summary=false)
+    @Child(name = "wasNotGiven", type = {BooleanType.class}, order=5, min=1, max=1, modifier=true, summary=true)
     @Description(shortDefinition="Flag for whether immunization was given", formalDefinition="Indicates if the vaccination was or was not given." )
     protected BooleanType wasNotGiven;
 
@@ -1139,6 +1455,7 @@ public class Immunization extends DomainResource {
      */
     @Child(name = "site", type = {CodeableConcept.class}, order=14, min=0, max=1, modifier=false, summary=false)
     @Description(shortDefinition="Body site vaccine  was administered", formalDefinition="Body site where vaccine was administered." )
+    @ca.uhn.fhir.model.api.annotation.Binding(valueSet="http://hl7.org/fhir/ValueSet/immunization-site")
     protected CodeableConcept site;
 
     /**
@@ -1146,6 +1463,7 @@ public class Immunization extends DomainResource {
      */
     @Child(name = "route", type = {CodeableConcept.class}, order=15, min=0, max=1, modifier=false, summary=false)
     @Description(shortDefinition="How vaccine entered body", formalDefinition="The path by which the vaccine product is taken into the body." )
+    @ca.uhn.fhir.model.api.annotation.Binding(valueSet="http://hl7.org/fhir/ValueSet/immunization-route")
     protected CodeableConcept route;
 
     /**
@@ -1183,7 +1501,7 @@ public class Immunization extends DomainResource {
     @Description(shortDefinition="What protocol was followed", formalDefinition="Contains information about the protocol(s) under which the vaccine was administered." )
     protected List<ImmunizationVaccinationProtocolComponent> vaccinationProtocol;
 
-    private static final long serialVersionUID = 898786200L;
+    private static final long serialVersionUID = -1984038638L;
 
   /**
    * Constructor
@@ -1195,7 +1513,7 @@ public class Immunization extends DomainResource {
   /**
    * Constructor
    */
-    public Immunization(CodeType status, CodeableConcept vaccineCode, Reference patient, BooleanType wasNotGiven, BooleanType reported) {
+    public Immunization(Enumeration<ImmunizationStatus> status, CodeableConcept vaccineCode, Reference patient, BooleanType wasNotGiven, BooleanType reported) {
       super();
       this.status = status;
       this.vaccineCode = vaccineCode;
@@ -1213,6 +1531,14 @@ public class Immunization extends DomainResource {
       return this.identifier;
     }
 
+    /**
+     * @return Returns a reference to <code>this</code> for easy method chaining
+     */
+    public Immunization setIdentifier(List<Identifier> theIdentifier) { 
+      this.identifier = theIdentifier;
+      return this;
+    }
+
     public boolean hasIdentifier() { 
       if (this.identifier == null)
         return false;
@@ -1222,10 +1548,6 @@ public class Immunization extends DomainResource {
       return false;
     }
 
-    /**
-     * @return {@link #identifier} (A unique identifier assigned to this immunization record.)
-     */
-    // syntactic sugar
     public Identifier addIdentifier() { //3
       Identifier t = new Identifier();
       if (this.identifier == null)
@@ -1234,7 +1556,6 @@ public class Immunization extends DomainResource {
       return t;
     }
 
-    // syntactic sugar
     public Immunization addIdentifier(Identifier t) { //3
       if (t == null)
         return this;
@@ -1245,14 +1566,24 @@ public class Immunization extends DomainResource {
     }
 
     /**
+     * @return The first repetition of repeating field {@link #identifier}, creating it if it does not already exist
+     */
+    public Identifier getIdentifierFirstRep() { 
+      if (getIdentifier().isEmpty()) {
+        addIdentifier();
+      }
+      return getIdentifier().get(0);
+    }
+
+    /**
      * @return {@link #status} (Indicates the current status of the vaccination event.). This is the underlying object with id, value and extensions. The accessor "getStatus" gives direct access to the value
      */
-    public CodeType getStatusElement() { 
+    public Enumeration<ImmunizationStatus> getStatusElement() { 
       if (this.status == null)
         if (Configuration.errorOnAutoCreate())
           throw new Error("Attempt to auto-create Immunization.status");
         else if (Configuration.doAutoCreate())
-          this.status = new CodeType(); // bb
+          this.status = new Enumeration<ImmunizationStatus>(new ImmunizationStatusEnumFactory()); // bb
       return this.status;
     }
 
@@ -1267,7 +1598,7 @@ public class Immunization extends DomainResource {
     /**
      * @param value {@link #status} (Indicates the current status of the vaccination event.). This is the underlying object with id, value and extensions. The accessor "getStatus" gives direct access to the value
      */
-    public Immunization setStatusElement(CodeType value) { 
+    public Immunization setStatusElement(Enumeration<ImmunizationStatus> value) { 
       this.status = value;
       return this;
     }
@@ -1275,16 +1606,16 @@ public class Immunization extends DomainResource {
     /**
      * @return Indicates the current status of the vaccination event.
      */
-    public String getStatus() { 
+    public ImmunizationStatus getStatus() { 
       return this.status == null ? null : this.status.getValue();
     }
 
     /**
      * @param value Indicates the current status of the vaccination event.
      */
-    public Immunization setStatus(String value) { 
+    public Immunization setStatus(ImmunizationStatus value) { 
         if (this.status == null)
-          this.status = new CodeType();
+          this.status = new Enumeration<ImmunizationStatus>(new ImmunizationStatusEnumFactory());
         this.status.setValue(value);
       return this;
     }
@@ -1895,6 +2226,14 @@ public class Immunization extends DomainResource {
       return this.note;
     }
 
+    /**
+     * @return Returns a reference to <code>this</code> for easy method chaining
+     */
+    public Immunization setNote(List<Annotation> theNote) { 
+      this.note = theNote;
+      return this;
+    }
+
     public boolean hasNote() { 
       if (this.note == null)
         return false;
@@ -1904,10 +2243,6 @@ public class Immunization extends DomainResource {
       return false;
     }
 
-    /**
-     * @return {@link #note} (Extra information about the immunization that is not conveyed by the other attributes.)
-     */
-    // syntactic sugar
     public Annotation addNote() { //3
       Annotation t = new Annotation();
       if (this.note == null)
@@ -1916,7 +2251,6 @@ public class Immunization extends DomainResource {
       return t;
     }
 
-    // syntactic sugar
     public Immunization addNote(Annotation t) { //3
       if (t == null)
         return this;
@@ -1924,6 +2258,16 @@ public class Immunization extends DomainResource {
         this.note = new ArrayList<Annotation>();
       this.note.add(t);
       return this;
+    }
+
+    /**
+     * @return The first repetition of repeating field {@link #note}, creating it if it does not already exist
+     */
+    public Annotation getNoteFirstRep() { 
+      if (getNote().isEmpty()) {
+        addNote();
+      }
+      return getNote().get(0);
     }
 
     /**
@@ -1959,6 +2303,14 @@ public class Immunization extends DomainResource {
       return this.reaction;
     }
 
+    /**
+     * @return Returns a reference to <code>this</code> for easy method chaining
+     */
+    public Immunization setReaction(List<ImmunizationReactionComponent> theReaction) { 
+      this.reaction = theReaction;
+      return this;
+    }
+
     public boolean hasReaction() { 
       if (this.reaction == null)
         return false;
@@ -1968,10 +2320,6 @@ public class Immunization extends DomainResource {
       return false;
     }
 
-    /**
-     * @return {@link #reaction} (Categorical data indicating that an adverse event is associated in time to an immunization.)
-     */
-    // syntactic sugar
     public ImmunizationReactionComponent addReaction() { //3
       ImmunizationReactionComponent t = new ImmunizationReactionComponent();
       if (this.reaction == null)
@@ -1980,7 +2328,6 @@ public class Immunization extends DomainResource {
       return t;
     }
 
-    // syntactic sugar
     public Immunization addReaction(ImmunizationReactionComponent t) { //3
       if (t == null)
         return this;
@@ -1988,6 +2335,16 @@ public class Immunization extends DomainResource {
         this.reaction = new ArrayList<ImmunizationReactionComponent>();
       this.reaction.add(t);
       return this;
+    }
+
+    /**
+     * @return The first repetition of repeating field {@link #reaction}, creating it if it does not already exist
+     */
+    public ImmunizationReactionComponent getReactionFirstRep() { 
+      if (getReaction().isEmpty()) {
+        addReaction();
+      }
+      return getReaction().get(0);
     }
 
     /**
@@ -1999,6 +2356,14 @@ public class Immunization extends DomainResource {
       return this.vaccinationProtocol;
     }
 
+    /**
+     * @return Returns a reference to <code>this</code> for easy method chaining
+     */
+    public Immunization setVaccinationProtocol(List<ImmunizationVaccinationProtocolComponent> theVaccinationProtocol) { 
+      this.vaccinationProtocol = theVaccinationProtocol;
+      return this;
+    }
+
     public boolean hasVaccinationProtocol() { 
       if (this.vaccinationProtocol == null)
         return false;
@@ -2008,10 +2373,6 @@ public class Immunization extends DomainResource {
       return false;
     }
 
-    /**
-     * @return {@link #vaccinationProtocol} (Contains information about the protocol(s) under which the vaccine was administered.)
-     */
-    // syntactic sugar
     public ImmunizationVaccinationProtocolComponent addVaccinationProtocol() { //3
       ImmunizationVaccinationProtocolComponent t = new ImmunizationVaccinationProtocolComponent();
       if (this.vaccinationProtocol == null)
@@ -2020,7 +2381,6 @@ public class Immunization extends DomainResource {
       return t;
     }
 
-    // syntactic sugar
     public Immunization addVaccinationProtocol(ImmunizationVaccinationProtocolComponent t) { //3
       if (t == null)
         return this;
@@ -2028,6 +2388,16 @@ public class Immunization extends DomainResource {
         this.vaccinationProtocol = new ArrayList<ImmunizationVaccinationProtocolComponent>();
       this.vaccinationProtocol.add(t);
       return this;
+    }
+
+    /**
+     * @return The first repetition of repeating field {@link #vaccinationProtocol}, creating it if it does not already exist
+     */
+    public ImmunizationVaccinationProtocolComponent getVaccinationProtocolFirstRep() { 
+      if (getVaccinationProtocol().isEmpty()) {
+        addVaccinationProtocol();
+      }
+      return getVaccinationProtocol().get(0);
     }
 
       protected void listChildren(List<Property> childrenList) {
@@ -2056,11 +2426,111 @@ public class Immunization extends DomainResource {
       }
 
       @Override
+      public Base[] getProperty(int hash, String name, boolean checkValid) throws FHIRException {
+        switch (hash) {
+        case -1618432855: /*identifier*/ return this.identifier == null ? new Base[0] : this.identifier.toArray(new Base[this.identifier.size()]); // Identifier
+        case -892481550: /*status*/ return this.status == null ? new Base[0] : new Base[] {this.status}; // Enumeration<ImmunizationStatus>
+        case 3076014: /*date*/ return this.date == null ? new Base[0] : new Base[] {this.date}; // DateTimeType
+        case 664556354: /*vaccineCode*/ return this.vaccineCode == null ? new Base[0] : new Base[] {this.vaccineCode}; // CodeableConcept
+        case -791418107: /*patient*/ return this.patient == null ? new Base[0] : new Base[] {this.patient}; // Reference
+        case -1050911117: /*wasNotGiven*/ return this.wasNotGiven == null ? new Base[0] : new Base[] {this.wasNotGiven}; // BooleanType
+        case -427039533: /*reported*/ return this.reported == null ? new Base[0] : new Base[] {this.reported}; // BooleanType
+        case 481140686: /*performer*/ return this.performer == null ? new Base[0] : new Base[] {this.performer}; // Reference
+        case 693933948: /*requester*/ return this.requester == null ? new Base[0] : new Base[] {this.requester}; // Reference
+        case 1524132147: /*encounter*/ return this.encounter == null ? new Base[0] : new Base[] {this.encounter}; // Reference
+        case -1969347631: /*manufacturer*/ return this.manufacturer == null ? new Base[0] : new Base[] {this.manufacturer}; // Reference
+        case 1901043637: /*location*/ return this.location == null ? new Base[0] : new Base[] {this.location}; // Reference
+        case 462547450: /*lotNumber*/ return this.lotNumber == null ? new Base[0] : new Base[] {this.lotNumber}; // StringType
+        case -668811523: /*expirationDate*/ return this.expirationDate == null ? new Base[0] : new Base[] {this.expirationDate}; // DateType
+        case 3530567: /*site*/ return this.site == null ? new Base[0] : new Base[] {this.site}; // CodeableConcept
+        case 108704329: /*route*/ return this.route == null ? new Base[0] : new Base[] {this.route}; // CodeableConcept
+        case -2083618872: /*doseQuantity*/ return this.doseQuantity == null ? new Base[0] : new Base[] {this.doseQuantity}; // SimpleQuantity
+        case 3387378: /*note*/ return this.note == null ? new Base[0] : this.note.toArray(new Base[this.note.size()]); // Annotation
+        case -1105867239: /*explanation*/ return this.explanation == null ? new Base[0] : new Base[] {this.explanation}; // ImmunizationExplanationComponent
+        case -867509719: /*reaction*/ return this.reaction == null ? new Base[0] : this.reaction.toArray(new Base[this.reaction.size()]); // ImmunizationReactionComponent
+        case -179633155: /*vaccinationProtocol*/ return this.vaccinationProtocol == null ? new Base[0] : this.vaccinationProtocol.toArray(new Base[this.vaccinationProtocol.size()]); // ImmunizationVaccinationProtocolComponent
+        default: return super.getProperty(hash, name, checkValid);
+        }
+
+      }
+
+      @Override
+      public void setProperty(int hash, String name, Base value) throws FHIRException {
+        switch (hash) {
+        case -1618432855: // identifier
+          this.getIdentifier().add(castToIdentifier(value)); // Identifier
+          break;
+        case -892481550: // status
+          this.status = new ImmunizationStatusEnumFactory().fromType(value); // Enumeration<ImmunizationStatus>
+          break;
+        case 3076014: // date
+          this.date = castToDateTime(value); // DateTimeType
+          break;
+        case 664556354: // vaccineCode
+          this.vaccineCode = castToCodeableConcept(value); // CodeableConcept
+          break;
+        case -791418107: // patient
+          this.patient = castToReference(value); // Reference
+          break;
+        case -1050911117: // wasNotGiven
+          this.wasNotGiven = castToBoolean(value); // BooleanType
+          break;
+        case -427039533: // reported
+          this.reported = castToBoolean(value); // BooleanType
+          break;
+        case 481140686: // performer
+          this.performer = castToReference(value); // Reference
+          break;
+        case 693933948: // requester
+          this.requester = castToReference(value); // Reference
+          break;
+        case 1524132147: // encounter
+          this.encounter = castToReference(value); // Reference
+          break;
+        case -1969347631: // manufacturer
+          this.manufacturer = castToReference(value); // Reference
+          break;
+        case 1901043637: // location
+          this.location = castToReference(value); // Reference
+          break;
+        case 462547450: // lotNumber
+          this.lotNumber = castToString(value); // StringType
+          break;
+        case -668811523: // expirationDate
+          this.expirationDate = castToDate(value); // DateType
+          break;
+        case 3530567: // site
+          this.site = castToCodeableConcept(value); // CodeableConcept
+          break;
+        case 108704329: // route
+          this.route = castToCodeableConcept(value); // CodeableConcept
+          break;
+        case -2083618872: // doseQuantity
+          this.doseQuantity = castToSimpleQuantity(value); // SimpleQuantity
+          break;
+        case 3387378: // note
+          this.getNote().add(castToAnnotation(value)); // Annotation
+          break;
+        case -1105867239: // explanation
+          this.explanation = (ImmunizationExplanationComponent) value; // ImmunizationExplanationComponent
+          break;
+        case -867509719: // reaction
+          this.getReaction().add((ImmunizationReactionComponent) value); // ImmunizationReactionComponent
+          break;
+        case -179633155: // vaccinationProtocol
+          this.getVaccinationProtocol().add((ImmunizationVaccinationProtocolComponent) value); // ImmunizationVaccinationProtocolComponent
+          break;
+        default: super.setProperty(hash, name, value);
+        }
+
+      }
+
+      @Override
       public void setProperty(String name, Base value) throws FHIRException {
         if (name.equals("identifier"))
           this.getIdentifier().add(castToIdentifier(value));
         else if (name.equals("status"))
-          this.status = castToCode(value); // CodeType
+          this.status = new ImmunizationStatusEnumFactory().fromType(value); // Enumeration<ImmunizationStatus>
         else if (name.equals("date"))
           this.date = castToDateTime(value); // DateTimeType
         else if (name.equals("vaccineCode"))
@@ -2101,6 +2571,35 @@ public class Immunization extends DomainResource {
           this.getVaccinationProtocol().add((ImmunizationVaccinationProtocolComponent) value);
         else
           super.setProperty(name, value);
+      }
+
+      @Override
+      public Base makeProperty(int hash, String name) throws FHIRException {
+        switch (hash) {
+        case -1618432855:  return addIdentifier(); // Identifier
+        case -892481550: throw new FHIRException("Cannot make property status as it is not a complex type"); // Enumeration<ImmunizationStatus>
+        case 3076014: throw new FHIRException("Cannot make property date as it is not a complex type"); // DateTimeType
+        case 664556354:  return getVaccineCode(); // CodeableConcept
+        case -791418107:  return getPatient(); // Reference
+        case -1050911117: throw new FHIRException("Cannot make property wasNotGiven as it is not a complex type"); // BooleanType
+        case -427039533: throw new FHIRException("Cannot make property reported as it is not a complex type"); // BooleanType
+        case 481140686:  return getPerformer(); // Reference
+        case 693933948:  return getRequester(); // Reference
+        case 1524132147:  return getEncounter(); // Reference
+        case -1969347631:  return getManufacturer(); // Reference
+        case 1901043637:  return getLocation(); // Reference
+        case 462547450: throw new FHIRException("Cannot make property lotNumber as it is not a complex type"); // StringType
+        case -668811523: throw new FHIRException("Cannot make property expirationDate as it is not a complex type"); // DateType
+        case 3530567:  return getSite(); // CodeableConcept
+        case 108704329:  return getRoute(); // CodeableConcept
+        case -2083618872:  return getDoseQuantity(); // SimpleQuantity
+        case 3387378:  return addNote(); // Annotation
+        case -1105867239:  return getExplanation(); // ImmunizationExplanationComponent
+        case -867509719:  return addReaction(); // ImmunizationReactionComponent
+        case -179633155:  return addVaccinationProtocol(); // ImmunizationVaccinationProtocolComponent
+        default: return super.makeProperty(hash, name);
+        }
+
       }
 
       @Override
@@ -2265,16 +2764,10 @@ public class Immunization extends DomainResource {
       }
 
       public boolean isEmpty() {
-        return super.isEmpty() && (identifier == null || identifier.isEmpty()) && (status == null || status.isEmpty())
-           && (date == null || date.isEmpty()) && (vaccineCode == null || vaccineCode.isEmpty()) && (patient == null || patient.isEmpty())
-           && (wasNotGiven == null || wasNotGiven.isEmpty()) && (reported == null || reported.isEmpty())
-           && (performer == null || performer.isEmpty()) && (requester == null || requester.isEmpty())
-           && (encounter == null || encounter.isEmpty()) && (manufacturer == null || manufacturer.isEmpty())
-           && (location == null || location.isEmpty()) && (lotNumber == null || lotNumber.isEmpty())
-           && (expirationDate == null || expirationDate.isEmpty()) && (site == null || site.isEmpty())
-           && (route == null || route.isEmpty()) && (doseQuantity == null || doseQuantity.isEmpty())
-           && (note == null || note.isEmpty()) && (explanation == null || explanation.isEmpty()) && (reaction == null || reaction.isEmpty())
-           && (vaccinationProtocol == null || vaccinationProtocol.isEmpty());
+        return super.isEmpty() && ca.uhn.fhir.util.ElementUtil.isEmpty(identifier, status, date
+          , vaccineCode, patient, wasNotGiven, reported, performer, requester, encounter
+          , manufacturer, location, lotNumber, expirationDate, site, route, doseQuantity
+          , note, explanation, reaction, vaccinationProtocol);
       }
 
   @Override
@@ -2310,7 +2803,7 @@ public class Immunization extends DomainResource {
    * Path: <b>Immunization.requester</b><br>
    * </p>
    */
-  @SearchParamDefinition(name="requester", path="Immunization.requester", description="The practitioner who ordered the vaccination", type="reference" )
+  @SearchParamDefinition(name="requester", path="Immunization.requester", description="The practitioner who ordered the vaccination", type="reference", providesMembershipIn={ @ca.uhn.fhir.model.api.annotation.Compartment(name="Practitioner") }, target={Practitioner.class } )
   public static final String SP_REQUESTER = "requester";
  /**
    * <b>Fluent Client</b> search parameter constant for <b>requester</b>
@@ -2376,7 +2869,7 @@ public class Immunization extends DomainResource {
    * Path: <b>Immunization.performer</b><br>
    * </p>
    */
-  @SearchParamDefinition(name="performer", path="Immunization.performer", description="The practitioner who administered the vaccination", type="reference" )
+  @SearchParamDefinition(name="performer", path="Immunization.performer", description="The practitioner who administered the vaccination", type="reference", providesMembershipIn={ @ca.uhn.fhir.model.api.annotation.Compartment(name="Practitioner") }, target={Practitioner.class } )
   public static final String SP_PERFORMER = "performer";
  /**
    * <b>Fluent Client</b> search parameter constant for <b>performer</b>
@@ -2402,7 +2895,7 @@ public class Immunization extends DomainResource {
    * Path: <b>Immunization.reaction.detail</b><br>
    * </p>
    */
-  @SearchParamDefinition(name="reaction", path="Immunization.reaction.detail", description="Additional information on reaction", type="reference" )
+  @SearchParamDefinition(name="reaction", path="Immunization.reaction.detail", description="Additional information on reaction", type="reference", target={Observation.class } )
   public static final String SP_REACTION = "reaction";
  /**
    * <b>Fluent Client</b> search parameter constant for <b>reaction</b>
@@ -2468,7 +2961,7 @@ public class Immunization extends DomainResource {
    * Path: <b>Immunization.manufacturer</b><br>
    * </p>
    */
-  @SearchParamDefinition(name="manufacturer", path="Immunization.manufacturer", description="Vaccine Manufacturer", type="reference" )
+  @SearchParamDefinition(name="manufacturer", path="Immunization.manufacturer", description="Vaccine Manufacturer", type="reference", target={Organization.class } )
   public static final String SP_MANUFACTURER = "manufacturer";
  /**
    * <b>Fluent Client</b> search parameter constant for <b>manufacturer</b>
@@ -2514,7 +3007,7 @@ public class Immunization extends DomainResource {
    * Path: <b>Immunization.patient</b><br>
    * </p>
    */
-  @SearchParamDefinition(name="patient", path="Immunization.patient", description="The patient for the vaccination record", type="reference" )
+  @SearchParamDefinition(name="patient", path="Immunization.patient", description="The patient for the vaccination record", type="reference", providesMembershipIn={ @ca.uhn.fhir.model.api.annotation.Compartment(name="Patient") }, target={Patient.class } )
   public static final String SP_PATIENT = "patient";
  /**
    * <b>Fluent Client</b> search parameter constant for <b>patient</b>
@@ -2580,7 +3073,7 @@ public class Immunization extends DomainResource {
    * Path: <b>Immunization.location</b><br>
    * </p>
    */
-  @SearchParamDefinition(name="location", path="Immunization.location", description="The service delivery location or facility in which the vaccine was / was to be administered", type="reference" )
+  @SearchParamDefinition(name="location", path="Immunization.location", description="The service delivery location or facility in which the vaccine was / was to be administered", type="reference", target={Location.class } )
   public static final String SP_LOCATION = "location";
  /**
    * <b>Fluent Client</b> search parameter constant for <b>location</b>

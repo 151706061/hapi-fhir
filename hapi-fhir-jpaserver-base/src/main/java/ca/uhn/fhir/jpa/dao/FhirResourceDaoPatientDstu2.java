@@ -42,6 +42,10 @@ import ca.uhn.fhir.rest.server.interceptor.IServerInterceptor.ActionRequestDetai
 
 public class FhirResourceDaoPatientDstu2 extends FhirResourceDaoDstu2<Patient>implements IFhirResourceDaoPatient<Patient> {
 
+	public FhirResourceDaoPatientDstu2() {
+		super();
+	}
+	
 	private IBundleProvider doEverythingOperation(IIdType theId, IPrimitiveType<Integer> theCount, DateRangeParam theLastUpdated, SortSpec theSort, StringAndListParam theContent, StringAndListParam theNarrative) {
 		SearchParameterMap paramMap = new SearchParameterMap();
 		if (theCount != null) {
@@ -61,7 +65,7 @@ public class FhirResourceDaoPatientDstu2 extends FhirResourceDaoDstu2<Patient>im
 			paramMap.add("_id", new StringParam(theId.getIdPart()));
 		}
 		
-		SearchBuilder builder = new SearchBuilder(getContext(), myEntityManager, myPlatformTransactionManager, mySearchDao, mySearchResultDao, this, myResourceIndexedSearchParamUriDao);
+		SearchBuilder builder = new SearchBuilder(getContext(), myEntityManager, myPlatformTransactionManager, mySearchDao, mySearchResultDao, this, myResourceIndexedSearchParamUriDao, myForcedIdDao, myTerminologySvc);
 		builder.setType(getResourceType(), getResourceName());
 		return builder.search(paramMap);
 	}
@@ -69,7 +73,7 @@ public class FhirResourceDaoPatientDstu2 extends FhirResourceDaoDstu2<Patient>im
 	@Override
 	public IBundleProvider patientInstanceEverything(HttpServletRequest theServletRequest, IIdType theId, IPrimitiveType<Integer> theCount, DateRangeParam theLastUpdated, SortSpec theSort, StringAndListParam theContent, StringAndListParam theNarrative, RequestDetails theRequestDetails) {
 		// Notify interceptors
-		ActionRequestDetails requestDetails = new ActionRequestDetails(null, getResourceName(), getContext(), theRequestDetails);
+		ActionRequestDetails requestDetails = new ActionRequestDetails(theRequestDetails, getResourceName(), null);
 		notifyInterceptors(RestOperationTypeEnum.EXTENDED_OPERATION_INSTANCE, requestDetails);
 
 		return doEverythingOperation(theId, theCount, theLastUpdated, theSort, theContent, theNarrative);
@@ -78,7 +82,7 @@ public class FhirResourceDaoPatientDstu2 extends FhirResourceDaoDstu2<Patient>im
 	@Override
 	public IBundleProvider patientTypeEverything(HttpServletRequest theServletRequest, IPrimitiveType<Integer> theCount, DateRangeParam theLastUpdated, SortSpec theSort, StringAndListParam theContent, StringAndListParam theNarrative, RequestDetails theRequestDetails) {
 		// Notify interceptors
-		ActionRequestDetails requestDetails = new ActionRequestDetails(null, getResourceName(), getContext(), theRequestDetails);
+		ActionRequestDetails requestDetails = new ActionRequestDetails(theRequestDetails, getResourceName(), null);
 		notifyInterceptors(RestOperationTypeEnum.EXTENDED_OPERATION_TYPE, requestDetails);
 
 		return doEverythingOperation(null, theCount, theLastUpdated, theSort, theContent, theNarrative);

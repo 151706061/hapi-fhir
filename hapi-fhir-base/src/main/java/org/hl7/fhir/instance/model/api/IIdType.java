@@ -32,7 +32,7 @@ package org.hl7.fhir.instance.model.api;
  * which version of the strctures your application is using.   
  * </p>
  */
-public interface IIdType extends IBase {
+public interface IIdType extends IPrimitiveType<String> {
 
 	void applyTo(IBaseResource theResource);
 
@@ -121,6 +121,7 @@ public interface IIdType extends IBase {
 	 */
 	boolean isVersionIdPartValidLong();
 
+	@Override
 	IIdType setValue(String theString);
 
 	IIdType toUnqualified();

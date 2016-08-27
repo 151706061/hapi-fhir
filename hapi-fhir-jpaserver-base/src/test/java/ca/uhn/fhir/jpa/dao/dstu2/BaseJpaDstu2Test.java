@@ -12,6 +12,7 @@ import org.apache.commons.io.IOUtils;
 import org.hibernate.search.jpa.FullTextEntityManager;
 import org.hibernate.search.jpa.Search;
 import org.hl7.fhir.instance.model.api.IBaseResource;
+import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +40,7 @@ import ca.uhn.fhir.jpa.provider.JpaSystemProviderDstu2;
 import ca.uhn.fhir.model.dstu2.composite.CodeableConceptDt;
 import ca.uhn.fhir.model.dstu2.composite.CodingDt;
 import ca.uhn.fhir.model.dstu2.composite.MetaDt;
+import ca.uhn.fhir.model.dstu2.resource.Appointment;
 import ca.uhn.fhir.model.dstu2.resource.Bundle;
 import ca.uhn.fhir.model.dstu2.resource.ConceptMap;
 import ca.uhn.fhir.model.dstu2.resource.Device;
@@ -63,6 +65,7 @@ import ca.uhn.fhir.model.dstu2.resource.ValueSet;
 import ca.uhn.fhir.parser.IParser;
 import ca.uhn.fhir.rest.method.MethodUtil;
 import ca.uhn.fhir.rest.server.interceptor.IServerInterceptor;
+import ca.uhn.fhir.util.TestUtil;
 
 //@formatter:off
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -73,16 +76,14 @@ public abstract class BaseJpaDstu2Test extends BaseJpaTest {
 	@Autowired
 	protected ApplicationContext myAppCtx;
 	@Autowired
-	protected IFulltextSearchSvc mySearchDao;
+	@Qualifier("myAppointmentDaoDstu2")
+	protected IFhirResourceDao<Appointment> myAppointmentDao;
+	@Autowired
+	@Qualifier("myBundleDaoDstu2")
+	protected IFhirResourceDao<Bundle> myBundleDao;
 	@Autowired
 	@Qualifier("myConceptMapDaoDstu2")
 	protected IFhirResourceDao<ConceptMap> myConceptMapDao;
-	@Autowired
-	@Qualifier("myMedicationDaoDstu2")
-	protected IFhirResourceDao<Medication> myMedicationDao;
-	@Autowired
-	@Qualifier("myMedicationOrderDaoDstu2")
-	protected IFhirResourceDao<MedicationOrder> myMedicationOrderDao;
 	@Autowired
 	protected DaoConfig myDaoConfig;
 	@Autowired
@@ -97,11 +98,9 @@ public abstract class BaseJpaDstu2Test extends BaseJpaTest {
 	@Autowired
 	@Qualifier("myEncounterDaoDstu2")
 	protected IFhirResourceDao<Encounter> myEncounterDao;
-	
-//	@PersistenceContext()
+	//	@PersistenceContext()
 	@Autowired
 	protected EntityManager myEntityManager;
-	
 	@Autowired
 	@Qualifier("myFhirContextDstu2")
 	protected FhirContext myFhirCtx;
@@ -112,6 +111,17 @@ public abstract class BaseJpaDstu2Test extends BaseJpaTest {
 	@Autowired
 	@Qualifier("myLocationDaoDstu2")
 	protected IFhirResourceDao<Location> myLocationDao;
+	
+@Autowired
+	@Qualifier("myMediaDaoDstu2")
+	protected IFhirResourceDao<Media> myMediaDao;
+	
+	@Autowired
+	@Qualifier("myMedicationDaoDstu2")
+	protected IFhirResourceDao<Medication> myMedicationDao;
+	@Autowired
+	@Qualifier("myMedicationOrderDaoDstu2")
+	protected IFhirResourceDao<MedicationOrder> myMedicationOrderDao;
 	@Autowired
 	@Qualifier("myObservationDaoDstu2")
 	protected IFhirResourceDao<Observation> myObservationDao;
@@ -121,9 +131,6 @@ public abstract class BaseJpaDstu2Test extends BaseJpaTest {
 	@Autowired
 	@Qualifier("myPatientDaoDstu2")
 	protected IFhirResourceDaoPatient<Patient> myPatientDao;
-	@Autowired
-	@Qualifier("myMediaDaoDstu2")
-	protected IFhirResourceDao<Media> myMediaDao;
 	@Autowired
 	@Qualifier("myPractitionerDaoDstu2")
 	protected IFhirResourceDao<Practitioner> myPractitionerDao;
@@ -136,6 +143,8 @@ public abstract class BaseJpaDstu2Test extends BaseJpaTest {
 	@Autowired
 	@Qualifier("myResourceProvidersDstu2")
 	protected Object myResourceProviders;
+	@Autowired
+	protected IFulltextSearchSvc mySearchDao;
 	@Autowired
 	@Qualifier("myStructureDefinitionDaoDstu2")
 	protected IFhirResourceDao<StructureDefinition> myStructureDefinitionDao;
@@ -156,20 +165,11 @@ public abstract class BaseJpaDstu2Test extends BaseJpaTest {
 	@Autowired
 	@Qualifier("myValueSetDaoDstu2")
 	protected IFhirResourceDaoValueSet<ValueSet, CodingDt, CodeableConceptDt> myValueSetDao;
-
 	@Before
 	public void beforeCreateInterceptor() {
 		myInterceptor = mock(IServerInterceptor.class);
 		myDaoConfig.setInterceptors(myInterceptor);
 	}
-
-	@Before
-	public void beforeResetConfig() {
-		myDaoConfig.setHardSearchLimit(1000);
-		myDaoConfig.setHardTagListLimit(1000);
-		myDaoConfig.setIncludeLimit(2000);
-	}
-
 	@Before
 	@Transactional
 	public void beforeFlushFT() {
@@ -188,6 +188,19 @@ public abstract class BaseJpaDstu2Test extends BaseJpaTest {
 		purgeDatabase(entityManager, myTxManager);
 	}
 
+	@Before
+	public void beforeResetConfig() {
+		myDaoConfig.setHardSearchLimit(1000);
+		myDaoConfig.setHardTagListLimit(1000);
+		myDaoConfig.setIncludeLimit(2000);
+		myDaoConfig.setAllowExternalReferences(new DaoConfig().isAllowExternalReferences());
+	}
+
+	@Override
+	protected FhirContext getContext() {
+		return myFhirCtx;
+	}
+
 	protected <T extends IBaseResource> T loadResourceFromClasspath(Class<T> type, String resourceName) throws IOException {
 		InputStream stream = FhirResourceDaoDstu2SearchNoFtTest.class.getResourceAsStream(resourceName);
 		if (stream == null) {
@@ -203,6 +216,11 @@ public abstract class BaseJpaDstu2Test extends BaseJpaTest {
 		retVal.setPropagationBehavior(TransactionTemplate.PROPAGATION_REQUIRES_NEW);
 		retVal.afterPropertiesSet();
 		return retVal;
+	}
+
+	@AfterClass
+	public static void afterClassClearContext() throws Exception {
+		TestUtil.clearAllStaticFieldsForUnitTest();
 	}
 
 }

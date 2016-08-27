@@ -9,7 +9,6 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.mock;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -46,43 +45,45 @@ import ca.uhn.fhir.model.dstu.resource.Patient;
 import ca.uhn.fhir.model.dstu2.composite.MetaDt;
 import ca.uhn.fhir.model.primitive.IdDt;
 import ca.uhn.fhir.model.primitive.InstantDt;
-import ca.uhn.fhir.rest.method.RequestDetails;
 import ca.uhn.fhir.rest.param.TokenParam;
 import ca.uhn.fhir.rest.server.IBundleProvider;
 import ca.uhn.fhir.rest.server.exceptions.InvalidRequestException;
-import ca.uhn.fhir.rest.server.servlet.ServletRequestDetails;
+import ca.uhn.fhir.util.TestUtil;
 
-public class FhirSystemDaoDstu1Test extends BaseJpaTest  {
+public class FhirSystemDaoDstu1Test extends BaseJpaTest {
 
 	private static AnnotationConfigApplicationContext ourCtx;
+	private static EntityManager ourEntityManager;
 	private static FhirContext ourFhirContext;
 	private static IFhirResourceDao<Location> ourLocationDao;
 	private static final org.slf4j.Logger ourLog = org.slf4j.LoggerFactory.getLogger(FhirSystemDaoDstu1Test.class);
 	private static IFhirResourceDao<Observation> ourObservationDao;
 	private static IFhirResourceDao<Patient> ourPatientDao;
 	private static IFhirSystemDao<List<IResource>, MetaDt> ourSystemDao;
-	private RequestDetails myRequestDetails;
-	private static EntityManager ourEntityManager;
 	private static PlatformTransactionManager ourTxManager;
 
 	@Before
 	public void before() {
-		myRequestDetails = mock(RequestDetails.class);
 		super.purgeDatabase(ourEntityManager, ourTxManager);
+	}
+
+	@Override
+	protected FhirContext getContext() {
+		return ourFhirContext;
 	}
 
 	@Test
 	public void testGetResourceCounts() {
 		Observation obs = new Observation();
 		obs.getName().addCoding().setSystem("urn:system").setCode("testGetResourceCountsO01");
-		ourObservationDao.create(obs, new ServletRequestDetails());
+		ourObservationDao.create(obs, mySrd);
 
 		Map<String, Long> oldCounts = ourSystemDao.getResourceCounts();
 
 		Patient patient = new Patient();
 		patient.addIdentifier().setSystem("urn:system").setValue("testGetResourceCountsP01");
 		patient.addName().addFamily("Tester").addGiven("Joe");
-		ourPatientDao.create(patient, new ServletRequestDetails());
+		ourPatientDao.create(patient, mySrd);
 
 		Map<String, Long> newCounts = ourSystemDao.getResourceCounts();
 
@@ -104,21 +105,21 @@ public class FhirSystemDaoDstu1Test extends BaseJpaTest  {
 		Patient patient = new Patient();
 		patient.addIdentifier().setSystem("urn:system").setValue("testHistory");
 		patient.addName().addFamily("Tester").addGiven("Joe");
-		IIdType pid = ourPatientDao.create(patient, new ServletRequestDetails()).getId().toVersionless();
+		IIdType pid = ourPatientDao.create(patient, mySrd).getId().toVersionless();
 
 		Thread.sleep(10);
 		patient.setId(pid);
-		IIdType newpid = ourPatientDao.update(patient, new ServletRequestDetails()).getId();
+		IIdType newpid = ourPatientDao.update(patient, mySrd).getId();
 
 		Thread.sleep(10);
 		patient.setId(pid);
-		IIdType newpid2 = ourPatientDao.update(patient, new ServletRequestDetails()).getId();
+		IIdType newpid2 = ourPatientDao.update(patient, mySrd).getId();
 
 		Thread.sleep(10);
 		patient.setId(pid);
-		IIdType newpid3 = ourPatientDao.update(patient, new ServletRequestDetails()).getId();
+		IIdType newpid3 = ourPatientDao.update(patient, mySrd).getId();
 
-		IBundleProvider values = ourSystemDao.history(start, new ServletRequestDetails());
+		IBundleProvider values = ourSystemDao.history(start, null, mySrd);
 		assertEquals(4, values.size());
 
 		List<IBaseResource> res = values.getResources(0, 4);
@@ -129,22 +130,22 @@ public class FhirSystemDaoDstu1Test extends BaseJpaTest  {
 
 		Location loc = new Location();
 		loc.getAddress().addLine("AAA");
-		IIdType lid = ourLocationDao.create(loc, new ServletRequestDetails()).getId();
+		IIdType lid = ourLocationDao.create(loc, mySrd).getId();
 
 		Location loc2 = new Location();
 		loc2.getAddress().addLine("AAA");
-		ourLocationDao.create(loc2, new ServletRequestDetails()).getId();
+		ourLocationDao.create(loc2, mySrd).getId();
 
 		Thread.sleep(2000);
 
-		values = ourLocationDao.history(start, new ServletRequestDetails());
+		values = ourLocationDao.history(start, null, mySrd);
 		assertEquals(2, values.size());
 
-		values = ourLocationDao.history(lid.getIdPartAsLong(), start, new ServletRequestDetails());
+		values = ourLocationDao.history(lid.toUnqualifiedVersionless(), start, null, mySrd);
 		assertEquals(1, values.size());
 
 	}
-	
+
 	@Test
 	public void testPersistWithSimpleLink() {
 		Patient patient = new Patient();
@@ -156,7 +157,7 @@ public class FhirSystemDaoDstu1Test extends BaseJpaTest  {
 		obs.getName().addCoding().setSystem("urn:system").setCode("testPersistWithSimpleLinkO01");
 		obs.setSubject(new ResourceReferenceDt("Patient/testPersistWithSimpleLinkP01"));
 
-		ourSystemDao.transaction(myRequestDetails, Arrays.asList((IResource) patient, obs));
+		ourSystemDao.transaction(mySrd, Arrays.asList((IResource) patient, obs));
 
 		String patientId = (patient.getId().getIdPart());
 		String obsId = (obs.getId().getIdPart());
@@ -185,7 +186,7 @@ public class FhirSystemDaoDstu1Test extends BaseJpaTest  {
 		patient.addIdentifier().setSystem("urn:system").setValue("testPersistWithSimpleLinkP02");
 		obs.getName().addCoding().setSystem("urn:system").setCode("testPersistWithSimpleLinkO02");
 
-		ourSystemDao.transaction(myRequestDetails, Arrays.asList((IResource) patient, obs));
+		ourSystemDao.transaction(mySrd, Arrays.asList((IResource) patient, obs));
 
 		String patientId2 = (patient.getId().getIdPart());
 		String patientVersion2 = (patient.getId().getVersionIdPart());
@@ -206,7 +207,7 @@ public class FhirSystemDaoDstu1Test extends BaseJpaTest  {
 		obs.setSubject(new ResourceReferenceDt("Patient/999998888888"));
 
 		try {
-			ourSystemDao.transaction(myRequestDetails, Arrays.asList((IResource) obs));
+			ourSystemDao.transaction(mySrd, Arrays.asList((IResource) obs));
 		} catch (InvalidRequestException e) {
 			assertThat(e.getMessage(), containsString("Resource Patient/999998888888 not found, specified in path: Observation.subject"));
 		}
@@ -216,7 +217,7 @@ public class FhirSystemDaoDstu1Test extends BaseJpaTest  {
 		obs.setSubject(new ResourceReferenceDt("Patient/1.2.3.4"));
 
 		try {
-			ourSystemDao.transaction(myRequestDetails, Arrays.asList((IResource) obs));
+			ourSystemDao.transaction(mySrd, Arrays.asList((IResource) obs));
 		} catch (InvalidRequestException e) {
 			assertThat(e.getMessage(), containsString("Resource Patient/1.2.3.4 not found, specified in path: Observation.subject"));
 		}
@@ -226,44 +227,44 @@ public class FhirSystemDaoDstu1Test extends BaseJpaTest  {
 	@Test
 	public void testTagOperationss() throws Exception {
 
-		TagList preSystemTl = ourSystemDao.getAllTags(new ServletRequestDetails());
+		TagList preSystemTl = ourSystemDao.getAllTags(mySrd);
 
 		TagList tl1 = new TagList();
 		tl1.addTag("testGetAllTagsScheme1", "testGetAllTagsTerm1", "testGetAllTagsLabel1");
 		Patient p1 = new Patient();
 		p1.addIdentifier().setSystem("foo").setValue("testGetAllTags01");
 		ResourceMetadataKeyEnum.TAG_LIST.put(p1, tl1);
-		ourPatientDao.create(p1, new ServletRequestDetails());
+		ourPatientDao.create(p1, mySrd);
 
 		TagList tl2 = new TagList();
 		tl2.addTag("testGetAllTagsScheme2", "testGetAllTagsTerm2", "testGetAllTagsLabel2");
 		Observation o1 = new Observation();
 		o1.getName().setText("testGetAllTags02");
 		ResourceMetadataKeyEnum.TAG_LIST.put(o1, tl2);
-		IIdType o1id = ourObservationDao.create(o1, new ServletRequestDetails()).getId();
+		IIdType o1id = ourObservationDao.create(o1, mySrd).getId();
 		assertTrue(o1id.getVersionIdPart() != null);
 
-		TagList postSystemTl = ourSystemDao.getAllTags(new ServletRequestDetails());
+		TagList postSystemTl = ourSystemDao.getAllTags(mySrd);
 		assertEquals(preSystemTl.size() + 2, postSystemTl.size());
 		assertEquals("testGetAllTagsLabel1", postSystemTl.getTag("testGetAllTagsScheme1", "testGetAllTagsTerm1").getLabel());
 
-		TagList tags = ourPatientDao.getAllResourceTags(new ServletRequestDetails());
+		TagList tags = ourPatientDao.getAllResourceTags(mySrd);
 		assertEquals("testGetAllTagsLabel1", tags.getTag("testGetAllTagsScheme1", "testGetAllTagsTerm1").getLabel());
 		assertNull(tags.getTag("testGetAllTagsScheme2", "testGetAllTagsTerm2"));
 
-		TagList tags2 = ourObservationDao.getTags(o1id, new ServletRequestDetails());
+		TagList tags2 = ourObservationDao.getTags(o1id, mySrd);
 		assertNull(tags2.getTag("testGetAllTagsScheme1", "testGetAllTagsTerm1"));
 		assertEquals("testGetAllTagsLabel2", tags2.getTag("testGetAllTagsScheme2", "testGetAllTagsTerm2").getLabel());
 
 		o1.setId(o1id);
-		IIdType o1id2 = ourObservationDao.update(o1, new ServletRequestDetails()).getId();
+		IIdType o1id2 = ourObservationDao.update(o1, mySrd).getId();
 		assertTrue(o1id2.getVersionIdPart() != null);
 
-		tags2 = ourObservationDao.getTags(o1id, new ServletRequestDetails());
+		tags2 = ourObservationDao.getTags(o1id, mySrd);
 		assertNull(tags2.getTag("testGetAllTagsScheme1", "testGetAllTagsTerm1"));
 		assertEquals("testGetAllTagsLabel2", tags2.getTag("testGetAllTagsScheme2", "testGetAllTagsTerm2").getLabel());
 
-		tags2 = ourObservationDao.getTags(o1id2, new ServletRequestDetails());
+		tags2 = ourObservationDao.getTags(o1id2, mySrd);
 		assertNull(tags2.getTag("testGetAllTagsScheme1", "testGetAllTagsTerm1"));
 		assertNotNull(tags2.getTag("testGetAllTagsScheme2", "testGetAllTagsTerm2"));
 
@@ -271,12 +272,12 @@ public class FhirSystemDaoDstu1Test extends BaseJpaTest  {
 		 * Remove a tag from a version
 		 */
 
-		ourObservationDao.removeTag(o1id2, TagTypeEnum.TAG, "testGetAllTagsScheme2", "testGetAllTagsTerm2", new ServletRequestDetails());
-		tags2 = ourObservationDao.getTags(o1id2, new ServletRequestDetails());
+		ourObservationDao.removeTag(o1id2, TagTypeEnum.TAG, "testGetAllTagsScheme2", "testGetAllTagsTerm2", mySrd);
+		tags2 = ourObservationDao.getTags(o1id2, mySrd);
 		assertNull(tags2.getTag("testGetAllTagsScheme1", "testGetAllTagsTerm1"));
 		assertNull(tags2.getTag("testGetAllTagsScheme2", "testGetAllTagsTerm2"));
 
-		tags2 = ourObservationDao.getTags(o1id, new ServletRequestDetails());
+		tags2 = ourObservationDao.getTags(o1id, mySrd);
 		assertNull(tags2.getTag("testGetAllTagsScheme1", "testGetAllTagsTerm1"));
 		assertNotNull(tags2.getTag("testGetAllTagsScheme2", "testGetAllTagsTerm2"));
 
@@ -284,13 +285,13 @@ public class FhirSystemDaoDstu1Test extends BaseJpaTest  {
 		 * Add a tag
 		 */
 		ourObservationDao.addTag(o1id2, TagTypeEnum.TAG, "testGetAllTagsScheme3", "testGetAllTagsTerm3", "testGetAllTagsLabel3");
-		tags2 = ourObservationDao.getTags(o1id2, new ServletRequestDetails());
+		tags2 = ourObservationDao.getTags(o1id2, mySrd);
 		assertNull(tags2.getTag("testGetAllTagsScheme1", "testGetAllTagsTerm1"));
 		assertNull(tags2.getTag("testGetAllTagsScheme2", "testGetAllTagsTerm2"));
 		assertNotNull(tags2.getTag("testGetAllTagsScheme3", "testGetAllTagsTerm3"));
 		assertEquals("testGetAllTagsLabel3", tags2.getTag("testGetAllTagsScheme3", "testGetAllTagsTerm3").getLabel());
 
-		tags2 = ourObservationDao.getTags(o1id, new ServletRequestDetails());
+		tags2 = ourObservationDao.getTags(o1id, mySrd);
 		assertNull(tags2.getTag("testGetAllTagsScheme1", "testGetAllTagsTerm1"));
 		assertNotNull(tags2.getTag("testGetAllTagsScheme2", "testGetAllTagsTerm2"));
 
@@ -306,7 +307,7 @@ public class FhirSystemDaoDstu1Test extends BaseJpaTest  {
 		patient2.setId(new IdDt("Patient/testTransactionFailsWithDusplicateIds"));
 		patient2.addIdentifier().setSystem("urn:system").setValue("testPersistWithSimpleLinkP02");
 
-		ourSystemDao.transaction(myRequestDetails, Arrays.asList((IResource) patient1, patient2));
+		ourSystemDao.transaction(mySrd, Arrays.asList((IResource) patient1, patient2));
 	}
 
 	@Test
@@ -316,7 +317,7 @@ public class FhirSystemDaoDstu1Test extends BaseJpaTest  {
 		Bundle bundle = ourFhirContext.newXmlParser().parseBundle(new InputStreamReader(bundleRes));
 		List<IResource> res = bundle.toListOfResources();
 
-		ourSystemDao.transaction(myRequestDetails, res);
+		ourSystemDao.transaction(mySrd, res);
 
 		Patient p1 = (Patient) res.get(0);
 		String id = p1.getId().getValue();
@@ -349,7 +350,7 @@ public class FhirSystemDaoDstu1Test extends BaseJpaTest  {
 		o2.setSubject(new ResourceReferenceDt("Patient/cid:patient1"));
 		res.add(o2);
 
-		ourSystemDao.transaction(myRequestDetails, res);
+		ourSystemDao.transaction(mySrd, res);
 
 		assertTrue(p1.getId().getValue(), p1.getId().getIdPart().matches("^[0-9]+$"));
 		assertTrue(o1.getId().getValue(), o1.getId().getIdPart().matches("^[0-9]+$"));
@@ -371,14 +372,13 @@ public class FhirSystemDaoDstu1Test extends BaseJpaTest  {
 			res.add(next.getResource());
 		}
 
-		List<IResource> response = ourSystemDao.transaction(myRequestDetails, res);
+		List<IResource> response = ourSystemDao.transaction(mySrd, res);
 
 		String encodeResourceToString = ourFhirContext.newXmlParser().setPrettyPrint(true).encodeResourceToString(response.get(0));
 		ourLog.info(encodeResourceToString);
-		
+
 		assertThat(encodeResourceToString, not(containsString("smsp")));
 	}
-
 
 	/**
 	 * This is the correct way to do this, not {@link #testTransactionWithCidIds()}
@@ -404,7 +404,7 @@ public class FhirSystemDaoDstu1Test extends BaseJpaTest  {
 		o2.setSubject(new ResourceReferenceDt("cid:patient1"));
 		res.add(o2);
 
-		ourSystemDao.transaction(myRequestDetails, res);
+		ourSystemDao.transaction(mySrd, res);
 
 		assertTrue(p1.getId().getValue(), p1.getId().getIdPart().matches("^[0-9]+$"));
 		assertTrue(o1.getId().getValue(), o1.getId().getIdPart().matches("^[0-9]+$"));
@@ -437,7 +437,7 @@ public class FhirSystemDaoDstu1Test extends BaseJpaTest  {
 		p3.addIdentifier().setSystem("urn:system").setValue("testTransactionWithDelete");
 		res.add(p3);
 
-		ourSystemDao.transaction(myRequestDetails, res);
+		ourSystemDao.transaction(mySrd, res);
 
 		/*
 		 * Verify
@@ -463,7 +463,7 @@ public class FhirSystemDaoDstu1Test extends BaseJpaTest  {
 		ResourceMetadataKeyEnum.DELETED_AT.put(p2, InstantDt.withCurrentTime());
 		res.add(p2);
 
-		ourSystemDao.transaction(myRequestDetails, res);
+		ourSystemDao.transaction(mySrd, res);
 
 		/*
 		 * Verify
@@ -477,8 +477,9 @@ public class FhirSystemDaoDstu1Test extends BaseJpaTest  {
 	}
 
 	@AfterClass
-	public static void afterClass() {
+	public static void afterClassClearContext() {
 		ourCtx.close();
+		TestUtil.clearAllStaticFieldsForUnitTest();
 	}
 
 	@SuppressWarnings("unchecked")

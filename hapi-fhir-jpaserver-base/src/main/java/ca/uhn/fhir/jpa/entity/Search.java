@@ -95,8 +95,8 @@ public class Search implements Serializable {
 	@Column(name="SEARCH_TYPE", nullable=false)
 	private SearchTypeEnum mySearchType;
 
-	@Column(name="TOTAL_COUNT")
-	private int myTotalCount;
+	@Column(name="TOTAL_COUNT", nullable=false)
+	private Integer myTotalCount;
 
 	@Column(name="SEARCH_UUID", length=40, nullable=false, updatable=false)
 	private String myUuid;
@@ -118,6 +118,10 @@ public class Search implements Serializable {
 	
 	public Date getLastUpdatedHigh() {
 		return myLastUpdatedHigh;
+	}
+
+	public Date getLastUpdatedLow() {
+		return myLastUpdatedLow;
 	}
 
 	public DateRangeParam getLastUpdated() {
@@ -145,7 +149,7 @@ public class Search implements Serializable {
 	}
 
 
-	public int getTotalCount() {
+	public Integer getTotalCount() {
 		return myTotalCount;
 	}
 
@@ -188,7 +192,7 @@ public class Search implements Serializable {
 		mySearchType = theSearchType;
 	}
 
-	public void setTotalCount(int theTotalCount) {
+	public void setTotalCount(Integer theTotalCount) {
 		myTotalCount = theTotalCount;
 	}
 

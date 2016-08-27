@@ -1,5 +1,7 @@
 package ca.uhn.fhir.util;
 
+import static org.apache.commons.lang3.StringUtils.defaultString;
+
 /*
  * #%L
  * HAPI FHIR - Core Library
@@ -35,6 +37,7 @@ import org.hl7.fhir.instance.model.api.IBaseHasExtensions;
 import org.hl7.fhir.instance.model.api.IBaseHasModifierExtensions;
 import org.hl7.fhir.instance.model.api.IBaseReference;
 import org.hl7.fhir.instance.model.api.IBaseResource;
+import org.hl7.fhir.instance.model.api.IIdType;
 import org.hl7.fhir.instance.model.api.IPrimitiveType;
 
 import ca.uhn.fhir.context.BaseRuntimeChildDefinition;
@@ -45,6 +48,7 @@ import ca.uhn.fhir.context.ConfigurationException;
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.context.RuntimeChildChoiceDefinition;
 import ca.uhn.fhir.context.RuntimeChildDirectResource;
+import ca.uhn.fhir.context.RuntimeExtensionDtDefinition;
 import ca.uhn.fhir.context.RuntimeResourceDefinition;
 import ca.uhn.fhir.context.RuntimeSearchParam;
 import ca.uhn.fhir.model.api.ExtensionDt;
@@ -78,20 +82,30 @@ public class FhirTerser {
 		if (theElement instanceof ISupportsUndeclaredExtensions) {
 			ISupportsUndeclaredExtensions containingElement = (ISupportsUndeclaredExtensions) theElement;
 			for (ExtensionDt nextExt : containingElement.getUndeclaredExtensions()) {
+				if (nextExt == null) {
+					continue;
+				}
 				theCallback.acceptUndeclaredExtension(containingElement, null, theChildDefinition, theDefinition, nextExt);
 				addUndeclaredExtensions(nextExt, theDefinition, theChildDefinition, theCallback);
 			}
 		}
-		
-		if (theElement instanceof IBaseHasExtensions) {
-			for (IBaseExtension<?, ?> nextExt : ((IBaseHasExtensions)theElement).getExtension()) {
-				theCallback.acceptElement(nextExt.getValue(), null, theChildDefinition, theDefinition);
-				addUndeclaredExtensions(nextExt, theDefinition, theChildDefinition, theCallback);
-			}
-		}
+
+		// Commented out because FhirTerserDstu3Test#testGetResourceReferenceInExtension
+//		if (theElement instanceof IBaseHasExtensions) {
+//			for (IBaseExtension<?, ?> nextExt : ((IBaseHasExtensions)theElement).getExtension()) {
+//				if (nextExt == null) {
+//					continue;
+//				}
+//				theCallback.acceptElement(nextExt.getValue(), null, theChildDefinition, theDefinition);
+//				addUndeclaredExtensions(nextExt, theDefinition, theChildDefinition, theCallback);
+//			}
+//		}
 		
 		if (theElement instanceof IBaseHasModifierExtensions) {
 			for (IBaseExtension<?, ?> nextExt : ((IBaseHasModifierExtensions)theElement).getModifierExtension()) {
+				if (nextExt == null) {
+					continue;
+				}
 				theCallback.acceptElement(nextExt.getValue(), null, theChildDefinition, theDefinition);
 				addUndeclaredExtensions(nextExt, theDefinition, theChildDefinition, theCallback);
 			}
@@ -125,18 +139,25 @@ public class FhirTerser {
 		BaseRuntimeElementCompositeDefinition<?> sourceDef = (BaseRuntimeElementCompositeDefinition<?>) myContext.getElementDefinition(theSource.getClass()); 
 		BaseRuntimeElementCompositeDefinition<?> targetDef = (BaseRuntimeElementCompositeDefinition<?>) myContext.getElementDefinition(theTarget.getClass());
 		
-		for (BaseRuntimeChildDefinition nextChild : sourceDef.getChildren()) {
+		List<BaseRuntimeChildDefinition> children = sourceDef.getChildren();
+		if (sourceDef instanceof RuntimeExtensionDtDefinition) {
+			children = ((RuntimeExtensionDtDefinition)sourceDef).getChildrenIncludingUrl();
+		}
+		
+		for (BaseRuntimeChildDefinition nextChild : children) {
 			for (IBase nextValue : nextChild.getAccessor().getValues(theSource)) {
-				BaseRuntimeChildDefinition targetChild = targetDef.getChildByName(nextChild.getElementName());
+				String elementName = nextChild.getChildNameByDatatype(nextValue.getClass());
+				BaseRuntimeChildDefinition targetChild = targetDef.getChildByName(elementName);
 				if (targetChild == null) {
 					if (theIgnoreMissingFields) {
 						continue;
 					} else {
-						throw new DataFormatException("Type " + theTarget.getClass().getName() + " does not have a child with name " + nextChild.getElementName());
+						throw new DataFormatException("Type " + theTarget.getClass().getName() + " does not have a child with name " + elementName);
 					}
 				}
 				
-				IBase target = targetChild.getChildByName(nextChild.getElementName()).newInstance();
+				BaseRuntimeElementDefinition<?> childDef = targetChild.getChildByName(elementName);
+				IBase target = childDef.newInstance();
 				targetChild.getMutator().addValue(theTarget, target);
 				cloneInto(nextValue, target, theIgnoreMissingFields);
 			}
@@ -177,16 +198,10 @@ public class FhirTerser {
 				}
 			}
 
-			@SuppressWarnings("unchecked")
 			@Override
 			public void acceptUndeclaredExtension(ISupportsUndeclaredExtensions theContainingElement, List<String> thePathToElement, BaseRuntimeChildDefinition theChildDefinition,
 					BaseRuntimeElementDefinition<?> theDefinition, ExtensionDt theNextExt) {
-				if (theType.isAssignableFrom(theNextExt.getClass())) {
-					retVal.add((T) theNextExt);
-				}
-				if (theNextExt.getValue() != null && theType.isAssignableFrom(theNextExt.getValue().getClass())) {
-					retVal.add((T) theNextExt.getValue());
-				}
+				// nothing
 			}
 		});
 		return retVal;
@@ -209,9 +224,7 @@ public class FhirTerser {
 			@Override
 			public void acceptUndeclaredExtension(ISupportsUndeclaredExtensions theContainingElement, List<String> thePathToElement, BaseRuntimeChildDefinition theChildDefinition,
 					BaseRuntimeElementDefinition<?> theDefinition, ExtensionDt theNextExt) {
-				if (theNextExt.getValue() != null && BaseResourceReferenceDt.class.isAssignableFrom(theNextExt.getValue().getClass())) {
-					retVal.add(new ResourceReferenceInfo(myContext, theResource, thePathToElement, (BaseResourceReferenceDt) theNextExt.getValue()));
-				}
+				// nothing
 			}
 		});
 		return retVal;
@@ -341,19 +354,26 @@ public class FhirTerser {
 	 * 
 	 * @param theCompartmentName The name of the compartment
 	 * @param theSource The potential member of the compartment
-	 * @param theTarget The owner of the compartment
+	 * @param theTarget The owner of the compartment. Note that both the resource type and ID must be filled in on this IIdType or the method will throw an {@link IllegalArgumentException}
 	 * @return <code>true</code> if <code>theSource</code> is in the compartment
+	 * @throws IllegalArgumentException If theTarget does not contain both a resource type and ID
 	 */
-	public boolean isSourceInCompartmentForTarget(String theCompartmentName, IBaseResource theSource, IBaseResource theTarget) {
+	public boolean isSourceInCompartmentForTarget(String theCompartmentName, IBaseResource theSource, IIdType theTarget) {
 		Validate.notBlank(theCompartmentName, "theCompartmentName must not be null or blank");
 		Validate.notNull(theSource, "theSource must not be null");
 		Validate.notNull(theTarget, "theTarget must not be null");
-		Validate.notBlank(theTarget.getIdElement().getIdPart(), "theTarget must have a populated ID (theTarget.getIdElement().getIdPart() does not return a value)");
+		Validate.notBlank(defaultString(theTarget.getResourceType()), "theTarget must have a populated resource type (theTarget.getResourceType() does not return a value)");
+		Validate.notBlank(defaultString(theTarget.getIdPart()), "theTarget must have a populated ID (theTarget.getIdPart() does not return a value)");
 		
-		RuntimeResourceDefinition targetDef = myContext.getResourceDefinition(theTarget);
-		String wantRef = targetDef.getName() + '/' + theTarget.getIdElement().getIdPart();
+		String wantRef = theTarget.toUnqualifiedVersionless().getValue();
 		
 		RuntimeResourceDefinition sourceDef = myContext.getResourceDefinition(theSource);
+		if (theSource.getIdElement().hasIdPart()) {
+			if (wantRef.equals(sourceDef.getName() + '/' + theSource.getIdElement().getIdPart())) {
+				return true;
+			}
+		}
+		
 		List<RuntimeSearchParam> params = sourceDef.getSearchParamsForCompartmentName(theCompartmentName);
 		for (RuntimeSearchParam nextParam : params) {
 			for (String nextPath : nextParam.getPathsSplit()) {
@@ -401,16 +421,6 @@ public class FhirTerser {
 		case PRIMITIVE_XHTML:
 		case PRIMITIVE_DATATYPE:
 			// These are primitive types, so we don't need to visit their children
-			break;
-		case RESOURCE_REF:
-			IBaseReference resRefDt = (IBaseReference) theElement;
-			if (resRefDt.getReferenceElement().getValue() == null && resRefDt.getResource() != null) {
-				IBaseResource theResource = resRefDt.getResource();
-				if (theResource.getIdElement() == null || theResource.getIdElement().isEmpty() || theResource.getIdElement().isLocal()) {
-					BaseRuntimeElementCompositeDefinition<?> def = myContext.getResourceDefinition(theResource);
-					visit(theResource, null, def, theCallback, theContainingElementPath, theChildDefinitionPath, theElementDefinitionPath);
-				}
-			}
 			break;
 		case RESOURCE:
 		case RESOURCE_BLOCK:
@@ -555,21 +565,12 @@ public class FhirTerser {
 		case PRIMITIVE_DATATYPE:
 			// These are primitive types
 			break;
-		case RESOURCE_REF:
-			IBaseReference resRefDt = (IBaseReference) theElement;
-			if (resRefDt.getReferenceElement().getValue() == null && resRefDt.getResource() != null) {
-				IBaseResource theResource = resRefDt.getResource();
-				if (theResource.getIdElement() == null || theResource.getIdElement().isEmpty() || theResource.getIdElement().isLocal()) {
-					def = myContext.getResourceDefinition(theResource);
-					visit(theStack, theResource, pathToElement, null, def, theCallback);
-				}
-			}
-			break;
 		case RESOURCE:
 		case RESOURCE_BLOCK:
 		case COMPOSITE_DATATYPE: {
 			BaseRuntimeElementCompositeDefinition<?> childDef = (BaseRuntimeElementCompositeDefinition<?>) def;
 			for (BaseRuntimeChildDefinition nextChild : childDef.getChildrenAndExtension()) {
+				
 				List<?> values = nextChild.getAccessor().getValues(theElement);
 				if (values != null) {
 					for (Object nextValueObject : values) {

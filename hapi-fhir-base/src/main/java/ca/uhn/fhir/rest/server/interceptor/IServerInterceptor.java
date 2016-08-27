@@ -21,6 +21,7 @@ package ca.uhn.fhir.rest.server.interceptor;
  */
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.ServletException;
@@ -39,6 +40,7 @@ import ca.uhn.fhir.rest.annotation.ResourceParam;
 import ca.uhn.fhir.rest.annotation.Search;
 import ca.uhn.fhir.rest.api.RestOperationTypeEnum;
 import ca.uhn.fhir.rest.method.RequestDetails;
+import ca.uhn.fhir.rest.server.IRestfulServerDefaults;
 import ca.uhn.fhir.rest.server.exceptions.AuthenticationException;
 import ca.uhn.fhir.rest.server.exceptions.BaseServerResponseException;
 
@@ -369,23 +371,47 @@ public interface IServerInterceptor {
 		private IBaseResource myResource;
 		private final String myResourceType;
 
-		public ActionRequestDetails(IIdType theId, String theResourceType, FhirContext theContext, RequestDetails theRequestDetails) {
+		public ActionRequestDetails(RequestDetails theRequestDetails) {
+			myId = theRequestDetails.getId();
+			myResourceType = theRequestDetails.getResourceName();
+			myContext = theRequestDetails.getServer().getFhirContext();
+			myRequestDetails = theRequestDetails;
+		}
+
+		public ActionRequestDetails(RequestDetails theRequestDetails, FhirContext theContext, IBaseResource theResource) {
+			this(theRequestDetails, theContext, theContext.getResourceDefinition(theResource).getName(), theResource.getIdElement());
+			myResource = theResource;
+		}
+
+		public ActionRequestDetails(RequestDetails theRequestDetails, FhirContext theContext, String theResourceType, IIdType theId) {
 			myId = theId;
 			myResourceType = theResourceType;
 			myContext = theContext;
 			myRequestDetails = theRequestDetails;
 		}
 
-		public ActionRequestDetails(IIdType theId, String theResourceType, IBaseResource theResource, FhirContext theContext, RequestDetails theRequestDetails) {
-			this(theId, theResourceType, theContext, theRequestDetails);
+		public ActionRequestDetails(RequestDetails theRequestDetails, IBaseResource theResource) {
+			this(theRequestDetails, theRequestDetails.getServer().getFhirContext().getResourceDefinition(theResource).getName(), theResource.getIdElement());
 			myResource = theResource;
 		}
 
-		public ActionRequestDetails(RequestDetails theRequestDetails) {
-			myId = theRequestDetails.getId();
-			myResourceType = theRequestDetails.getResourceName();
-			myContext = theRequestDetails.getServer().getFhirContext();
-			myRequestDetails = theRequestDetails;
+		public ActionRequestDetails(RequestDetails theRequestDetails, IBaseResource theResource, String theResourceType, IIdType theId) {
+			this(theRequestDetails, theResourceType, theId);
+			myResource = theResource;
+		}
+
+		public ActionRequestDetails(RequestDetails theRequestDetails, String theResourceType, IIdType theId) {
+			this(theRequestDetails, theRequestDetails.getServer().getFhirContext(), theResourceType, theId);
+		}
+
+		/**
+		 * Constructor
+		 * 
+		 * @param theRequestDetails The request details to wrap
+		 * @param theId The ID of the resource being created (note that the ID should have the resource type populated)
+		 */
+		public ActionRequestDetails(RequestDetails theRequestDetails, IIdType theId) {
+			this(theRequestDetails, theId.getResourceType(), theId);
 		}
 
 		public FhirContext getContext() {
@@ -397,6 +423,13 @@ public interface IServerInterceptor {
 		 */
 		public IIdType getId() {
 			return myId;
+		}
+
+		/**
+		 * Returns the request details associated with this request
+		 */
+		public RequestDetails getRequestDetails() {
+			return myRequestDetails;
 		}
 
 		/**
@@ -425,6 +458,25 @@ public interface IServerInterceptor {
 		 */
 		public Map<Object, Object> getUserData() {
 			return myRequestDetails.getUserData();
+		}
+
+		/**
+		 * This method may be invoked by user code to notify interceptors that a nested 
+		 * operation is being invoked which is denoted by this request details.
+		 */
+		public void notifyIncomingRequestPreHandled(RestOperationTypeEnum theOperationType) {
+			RequestDetails requestDetails = getRequestDetails();
+			if (requestDetails == null) {
+				return;
+			}
+			IRestfulServerDefaults server = requestDetails.getServer();
+			if (server == null) {
+				return;
+			}
+			List<IServerInterceptor> interceptors = server.getInterceptors();
+			for (IServerInterceptor next : interceptors) {
+				next.incomingRequestPreHandled(theOperationType, this);
+			}
 		}
 
 		/**
